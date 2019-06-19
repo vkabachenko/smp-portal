@@ -45,14 +45,16 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
+        'authManager' => [
+            'class' => 'yii\rbac\PhpManager',
+            'defaultRoles' => ['client'],
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
     ],
     'params' => $params,
 ];

@@ -69,7 +69,15 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            \Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            $auth = \Yii::$app->authManager;
+            $role = $auth->getRole(\Yii::$app->user->identity->role);
+            if (!is_null($role)) {
+                if (is_null($auth->getAssignment($role->name, \Yii::$app->user->id))) {
+                    $auth->assign($role, \Yii::$app->user->id);
+                }
+            }
+            return true;
         }
         return false;
     }

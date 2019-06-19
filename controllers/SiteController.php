@@ -5,10 +5,10 @@ namespace app\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
-use app\models\ContactForm;
 
 class SiteController extends Controller
 {
@@ -56,7 +56,10 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        if (\Yii::$app->user->can('master')) {
+            return $this->redirect(['master/index']);
+        }
+        throw new NotFoundHttpException('User cabinet not found');
     }
 
     /**
