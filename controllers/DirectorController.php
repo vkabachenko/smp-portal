@@ -6,7 +6,7 @@ namespace app\controllers;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 
-class MasterController extends Controller
+class DirectorController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -19,7 +19,7 @@ class MasterController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['master'],
+                        'roles' => ['director'],
                     ],
                 ],
             ],

@@ -25,6 +25,9 @@ class RbacController extends Controller
         $director = $auth->createRole('director');
         $auth->add($director);
 
+        $admin = $auth->createRole('admin');
+        $auth->add($admin);
+
         echo 'done' . "\n";
     }
 }

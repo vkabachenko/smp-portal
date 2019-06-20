@@ -52,14 +52,16 @@ class SiteController extends Controller
     /**
      * Displays homepage.
      *
-     * @return string
+     * @throws NotFoundHttpException
      */
-    public function actionIndex()
+    public function actionIndex(): Response
     {
-        if (\Yii::$app->user->can('master')) {
-            return $this->redirect(['master/index']);
+        try {
+            return $this->redirect([\Yii::$app->user->identity->role .'/index']);
+        } catch (\Throwable $e) {
+            \Yii::error($e->getMessage());
+            throw new NotFoundHttpException('User cabinet not found');
         }
-        throw new NotFoundHttpException('User cabinet not found');
     }
 
     /**
