@@ -40,7 +40,7 @@ use yii\helpers\Url;
 
     <?= $form->field($model, 'vendor_code')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'composition_id')
+    <?= $form->field($model, 'compositionCombined')
         ->dropDownList([],['prompt' => 'Выбор', 'class' => 'form-control bid-brand-composition']); ?>
 
     <?= $form->field($model, 'composition_name')->textInput(['maxlength' => true, 'class' => 'form-control bid-brand-composition-original']) ?>

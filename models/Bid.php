@@ -42,6 +42,7 @@ use yii\behaviors\TimestampBehavior;
  */
 class Bid extends \yii\db\ActiveRecord
 {
+
     /**
      * {@inheritdoc}
      */
@@ -70,7 +71,7 @@ class Bid extends \yii\db\ActiveRecord
         return [
             [['manufacturer_id'], 'required'],
             [['manufacturer_id', 'brand_id', 'brand_model_id', 'composition_id', 'client_id', 'condition_id'], 'integer'],
-            [['composition_table', 'treatment_type'], 'string'],
+            [['composition_table', 'treatment_type', 'compositionCombined'], 'string'],
             [['purchase_date', 'application_date', 'created_at', 'updated_at'], 'safe'],
             [['brand_model_name', 'composition_name', 'serial_number', 'vendor_code', 'client_name', 'client_phone', 'client_address', 'warranty_number', 'bid_number', 'bid_1C_number', 'bid_manufacturer_number'], 'string', 'max' => 255],
             [['condition_id'], 'exist', 'skipOnError' => true, 'targetClass' => Condition::className(), 'targetAttribute' => ['condition_id' => 'id']],
@@ -92,6 +93,7 @@ class Bid extends \yii\db\ActiveRecord
             'brand_model_id' => 'Модель - список',
             'brand_model_name' => 'Модель',
             'composition_id' => 'Комплектность',
+            'compositionCombined' => 'Комплектность - список',
             'composition_table' => 'Composition Table',
             'composition_name' => 'Комплектность - ввод',
             'serial_number' => 'Серийный номер',
@@ -159,5 +161,30 @@ class Bid extends \yii\db\ActiveRecord
     public function getBidHistories()
     {
         return $this->hasMany(BidHistory::className(), ['bid_id' => 'id']);
+    }
+
+    public function getCompositionCombined()
+    {
+        return is_null($this->composition_id) ? null : strval($this->composition_table) . '-' . strval($this->composition_id);
+    }
+
+    public function setCompositionCombined($value)
+    {
+        $combined = explode('-', $value);
+        if (count($combined) !== 2) {
+            $this->composition_id = null;
+            $this->composition_table = null;
+        } else {
+            $this->composition_id = $combined[1];
+            $this->composition_table = $combined[0];
+        }
+    }
+
+    public function beforeSave($insert)
+    {
+        if (empty($this->treatment_type)) {
+            $this->treatment_type = null;
+        }
+        return parent::beforeSave($insert);
     }
 }

@@ -26,7 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
             'columns' => [
                 [
                     'attribute' => 'created_at',
@@ -43,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $html = Html::tag('div', $model->manufacturer->name, ['style'=> 'max-width: 25%; overflow: hidden;']);
+                        $html = Html::tag('div', $model->manufacturer->name, ['style'=> 'min-width: 25%; white-space: normal; word-wrap: break-word']);
                         return $html;
                     },
                 ],
@@ -53,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
                         $text = $model->brand_id ? $model->brand->name : '';
-                        $html = Html::tag('div', $text, ['style'=> 'max-width: 25%; overflow: hidden;']);
+                        $html = Html::tag('div', $text, ['style'=> 'min-width: 25%; white-space: normal; word-wrap: break-word']);
                         return $html;
                     },
                 ],
@@ -62,8 +61,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $text = $model->brand_model_id ? $model->brandModel : $model->brand_model_name;
-                        $html = Html::tag('div', $text, ['style'=> 'max-width: 25%; overflow: hidden;']);
+                        $text = $model->brand_model_id ? $model->brandModel->name : $model->brand_model_name;
+                        $html = Html::tag('div', $text, ['style'=> 'min-width: 25%; white-space: normal; word-wrap: break-word']);
                         return $html;
                     },
                 ],

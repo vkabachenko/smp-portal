@@ -14,11 +14,11 @@ class CompositionHelper
 
         $union = [];
         foreach ($brandCompositions as $el) {
-            $el['source'] = 'brand';
+            $el['source'] = BrandComposition::tableName();
             $union[] = $el;
         }
         foreach ($commonCompositions as $el) {
-            $el['source'] = 'common';
+            $el['source'] = Composition::tableName();
             $union[] = $el;
         }
         ArrayHelper::multisort($union, 'name');

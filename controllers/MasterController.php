@@ -7,7 +7,6 @@ use app\models\Bid;
 use app\models\search\BidSearch;
 use Yii;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\web\Controller;
 
 class MasterController extends Controller
