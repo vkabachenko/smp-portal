@@ -37,6 +37,7 @@ use yii\behaviors\TimestampBehavior;
  * @property Brand $brand
  * @property User $client
  * @property Manufacturer $manufacturer
+ * @property BrandModel $brandModel
  * @property BidHistory[] $bidHistories
  */
 class Bid extends \yii\db\ActiveRecord
@@ -86,29 +87,29 @@ class Bid extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'manufacturer_id' => 'Manufacturer ID',
-            'brand_id' => 'Brand ID',
-            'brand_model_id' => 'Brand Model ID',
-            'brand_model_name' => 'Brand Model Name',
-            'composition_id' => 'Composition ID',
+            'manufacturer_id' => 'Производитель',
+            'brand_id' => 'Бренд',
+            'brand_model_id' => 'Модель - список',
+            'brand_model_name' => 'Модель',
+            'composition_id' => 'Комплектность',
             'composition_table' => 'Composition Table',
-            'composition_name' => 'Composition Name',
-            'serial_number' => 'Serial Number',
-            'vendor_code' => 'Vendor Code',
+            'composition_name' => 'Комплектность - ввод',
+            'serial_number' => 'Серийный номер',
+            'vendor_code' => 'Артикул',
             'client_id' => 'Client ID',
-            'client_name' => 'Client Name',
-            'client_phone' => 'Client Phone',
+            'client_name' => 'ФИО клиента',
+            'client_phone' => 'Телефон клиента',
             'client_address' => 'Client Address',
-            'treatment_type' => 'Treatment Type',
-            'purchase_date' => 'Purchase Date',
-            'application_date' => 'Application Date',
-            'created_at' => 'Created At',
+            'treatment_type' => 'Тип обращения',
+            'purchase_date' => 'Дата покупки',
+            'application_date' => 'Дата обращения',
+            'created_at' => 'Создана',
             'updated_at' => 'Updated At',
-            'warranty_number' => 'Warranty Number',
-            'bid_number' => 'Bid Number',
-            'bid_1C_number' => 'Bid 1 C Number',
-            'bid_manufacturer_number' => 'Bid Manufacturer Number',
-            'condition_id' => 'Condition ID',
+            'warranty_number' => 'Номер гарантийного талона',
+            'bid_number' => 'Номер заявки',
+            'bid_1C_number' => 'Номер заявки в 1С',
+            'bid_manufacturer_number' => 'Номер заявки у производителя',
+            'condition_id' => 'Состояние',
         ];
     }
 
@@ -126,6 +127,14 @@ class Bid extends \yii\db\ActiveRecord
     public function getBrand()
     {
         return $this->hasOne(Brand::className(), ['id' => 'brand_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBrandModel()
+    {
+        return $this->hasOne(BrandModel::className(), ['id' => 'brand_model_id']);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "manufacturer".
@@ -59,5 +60,16 @@ class Manufacturer extends \yii\db\ActiveRecord
     public function getBrands()
     {
         return $this->hasMany(Brand::className(), ['manufacturer_id' => 'id']);
+    }
+
+    /**
+     * return array
+     */
+    public static function manufacturersAsMap()
+    {
+        $models = self::find()->orderBy('name')->all();
+        $list = ArrayHelper::map($models, 'id', 'name');
+
+        return $list;
     }
 }

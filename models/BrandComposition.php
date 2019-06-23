@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "brand_composition".
@@ -54,5 +55,20 @@ class BrandComposition extends \yii\db\ActiveRecord
     public function getBrand()
     {
         return $this->hasOne(Brand::className(), ['id' => 'brand_id']);
+    }
+
+    /**
+     * return array
+     */
+    public static function brandCompositions($brandId)
+    {
+            $models = self::find()
+                ->select(['id', 'name'])
+                ->where(['brand_id' => $brandId])
+                ->orderBy('name')
+                ->asArray()
+                ->all();
+
+        return $models;
     }
 }

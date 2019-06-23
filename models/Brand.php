@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "brand".
@@ -81,5 +82,20 @@ class Brand extends \yii\db\ActiveRecord
     public function getBrandModels()
     {
         return $this->hasMany(BrandModel::className(), ['brand_id' => 'id']);
+    }
+
+    /**
+     * return array
+     */
+    public static function brandsManufacturer($manufacturerId)
+    {
+        $models = self::find()
+            ->select(['id', 'name'])
+            ->where(['manufacturer_id' => $manufacturerId])
+            ->orderBy('name')
+            ->asArray()
+            ->all();
+
+        return $models;
     }
 }

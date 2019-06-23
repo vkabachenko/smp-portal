@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "condition".
@@ -10,7 +11,7 @@ use Yii;
  * @property int $id
  * @property string $name
  *
- * @property Bid[] $bs
+ * @property Bid[] $bids
  */
 class Condition extends \yii\db\ActiveRecord
 {
@@ -47,8 +48,19 @@ class Condition extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBs()
+    public function getBids()
     {
         return $this->hasMany(Bid::className(), ['condition_id' => 'id']);
+    }
+
+    /**
+     * return array
+     */
+    public static function conditionsAsMap()
+    {
+        $models = self::find()->orderBy('name')->all();
+        $list = ArrayHelper::map($models, 'id', 'name');
+
+        return $list;
     }
 }

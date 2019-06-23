@@ -55,4 +55,19 @@ class BrandModel extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Brand::className(), ['id' => 'brand_id']);
     }
+
+    /**
+     * return array
+     */
+    public static function brandModels($brandId)
+    {
+        $models = self::find()
+            ->select(['id', 'name'])
+            ->where(['brand_id' => $brandId])
+            ->orderBy('name')
+            ->asArray()
+            ->all();
+
+        return $models;
+    }
 }

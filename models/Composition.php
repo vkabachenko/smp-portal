@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "composition".
@@ -40,5 +41,19 @@ class Composition extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
         ];
+    }
+
+    /**
+     * return array
+     */
+    public static function compositions()
+    {
+        $models = self::find()
+            ->select(['id', 'name'])
+            ->orderBy('name')
+            ->asArray()
+            ->all();
+
+        return $models;
     }
 }
