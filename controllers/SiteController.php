@@ -54,7 +54,7 @@ class SiteController extends Controller
      *
      * @throws NotFoundHttpException
      */
-    public function actionIndex(): Response
+    public function actionIndex()
     {
         try {
             return $this->redirect([\Yii::$app->user->identity->role .'/index']);
