@@ -2,6 +2,7 @@
 
 use app\models\Bid;
 use app\models\search\BidSearch;
+use yii\bootstrap\Modal;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use yii\bootstrap\Html;
@@ -33,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
                         $text = date('d.m.Y', strtotime($model->created_at));
-                        $html = Html::a($text, ['update', 'id' => $model->id]);
+                        $html = Html::a($text, '#', ['class' => 'bid-item', 'data-id' => $model->id, 'style' => 'cursor: pointer;']);
                         return $html;
                     },
                 ],
@@ -70,3 +71,45 @@ $this->params['breadcrumbs'][] = $this->title;
         ]); ?>
     </div>
 </div>
+
+<!-- Modal -->
+<?php
+Modal::begin([
+    'id' => 'bid-modal',
+    'header' => '<h3>Выберите действие с заявкой</h3>',
+    'closeButton' => [
+        'id'=>'close-button',
+        'class'=>'close',
+        'data-dismiss' =>'modal',
+    ],
+    'clientOptions' => [
+        'backdrop' => false, 'keyboard' => true
+    ]
+]);
+?>
+
+    <ul style="list-style: none;">
+        <li>
+            <?= Html::a('Редактировать', ['update', 'id' => 0], ['class' => 'bid-update-item']); ?>
+         </li>
+    </ul>
+
+
+<?php Modal::end(); ?>
+
+<?php
+
+    $script = <<<JS
+    
+    $('.bid-item').click(function(evt) {
+        evt.preventDefault();
+        
+        var modal = $('#bid-modal');
+        var updateHref = modal.find('.bid-update-item').attr('href');
+        updateHref = updateHref.slice(0, -1) + $(this).data('id');
+        modal.find('.bid-update-item').attr('href', updateHref);
+        modal.modal('show');
+    });
+JS;
+
+    $this->registerJs($script);
