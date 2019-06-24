@@ -26,4 +26,16 @@ class CompositionHelper
         return $union;
     }
 
+    public static function unionCompositionsAsMap($brandId)
+    {
+        $unionCompositions = self::unionCompositions($brandId);
+        $unionMap = [];
+
+        foreach ($unionCompositions as $item) {
+            $unionMap[$item['source'] . '-' . $item['id']] = $item['name'];
+        }
+
+        return $unionMap;
+    }
+
 }

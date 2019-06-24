@@ -180,11 +180,32 @@ class Bid extends \yii\db\ActiveRecord
         }
     }
 
+    public function getBrandModelTab()
+    {
+        return $this->brand_model_name ? 1 : 0;
+    }
+
+    public function getCompositionTab()
+    {
+        return $this->composition_name ? 1 : 0;
+    }
+
     public function beforeSave($insert)
     {
+        if ($this->brand_model_name) {
+            $this->brand_model_id = null;
+        }
+
+        if ($this->composition_name) {
+            $this->composition_id = null;
+            $this->composition_table = null;
+        }
+
         if (empty($this->treatment_type)) {
             $this->treatment_type = null;
         }
         return parent::beforeSave($insert);
     }
+
+
 }

@@ -98,4 +98,14 @@ class Brand extends \yii\db\ActiveRecord
 
         return $models;
     }
+
+    /**
+     * return array
+     */
+    public static function brandsManufacturerAsMap($manufacturerId)
+    {
+        $models = self::brandsManufacturer($manufacturerId);
+
+        return ArrayHelper::map($models, 'id', 'name');
+    }
 }

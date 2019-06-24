@@ -6,6 +6,10 @@ use app\models\Manufacturer;
 use app\models\Condition;
 use yii\jui\DatePicker;
 use yii\helpers\Url;
+use app\models\Brand;
+use app\models\BrandModel;
+use app\helpers\bid\CompositionHelper;
+use yii\jui\Accordion;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
@@ -24,26 +28,65 @@ use yii\helpers\Url;
         ]); ?>
 
     <?= $form->field($model, 'brand_id')
-        ->dropDownList([],[
+        ->dropDownList(Brand::brandsManufacturerAsMap($model->manufacturer_id),[
             'prompt' => 'Выбор',
             'class' => 'form-control bid-brand',
             'data-url-model' => Url::to(['bid/brand-models']),
             'data-url-composition' => Url::to(['bid/compositions'])
         ]); ?>
 
-    <?= $form->field($model, 'brand_model_id')
-        ->dropDownList([],['prompt' => 'Выбор', 'class' => 'form-control bid-brand-model']); ?>
-
-    <?= $form->field($model, 'brand_model_name')->textInput(['maxlength' => true, 'class' => 'form-control bid-brand-model-original']) ?>
+    <?= Accordion::widget([
+        'id' => 'brand-model-accordion',
+        'items' => [
+            [
+                'header' => 'Модель - выбор из списка',
+                'content' => $form->field($model, 'brand_model_id')
+                                    ->dropDownList(
+                                            BrandModel::brandModelsAsMap($model->brand_id),
+                                            ['prompt' => 'Выбор', 'class' => 'form-control bid-brand-model']
+                                            )
+                                    ->label(false)
+            ],
+            [
+                'header' => 'Модель - ввод названия',
+                'content' => $form->field($model, 'brand_model_name')
+                                    ->textInput(
+                                            ['maxlength' => true, 'class' => 'form-control bid-brand-model-original']
+                                    )
+                                    ->label(false)
+            ]
+        ],
+        'options' => ['style' => 'margin-bottom: 10px;'],
+        'headerOptions' => ['tag' => 'p', 'style' => 'font-size: 80%; font-weight: bold;'],
+    ]); ?>
 
     <?= $form->field($model, 'serial_number')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'vendor_code')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'compositionCombined')
-        ->dropDownList([],['prompt' => 'Выбор', 'class' => 'form-control bid-brand-composition']); ?>
-
-    <?= $form->field($model, 'composition_name')->textInput(['maxlength' => true, 'class' => 'form-control bid-brand-composition-original']) ?>
+    <?= Accordion::widget([
+        'id' => 'brand-composition-accordion',
+        'items' => [
+            [
+                'header' => 'Комплектность - выбор из списка',
+                'content' => $form->field($model, 'compositionCombined')
+                    ->dropDownList(
+                          CompositionHelper::unionCompositionsAsMap($model->brand_id),[
+                                  'prompt' => 'Выбор', 'class' => 'form-control bid-brand-composition'
+                          ]
+                    )
+                    ->label(false)
+            ],
+            [
+                'header' => 'Комплектность - ввод названия',
+                'content' => $form->field($model, 'composition_name')
+                    ->textInput(['maxlength' => true, 'class' => 'form-control bid-brand-composition-original'])
+                    ->label(false)
+            ]
+        ],
+        'options' => ['style' => 'margin-bottom: 10px;'],
+        'headerOptions' => ['tag' => 'p', 'style' => 'font-size: 80%; font-weight: bold;'],
+    ]); ?>
 
     <?= $form->field($model, 'condition_id')
         ->dropDownList(Condition::conditionsAsMap(),['prompt' => 'Выбор', 'class' => 'form-control bid-condition']); ?>
@@ -164,6 +207,9 @@ $script = <<<JS
             );
         }
     });
+    
+    $( "#brand-model-accordion" ).accordion( "option", "active", {$model->brandModelTab});
+    $( "#brand-composition-accordion" ).accordion( "option", "active", {$model->compositionTab});
 
 JS;
 
