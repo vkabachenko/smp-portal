@@ -12,12 +12,29 @@ class RbacController extends Controller
         $auth = \Yii::$app->authManager;
         $auth->removeAll();
 
-        // добавляем роль "author" и даём роли разрешение "createPost"
+
+
+        $listBids = $auth->createPermission('listBids');
+        $auth->add($listBids);
+
+        $createBid = $auth->createPermission('createBid');
+        $auth->add($createBid);
+
+        $updateBid = $auth->createPermission('updateBid');
+        $auth->add($updateBid);
+
+        $viewBid = $auth->createPermission('viewBid');
+        $auth->add($viewBid);
+
         $client = $auth->createRole('client');
         $auth->add($client);
 
         $master = $auth->createRole('master');
         $auth->add($master);
+        $auth->addChild($master, $listBids);
+        $auth->addChild($master, $createBid);
+        $auth->addChild($master, $updateBid);
+        $auth->addChild($master, $viewBid);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);

@@ -10,6 +10,8 @@ use yii\web\Controller;
 
 class BidHistoryController  extends Controller
 {
+    use AccessTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -21,7 +23,7 @@ class BidHistoryController  extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['master'],
+                        'roles' => ['@'],
                     ],
                 ],
             ],
@@ -30,6 +32,8 @@ class BidHistoryController  extends Controller
 
     public function actionIndex($bidId)
     {
+        $this->checkAccess('viewBid');
+
         $searchModel = new BidHistorySearch();
         $dataProvider = $searchModel->search($bidId);
 

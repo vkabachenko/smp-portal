@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div>
-    <h2>История <?= Html::a('заявки', ['master/update', 'id' => $bidId]) ?></h2>
+    <h2>История <?= Html::a('заявки', ['bid/update', 'id' => $bidId]) ?></h2>
 
     <div>
         <p>

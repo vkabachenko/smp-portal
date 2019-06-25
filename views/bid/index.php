@@ -1,22 +1,21 @@
 <?php
 
-use app\models\Bid;
-use app\models\search\BidSearch;
+
 use yii\bootstrap\Modal;
-use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 use yii\bootstrap\Html;
-use yii\web\View;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\BidSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $title string */
 
-$this->title = 'Личный кабинет мастера';
+$this->title = $title;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div>
-    <h2>Личный кабинет  мастера <?= \Yii::$app->user->identity->username ?></h2>
+    <h2> <?= $this->title . ' ' . \Yii::$app->user->identity->username ?></h2>
 
     <div>
         <p>

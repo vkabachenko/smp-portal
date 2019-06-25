@@ -1,41 +1,80 @@
 <?php
 
+
 namespace app\controllers;
 
-use app\helpers\bid\CompositionHelper;
-use app\models\Brand;
-use app\models\BrandModel;
+use app\models\Bid;
+use app\models\search\BidHistorySearch;
+use app\models\search\BidSearch;
+use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\web\Response;
 
 class BidController extends Controller
 {
-    public function actionBrands()
-    {
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-        $manufacturerId = intval(\Yii::$app->request->post('manufacturerId'));
+    use AccessTrait;
 
-        $brands = Brand::brandsManufacturer($manufacturerId);
-        return $brands;
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
     }
 
-    public function actionBrandModels()
-    {
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-        $brandId = intval(\Yii::$app->request->post('brandId'));
 
-        $brandModels = BrandModel::brandModels($brandId);
-        return $brandModels;
+    public function actionIndex($title = 'Список заявок')
+    {
+        $this->checkAccess('listBids');
+
+        $searchModel = new BidSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'title' => $title
+        ]);
     }
 
-    public function actionCompositions()
+    public function actionCreate()
     {
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-        $brandId = intval(\Yii::$app->request->post('brandId'));
+        $this->checkAccess('createBid');
 
-        $compositions = CompositionHelper::unionCompositions($brandId);
+        $model = new Bid();
 
-        return $compositions;
+        if ($model->load(Yii::$app->request->post()) && $model->createBid(\Yii::$app->user->id)) {
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionUpdate($id)
+    {
+        $this->checkAccess('updateBid');
+
+        $model = Bid::findOne($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
 }
