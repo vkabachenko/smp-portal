@@ -88,10 +88,10 @@ class BidHistory extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'bid_id' => 'Bid ID',
-            'user_id' => 'User ID',
-            'status' => 'Status',
-            'comment' => 'Comment',
-            'created_at' => 'Created At',
+            'user_id' => 'Создатель',
+            'status' => 'Статус',
+            'comment' => 'Комментарий',
+            'created_at' => 'Дата создания',
             'updated_at' => 'Updated At',
         ];
     }

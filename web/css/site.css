@@ -122,3 +122,20 @@ a.desc:after {
 .navbar-inverse .navbar-brand, .navbar-inverse .btn-link {
     color: #025256;
 }
+
+.grid-table {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.grid-25 {
+    min-width: 25%;
+}
+
+.bid-menu {
+    list-style: none;
+}
+
+.bid-menu li {
+    margin-bottom: 1rem;
+}

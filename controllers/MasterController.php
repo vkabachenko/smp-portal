@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 use app\models\Bid;
+use app\models\search\BidHistorySearch;
 use app\models\search\BidSearch;
 use Yii;
 use yii\filters\AccessControl;
@@ -66,4 +67,5 @@ class MasterController extends Controller
             'model' => $model,
         ]);
     }
+
 }
