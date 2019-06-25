@@ -43,6 +43,14 @@ use yii\behaviors\TimestampBehavior;
 class Bid extends \yii\db\ActiveRecord
 {
 
+    const TREATMENT_TYPE_WARRANTY = 'warranty';
+    const TREATMENT_TYPE_PRESALE = 'pre-sale';
+
+    const TREATMENT_TYPES = [
+        self::TREATMENT_TYPE_WARRANTY => 'Гарантия',
+        self::TREATMENT_TYPE_PRESALE => 'Предпродажа',
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -78,6 +86,8 @@ class Bid extends \yii\db\ActiveRecord
             [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => Brand::className(), 'targetAttribute' => ['brand_id' => 'id']],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['client_id' => 'id']],
             [['manufacturer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manufacturer::className(), 'targetAttribute' => ['manufacturer_id' => 'id']],
+            ['treatment_type', 'default', 'value' => null],
+            ['treatment_type', 'in', 'range' => array_keys(self::TREATMENT_TYPES)],
         ];
     }
 
@@ -201,10 +211,35 @@ class Bid extends \yii\db\ActiveRecord
             $this->composition_table = null;
         }
 
-        if (empty($this->treatment_type)) {
-            $this->treatment_type = null;
-        }
         return parent::beforeSave($insert);
+    }
+
+    public function createBid($userId)
+    {
+        $transaction = \Yii::$app->db->beginTransaction();
+
+        try {
+            if ($this->save()) {
+                $bidHistory = new BidHistory([
+                    'bid_id' => $this->id,
+                    'user_id' => $userId
+                ]);
+                $result = $bidHistory->save();
+                if ($result === false) {
+                    \Yii::error($bidHistory->getErrors());
+                    $transaction->rollBack();
+                } else {
+                    $transaction->commit();
+                }
+                return $result;
+            } else {
+                return false;
+            }
+        } catch (\Throwable $e) {
+            \Yii::error($e->getMessage());
+            $transaction->rollBack();
+            return false;
+        }
     }
 
 

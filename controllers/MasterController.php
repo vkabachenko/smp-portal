@@ -45,7 +45,7 @@ class MasterController extends Controller
     {
         $model = new Bid();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->createBid(\Yii::$app->user->id)) {
             return $this->redirect(['index']);
         }
 

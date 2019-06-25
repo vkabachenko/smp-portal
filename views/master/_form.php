@@ -10,6 +10,7 @@ use app\models\Brand;
 use app\models\BrandModel;
 use app\helpers\bid\CompositionHelper;
 use yii\jui\Accordion;
+use app\models\Bid;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
@@ -99,7 +100,7 @@ use yii\jui\Accordion;
 
     <?= $form->field($model, 'client_address')->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'treatment_type')->dropDownList([ 'warranty' => 'Гарантия', 'pre-sale' => 'Предпродажа', ], ['prompt' => 'Выбор']) ?>
+    <?= $form->field($model, 'treatment_type')->dropDownList(Bid::TREATMENT_TYPES, ['prompt' => 'Выбор']) ?>
 
     <?= $form->field($model, 'purchase_date')->widget(DatePicker::class, [
         'language' => 'ru',

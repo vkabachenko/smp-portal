@@ -11,17 +11,38 @@ use yii\behaviors\TimestampBehavior;
  * @property int $id
  * @property int $bid_id
  * @property int $user_id
- * @property int $status_id
+ * @property int $status
  * @property string $comment
  * @property string $created_at
  * @property string $updated_at
  *
  * @property Bid $bid
- * @property BidStatus $status
  * @property User $user
  */
 class BidHistory extends \yii\db\ActiveRecord
 {
+    const STATUS_CREATED = 'created';
+    const STATUS_FILLED = 'filled';
+    const STATUS_SENT = 'sent';
+    const STATUS_CLARIICATION_NEEDED = 'clarification needed';
+    const STATUS_APPROVED = 'approved';
+    const STATUS_DONE = 'done';
+    const STATUS_ISSUED = 'issued';
+    const STATUS_PAYED = 'payed';
+    const STATUS_CLOSED = 'closed';
+
+    const STATUSES = [
+        self::STATUS_CREATED => 'Создана',
+        self::STATUS_FILLED => 'Заполнена',
+        self::STATUS_SENT => 'Отправлена',
+        self::STATUS_APPROVED => 'Одобрена',
+        self::STATUS_CLARIICATION_NEEDED => 'Требует уточнения',
+        self::STATUS_DONE => 'Выполнена',
+        self::STATUS_ISSUED => 'Выдана',
+        self::STATUS_PAYED => 'Оплачена',
+        self::STATUS_CLOSED => 'Закрыта',
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -49,12 +70,13 @@ class BidHistory extends \yii\db\ActiveRecord
     {
         return [
             [['bid_id'], 'required'],
-            [['bid_id', 'user_id', 'status_id'], 'integer'],
+            [['bid_id', 'user_id'], 'integer'],
             [['comment'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['bid_id'], 'exist', 'skipOnError' => true, 'targetClass' => Bid::className(), 'targetAttribute' => ['bid_id' => 'id']],
-            [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => BidStatus::className(), 'targetAttribute' => ['status_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            ['status', 'in', 'range' => array_keys(self::STATUSES)],
+            ['status', 'default', 'value' => self::STATUS_CREATED],
         ];
     }
 
@@ -67,7 +89,7 @@ class BidHistory extends \yii\db\ActiveRecord
             'id' => 'ID',
             'bid_id' => 'Bid ID',
             'user_id' => 'User ID',
-            'status_id' => 'Status ID',
+            'status' => 'Status',
             'comment' => 'Comment',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -80,14 +102,6 @@ class BidHistory extends \yii\db\ActiveRecord
     public function getBid()
     {
         return $this->hasOne(Bid::className(), ['id' => 'bid_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getStatus()
-    {
-        return $this->hasOne(BidStatus::className(), ['id' => 'status_id']);
     }
 
     /**
