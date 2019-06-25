@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
                         $text = date('d.m.Y', strtotime($model->created_at));
-                        $html = Html::a($text, '#', ['class' => 'bid-item', 'data-id' => $model->id, 'style' => 'cursor: pointer;']);
+                        $html = Html::a($text, '#', ['class' => 'bid-item', 'data-id' => $model->id]);
                         return $html;
                     },
                 ],
@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $html = Html::tag('div', $model->manufacturer->name, ['style'=> 'min-width: 25%; white-space: normal; word-wrap: break-word']);
+                        $html = Html::tag('div', $model->manufacturer->name, ['class' => 'grid-table grid-25']);
                         return $html;
                     },
                 ],
@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
                         $text = $model->brand_id ? $model->brand->name : '';
-                        $html = Html::tag('div', $text, ['style'=> 'min-width: 25%; white-space: normal; word-wrap: break-word']);
+                        $html = Html::tag('div', $text, ['class' => 'grid-table grid-25']);
                         return $html;
                     },
                 ],
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
                         $text = $model->brand_model_id ? $model->brandModel->name : $model->brand_model_name;
-                        $html = Html::tag('div', $text, ['style'=> 'min-width: 25%; white-space: normal; word-wrap: break-word']);
+                        $html = Html::tag('div', $text, ['class' => 'grid-table grid-25']);
                         return $html;
                     },
                 ],
@@ -88,10 +88,13 @@ Modal::begin([
 ]);
 ?>
 
-    <ul style="list-style: none;">
+    <ul class="bid-menu"">
         <li>
             <?= Html::a('Редактировать', ['update', 'id' => 0], ['class' => 'bid-update-item']); ?>
-         </li>
+        </li>
+        <li>
+            <?= Html::a('История заявки', ['bid-history/index', 'bidId' => 0], ['class' => 'bid-history-item']); ?>
+        </li>
     </ul>
 
 
@@ -100,15 +103,24 @@ Modal::begin([
 <?php
 
     $script = <<<JS
-    
-    $('.bid-item').click(function(evt) {
-        evt.preventDefault();
+    $(function() {
+        $('.bid-item').click(function(evt) {
+            evt.preventDefault();
+            
+            var modal = $('#bid-modal');
+            var id = $(this).data('id');
+            
+            updateHref(modal, id, '.bid-update-item');
+            updateHref(modal, id, '.bid-history-item');
+            
+            modal.modal('show');
+        });
         
-        var modal = $('#bid-modal');
-        var updateHref = modal.find('.bid-update-item').attr('href');
-        updateHref = updateHref.slice(0, -1) + $(this).data('id');
-        modal.find('.bid-update-item').attr('href', updateHref);
-        modal.modal('show');
+        function updateHref(modal, id, selector) {
+            var href = modal.find(selector).attr('href');
+            href = href.slice(0, -1) + id;
+            modal.find(selector).attr('href', href);
+        }
     });
 JS;
 
