@@ -1,10 +1,9 @@
 <?php
 
-use app\models\Bid;
+
 use yii\grid\GridView;
 use yii\bootstrap\Html;
-use yii\web\View;
-use app\models\BidHistory;
+
 
 /* @var $this yii\web\View */
 /* @var $dataProvider \yii\data\ActiveDataProvider */
@@ -33,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
                         $text = date('d.m.Y', strtotime($model->created_at));
-                        $html = Html::a($text, '#', ['class' => 'bid-item', 'data-id' => $model->id]);
+                        $html = Html::a($text, ['view', 'id' => $model->id] );
                         return $html;
                     },
                 ],

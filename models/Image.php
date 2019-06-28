@@ -72,6 +72,6 @@ class Image extends \yii\db\ActiveRecord
 
     public function getPath()
     {
-        return \Yii::getAlias('@app/uploads/') . $this->src_name;
+        return \Yii::getAlias('@webroot/uploads/') . $this->src_name;
     }
 }

@@ -93,6 +93,7 @@ class BidHistory extends \yii\db\ActiveRecord
             'comment' => 'Комментарий',
             'created_at' => 'Дата создания',
             'updated_at' => 'Updated At',
+            'statusName' => 'Статус'
         ];
     }
 
@@ -110,5 +111,17 @@ class BidHistory extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getImages()
+    {
+        return $this->hasMany(Image::class, ['bid_history_id' => 'id']);
+    }
+
+    public function getStatusName() {
+        return self::STATUSES[$this->status];
     }
 }

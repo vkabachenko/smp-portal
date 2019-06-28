@@ -139,3 +139,10 @@ a.desc:after {
 .bid-menu li {
     margin-bottom: 1rem;
 }
+
+.view-img-wrap {
+    float: left;
+    width: 100px;
+    padding: 0 25px;
+    cursor: pointer;
+}
