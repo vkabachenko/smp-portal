@@ -112,8 +112,9 @@ class Bid extends \yii\db\ActiveRecord
             'client_id' => 'Client ID',
             'client_name' => 'ФИО клиента',
             'client_phone' => 'Телефон клиента',
-            'client_address' => 'Client Address',
+            'client_address' => 'Адрес клиента',
             'treatment_type' => 'Тип обращения',
+            'treatmentTypeName' => 'Тип обращения',
             'purchase_date' => 'Дата покупки',
             'application_date' => 'Дата обращения',
             'created_at' => 'Создана',
@@ -191,14 +192,9 @@ class Bid extends \yii\db\ActiveRecord
         }
     }
 
-    public function getBrandModelTab()
+    public function getTreatmentTypeName()
     {
-        return $this->brand_model_name ? 1 : 0;
-    }
-
-    public function getCompositionTab()
-    {
-        return $this->composition_name ? 1 : 0;
+        return is_null($this->treatment_type) ? '' : self::TREATMENT_TYPES[$this->treatment_type];
     }
 
     public function beforeSave($insert)

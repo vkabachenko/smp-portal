@@ -7,7 +7,6 @@ use app\helpers\bid\CompositionHelper;
 use app\models\Bid;
 use app\models\Brand;
 use app\models\BrandModel;
-use app\models\search\BidHistorySearch;
 use app\models\search\BidSearch;
 use Yii;
 use yii\filters\AccessControl;
@@ -76,6 +75,17 @@ class BidController extends Controller
         }
 
         return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionView($id)
+    {
+        $this->checkAccess('viewBid');
+
+        $model = Bid::findOne($id);
+
+        return $this->render('view', [
             'model' => $model,
         ]);
     }

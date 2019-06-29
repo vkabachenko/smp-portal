@@ -32,8 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $text = date('d.m.Y', strtotime($model->created_at));
-                        $html = Html::a($text, '#', ['class' => 'bid-item', 'data-id' => $model->id]);
+                        $text = date('d.m.Y h:i', strtotime($model->created_at));
+                        $html = Html::a($text, ['view', 'id' => $model->id]);
                         return $html;
                     },
                 ],
@@ -71,56 +71,4 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
-<!-- Modal -->
-<?php
-Modal::begin([
-    'id' => 'bid-modal',
-    'header' => '<h3>Выберите действие с заявкой</h3>',
-    'closeButton' => [
-        'id'=>'close-button',
-        'class'=>'close',
-        'data-dismiss' =>'modal',
-    ],
-    'clientOptions' => [
-        'backdrop' => false, 'keyboard' => true
-    ]
-]);
-?>
 
-    <ul class="bid-menu"">
-        <li>
-            <?= Html::a('Редактировать', ['update', 'id' => 0], ['class' => 'bid-update-item']); ?>
-        </li>
-        <li>
-            <?= Html::a('История заявки', ['bid-history/index', 'bidId' => 0], ['class' => 'bid-history-item']); ?>
-        </li>
-    </ul>
-
-
-<?php Modal::end(); ?>
-
-<?php
-
-    $script = <<<JS
-    $(function() {
-        $('.bid-item').click(function(evt) {
-            evt.preventDefault();
-            
-            var modal = $('#bid-modal');
-            var id = $(this).data('id');
-            
-            updateHref(modal, id, '.bid-update-item');
-            updateHref(modal, id, '.bid-history-item');
-            
-            modal.modal('show');
-        });
-        
-        function updateHref(modal, id, selector) {
-            var href = modal.find(selector).attr('href');
-            href = href.slice(0, -1) + id;
-            modal.find(selector).attr('href', href);
-        }
-    });
-JS;
-
-    $this->registerJs($script);

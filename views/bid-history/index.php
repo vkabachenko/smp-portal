@@ -11,11 +11,12 @@ use yii\bootstrap\Html;
 
 $this->title = 'История заявки';
 $this->params['breadcrumbs'][] = ['label' => 'Личный кабинет мастера', 'url' => ['master/index']];
+$this->params['breadcrumbs'][] = ['label' => 'Просмотр  заявки', 'url' => ['bid/view', 'id' => $bidId]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div>
-    <h2>История <?= Html::a('заявки', ['bid/update', 'id' => $bidId]) ?></h2>
+    <h3>История заявки</h3>
 
     <div>
         <p>
@@ -31,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $text = date('d.m.Y', strtotime($model->created_at));
+                        $text = date('d.m.Y h:i', strtotime($model->created_at));
                         $html = Html::a($text, ['view', 'id' => $model->id] );
                         return $html;
                     },
