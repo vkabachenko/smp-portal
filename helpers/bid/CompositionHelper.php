@@ -8,34 +8,23 @@ use yii\helpers\ArrayHelper;
 
 class CompositionHelper
 {
-    public static function unionCompositions($brandId) {
-        $commonCompositions = Composition::compositions();
-        $brandCompositions = BrandComposition::brandCompositions($brandId);
+    public static function unionCompositions($brandId, $term = null) {
+
+        $commonCompositions = Composition::compositions($term);
+        $brandCompositions = BrandComposition::brandCompositions($brandId, $term);
 
         $union = [];
         foreach ($brandCompositions as $el) {
-            $el['source'] = BrandComposition::tableName();
+            $el['id'] = BrandComposition::tableName() . '-' . $el['id'];
             $union[] = $el;
         }
         foreach ($commonCompositions as $el) {
-            $el['source'] = Composition::tableName();
+            $el['id'] = Composition::tableName() . '-' . $el['id'];
             $union[] = $el;
         }
         ArrayHelper::multisort($union, 'name');
 
         return $union;
-    }
-
-    public static function unionCompositionsAsMap($brandId)
-    {
-        $unionCompositions = self::unionCompositions($brandId);
-        $unionMap = [];
-
-        foreach ($unionCompositions as $item) {
-            $unionMap[$item['source'] . '-' . $item['id']] = $item['name'];
-        }
-
-        return $unionMap;
     }
 
 }

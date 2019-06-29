@@ -60,11 +60,12 @@ class BrandComposition extends \yii\db\ActiveRecord
     /**
      * return array
      */
-    public static function brandCompositions($brandId)
+    public static function brandCompositions($brandId, $term = null)
     {
             $models = self::find()
                 ->select(['id', 'name'])
                 ->where(['brand_id' => $brandId])
+                ->andFilterWhere((['like', 'name', $term]))
                 ->orderBy('name')
                 ->asArray()
                 ->all();

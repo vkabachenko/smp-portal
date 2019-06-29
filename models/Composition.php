@@ -46,10 +46,11 @@ class Composition extends \yii\db\ActiveRecord
     /**
      * return array
      */
-    public static function compositions()
+    public static function compositions($term = null)
     {
         $models = self::find()
             ->select(['id', 'name'])
+            ->andFilterWhere((['like', 'name', $term]))
             ->orderBy('name')
             ->asArray()
             ->all();
