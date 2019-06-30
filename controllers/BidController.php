@@ -5,6 +5,7 @@ namespace app\controllers;
 
 use app\helpers\bid\CompositionHelper;
 use app\models\Bid;
+use app\models\BidHistory;
 use app\models\Brand;
 use app\models\BrandModel;
 use app\models\search\BidSearch;
@@ -70,7 +71,9 @@ class BidController extends Controller
 
         $model = Bid::findOne($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            BidHistory::createUpdated($model, \Yii::$app->user->id);
+            $model->save(false);
             return $this->redirect(['index']);
         }
 

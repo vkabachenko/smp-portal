@@ -22,6 +22,7 @@ use yii\behaviors\TimestampBehavior;
 class BidHistory extends \yii\db\ActiveRecord
 {
     const STATUS_CREATED = 'created';
+    const STATUS_UPDATED = 'updated';
     const STATUS_FILLED = 'filled';
     const STATUS_SENT = 'sent';
     const STATUS_CLARIICATION_NEEDED = 'clarification needed';
@@ -33,6 +34,7 @@ class BidHistory extends \yii\db\ActiveRecord
 
     const STATUSES = [
         self::STATUS_CREATED => 'Создана',
+        self::STATUS_UPDATED => 'Исправлена',
         self::STATUS_FILLED => 'Заполнена',
         self::STATUS_SENT => 'Отправлена',
         self::STATUS_APPROVED => 'Одобрена',
@@ -121,7 +123,41 @@ class BidHistory extends \yii\db\ActiveRecord
         return $this->hasMany(Image::class, ['bid_history_id' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBidUpdateHistories()
+    {
+        return $this->hasMany(BidUpdateHistory::class, ['bid_history_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBidUpdateHistory()
+    {
+        return $this->hasOne(BidUpdateHistory::class, ['bid_history_id' => 'id']);
+    }
+
     public function getStatusName() {
         return self::STATUSES[$this->status];
+    }
+
+    public static function createUpdated(Bid $bid, $userId)
+    {
+        try {
+            $model = new self([
+                'bid_id' => $bid->id,
+                'user_id' => $userId,
+                'status' => self::STATUS_UPDATED
+            ]);
+            if ($model->save()) {
+                BidUpdateHistory::createUpdated($bid, $model);
+            } else {
+                \Yii::error($model->getErrors());
+            }
+        } catch (\Throwable $e) {
+            \Yii::error($e->getMessage());
+        }
     }
 }

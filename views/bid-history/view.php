@@ -26,6 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ]);
 ?>
 
+<?php if (!empty($model->bidUpdateHistory)): ?>
+    <?= $this->render('_updated', ['model' => $model]) ?>
+<?php endif; ?>
+
+
 <?php if (!empty($model->images)): ?>
 <div>
     <?php foreach ($model->images as $image): ?>
