@@ -40,6 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'label' => 'Состояние',
             'value' => $model->condition->name,
         ],
+        'defect',
+        'diagnostic',
         'client_name',
         'client_phone',
         'client_address',

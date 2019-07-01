@@ -187,6 +187,9 @@ use yii\web\JsExpression;
         ]
     ]) ?>
 
+    <?= $form->field($model, 'defect')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'diagnostic')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'condition_id')
         ->dropDownList(Condition::conditionsAsMap(),['prompt' => 'Выбор', 'class' => 'form-control bid-condition']); ?>
