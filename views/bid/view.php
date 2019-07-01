@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'label' => 'Производитель',
             'value' => $model->manufacturer->name,
         ],
+        'equipment',
         'brand_model_name',
         'serial_number',
         'vendor_code',

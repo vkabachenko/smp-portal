@@ -42,7 +42,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $html = Html::tag('div', $model->manufacturer->name, ['class' => 'grid-table grid-25']);
+                        $html = Html::tag('div', $model->manufacturer->name, ['class' => 'grid-table grid-20']);
+                        return $html;
+                    },
+                ],
+                [
+                    'attribute' => 'equipment',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        /* @var $model app\models\Bid */
+                        $html = Html::tag('div', $model->equipment, ['class' => 'grid-table grid-20']);
                         return $html;
                     },
                 ],
@@ -52,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
                         $text = $model->brand_id ? $model->brand->name : '';
-                        $html = Html::tag('div', $text, ['class' => 'grid-table grid-25']);
+                        $html = Html::tag('div', $text, ['class' => 'grid-table grid-20']);
                         return $html;
                     },
                 ],
@@ -62,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
                         $text = $model->brand_model_id ? $model->brandModel->name : $model->brand_model_name;
-                        $html = Html::tag('div', $text, ['class' => 'grid-table grid-25']);
+                        $html = Html::tag('div', $text, ['class' => 'grid-table grid-20']);
                         return $html;
                     },
                 ],

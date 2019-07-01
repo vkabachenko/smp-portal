@@ -12,6 +12,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $manufacturer_id
  * @property int $brand_id
  * @property string $brand_name
+ * @property string $equipment
  * @property int $brand_model_id
  * @property string $brand_model_name
  * @property int $composition_id
@@ -82,7 +83,7 @@ class Bid extends \yii\db\ActiveRecord
             [['manufacturer_id', 'brand_id', 'brand_model_id', 'composition_id', 'client_id', 'condition_id'], 'integer'],
             [['composition_table', 'treatment_type', 'compositionCombined', 'brand_name'], 'string'],
             [['purchase_date', 'application_date', 'created_at', 'updated_at'], 'safe'],
-            [['brand_model_name', 'composition_name', 'serial_number', 'vendor_code', 'client_name', 'client_phone', 'client_address', 'warranty_number', 'bid_number', 'bid_1C_number', 'bid_manufacturer_number'], 'string', 'max' => 255],
+            [['brand_model_name', 'composition_name', 'serial_number', 'vendor_code', 'client_name', 'client_phone', 'client_address', 'warranty_number', 'bid_number', 'bid_1C_number', 'bid_manufacturer_number', 'equipment'], 'string', 'max' => 255],
             [['condition_id'], 'exist', 'skipOnError' => true, 'targetClass' => Condition::className(), 'targetAttribute' => ['condition_id' => 'id']],
             [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => Brand::className(), 'targetAttribute' => ['brand_id' => 'id']],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['client_id' => 'id']],
@@ -124,6 +125,7 @@ class Bid extends \yii\db\ActiveRecord
             'bid_1C_number' => 'Номер заявки в 1С',
             'bid_manufacturer_number' => 'Номер заявки у производителя',
             'condition_id' => 'Состояние',
+            'equipment' => 'Оборудование'
         ];
     }
 

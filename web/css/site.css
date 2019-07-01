@@ -132,6 +132,10 @@ a.desc:after {
     min-width: 25%;
 }
 
+.grid-20 {
+    min-width: 20%;
+}
+
 .bid-menu {
     list-style: none;
 }

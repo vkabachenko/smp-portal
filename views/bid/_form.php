@@ -79,6 +79,8 @@ use yii\web\JsExpression;
             'id' => 'bid-manufacturer-id',
         ]); ?>
 
+    <?= $form->field($model, 'equipment')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'brand_model_id')->hiddenInput([
         'id' => 'bid-brand-model-id',
         'data-url' => Url::to(['bid/brand-model'])
