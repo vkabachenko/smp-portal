@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'composition_name',
         [
             'label' => 'Состояние',
-            'value' => $model->condition->name,
+            'value' => $model->condition ? $model->condition->name : '',
         ],
         'defect',
         'diagnostic',
@@ -51,7 +51,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'warranty_number',
         'bid_number',
         'bid_1C_number',
-        'bid_manufacturer_number'
+        'bid_manufacturer_number',
+        [
+            'label' => 'Статус ремонта',
+            'value' => $model->repairStatus ? $model->repairStatus->name : '',
+        ],
+        [
+            'label' => 'Статус гарантии',
+            'value' => $model->warrantyStatus ? $model->warrantyStatus->name : '',
+        ],
     ]
 
 ]);

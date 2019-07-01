@@ -9,6 +9,9 @@ use yii\helpers\Url;
 use app\models\Bid;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
+use app\models\RepairStatus;
+use app\models\WarrantyStatus;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
@@ -223,6 +226,12 @@ use yii\web\JsExpression;
     <?= $form->field($model, 'bid_1C_number')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'bid_manufacturer_number')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'repair_status_id')
+        ->dropDownList(RepairStatus::repairStatusAsMap(),['prompt' => 'Выбор']); ?>
+
+    <?= $form->field($model, 'warranty_status_id')
+        ->dropDownList(WarrantyStatus::warrantyStatusAsMap(),['prompt' => 'Выбор']); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

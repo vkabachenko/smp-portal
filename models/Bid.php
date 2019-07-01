@@ -36,6 +36,8 @@ use yii\behaviors\TimestampBehavior;
  * @property string $bid_1C_number
  * @property string $bid_manufacturer_number
  * @property int $condition_id
+ * @property int $repair_status_id
+ * @property int $warranty_status_id
  *
  * @property Condition $condition
  * @property Brand $brand
@@ -82,7 +84,16 @@ class Bid extends \yii\db\ActiveRecord
     {
         return [
             [['manufacturer_id', 'brand_name'], 'required'],
-            [['manufacturer_id', 'brand_id', 'brand_model_id', 'composition_id', 'client_id', 'condition_id'], 'integer'],
+            [[
+                'manufacturer_id',
+                'brand_id',
+                'brand_model_id',
+                'composition_id',
+                'client_id',
+                'condition_id',
+                'repair_status_id',
+                'warranty_status_id',
+            ], 'integer'],
             [['composition_table', 'treatment_type', 'compositionCombined', 'brand_name'], 'string'],
             [['purchase_date', 'application_date', 'created_at', 'updated_at'], 'safe'],
             [[
@@ -105,6 +116,8 @@ class Bid extends \yii\db\ActiveRecord
             [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => Brand::className(), 'targetAttribute' => ['brand_id' => 'id']],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['client_id' => 'id']],
             [['manufacturer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manufacturer::className(), 'targetAttribute' => ['manufacturer_id' => 'id']],
+            [['repair_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => RepairStatus::className(), 'targetAttribute' => ['repair_status_id' => 'id']],
+            [['warranty_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => WarrantyStatus::className(), 'targetAttribute' => ['warranty_status_id' => 'id']],
             ['treatment_type', 'default', 'value' => null],
             ['treatment_type', 'in', 'range' => array_keys(self::TREATMENT_TYPES)],
         ];
@@ -144,7 +157,9 @@ class Bid extends \yii\db\ActiveRecord
             'condition_id' => 'Состояние',
             'equipment' => 'Оборудование',
             'defect' => 'Заявленная неисправность',
-            'diagnostic' => 'Результат диагностики'
+            'diagnostic' => 'Результат диагностики',
+            'repair_status_id' => 'Статус ремонта',
+            'warranty_status_id' => 'Статус гарантии',
         ];
     }
 
@@ -186,6 +201,22 @@ class Bid extends \yii\db\ActiveRecord
     public function getManufacturer()
     {
         return $this->hasOne(Manufacturer::className(), ['id' => 'manufacturer_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRepairStatus()
+    {
+        return $this->hasOne(RepairStatus::className(), ['id' => 'repair_status_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWarrantyStatus()
+    {
+        return $this->hasOne(WarrantyStatus::className(), ['id' => 'warranty_status_id']);
     }
 
     /**
