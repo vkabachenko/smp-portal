@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $text = date('d.m.Y h:i', strtotime($model->created_at));
+                        $text = date('d.m.Y H:i', strtotime($model->created_at));
                         $html = Html::a($text, ['view', 'id' => $model->id]);
                         return $html;
                     },

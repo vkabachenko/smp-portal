@@ -197,20 +197,6 @@ class Bid extends \yii\db\ActiveRecord
         return is_null($this->treatment_type) ? '' : self::TREATMENT_TYPES[$this->treatment_type];
     }
 
-    public function beforeSave($insert)
-    {
-        if ($this->brand_model_name) {
-            $this->brand_model_id = null;
-        }
-
-        if ($this->composition_name) {
-            $this->composition_id = null;
-            $this->composition_table = null;
-        }
-
-        return parent::beforeSave($insert);
-    }
-
     public function createBid($userId)
     {
         $transaction = \Yii::$app->db->beginTransaction();
