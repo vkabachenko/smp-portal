@@ -119,8 +119,12 @@ a.desc:after {
     border-color: #A5D0AE;
 }
 
-.navbar-inverse .navbar-brand, .navbar-inverse .btn-link {
+.navbar-inverse .navbar-brand, .navbar-inverse .btn-link, .navbar-inverse .navbar-nav > li > a {
     color: #025256;
+}
+
+.navbar-inverse .navbar-nav > li.active > a {
+    background-color: rgba(8, 8, 8, .3);
 }
 
 .grid-table {

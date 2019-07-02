@@ -11,6 +11,62 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
 AppAsset::register($this);
+
+// Menu items
+$commonItems = [
+    Yii::$app->user->isGuest ? (
+    ['label' => 'Вход', 'url' => ['/site/login']]
+    ) : (
+        '<li>'
+        . Html::beginForm(['/site/logout'], 'post')
+        . Html::submitButton(
+            'Выйти (' . Yii::$app->user->identity->username . ')',
+            ['class' => 'btn btn-link logout']
+        )
+        . Html::endForm()
+        . '</li>'
+    )
+];
+
+$customItems = [];
+
+if (\Yii::$app->user->can('admin')) {
+    $customItems = [
+            [
+                'label' => 'Заявки',
+                'url' => ['bid/index', 'title' => 'Личный кабинет администратора']
+            ],
+        [
+            'label' => 'Справочники',
+            'items' => [
+                [
+                    'label' => 'Производители',
+                    'url' => ['manufacturer/index']
+                ],
+                [
+                    'label' => 'Комплектность',
+                    'url' => ['composition/index']
+                ],
+                [
+                    'label' => 'Состояния',
+                    'url' => ['condition/index']
+                ],
+                [
+                    'label' => 'Статусы ремонта',
+                    'url' => ['repair-status/index']
+                ],
+                [
+                    'label' => 'Статусы гарантии',
+                    'url' => ['warranty-status/index']
+                ],
+            ]
+        ],
+    ];
+}
+
+
+$items = array_merge($customItems, $commonItems);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -37,20 +93,7 @@ AppAsset::register($this);
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Вход', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Выйти (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
-        ],
+        'items' => $items
     ]);
     NavBar::end();
     ?>
