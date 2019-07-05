@@ -20,18 +20,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'label' => 'Создатель',
             'value' => $model->user->username,
         ],
-        'statusName',
-        'comment'
+        'action'
     ]
 ]);
 ?>
 
-<?php if (!empty($model->bidUpdateHistory)): ?>
+<?php if (!empty($model->updated_attributes)): ?>
     <?= $this->render('_updated', ['model' => $model]) ?>
 <?php endif; ?>
 
-<?php if (!empty($model->images)): ?>
-    <?= $this->render('_images', ['model' => $model]) ?>
-<?php endif; ?>
 
 

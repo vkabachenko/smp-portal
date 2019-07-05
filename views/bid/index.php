@@ -38,6 +38,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
                 [
+                    'attribute' => 'status_id',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        /* @var $model app\models\Bid */
+                        $html = Html::tag('div', $model->status_id ? $model->status->name : '', ['class' => 'grid-table']);
+                        return $html;
+                    },
+                ],
+                [
                     'attribute' => 'manufacturer_id',
                     'format' => 'raw',
                     'value' => function ($model) {

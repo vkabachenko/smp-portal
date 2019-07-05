@@ -11,7 +11,7 @@
             <th>Старое значение</th>
             <th>Новое значение</th>
         </tr>
-        <?php foreach ($model->bidUpdateHistory->updated_attributes as $updatedAttribute): ?>
+        <?php foreach ($model->updated_attributes as $updatedAttribute): ?>
             <tr>
                 <td>
                     <?= $model->bid->getAttributeLabel($updatedAttribute['name']) ?>

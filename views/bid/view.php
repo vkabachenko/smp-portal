@@ -14,11 +14,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3><?= Html::encode($this->title) ?></h3>
 
     <div class="row" style="margin-bottom: 10px;">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <?= Html::a('История', ['bid-history/index', 'bidId' => $model->id], ['class' => 'btn btn-success']) ?>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        </div>
+        <div class="col-lg-4">
+            <?= Html::a('Добавить фото', ['bid-image/create', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
 
@@ -54,15 +57,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'bid_manufacturer_number',
         [
             'label' => 'Статус ремонта',
-            'value' => $model->repairStatus ? $model->repairStatus->name : '',
+            'value' => $model->repair_status_id ? $model->repairStatus->name : '',
         ],
         [
             'label' => 'Статус гарантии',
-            'value' => $model->warrantyStatus ? $model->warrantyStatus->name : '',
+            'value' => $model->warranty_status_id ? $model->warrantyStatus->name : '',
+        ],
+        [
+            'label' => 'Статус заявки',
+            'value' => $model->status_id ? $model->status->name : '',
         ],
     ]
 
 ]);
 ?>
+
+<?php if (!empty($model->bidImages)): ?>
+    <?= $this->render('_images', ['model' => $model]) ?>
+<?php endif; ?>
+
 
 </div>

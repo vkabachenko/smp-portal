@@ -38,6 +38,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $condition_id
  * @property int $repair_status_id
  * @property int $warranty_status_id
+ * @property int $status_id
  *
  * @property Condition $condition
  * @property Brand $brand
@@ -93,6 +94,7 @@ class Bid extends \yii\db\ActiveRecord
                 'condition_id',
                 'repair_status_id',
                 'warranty_status_id',
+                'status_id'
             ], 'integer'],
             [['composition_table', 'treatment_type', 'compositionCombined', 'brand_name'], 'string'],
             [['purchase_date', 'application_date', 'created_at', 'updated_at'], 'safe'],
@@ -160,6 +162,7 @@ class Bid extends \yii\db\ActiveRecord
             'diagnostic' => 'Результат диагностики',
             'repair_status_id' => 'Статус ремонта',
             'warranty_status_id' => 'Статус гарантии',
+            'status_id' => 'Статус'
         ];
     }
 
@@ -214,6 +217,14 @@ class Bid extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getStatus()
+    {
+        return $this->hasOne(BidStatus::className(), ['id' => 'status_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getWarrantyStatus()
     {
         return $this->hasOne(WarrantyStatus::className(), ['id' => 'warranty_status_id']);
@@ -225,6 +236,14 @@ class Bid extends \yii\db\ActiveRecord
     public function getBidHistories()
     {
         return $this->hasMany(BidHistory::className(), ['bid_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBidImages()
+    {
+        return $this->hasMany(BidImage::className(), ['bid_id' => 'id']);
     }
 
     public function getCompositionCombined()
@@ -257,7 +276,8 @@ class Bid extends \yii\db\ActiveRecord
             if ($this->save()) {
                 $bidHistory = new BidHistory([
                     'bid_id' => $this->id,
-                    'user_id' => $userId
+                    'user_id' => $userId,
+                    'action' => 'Создана'
                 ]);
                 $result = $bidHistory->save();
                 if ($result === false) {

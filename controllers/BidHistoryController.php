@@ -47,7 +47,7 @@ class BidHistoryController  extends Controller
         ]);
     }
 
-    public function actionCreate($bidId)
+/*    public function actionCreate($bidId)
     {
         $this->checkAccess('createBid');
 
@@ -67,11 +67,11 @@ class BidHistoryController  extends Controller
             'uploadForm' => $uploadForm
         ]);
     }
-
+*/
     public function actionView($id)
     {
         $this->checkAccess('viewBid');
-        $model = BidHistory::find()->with('images')->where(['id' => $id])->one();
+        $model = BidHistory::find()->where(['id' => $id])->one();
 
         return $this->render('view', [
             'model' => $model

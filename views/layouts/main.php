@@ -59,6 +59,10 @@ if (\Yii::$app->user->can('admin')) {
                     'label' => 'Статусы гарантии',
                     'url' => ['warranty-status/index']
                 ],
+                [
+                    'label' => 'Статусы заявки',
+                    'url' => ['bid-status/index']
+                ],
             ]
         ],
     ];

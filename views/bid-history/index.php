@@ -19,11 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3>История заявки</h3>
 
     <div>
-        <p>
-            <?= Html::a('Новый этап', ['create', 'bidId' => $bidId], ['class' => 'btn btn-success']) ?>
-        </p>
-
-
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'columns' => [
@@ -47,22 +42,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ],
                 [
-                    'attribute' => 'status',
+                    'attribute' => 'action',
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\BidHistory */
-                        $text = \app\models\BidHistory::STATUSES[$model->status];
-                        $html = Html::tag('div', $text, ['class' => 'grid-table']);
-                        return $html;
-                    },
-                ],
-                [
-                    'attribute' => 'comment',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        /* @var $model app\models\BidHistory */
-                        $text = $model->comment;
-                        $html = Html::tag('div', $text, ['class' => 'grid-table grid-25']);
+                        $html = Html::tag('div', $model->action, ['class' => 'grid-table']);
                         return $html;
                     },
                 ],

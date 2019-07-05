@@ -3,27 +3,40 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "image".
+ * This is the model class for table "bid_image".
  *
  * @property int $id
  * @property int $bid_id
- * @property int $bid_history_id
  * @property string $file_name
  * @property string $src_name
+ * @property string $created_at
+ * @property string $updated_at
  *
- * @property BidHistory $bidHistory
  * @property Bid $bid
  */
-class Image extends \yii\db\ActiveRecord
+class BidImage extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'image';
+        return 'bid_image';
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'value' => function () {
+                    return date('Y-m-d H:i:s');
+                }
+            ],
+        ];
     }
 
     /**
@@ -32,10 +45,10 @@ class Image extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['bid_id', 'bid_history_id', 'file_name', 'src_name'], 'required'],
-            [['bid_id', 'bid_history_id'], 'integer'],
+            [['bid_id', 'file_name', 'src_name'], 'required'],
+            [['bid_id'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
             [['file_name', 'src_name'], 'string', 'max' => 255],
-            [['bid_history_id'], 'exist', 'skipOnError' => true, 'targetClass' => BidHistory::className(), 'targetAttribute' => ['bid_history_id' => 'id']],
             [['bid_id'], 'exist', 'skipOnError' => true, 'targetClass' => Bid::className(), 'targetAttribute' => ['bid_id' => 'id']],
         ];
     }
@@ -48,18 +61,11 @@ class Image extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'bid_id' => 'Bid ID',
-            'bid_history_id' => 'Bid History ID',
             'file_name' => 'File Name',
             'src_name' => 'Src Name',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBidHistory()
-    {
-        return $this->hasOne(BidHistory::className(), ['id' => 'bid_history_id']);
     }
 
     /**

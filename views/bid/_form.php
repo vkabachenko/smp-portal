@@ -11,6 +11,7 @@ use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use app\models\RepairStatus;
 use app\models\WarrantyStatus;
+use app\models\BidStatus;
 
 
 /* @var $this yii\web\View */
@@ -232,6 +233,9 @@ use app\models\WarrantyStatus;
 
     <?= $form->field($model, 'warranty_status_id')
         ->dropDownList(WarrantyStatus::warrantyStatusAsMap(),['prompt' => 'Выбор']); ?>
+
+    <?= $form->field($model, 'status_id')
+        ->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

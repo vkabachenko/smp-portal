@@ -3,8 +3,7 @@
 
 namespace app\models\form;
 
-use app\models\BidHistory;
-use app\models\Image;
+use app\models\BidImage;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
@@ -35,17 +34,12 @@ class MultipleUploadForm extends Model
         ];
     }
 
-    public function upload(BidHistory $model)
+    public function upload($attributes)
     {
         foreach ($this->files as $file) {
-            $image = new Image(
-                [
-                    'bid_id' => $model->bid_id,
-                    'bid_history_id' => $model->id,
-                    'file_name' => $file->name,
-                    'src_name' => \Yii::$app->security->generateRandomString() . '.' . $file->extension
-                ]
-            );
+            $image = new BidImage($attributes);
+            $image->file_name = $file->name;
+            $image->src_name = \Yii::$app->security->generateRandomString() . '.' . $file->extension;
             if ($image->save()) {
                 $file->saveAs($image->getPath());
             } else {

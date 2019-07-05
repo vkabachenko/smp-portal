@@ -4,7 +4,7 @@ use yii\bootstrap\Modal;
 ?>
 
     <div>
-        <?php foreach ($model->images as $image): ?>
+        <?php foreach ($model->bidImages as $image): ?>
 
             <div
                 class= "view-img-wrap"

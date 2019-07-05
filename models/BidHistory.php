@@ -11,40 +11,16 @@ use yii\behaviors\TimestampBehavior;
  * @property int $id
  * @property int $bid_id
  * @property int $user_id
- * @property int $status
- * @property string $comment
+ * @property string $action
  * @property string $created_at
  * @property string $updated_at
+ * @property array $updated_attributes
  *
  * @property Bid $bid
  * @property User $user
  */
 class BidHistory extends \yii\db\ActiveRecord
 {
-    const STATUS_CREATED = 'created';
-    const STATUS_UPDATED = 'updated';
-    const STATUS_FILLED = 'filled';
-    const STATUS_SENT = 'sent';
-    const STATUS_CLARIICATION_NEEDED = 'clarification needed';
-    const STATUS_APPROVED = 'approved';
-    const STATUS_DONE = 'done';
-    const STATUS_ISSUED = 'issued';
-    const STATUS_PAYED = 'payed';
-    const STATUS_CLOSED = 'closed';
-
-    const STATUSES = [
-        self::STATUS_CREATED => 'Создана',
-        self::STATUS_UPDATED => 'Исправлена',
-        self::STATUS_FILLED => 'Заполнена',
-        self::STATUS_SENT => 'Отправлена',
-        self::STATUS_APPROVED => 'Одобрена',
-        self::STATUS_CLARIICATION_NEEDED => 'Требует уточнения',
-        self::STATUS_DONE => 'Выполнена',
-        self::STATUS_ISSUED => 'Выдана',
-        self::STATUS_PAYED => 'Оплачена',
-        self::STATUS_CLOSED => 'Закрыта',
-    ];
-
     /**
      * {@inheritdoc}
      */
@@ -73,12 +49,11 @@ class BidHistory extends \yii\db\ActiveRecord
         return [
             [['bid_id'], 'required'],
             [['bid_id', 'user_id'], 'integer'],
-            [['comment'], 'string'],
+            [['action'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['bid_id'], 'exist', 'skipOnError' => true, 'targetClass' => Bid::className(), 'targetAttribute' => ['bid_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            ['status', 'in', 'range' => array_keys(self::STATUSES)],
-            ['status', 'default', 'value' => self::STATUS_CREATED],
+            [['updated_attributes'], 'safe'],
         ];
     }
 
@@ -91,11 +66,9 @@ class BidHistory extends \yii\db\ActiveRecord
             'id' => 'ID',
             'bid_id' => 'Bid ID',
             'user_id' => 'Создатель',
-            'status' => 'Статус',
-            'comment' => 'Комментарий',
+            'action' => 'Действие',
             'created_at' => 'Дата создания',
             'updated_at' => 'Updated At',
-            'statusName' => 'Статус'
         ];
     }
 
@@ -115,49 +88,41 @@ class BidHistory extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getImages()
-    {
-        return $this->hasMany(Image::class, ['bid_history_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBidUpdateHistories()
-    {
-        return $this->hasMany(BidUpdateHistory::class, ['bid_history_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBidUpdateHistory()
-    {
-        return $this->hasOne(BidUpdateHistory::class, ['bid_history_id' => 'id']);
-    }
-
-    public function getStatusName() {
-        return self::STATUSES[$this->status];
-    }
-
     public static function createUpdated(Bid $bid, $userId)
     {
         try {
             $model = new self([
                 'bid_id' => $bid->id,
                 'user_id' => $userId,
-                'status' => self::STATUS_UPDATED
+                'action' => 'Изменена'
             ]);
-            if ($model->save()) {
-                BidUpdateHistory::createUpdated($bid, $model);
-            } else {
+
+            $changedAttributes = [];
+            foreach ($bid->getDirtyAttributes() as $name => $value) {
+                $oldValue = $bid->getOldAttribute($name);
+                if ($value != $oldValue) {
+                    $changedAttributes[] = [
+                        'name' => $name,
+                        'value' => $value,
+                        'old_value' => $oldValue
+                    ];
+                }
+            }
+            $model->updated_attributes = $changedAttributes;
+
+            if (!$model->save()) {
                 \Yii::error($model->getErrors());
             }
         } catch (\Throwable $e) {
             \Yii::error($e->getMessage());
+        }
+    }
+
+    public static function createRecord($attributes)
+    {
+        $model = new self($attributes);
+        if (!$model->save()) {
+            \Yii::error($attributes);
         }
     }
 }

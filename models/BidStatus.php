@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "bid_status".
@@ -40,15 +41,18 @@ class BidStatus extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Наименование',
         ];
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * return array
      */
-    public function getBidHistories()
+    public static function bidStatusAsMap()
     {
-        return $this->hasMany(BidHistory::className(), ['status_id' => 'id']);
+        $models = self::find()->orderBy('name')->all();
+        $list = ArrayHelper::map($models, 'id', 'name');
+
+        return $list;
     }
 }
