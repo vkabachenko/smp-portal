@@ -20,9 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-lg-4">
             <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         </div>
-        <div class="col-lg-4">
-            <?= Html::a('Добавить фото', ['bid-image/create', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
-        </div>
     </div>
 
 <?= \yii\widgets\DetailView::widget([
@@ -76,5 +73,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_images', ['model' => $model]) ?>
 <?php endif; ?>
 
-
+<div class="row form-group clearfix"></div>
+<div>
+    <?= Html::a('Добавить фото', ['bid-image/create', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
 </div>
+
