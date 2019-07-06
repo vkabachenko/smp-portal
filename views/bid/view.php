@@ -69,11 +69,15 @@ $this->params['breadcrumbs'][] = $this->title;
 ]);
 ?>
 
+<div class="form-group">
+    <?= Html::a('Комментарии', ['bid-comment/index', 'bidId' => $model->id], ['class' => 'btn btn-success']) ?>
+</div>
+
 <?php if (!empty($model->bidImages)): ?>
     <?= $this->render('_images', ['model' => $model]) ?>
 <?php endif; ?>
 
-<div class="row form-group clearfix"></div>
+<div class="form-group clearfix"></div>
 <div>
     <?= Html::a('Добавить фото', ['bid-image/create', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
 </div>

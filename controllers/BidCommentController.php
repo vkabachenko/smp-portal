@@ -3,13 +3,12 @@
 
 namespace app\controllers;
 
-use app\models\search\BidHistorySearch;
+use app\models\BidComment;
+use app\models\search\BidCommentSearch;
 use yii\filters\AccessControl;
 use yii\web\Controller;
-use app\models\BidHistory;
 
-
-class BidHistoryController  extends Controller
+class BidCommentController  extends Controller
 {
     use AccessTrait;
 
@@ -33,9 +32,9 @@ class BidHistoryController  extends Controller
 
     public function actionIndex($bidId)
     {
-        $this->checkAccess('viewBid');
+        $this->checkAccess('viewComments');
 
-        $searchModel = new BidHistorySearch();
+        $searchModel = new BidCommentSearch();
         $dataProvider = $searchModel->search($bidId);
 
         return $this->render('index', [
@@ -44,13 +43,22 @@ class BidHistoryController  extends Controller
         ]);
     }
 
-    public function actionView($id)
+    public function actionCreate($bidId)
     {
-        $this->checkAccess('viewBid');
-        $model = BidHistory::find()->where(['id' => $id])->one();
+        $this->checkAccess('createComment');
 
-        return $this->render('view', [
-            'model' => $model
+        $model = new BidComment([
+            'bid_id' => $bidId,
+            'user_id' => \Yii::$app->user->id
+        ]);
+
+        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index', 'bidId' => $bidId]);
+        }
+
+        return $this->render('create', [
+            'model' => $model,
         ]);
     }
+
 }

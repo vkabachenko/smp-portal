@@ -29,6 +29,12 @@ class RbacController extends Controller
         $manageCatalogs = $auth->createPermission('manageCatalogs');
         $auth->add($manageCatalogs);
 
+        $viewComments = $auth->createPermission('viewComments');
+        $auth->add($viewComments);
+
+        $createComment = $auth->createPermission('createComment');
+        $auth->add($createComment);
+
         $client = $auth->createRole('client');
         $auth->add($client);
 
@@ -38,6 +44,8 @@ class RbacController extends Controller
         $auth->addChild($master, $createBid);
         $auth->addChild($master, $updateBid);
         $auth->addChild($master, $viewBid);
+        $auth->addChild($master, $viewComments);
+        $auth->addChild($master, $createComment);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
@@ -52,6 +60,8 @@ class RbacController extends Controller
         $auth->addChild($admin, $updateBid);
         $auth->addChild($admin, $viewBid);
         $auth->addChild($admin, $manageCatalogs);
+        $auth->addChild($admin, $viewComments);
+        $auth->addChild($admin, $createComment);
 
         echo 'done' . "\n";
     }

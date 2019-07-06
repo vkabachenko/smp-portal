@@ -19,7 +19,7 @@ use app\models\BidStatus;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="bid-form">
+<div>
 
     <?php $form = ActiveForm::begin(); ?>
 
