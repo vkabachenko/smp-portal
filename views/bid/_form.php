@@ -12,11 +12,14 @@ use yii\web\JsExpression;
 use app\models\RepairStatus;
 use app\models\WarrantyStatus;
 use app\models\BidStatus;
+use app\assets\QuaggaAsset;
 
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
 /* @var $form yii\widgets\ActiveForm */
+
+QuaggaAsset::register($this);
 ?>
 
 <div>
@@ -136,7 +139,15 @@ use app\models\BidStatus;
         ]
     ]) ?>
 
-    <?= $form->field($model, 'serial_number')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'serial_number')->textInput([
+            'id' => 'bid-serial-number',
+            'maxlength' => true
+    ]) ?>
+
+    <div class="form-group">
+        <span style="font-weight: bold;">Файл со штрих-кодом серийного номера</span>
+        <?= Html::fileInput('', null, ['id' => 'bid-serial-number-file']) ?>
+    </div>
 
     <?= $form->field($model, 'vendor_code')->textInput(['maxlength' => true]) ?>
 
@@ -248,6 +259,67 @@ use app\models\BidStatus;
 <?php
 $script = <<<JS
     $(function(){
+            var App = {
+            init: function() {
+                App.attachListeners();
+            },
+            config: {
+                reader: "code_128",
+                length: 10
+            },
+            attachListeners: function() {
+                $("#bid-serial-number-file").on("change", function(e) {
+                    if (e.target.files && e.target.files.length) {
+                        App.decode(URL.createObjectURL(e.target.files[0]));
+                    }
+                });
+            },
+            detachListeners: function() {
+                $("#bid-serial-number-file").off("change");
+            },
+            decode: function(src) {
+                var self = this,
+                    config = $.extend({}, self.state, {src: src});
+    
+                Quagga.decodeSingle(config, function(result) {});
+            },
+            state: {
+                inputStream: {
+                    size: 800
+                },
+                locator: {
+                    patchSize: "medium",
+                    halfSample: false
+                },
+                numOfWorkers: 1,
+                decoder: {
+                    readers: [{
+                        format: "code_128_reader",
+                        config: {}
+                    }]
+                },
+                locate: true,
+                src: null
+            }
+        };
+    
+        App.init();
+    
+        Quagga.onProcessed(function(result) {
+            console.log('processed');
+            console.log(result);
+        });
+    
+        Quagga.onDetected(function(result) {
+            console.log('detected');
+            console.log(result);
+            var code = result.codeResult.code;
+            if (code) {
+                $('#bid-serial-number').val(code);
+            }
+        });
+        
+        
         $('#bid-manufacturer-id').change(function(){
             if ($('#bid-brand-id').val()) {
               $('#bid-brand-id').val('');
@@ -267,7 +339,6 @@ $script = <<<JS
             }
         });
     });
-
 JS;
 
 $this->registerJs($script);
