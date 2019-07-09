@@ -6,9 +6,7 @@ use yii\widgets\ListView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $bidId int */
 $this->title = 'Комментарии';
-$this->params['breadcrumbs'][] = ['label' => 'Личный кабинет мастера', 'url' => ['bid/index']];
-$this->params['breadcrumbs'][] = ['label' => 'Просмотр  заявки', 'url' => ['bid/view', 'id' => $bidId]];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['back'] = ['bid/view', 'id' => $bidId];
 ?>
 
 <h3><?= $this->title ?></h3>

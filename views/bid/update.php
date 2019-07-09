@@ -6,9 +6,7 @@ use yii\helpers\Html;
 /* @var $model app\models\Bid */
 
 $this->title = 'Редактирование заявки';
-$this->params['breadcrumbs'][] = ['label' => 'Личный кабинет мастера', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Просмотр  заявки', 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['back'] = ['view', 'id' => $model->id];
 ?>
 <div>
 

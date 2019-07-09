@@ -10,9 +10,7 @@ use yii\bootstrap\Html;
 /* @var $bidId int */
 
 $this->title = 'История заявки';
-$this->params['breadcrumbs'][] = ['label' => 'Личный кабинет мастера', 'url' => ['master/index']];
-$this->params['breadcrumbs'][] = ['label' => 'Просмотр  заявки', 'url' => ['bid/view', 'id' => $bidId]];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['back'] = ['bid/view', 'id' => $bidId];
 ?>
 
 <div>

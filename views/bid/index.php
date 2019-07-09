@@ -11,7 +11,6 @@ use yii\bootstrap\Html;
 /* @var $title string */
 
 $this->title = $title;
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div>

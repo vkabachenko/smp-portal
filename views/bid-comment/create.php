@@ -7,10 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $model \app\models\BidComment */
 
 $this->title = 'Новый комментарий';
-$this->params['breadcrumbs'][] = ['label' => 'Личный кабинет мастера', 'url' => ['bid/index']];
-$this->params['breadcrumbs'][] = ['label' => 'Просмотр  заявки', 'url' => ['bid/view', 'id' => $model->bid_id]];
-$this->params['breadcrumbs'][] = ['label' => 'Комментарии', 'url' => ['bid-comment/index', 'bidId' => $model->bid_id]];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['back'] = ['bid-comment/index', 'bidId' => $model->bid_id];
 ?>
 
 <div>

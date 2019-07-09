@@ -5,9 +5,7 @@
 use yii\bootstrap\Modal;
 
 $this->title = 'Этап заявки';
-$this->params['breadcrumbs'][] = ['label' => 'Личный кабинет мастера', 'url' => ['master/index']];
-$this->params['breadcrumbs'][] = ['label' => 'История заявки', 'url' => ['bid-history/index', 'bidId' => $model->bid_id]];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['back'] = ['bid-history/index', 'bidId' => $model->bid_id];
 
 ?>
 <h3><?= $this->title ?></h3>

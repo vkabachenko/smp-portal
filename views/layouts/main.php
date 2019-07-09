@@ -7,8 +7,8 @@ use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\widgets\BackWidget\BackWidget;
 
 AppAsset::register($this);
 
@@ -103,8 +103,8 @@ $items = array_merge($customItems, $commonItems);
     ?>
 
     <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+        <?= BackWidget::widget([
+            'backLink' => isset($this->params['back']) ? $this->params['back'] : null,
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>

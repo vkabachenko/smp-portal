@@ -7,7 +7,6 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Состояния';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div>
 

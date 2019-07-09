@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Статусы гарантии';
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['back'] = ['index'];
 ?>
 <div>
 

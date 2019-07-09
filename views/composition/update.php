@@ -5,8 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 
 $this->title = 'Редактировать комплектность: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Комплектность', 'url' => ['index']];
-$this->params['breadcrumbs'][] = 'Редактировать';
+$this->params['back'] = ['index'];
 ?>
 <div>
 

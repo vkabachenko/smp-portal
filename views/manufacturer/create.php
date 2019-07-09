@@ -6,8 +6,7 @@ use yii\helpers\Html;
 /* @var $model app\models\Manufacturer */
 
 $this->title = 'Новый производитель';
-$this->params['breadcrumbs'][] = ['label' => 'Производители', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['back'] = ['index'];
 ?>
 <div>
 

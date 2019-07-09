@@ -6,8 +6,7 @@ use yii\bootstrap\Html;
 /* @var $model app\models\Bid */
 
 $this->title = 'Просмотр заявки';
-$this->params['breadcrumbs'][] = ['label' => 'Личный кабинет мастера', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['back'] = ['index'];
 ?>
 <div>
 
