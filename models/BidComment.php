@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\form\CommentForm;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -84,5 +85,18 @@ class BidComment extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public static function createFromForm(CommentForm $commentForm, $bidId, $userId) {
+        if ($commentForm->comment) {
+            $model = new self([
+                'bid_id' => $bidId,
+                'user_id' => $userId,
+                'comment' => $commentForm->comment
+            ]);
+            if (!$model->save()) {
+                \Yii::error($model->getErrors());
+            }
+        }
     }
 }

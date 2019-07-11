@@ -5,9 +5,11 @@ namespace app\controllers;
 
 use app\helpers\bid\CompositionHelper;
 use app\models\Bid;
+use app\models\BidComment;
 use app\models\BidHistory;
 use app\models\Brand;
 use app\models\BrandModel;
+use app\models\form\CommentForm;
 use app\models\form\MultipleUploadForm;
 use app\models\search\BidSearch;
 use Yii;
@@ -58,17 +60,20 @@ class BidController extends Controller
 
         $model = new Bid();
         $uploadForm = new MultipleUploadForm();
+        $commentForm = new CommentForm();
 
         if ($model->load(Yii::$app->request->post())) {
             $uploadForm->files = UploadedFile::getInstances($uploadForm, 'files');
-            if ($model->createBid(\Yii::$app->user->id, $uploadForm)) {
+            $commentForm->load(Yii::$app->request->post());
+            if ($model->createBid(\Yii::$app->user->id, $uploadForm, $commentForm)) {
                 return $this->redirect(['index']);
             }
         }
 
         return $this->render('create', [
             'model' => $model,
-            'uploadForm' => $uploadForm
+            'uploadForm' => $uploadForm,
+            'commentForm' => $commentForm
         ]);
     }
 

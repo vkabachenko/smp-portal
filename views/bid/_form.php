@@ -20,6 +20,7 @@ use app\assets\QuaggaAsset;
 /* @var $model app\models\Bid */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $uploadForm \app\models\form\MultipleUploadForm */
+/* @var $commentForm \app\models\form\CommentForm */
 
 QuaggaAsset::register($this);
 ?>
@@ -251,7 +252,10 @@ QuaggaAsset::register($this);
         ->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']); ?>
 
     <?php if ($model->isNewRecord): ?>
-        <div>
+        <div class="form-group">
+            <?= $form->field($commentForm, 'comment')->textarea() ?>
+        </div>
+        <div class="form-group">
             <?= $form->field($uploadForm, 'files[]')->widget(FileInput::class, [
                 'options' => ['multiple' => true, 'accept' => 'image/*'],
                 'pluginOptions'=>['allowedFileExtensions'=>['jpg','jpeg','png'],'showUpload' => false,]

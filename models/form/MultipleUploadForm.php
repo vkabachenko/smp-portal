@@ -12,7 +12,7 @@ class MultipleUploadForm extends Model
     /**
      * @var UploadedFile[] files uploaded
      */
-    public $files;
+    public $files = [];
 
     /**
      * @return array the validation rules.
