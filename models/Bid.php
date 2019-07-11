@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\form\MultipleUploadForm;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -268,7 +269,7 @@ class Bid extends \yii\db\ActiveRecord
         return is_null($this->treatment_type) ? '' : self::TREATMENT_TYPES[$this->treatment_type];
     }
 
-    public function createBid($userId)
+    public function createBid($userId, MultipleUploadForm $uploadForm)
     {
         $transaction = \Yii::$app->db->beginTransaction();
 
@@ -284,6 +285,7 @@ class Bid extends \yii\db\ActiveRecord
                     \Yii::error($bidHistory->getErrors());
                     $transaction->rollBack();
                 } else {
+                    $uploadForm->upload(['bid_id' => $this->id, 'user_id' => $userId,]);
                     $transaction->commit();
                 }
                 return $result;

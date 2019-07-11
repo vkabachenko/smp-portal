@@ -8,10 +8,12 @@ use app\models\Bid;
 use app\models\BidHistory;
 use app\models\Brand;
 use app\models\BrandModel;
+use app\models\form\MultipleUploadForm;
 use app\models\search\BidSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\UploadedFile;
 
 class BidController extends Controller
 {
@@ -55,13 +57,18 @@ class BidController extends Controller
         $this->checkAccess('createBid');
 
         $model = new Bid();
+        $uploadForm = new MultipleUploadForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->createBid(\Yii::$app->user->id)) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            $uploadForm->files = UploadedFile::getInstances($uploadForm, 'files');
+            if ($model->createBid(\Yii::$app->user->id, $uploadForm)) {
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('create', [
             'model' => $model,
+            'uploadForm' => $uploadForm
         ]);
     }
 

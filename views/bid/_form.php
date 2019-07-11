@@ -1,5 +1,6 @@
 <?php
 
+use kartik\file\FileInput;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Manufacturer;
@@ -18,6 +19,7 @@ use app\assets\QuaggaAsset;
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $uploadForm \app\models\form\MultipleUploadForm */
 
 QuaggaAsset::register($this);
 ?>
@@ -247,6 +249,17 @@ QuaggaAsset::register($this);
 
     <?= $form->field($model, 'status_id')
         ->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']); ?>
+
+    <?php if ($model->isNewRecord): ?>
+        <div>
+            <?= $form->field($uploadForm, 'files[]')->widget(FileInput::class, [
+                'options' => ['multiple' => true, 'accept' => 'image/*'],
+                'pluginOptions'=>['allowedFileExtensions'=>['jpg','jpeg','png'],'showUpload' => false,]
+            ])
+            ?>
+        </div>
+    <?php endif; ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
