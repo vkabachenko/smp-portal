@@ -19,6 +19,9 @@ $this->params['back'] = ['index'];
         <div class="col-lg-4">
             <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         </div>
+        <div class="col-lg-4">
+            <?= Html::a('Отправить', ['create-act', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        </div>
     </div>
 
 <?= \yii\widgets\DetailView::widget([

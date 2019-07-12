@@ -44,6 +44,9 @@ $config = [
                 ],
             ],
         ],
+        'formatter' => [
+            'dateFormat' => 'dd.MM.yyyy',
+        ],
         'db' => $db,
         'authManager' => [
             'class' => 'yii\rbac\PhpManager',

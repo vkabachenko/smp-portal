@@ -270,6 +270,11 @@ class Bid extends \yii\db\ActiveRecord
         return is_null($this->treatment_type) ? '' : self::TREATMENT_TYPES[$this->treatment_type];
     }
 
+    public function isWarranty()
+    {
+        return $this->treatment_type === self::TREATMENT_TYPE_WARRANTY;
+    }
+
     public function createBid($userId, MultipleUploadForm $uploadForm, CommentForm $commentForm)
     {
         $transaction = \Yii::$app->db->beginTransaction();

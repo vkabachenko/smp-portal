@@ -12,6 +12,7 @@ use app\models\BrandModel;
 use app\models\form\CommentForm;
 use app\models\form\MultipleUploadForm;
 use app\models\search\BidSearch;
+use app\templates\excel\act\ExcelActDefault;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -103,6 +104,16 @@ class BidController extends Controller
         return $this->render('view', [
             'model' => $model,
         ]);
+    }
+
+    public function actionCreateAct($id)
+    {
+        $this->checkAccess('viewBid');
+        $act = new ExcelActDefault($id);
+        $act->generate();
+        $act->save();
+
+        $this->redirect(['view', 'id' => $id]);
     }
 
     public function actionBrand()
