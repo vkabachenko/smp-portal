@@ -20,7 +20,7 @@ $this->params['back'] = ['index'];
             <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         </div>
         <div class="col-lg-4">
-            <?= Html::a('Отправить', ['create-act', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Отправить', ['send-act/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
 

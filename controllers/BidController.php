@@ -106,16 +106,6 @@ class BidController extends Controller
         ]);
     }
 
-    public function actionCreateAct($id)
-    {
-        $this->checkAccess('viewBid');
-        $act = new ExcelActDefault($id);
-        $act->generate();
-        $act->save();
-
-        $this->redirect(['view', 'id' => $id]);
-    }
-
     public function actionBrand()
     {
         $this->checkAccess('createBid');
