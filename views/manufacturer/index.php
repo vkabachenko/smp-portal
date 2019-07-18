@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -21,6 +21,15 @@ $this->title = 'Производители';
         'dataProvider' => $dataProvider,
         'columns' => [
             'name',
+            [
+                'attribute' => 'act_template',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    /* @var $model app\models\Manufacturer*/
+                    $html = Html::a($model->act_template, ['download/act-excel', 'filename' => $model->act_template]);
+                    return $html;
+                },
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update}{delete}',

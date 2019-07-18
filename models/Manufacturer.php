@@ -2,14 +2,18 @@
 
 namespace app\models;
 
+use app\models\form\UploadExcelTemplateForm;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "manufacturer".
  *
  * @property int $id
  * @property string $name
+ * @property string $act_template
+
  *
  * @property Bid[] $bs
  * @property Brand[] $brands
@@ -31,7 +35,7 @@ class Manufacturer extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['name'], 'string', 'max' => 255],
+            [['name', 'act_template'], 'string', 'max' => 255],
         ];
     }
 
@@ -43,6 +47,7 @@ class Manufacturer extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Наименование',
+            'act_template' => 'Файл шаблона акта'
         ];
     }
 
@@ -71,5 +76,52 @@ class Manufacturer extends \yii\db\ActiveRecord
         $list = ArrayHelper::map($models, 'id', 'name');
 
         return $list;
+    }
+
+    public static function getActTemplateDirectory()
+    {
+        return \Yii::getAlias('@app/templates/excel/act/');
+    }
+
+    /**
+     * @return string
+     */
+    public function getActTemplatePath()
+    {
+        return self::getActTemplateDirectory() . $this->act_template;
+    }
+
+    /**
+     * @param UploadExcelTemplateForm $uploadForm
+     * @return bool
+     */
+    public function saveWithUpload(UploadExcelTemplateForm $uploadForm)
+    {
+        $this->deleteActTemplate();
+        $uploadForm->file = UploadedFile::getInstance($uploadForm, 'file');
+        $this->act_template = $uploadForm->file ? $uploadForm->file->name : null;
+        if ($this->save()) {
+            if ($uploadForm->file) {
+                $uploadForm->file->saveAs($this->getActTemplatePath());
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private function deleteActTemplate()
+    {
+        if (is_file($this->getActTemplatePath())) {
+            @unlink($this->getActTemplatePath());
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function beforeDelete()
+    {
+        $this->deleteActTemplate();
+        return parent::beforeDelete();
     }
 }

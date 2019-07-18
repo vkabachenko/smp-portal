@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\form\UploadExcelTemplateForm;
 use Yii;
 use app\models\Manufacturer;
 use yii\data\ActiveDataProvider;
@@ -9,6 +10,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 
 class ManufacturerController extends Controller
@@ -55,12 +57,14 @@ class ManufacturerController extends Controller
     {
         $model = new Manufacturer();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $uploadForm = new UploadExcelTemplateForm();
+        if ($model->load(Yii::$app->request->post()) && $model->saveWithUpload($uploadForm)) {
             return $this->redirect(['index']);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'uploadForm' => $uploadForm
         ]);
     }
 
@@ -68,12 +72,14 @@ class ManufacturerController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $uploadForm = new UploadExcelTemplateForm();
+        if ($model->load(Yii::$app->request->post()) && $model->saveWithUpload($uploadForm)) {
             return $this->redirect(['index']);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'uploadForm' => $uploadForm
         ]);
     }
 
