@@ -124,4 +124,9 @@ class Manufacturer extends \yii\db\ActiveRecord
         $this->deleteActTemplate();
         return parent::beforeDelete();
     }
+
+    public function isActTemplate()
+    {
+        return !is_null($this->act_template);
+    }
 }

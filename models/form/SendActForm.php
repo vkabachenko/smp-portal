@@ -5,15 +5,19 @@ namespace app\models\form;
 
 
 use app\models\BidImage;
-use app\templates\excel\act\ExcelActDefault;
+use app\templates\excel\act\ExcelAct;
 use himiklab\thumbnail\EasyThumbnailImage;
 use yii\base\Model;
+use yii\web\UploadedFile;
 
 class SendActForm extends Model
 {
     public $bidId;
     public $images = [];
     public $email;
+
+    /* @var ExcelAct */
+    public $act;
 
     /**
      * @inheritdoc
@@ -25,6 +29,7 @@ class SendActForm extends Model
             /* @var $model BidImage */
             $this->images[$model->id] = EasyThumbnailImage::thumbnailImg($model->getPath(), 50, 50);
         }
+        $this->act = new ExcelAct(['id' => $this->bidId]);
     }
 
     /**
@@ -52,8 +57,10 @@ class SendActForm extends Model
         ];
     }
 
-    public function send()
+    public function send(UploadExcelTemplateForm $uploadForm)
     {
+        $this->setUploadedAct($uploadForm);
+
         /* @var $mailer \yii\swiftmailer\Mailer */
         $mailer = \Yii::$app->mailer;
         $message = $mailer->compose();
@@ -63,10 +70,8 @@ class SendActForm extends Model
             ->setSubject('Акт')
             ->setTextBody('Test');
 
-        $act = new ExcelActDefault($this->bidId);
-        $act->generate();
-        $act->save();
-        $message->attach($act->getPath());
+
+        $message->attach($this->act->getPath());
 
         foreach ($this->images as $imageId) {
             $model = BidImage::findOne($imageId);
@@ -74,5 +79,13 @@ class SendActForm extends Model
         }
 
         return $message->send();
+    }
+
+    private function setUploadedAct(UploadExcelTemplateForm $uploadForm)
+    {
+        $uploadForm->file = UploadedFile::getInstance($uploadForm, 'file');
+        if ($uploadForm->file) {
+            $uploadForm->file->saveAs($this->act->getPath());
+        }
     }
 }

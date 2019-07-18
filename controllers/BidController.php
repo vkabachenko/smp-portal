@@ -12,7 +12,7 @@ use app\models\BrandModel;
 use app\models\form\CommentForm;
 use app\models\form\MultipleUploadForm;
 use app\models\search\BidSearch;
-use app\templates\excel\act\ExcelActDefault;
+use app\templates\excel\act\ExcelAct;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
