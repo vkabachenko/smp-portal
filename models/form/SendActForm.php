@@ -5,6 +5,7 @@ namespace app\models\form;
 
 
 use app\models\BidImage;
+use app\models\TemplateModel;
 use app\templates\excel\act\ExcelAct;
 use himiklab\thumbnail\EasyThumbnailImage;
 use yii\base\Model;
@@ -68,7 +69,7 @@ class SendActForm extends Model
         $message->setFrom(\Yii::$app->params['adminEmail'])
             ->setTo($this->email)
             ->setSubject('Акт')
-            ->setTextBody('Test');
+            ->setTextBody($this->getMailContent());
 
 
         $message->attach($this->act->getPath());
@@ -86,6 +87,19 @@ class SendActForm extends Model
         $uploadForm->file = UploadedFile::getInstance($uploadForm, 'file');
         if ($uploadForm->file) {
             $uploadForm->file->saveAs($this->act->getPath());
+        }
+    }
+
+    private function getMailContent()
+    {
+        $model = TemplateModel::findByName(TemplateModel::EMAIL_ACT);
+        if (is_null($model)) {
+            return '';
+        } else {
+            $fields = $model->fields;
+            $content = isset($fields['content']) ? $fields['content'] : '';
+            $signature = isset($fields['signature']) ? $fields['signature'] : '';
+            return $content . "\n" . "\n" . '-----------------' . "\n" . $signature . "\n";
         }
     }
 }

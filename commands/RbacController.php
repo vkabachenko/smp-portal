@@ -12,8 +12,6 @@ class RbacController extends Controller
         $auth = \Yii::$app->authManager;
         $auth->removeAll();
 
-
-
         $listBids = $auth->createPermission('listBids');
         $auth->add($listBids);
 
@@ -35,6 +33,9 @@ class RbacController extends Controller
         $createComment = $auth->createPermission('createComment');
         $auth->add($createComment);
 
+        $manageEmailTemplate = $auth->createPermission('manageEmailTemplate');
+        $auth->add($manageEmailTemplate);
+
         $client = $auth->createRole('client');
         $auth->add($client);
 
@@ -49,6 +50,13 @@ class RbacController extends Controller
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
+        $auth->addChild($manager, $listBids);
+        $auth->addChild($manager, $createBid);
+        $auth->addChild($manager, $updateBid);
+        $auth->addChild($manager, $viewBid);
+        $auth->addChild($manager, $viewComments);
+        $auth->addChild($manager, $createComment);
+        $auth->addChild($manager, $manageEmailTemplate);
 
         $director = $auth->createRole('director');
         $auth->add($director);

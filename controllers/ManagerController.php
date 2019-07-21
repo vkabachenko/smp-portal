@@ -29,6 +29,6 @@ class ManagerController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->redirect(['bid/index', 'title' => 'Личный кабинет менеджера']);
     }
 }

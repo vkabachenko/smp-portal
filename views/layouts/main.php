@@ -68,6 +68,23 @@ if (\Yii::$app->user->can('admin')) {
     ];
 }
 
+if (\Yii::$app->user->can('manager')) {
+    $customItems = [
+        [
+            'label' => 'Заявки',
+            'url' => ['bid/index', 'title' => 'Личный кабинет менеджера']
+        ],
+        [
+            'label' => 'Шаблоны',
+            'items' => [
+                [
+                    'label' => 'Актов технического состояния',
+                    'url' => ['email-template/update']
+                ],
+            ]
+        ],
+    ];
+}
 
 $items = array_merge($customItems, $commonItems);
 
