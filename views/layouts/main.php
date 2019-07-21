@@ -78,7 +78,11 @@ if (\Yii::$app->user->can('manager')) {
             'label' => 'Шаблоны',
             'items' => [
                 [
-                    'label' => 'Актов технического состояния',
+                    'label' => 'Excel актов технического состояния',
+                    'url' => ['manufacturer/index-template']
+                ],
+                [
+                    'label' => 'Писем актов технического состояния',
                     'url' => ['email-template/update']
                 ],
             ]

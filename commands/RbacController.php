@@ -24,8 +24,12 @@ class RbacController extends Controller
         $viewBid = $auth->createPermission('viewBid');
         $auth->add($viewBid);
 
+        $manageBrand = $auth->createPermission('manageBrand');
+        $auth->add($manageBrand);
+
         $manageCatalogs = $auth->createPermission('manageCatalogs');
         $auth->add($manageCatalogs);
+        $auth->addChild($manageCatalogs, $manageBrand);
 
         $viewComments = $auth->createPermission('viewComments');
         $auth->add($viewComments);
@@ -57,6 +61,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $viewComments);
         $auth->addChild($manager, $createComment);
         $auth->addChild($manager, $manageEmailTemplate);
+        $auth->addChild($manager, $manageBrand);
 
         $director = $auth->createRole('director');
         $auth->add($director);
