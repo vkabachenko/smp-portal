@@ -8,6 +8,9 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $model app\models\form\EmailTemplateForm */
+
+$this->title = 'Шаблон письма';
+$this->params['back'] = ['manager/index'];
 ?>
 
 <div>
