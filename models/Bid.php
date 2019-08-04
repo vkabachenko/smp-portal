@@ -243,6 +243,14 @@ class Bid extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getBidComments()
+    {
+        return $this->hasMany(BidComment::className(), ['bid_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getBidImages()
     {
         return $this->hasMany(BidImage::className(), ['bid_id' => 'id']);

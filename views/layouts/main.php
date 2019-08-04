@@ -65,6 +65,19 @@ if (\Yii::$app->user->can('admin')) {
                 ],
             ]
         ],
+        [
+            'label' => 'Обмен с 1С',
+            'items' => [
+                [
+                    'label' => 'Экспорт',
+                    'url' => ['exchange/write']
+                ],
+                [
+                    'label' => 'Импорт',
+                    'url' => ['exchange/read']
+                ],
+            ]
+        ],
     ];
 }
 

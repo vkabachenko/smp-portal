@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fce9940b70f1c9a256c606ece1a3a159",
+    "content-hash": "6a956af36555d79b1434021fdd4f0402",
     "packages": [
         {
             "name": "alhimik1986/php-excel-templator",
@@ -136,7 +136,7 @@
             "version": "v1.3.2",
             "source": {
                 "type": "git",
-                "url": "git@github.com:bestiejs/punycode.js.git",
+                "url": "https://github.com/bestiejs/punycode.js.git",
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3"
             },
             "dist": {
@@ -166,6 +166,56 @@
             "license": [
                 "MIT"
             ]
+        },
+        {
+            "name": "bupy7/xml-constructor",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bupy7/xml-constructor.git",
+                "reference": "2431d0ae12a46b3935cc2ba0441d4093ef4acacb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bupy7/xml-constructor/zipball/2431d0ae12a46b3935cc2ba0441d4093ef4acacb",
+                "reference": "2431d0ae12a46b3935cc2ba0441d4093ef4acacb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-libxml": "*",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=5.7.27",
+                "satooshi/php-coveralls": "^1.0.1 || ^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "bupy7\\xml\\constructor\\": "src",
+                    "bupy7\\xml\\constructor\\tests\\": "tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Vasily Belosloodcev",
+                    "email": "vasily.belosloodcev@gmail.com"
+                }
+            ],
+            "description": "The XML of document structure constructor.",
+            "keywords": [
+                "library",
+                "php",
+                "xml",
+                "xml constructor",
+                "xml maker",
+                "xml writter"
+            ],
+            "time": "2019-04-19T18:48:49+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -5187,7 +5237,8 @@
     "stability-flags": {
         "yiisoft/yii2-jui": 20,
         "kartik-v/yii2-widget-fileinput": 20,
-        "alhimik1986/php-excel-templator": 20
+        "alhimik1986/php-excel-templator": 20,
+        "bupy7/xml-constructor": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
