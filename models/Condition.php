@@ -63,4 +63,27 @@ class Condition extends \yii\db\ActiveRecord
 
         return $list;
     }
+
+
+    public static function findByName($name)
+    {
+        if (empty($name)) {
+            return null;
+        }
+
+        $model = self::find()->where(['name' => $name])->one();
+        if (!$model) {
+            $model = new self(['name' => $name]);
+            $model->save();
+        }
+
+        return $model;
+    }
+
+    public static function findIdByName($name)
+    {
+        $model = self::findByName($name);
+
+        return $model ? $model->id : null;
+    }
 }

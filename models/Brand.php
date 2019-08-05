@@ -55,7 +55,7 @@ class Brand extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBs()
+    public function getBids()
     {
         return $this->hasMany(Bid::className(), ['brand_id' => 'id']);
     }
@@ -108,4 +108,19 @@ class Brand extends \yii\db\ActiveRecord
 
         return ArrayHelper::map($models, 'id', 'name');
     }
+
+    public static function findByName($name)
+    {
+        if (empty($name)) {
+            return null;
+        }
+
+        $model = self::find()->where(['name' => $name])->one();
+        if (!$model) {
+            return null;
+        }
+
+        return $model;
+    }
+
 }

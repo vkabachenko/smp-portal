@@ -1,5 +1,6 @@
 <?php
 
+namespace app\helpers\common;
 
 class XmlHelper
 {
