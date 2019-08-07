@@ -16,8 +16,11 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
 
     <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'images')
-            ->checkboxList($model->images,['encode' => false, 'separator'=>'<br/>']) ?>
+        <?php if (count($model->images) > 0): ?>
+            <?= $form->field($model, 'images')
+                ->checkboxList($model->images,['encode' => false, 'separator'=>'<br/>']) ?>
+        <?php endif; ?>
+
         <?= $form->field($model, 'email') ?>
 
     <?php if ($model->act->isGenerated()): ?>

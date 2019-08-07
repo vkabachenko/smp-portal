@@ -34,6 +34,7 @@ class BidComment extends \yii\db\ActiveRecord
         return [
             [
                 'class' => TimestampBehavior::class,
+                'preserveNonEmptyValues' => true,
                 'value' => function () {
                     return date('Y-m-d H:i:s');
                 }

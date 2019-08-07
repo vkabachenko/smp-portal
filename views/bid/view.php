@@ -31,7 +31,7 @@ $this->params['back'] = ['index'];
         'brand_name',
         [
             'label' => 'Производитель',
-            'value' => $model->manufacturer->name,
+            'value' => $model->manufacturer_id ? $model->manufacturer->name : null,
         ],
         'equipment',
         'brand_model_name',
@@ -40,7 +40,7 @@ $this->params['back'] = ['index'];
         'composition_name',
         [
             'label' => 'Состояние',
-            'value' => $model->condition ? $model->condition->name : '',
+            'value' => $model->condition_id ? $model->condition->name : null,
         ],
         'defect',
         'diagnostic',
@@ -56,15 +56,15 @@ $this->params['back'] = ['index'];
         'bid_manufacturer_number',
         [
             'label' => 'Статус ремонта',
-            'value' => $model->repair_status_id ? $model->repairStatus->name : '',
+            'value' => $model->repair_status_id ? $model->repairStatus->name : null,
         ],
         [
             'label' => 'Статус гарантии',
-            'value' => $model->warranty_status_id ? $model->warrantyStatus->name : '',
+            'value' => $model->warranty_status_id ? $model->warrantyStatus->name : null,
         ],
         [
             'label' => 'Статус заявки',
-            'value' => $model->status_id ? $model->status->name : '',
+            'value' => $model->status_id ? $model->status->name : null,
         ],
     ]
 

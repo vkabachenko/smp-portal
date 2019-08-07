@@ -338,11 +338,9 @@ $script = <<<JS
         
         
         $('#bid-manufacturer-id').change(function(){
-            if ($('#bid-brand-id').val()) {
               $('#bid-brand-id').val('');
               $('#bid-brand-name').val('');
               $('#bid-brand-id').trigger('change');
-            }
         });
         
         $('#bid-brand-id').change(function(){

@@ -50,7 +50,9 @@ $this->title = $title;
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $html = Html::tag('div', $model->manufacturer->name, ['class' => 'grid-table grid-20']);
+                        $html = $model->manufacturer_id
+                            ? Html::tag('div', $model->manufacturer->name, ['class' => 'grid-table grid-20'])
+                            : null;                        ;
                         return $html;
                     },
                 ],
@@ -64,12 +66,10 @@ $this->title = $title;
                     },
                 ],
                 [
-                    'attribute' => 'brand_id',
+                    'attribute' => 'brand_name',
                     'format' => 'raw',
                     'value' => function ($model) {
-                        /* @var $model app\models\Bid */
-                        $text = $model->brand_id ? $model->brand->name : '';
-                        $html = Html::tag('div', $text, ['class' => 'grid-table grid-20']);
+                        $html = Html::tag('div', $model->brand_name, ['class' => 'grid-table grid-20']);
                         return $html;
                     },
                 ],

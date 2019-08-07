@@ -5,6 +5,7 @@ namespace app\services\xml;
 use app\helpers\common\XmlHelper;
 use app\models\Bid;
 use app\models\BidComment;
+use app\models\BidHistory;
 use app\models\Brand;
 use app\models\Condition;
 use app\models\RepairStatus;
@@ -50,10 +51,6 @@ class ReadService extends BaseService
         $model = new Bid();
 
         $brand = Brand::findByName($attributes['Бренд']);
-        if (!$brand) {
-            \Yii::error($attributes);
-            return null;
-        }
 
         $model->bid_1C_number = $attributes['Номер'];
         $model->client_name = $attributes['КлиентНаименование'];
@@ -63,7 +60,7 @@ class ReadService extends BaseService
         $model->equipment = $attributes['Оборудование'];
         $model->brand_id = $brand->id;
         $model->brand_name = $attributes['Бренд'];
-        $model->manufacturer_id = $brand->manufacturer_id;
+        $model->manufacturer_id = $brand ? $brand->manufacturer_id : null;
         $model->serial_number = $attributes['СерийныйНомер'];
         $model->condition_id = Condition::findIdByName($attributes['ВнешнийВид']);
         $model->composition_name = $attributes['Комплектность'];
@@ -79,6 +76,13 @@ class ReadService extends BaseService
             \Yii::error($model->getErrors());
             return null;
         }
+
+        $bidHistory = new BidHistory([
+            'bid_id' => $model->id,
+            'user_id' => \Yii::$app->user->id,
+            'action' => 'Импортирована из 1С'
+        ]);
+        $bidHistory->save();
 
         return $model;
     }

@@ -16,8 +16,8 @@ class ExchangeController extends Controller
     {
         $uploadForm = new UploadXmlForm();
         if (\Yii::$app->request->isPost) {
-            //$uploadForm->file = UploadedFile::getInstance($uploadForm, 'file');
-            //$uploadForm->upload($filename);
+            $uploadForm->file = UploadedFile::getInstance($uploadForm, 'file');
+            $uploadForm->upload($filename);
             $service = new ReadService($filename);
             $service->setBids();
             return $this->redirect(['admin/index']);
@@ -39,7 +39,5 @@ class ExchangeController extends Controller
         $service = new BaseService($filename);
         return \Yii::$app->response->sendFile($service->filename, $filename );
     }
-
-
 
 }

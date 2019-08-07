@@ -19,6 +19,9 @@ class ExcelAct extends ExcelTemplate
 
     public function generate()
     {
+        if (!$this->bid->manufacturer_id) {
+            return;
+        }
         $manufacturer = $this->bid->manufacturer;
         if (!is_null($manufacturer->act_template)) {
             PhpExcelTemplator::saveToFile($manufacturer->getActTemplatePath(), $this->getPath(), $this->getParams());

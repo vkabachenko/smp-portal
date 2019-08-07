@@ -73,6 +73,7 @@ class Bid extends \yii\db\ActiveRecord
         return [
             [
                 'class' => TimestampBehavior::class,
+                'preserveNonEmptyValues' => true,
                 'value' => function () {
                     return date('Y-m-d H:i:s');
                 }
@@ -86,7 +87,7 @@ class Bid extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['manufacturer_id', 'brand_name'], 'required'],
+            [['brand_name'], 'required'],
             [[
                 'manufacturer_id',
                 'brand_id',
@@ -283,6 +284,14 @@ class Bid extends \yii\db\ActiveRecord
         return $this->treatment_type === self::TREATMENT_TYPE_WARRANTY;
     }
 
+    public function beforeValidate()
+    {
+        if (empty($this->brand_id)) {
+            $this->manufacturer_id = null;
+        }
+        return parent::beforeValidate();
+    }
+
     public function createBid($userId, MultipleUploadForm $uploadForm, CommentForm $commentForm)
     {
         $transaction = \Yii::$app->db->beginTransaction();
@@ -313,6 +322,4 @@ class Bid extends \yii\db\ActiveRecord
             return false;
         }
     }
-
-
 }
