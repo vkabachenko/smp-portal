@@ -31,7 +31,7 @@ class ReadService extends BaseService
 
     public function setBids()
     {
-        $bidsArray = $this->xmlArray['ДС'];
+        $bidsArray = $this->xmlArray['пмДокументСервиса'];
         foreach ($bidsArray as $bidArray) {
             $this->setBid($bidArray);
         }
@@ -40,7 +40,7 @@ class ReadService extends BaseService
     private function setBid($bidArray)
     {
         $attributes = $bidArray['@attributes'];
-        $bidComments = isset($bidArray['ТаблицаКомментариевСтрока']) ? $bidArray['ТаблицаКомментариевСтрока'] : [];
+        $bidComments = isset($bidArray['ТаблицаКомментариев']) ? $bidArray['ТаблицаКомментариев'] : [];
 
         $bid = $this->createBid($attributes);
         $this->createComments($bid, $bidComments);
@@ -58,7 +58,7 @@ class ReadService extends BaseService
         $model->created_at = $this->setDate($attributes['ДатаПринятияВРемонт']);
         $model->repair_status_id = RepairStatus::findIdByName($attributes['СтатусРемонта']);
         $model->equipment = $attributes['Оборудование'];
-        $model->brand_id = $brand->id;
+        $model->brand_id = $brand ? $brand->id : null;
         $model->brand_name = $attributes['Бренд'];
         $model->manufacturer_id = $brand ? $brand->manufacturer_id : null;
         $model->serial_number = $attributes['СерийныйНомер'];
@@ -70,6 +70,7 @@ class ReadService extends BaseService
         $model->vendor_code = $attributes['Артикул'];
         $model->bid_manufacturer_number = $attributes['НомерЗаявкиУПредставительства'];
         $model->warranty_status_id = WarrantyStatus::findIdByName($attributes['СтатусГарантии']);
+        $model->user_id = User::findIdByName($attributes['Мастер']);
 
         if (!$model->save()) {
             \Yii::error($attributes);
@@ -104,7 +105,7 @@ class ReadService extends BaseService
 
     private function createComment($bid, $attributes)
     {
-        $user = User::findByUsername($attributes['Автор']);
+        $user = User::findByName($attributes['Автор']);
         $model = new BidComment();
         $model->bid_id = $bid->id;
         $model->user_id = $user ? $user->id : null;

@@ -70,7 +70,8 @@ if (\Yii::$app->user->can('admin')) {
             'items' => [
                 [
                     'label' => 'Экспорт',
-                    'url' => ['exchange/write']
+                    'url' => ['exchange/write'],
+                    'options' => ['class' => 'disabled']
                 ],
                 [
                     'label' => 'Импорт',
