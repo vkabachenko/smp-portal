@@ -8,7 +8,7 @@
             <?= $model->created_at ?>
         </div>
         <div  class="col-sm-12 col-xs-6">
-            <?= $model->user->username ?>
+            <?= $model->user->name ?>
         </div>
     </div>
     <div class="col-sm-8 col-xs-12">

@@ -66,6 +66,10 @@ $this->params['back'] = ['index'];
             'label' => 'Статус заявки',
             'value' => $model->status_id ? $model->status->name : null,
         ],
+        [
+            'label' => 'Мастер',
+            'value' => $model->user_id ? $model->user->name : null,
+        ],
     ]
 
 ]);

@@ -14,7 +14,7 @@ use app\models\RepairStatus;
 use app\models\WarrantyStatus;
 use app\models\BidStatus;
 use app\assets\QuaggaAsset;
-
+use app\models\User;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
@@ -250,6 +250,9 @@ QuaggaAsset::register($this);
 
     <?= $form->field($model, 'status_id')
         ->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']); ?>
+
+    <?= $form->field($model, 'user_id')
+        ->dropDownList(User::mastersAsMap(),['prompt' => 'Выбор']); ?>
 
     <?php if ($model->isNewRecord): ?>
         <div class="form-group">

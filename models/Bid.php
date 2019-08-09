@@ -11,6 +11,7 @@ use yii\behaviors\TimestampBehavior;
  * This is the model class for table "bid".
  *
  * @property int $id
+ * @property int $user_id
  * @property int $manufacturer_id
  * @property int $brand_id
  * @property string $brand_name
@@ -97,7 +98,8 @@ class Bid extends \yii\db\ActiveRecord
                 'condition_id',
                 'repair_status_id',
                 'warranty_status_id',
-                'status_id'
+                'status_id',
+                'user_id'
             ], 'integer'],
             [['composition_table', 'treatment_type', 'compositionCombined', 'brand_name'], 'string'],
             [['purchase_date', 'application_date', 'created_at', 'updated_at'], 'safe'],
@@ -165,7 +167,8 @@ class Bid extends \yii\db\ActiveRecord
             'diagnostic' => 'Результат диагностики',
             'repair_status_id' => 'Статус ремонта',
             'warranty_status_id' => 'Статус гарантии',
-            'status_id' => 'Статус'
+            'status_id' => 'Статус',
+            'user_id' => 'Мастер'
         ];
     }
 
@@ -223,6 +226,14 @@ class Bid extends \yii\db\ActiveRecord
     public function getStatus()
     {
         return $this->hasOne(BidStatus::className(), ['id' => 'status_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     /**
