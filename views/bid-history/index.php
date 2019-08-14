@@ -35,7 +35,7 @@ $this->params['back'] = ['bid/view', 'id' => $bidId];
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $html = Html::tag('div', $model->user->username, ['class' => 'grid-table']);
+                        $html = Html::tag('div', $model->user_id ? $model->user->username : null, ['class' => 'grid-table']);
                         return $html;
                     },
                 ],

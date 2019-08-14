@@ -16,7 +16,7 @@ $this->params['back'] = ['bid-history/index', 'bidId' => $model->bid_id];
         'created_at',
         [
             'label' => 'Создатель',
-            'value' => $model->user->username,
+            'value' => $model->user_id ? $model->user->username : null,
         ],
         'action'
     ]

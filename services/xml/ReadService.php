@@ -96,7 +96,9 @@ class ReadService extends BaseService
             'user_id' => \Yii::$app->request->isConsoleRequest ? null : \Yii::$app->user->id,
             'action' => 'Импортирована из 1С'
         ]);
-        $bidHistory->save();
+        if (!$bidHistory->save()) {
+            \Yii::error($bidHistory->getErrors());
+        };
 
         return $model;
     }
