@@ -6,12 +6,12 @@ namespace app\services\xml;
 
 class BaseService
 {
-    const BASE_PATH = '@webroot' . '/xml/';
+    const BASE_PATH = '@webroot';
     public $filename;
 
-    public function __construct($filename)
+    public function __construct($filename, $folder = 'xml')
     {
-        $this->filename = \Yii::getAlias(self::BASE_PATH) . $filename;
+        $this->filename = \Yii::getAlias(self::BASE_PATH) . '/' . $folder . '/' . $filename;
     }
 
 }

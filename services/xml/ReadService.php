@@ -17,9 +17,9 @@ class ReadService extends BaseService
     /* @var array */
     private $xmlArray = [];
 
-    public function __construct($filename)
+    public function __construct($filename, $folder = 'xml')
     {
-        parent::__construct($filename);
+        parent::__construct($filename, $folder);
         $this->createXmlArray();
     }
 
@@ -40,17 +40,30 @@ class ReadService extends BaseService
     private function setBid($bidArray)
     {
         $attributes = $bidArray['@attributes'];
+
+        if ($this->isDuplicate($attributes)) {
+            return;
+        }
         $bidComments = isset($bidArray['ТаблицаКомментариев']) ? $bidArray['ТаблицаКомментариев'] : [];
 
         $bid = $this->createBid($attributes);
         $this->createComments($bid, $bidComments);
+
+    }
+
+    private function isDuplicate($attributes)
+    {
+        $bid1Cnumber = $attributes['Номер'];
+        $isExists = Bid::find()->where(['bid_1C_number' => $bid1Cnumber])->exists();
+
+        return $isExists;
     }
 
     private function createBid($attributes)
     {
         $model = new Bid();
 
-        $brand = Brand::findByName($attributes['Бренд']);
+        $brand = Brand::findByName(trim($attributes['Бренд']));
 
         $model->bid_1C_number = $attributes['Номер'];
         $model->client_name = $attributes['КлиентНаименование'];
@@ -59,7 +72,7 @@ class ReadService extends BaseService
         $model->repair_status_id = RepairStatus::findIdByName($attributes['СтатусРемонта']);
         $model->equipment = $attributes['Оборудование'];
         $model->brand_id = $brand ? $brand->id : null;
-        $model->brand_name = $attributes['Бренд'];
+        $model->brand_name = trim($attributes['Бренд']);
         $model->manufacturer_id = $brand ? $brand->manufacturer_id : null;
         $model->serial_number = $attributes['СерийныйНомер'];
         $model->condition_id = Condition::findIdByName($attributes['ВнешнийВид']);
@@ -80,7 +93,7 @@ class ReadService extends BaseService
 
         $bidHistory = new BidHistory([
             'bid_id' => $model->id,
-            'user_id' => \Yii::$app->user->id,
+            'user_id' => \Yii::$app->request->isConsoleRequest ? null : \Yii::$app->user->id,
             'action' => 'Импортирована из 1С'
         ]);
         $bidHistory->save();
