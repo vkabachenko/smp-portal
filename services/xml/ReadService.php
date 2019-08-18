@@ -31,7 +31,7 @@ class ReadService extends BaseService
 
     public function setBids()
     {
-        $bidsArray = $this->xmlArray['пмДокументСервиса'];
+        $bidsArray = $this->xmlArray['ДС'];
         foreach ($bidsArray as $bidArray) {
             $this->setBid($bidArray);
         }
@@ -44,7 +44,7 @@ class ReadService extends BaseService
         if ($this->isDuplicate($attributes)) {
             return;
         }
-        $bidComments = isset($bidArray['ТаблицаКомментариев']) ? $bidArray['ТаблицаКомментариев'] : [];
+        $bidComments = isset($bidArray['ТаблицаКомментариевСтрока']) ? $bidArray['ТаблицаКомментариевСтрока'] : [];
 
         $bid = $this->createBid($attributes);
         $this->createComments($bid, $bidComments);
