@@ -16,6 +16,7 @@ use app\templates\excel\act\ExcelAct;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
 class BidController extends Controller
@@ -100,6 +101,10 @@ class BidController extends Controller
         $this->checkAccess('viewBid');
 
         $model = Bid::findOne($id);
+
+        if (!$model) {
+            throw new NotFoundHttpException('Page not found');
+        }
 
         return $this->render('view', [
             'model' => $model,

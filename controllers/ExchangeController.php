@@ -59,17 +59,23 @@ class ExchangeController extends Controller
         \Yii::$app->response->format = Response::FORMAT_JSON;
 
         if (!\Yii::$app->request->isPost) {
-            \Yii::error('incorrect request');
-            return ['status' => 'incorrect request type'];
+            throw new \Exception('Incorrect request type');
         }
 
-        $content = \Yii::$app->request->getRawBody();
-        \Yii::info($content);
+        if (empty($_FILES)) {
+            throw new \Exception('File not found');
+        }
+        reset($_FILES);
+        $fileName = key($_FILES);
 
-        $path =  \Yii::getAlias('@webroot') . '/xml/test.xml';
-        file_put_contents($path, $content);
+        $path =  \Yii::getAlias('@webroot') . '/xml/import.xml';
+        @unlink($path);
 
-        $service = new ReadService('test.xml');
+        $upload = UploadedFile::getInstanceByName($fileName);
+
+        $upload->saveAs($path);
+
+        $service = new ReadService('import.xml');
         $service->setBids();
 
         return ['status' => 'OK'];
