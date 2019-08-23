@@ -8,18 +8,18 @@ use yii\bootstrap\Html;
 $this->title = 'Просмотр заявки';
 $this->params['back'] = ['index'];
 ?>
-<div>
+<div class="bid-view">
 
     <h3><?= Html::encode($this->title) ?></h3>
 
     <div class="row" style="margin-bottom: 10px;">
-        <div class="col-lg-4">
+        <div class="col-sm-4 col-xs-6">
             <?= Html::a('История', ['bid-history/index', 'bidId' => $model->id], ['class' => 'btn btn-success']) ?>
         </div>
-        <div class="col-lg-4">
+        <div class="col-sm-4  col-xs-6">
             <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         </div>
-        <div class="col-lg-4">
+        <div class="col-sm-4  col-xs-6 bid-view-send">
             <?= Html::a('Отправить', ['send-act/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
         </div>
     </div>

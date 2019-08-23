@@ -165,4 +165,18 @@ a.desc:after {
     opacity:0.6;
 }
 
+.bid-view .detail-view th {
+    width: 25%;
+}
+
+.bid-view .detail-view td {
+    width: 75%;
+}
+
+@media(max-width:767px) {
+    .bid-view-send {
+        margin-top: 10px;
+    }
+}
+
 
