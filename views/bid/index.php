@@ -17,9 +17,18 @@ $this->title = $title;
     <h2> <?= $this->title . ' ' . \Yii::$app->user->identity->username ?></h2>
 
     <div>
-        <p>
+        <div>
             <?= Html::a('Новая заявка', ['create'], ['class' => 'btn btn-success']) ?>
-        </p>
+        </div>
+
+        <div class="bid-search-btn-wrap">
+            <?= Html::button('Поиск по параметрам', [
+                'class' => 'btn btn-primary',
+                'onclick' => '$(".bid-search").show();$(".bid-search-text").hide();'
+            ])
+            ?>
+            <?= $this->render('_search-text', ['model' => $searchModel]); ?>
+        </div>
 
         <?= $this->render('_search', ['model' => $searchModel]); ?>
 

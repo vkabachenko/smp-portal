@@ -179,4 +179,25 @@ a.desc:after {
     }
 }
 
+.bid-search {
+    display: none;
+}
+
+.bid-search-btn-wrap {
+    margin: 10px 0;
+}
+
+.bid-search-head {
+     margin: 0 5px;
+     color: #999;
+}
+
+.bid-search-head-main {
+    margin-right: 10px;
+    color: #333;
+}
+
+.bid-search-content {
+    color: dodgerblue;
+}
 
