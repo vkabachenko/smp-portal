@@ -125,6 +125,8 @@ class ReadService extends BaseService
 
         BidHistory::createUpdated($model, null, 'Изменена в 1C');
 
+        $model->save(false);
+
         return $model;
     }
 

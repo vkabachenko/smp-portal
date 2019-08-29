@@ -116,7 +116,7 @@ class WriteService extends BaseService
     {
         $attributes = [
             'НомерСтроки' => $index + 1,
-            'Автор' => $bidComment->user->username,
+            'Автор' => $bidComment->user->name,
             'ДатаВремя' => date("dmYHis", strtotime($bidComment->created_at)),
             'ТекстКомментария' => Html::encode($bidComment->comment)
         ];

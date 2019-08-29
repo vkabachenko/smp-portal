@@ -71,7 +71,6 @@ if (\Yii::$app->user->can('admin')) {
                 [
                     'label' => 'Экспорт',
                     'url' => ['exchange/write'],
-                    'options' => ['class' => 'disabled']
                 ],
                 [
                     'label' => 'Импорт',
