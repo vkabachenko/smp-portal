@@ -41,14 +41,15 @@ class ReadService extends BaseService
     {
         $attributes = $bidArray['@attributes'];
 
-        if ($this->isDuplicate($attributes)) {
-            return;
-        }
         $bidComments = isset($bidArray['ТаблицаКомментариевСтрока']) ? $bidArray['ТаблицаКомментариевСтрока'] : [];
 
-        $bid = $this->createBid($attributes);
-        $this->createComments($bid, $bidComments);
-
+        if ($this->isDuplicate($attributes)) {
+            $bid = $this->updateBid($attributes);
+            $this->createComments($bid, $bidComments);
+        } else {
+            $bid = $this->createBid($attributes);
+            $this->createComments($bid, $bidComments);
+        }
     }
 
     private function isDuplicate($attributes)
@@ -63,6 +64,26 @@ class ReadService extends BaseService
     {
         $model = new Bid();
 
+        if (!$this->fillAndValidateBid($model, $attributes)) {
+            return null;
+        }
+
+        $model->save(false);
+
+        $bidHistory = new BidHistory([
+            'bid_id' => $model->id,
+            'user_id' => null,
+            'action' => 'Импортирована из 1С'
+        ]);
+        if (!$bidHistory->save()) {
+            \Yii::error($bidHistory->getErrors());
+        };
+
+        return $model;
+    }
+
+    private function fillAndValidateBid(Bid $model, $attributes)
+    {
         $brand = Brand::findByName(trim($attributes['Бренд']));
 
         $model->bid_1C_number = $attributes['Номер'];
@@ -85,20 +106,24 @@ class ReadService extends BaseService
         $model->warranty_status_id = WarrantyStatus::findIdByName($attributes['СтатусГарантии']);
         $model->user_id = User::findIdByName($attributes['Мастер']);
 
-        if (!$model->save()) {
+        if (!$model->validate()) {
             \Yii::error($attributes);
             \Yii::error($model->getErrors());
+            return false;
+        }
+        return true;
+    }
+
+    private function updateBid($attributes)
+    {
+        /* @var $model Bid */
+        $model = Bid::find()->where(['bid_1C_number' => $attributes['Номер']])->one();
+
+        if (!$this->fillAndValidateBid($model, $attributes)) {
             return null;
         }
 
-        $bidHistory = new BidHistory([
-            'bid_id' => $model->id,
-            'user_id' => \Yii::$app->request->isConsoleRequest ? null : \Yii::$app->user->id,
-            'action' => 'Импортирована из 1С'
-        ]);
-        if (!$bidHistory->save()) {
-            \Yii::error($bidHistory->getErrors());
-        };
+        BidHistory::createUpdated($model, null, 'Изменена в 1C');
 
         return $model;
     }
@@ -120,11 +145,18 @@ class ReadService extends BaseService
 
     private function createComment($bid, $attributes)
     {
+        $createdAt = $this->setDate($attributes['ДатаВремя']);
+        $exists = BidComment::find()->where(['bid_id' => $bid->id, 'created_at' => $createdAt])->exists();
+
+        if ($exists) {
+            return;
+        }
+
         $user = User::findByName($attributes['Автор']);
         $model = new BidComment();
         $model->bid_id = $bid->id;
         $model->user_id = $user ? $user->id : null;
-        $model->created_at = $this->setDate($attributes['ДатаВремя']);
+        $model->created_at = $createdAt;
         $model->comment = $attributes['ТекстКомментария'];
 
         if (!$model->save()) {

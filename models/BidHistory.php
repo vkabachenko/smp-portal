@@ -88,13 +88,13 @@ class BidHistory extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public static function createUpdated(Bid $bid, $userId)
+    public static function createUpdated(Bid $bid, $userId, $actionText = 'Изменена на портале')
     {
         try {
             $model = new self([
                 'bid_id' => $bid->id,
                 'user_id' => $userId,
-                'action' => 'Изменена'
+                'action' => $actionText
             ]);
 
             $changedAttributes = [];
@@ -108,10 +108,13 @@ class BidHistory extends \yii\db\ActiveRecord
                     ];
                 }
             }
-            $model->updated_attributes = $changedAttributes;
 
-            if (!$model->save()) {
-                \Yii::error($model->getErrors());
+            if (!empty($changedAttributes)) {
+                $model->updated_attributes = $changedAttributes;
+
+                if (!$model->save()) {
+                    \Yii::error($model->getErrors());
+                }
             }
         } catch (\Throwable $e) {
             \Yii::error($e->getMessage());
