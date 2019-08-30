@@ -137,12 +137,28 @@ a.desc:after {
     word-break: break-all;
 }
 
-.grid-20 {
-    width: 20%;
+@media(max-width:767px) {
+    .bids-grid .grid-treatment-type {
+        display: none;
+    }
 }
 
-.grid-10 {
-    width: 10%;
+@media(max-width:450px) {
+    .bids-grid .grid-bid-1C-number {
+        display: none;
+    }
+    .bids-grid .grid-manufacturer {
+        display: none;
+    }
+    .bids-grid .grid-warranty-status {
+        display: none;
+    }
+    .bids-grid .grid-master {
+        display: none;
+    }
+    .bids-grid .grid-created-at {
+        display: none;
+    }
 }
 
 .bid-menu {

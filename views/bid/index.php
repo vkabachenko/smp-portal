@@ -1,6 +1,7 @@
 <?php
 
 
+use app\models\Bid;
 use app\models\Manufacturer;
 use app\models\RepairStatus;
 use app\models\User;
@@ -51,7 +52,9 @@ $this->title = $title;
                         $html = Html::tag('div', $a);
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-10'],
+                    'filterOptions' => ['class' => 'grid-created-at'],
+                    'headerOptions' => ['class' => 'grid-created-at'],
+                    'contentOptions' => ['class' => 'grid-created-at'],
                     'filter' => DatePicker::widget([
                         'model' => $searchModel,
                         'attribute' => 'created_at_from',
@@ -69,7 +72,9 @@ $this->title = $title;
                         $html = Html::tag('div', $model->bid_number);
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-10']
+                    'filterOptions' => ['class' => 'grid-bid-number'],
+                    'headerOptions' => ['class' => 'grid-bid-number'],
+                    'contentOptions' => ['class' => 'grid-bid-number']
                 ],
                 [
                     'attribute' => 'bid_1C_number',
@@ -79,7 +84,9 @@ $this->title = $title;
                         $html = Html::tag('div', $model->bid_1C_number);
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-10']
+                    'filterOptions' => ['class' => 'grid-bid-1C-number'],
+                    'headerOptions' => ['class' => 'grid-bid-1C-number'],
+                    'contentOptions' => ['class' => 'grid-bid-1C-number']
                 ],
                 [
                     'attribute' => 'equipment',
@@ -89,7 +96,9 @@ $this->title = $title;
                         $html = Html::tag('div', $model->equipment);
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-20']
+                    'filterOptions' => ['class' => 'grid-equipmant'],
+                    'headerOptions' => ['class' => 'grid-equipmant'],
+                    'contentOptions' => ['class' => 'grid-equipmant']
                 ],
                 [
                     'attribute' => 'manufacturer_id',
@@ -101,8 +110,25 @@ $this->title = $title;
                             : null;                        ;
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-10'],
+                    'filterOptions' => ['class' => 'grid-manufacturer'],
+                    'headerOptions' => ['class' => 'grid-manufacturer'],
+                    'contentOptions' => ['class' => 'grid-manufacturer'],
                     'filter' => Manufacturer::manufacturersAsMap()
+                ],
+                [
+                    'attribute' => 'treatment_type',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        /* @var $model app\models\Bid */
+                        $html = $model->treatment_type
+                            ? Html::tag('div', Bid::TREATMENT_TYPES[$model->treatment_type])
+                            : null;                        ;
+                        return $html;
+                    },
+                    'filterOptions' => ['class' => 'grid-treatment-type'],
+                    'contentOptions' => ['class' => 'grid-treatment-type'],
+                    'headerOptions' => ['class' => 'grid-treatment-type'],
+                    'filter' => Bid::TREATMENT_TYPES
                 ],
                 [
                     'attribute' => 'repair_status_id',
@@ -114,7 +140,9 @@ $this->title = $title;
                             : null;                        ;
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-10'],
+                    'filterOptions' => ['class' => 'grid-repair-status'],
+                    'headerOptions' => ['class' => 'grid-repair-status'],
+                    'contentOptions' => ['class' => 'grid-repair-status'],
                     'filter' => RepairStatus::repairStatusAsMap()
                 ],
                 [
@@ -124,10 +152,12 @@ $this->title = $title;
                         /* @var $model app\models\Bid */
                         $html = $model->warranty_status_id
                             ? Html::tag('div', $model->warrantyStatus->name)
-                            : null;                        ;
+                            : null;
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-10'],
+                    'filterOptions' => ['class' => 'grid-warranty-status'],
+                    'headerOptions' => ['class' => 'grid-warranty-status'],
+                    'contentOptions' => ['class' => 'grid-warranty-status'],
                     'filter' => WarrantyStatus::warrantyStatusAsMap()
                 ],
                 [
@@ -137,10 +167,12 @@ $this->title = $title;
                         /* @var $model app\models\Bid */
                         $html = $model->user_id
                             ? Html::tag('div', $model->user->name)
-                            : null;                        ;
+                            : null;
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-10'],
+                    'filterOptions' => ['class' => 'grid-master'],
+                    'headerOptions' => ['class' => 'grid-master'],
+                    'contentOptions' => ['class' => 'grid-master'],
                     'filter' => User::mastersAsMap()
                 ],
                 [
@@ -151,7 +183,9 @@ $this->title = $title;
                         $html = Html::tag('div', $model->client_name);
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-10']
+                    'filterOptions' => ['class' => 'grid-client'],
+                    'headerOptions' => ['class' => 'grid-client'],
+                    'contentOptions' => ['class' => 'grid-client']
                 ],
             ],
         ]); ?>

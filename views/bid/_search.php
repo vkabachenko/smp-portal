@@ -1,5 +1,6 @@
 <?php
 
+use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Manufacturer;
@@ -47,6 +48,8 @@ use kartik\date\DatePicker;
     <?= $form->field($model, 'serial_number') ?>
 
     <?= $form->field($model, 'vendor_code') ?>
+
+    <?= $form->field($model, 'user_id')->dropDownList(User::mastersAsMap(),['prompt' => 'Выбор']) ?>
 
     <?= $form->field($model, 'client_name') ?>
 
