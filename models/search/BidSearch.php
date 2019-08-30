@@ -78,7 +78,7 @@ class BidSearch extends Bid
      */
     public function search($params)
     {
-        $query = Bid::find();
+        $query = Bid::find()->orderBy('created_at DESC');
 
         // add conditions that should always apply here
 

@@ -127,17 +127,22 @@ a.desc:after {
     background-color: rgba(8, 8, 8, .3);
 }
 
-.grid-table {
-    white-space: normal;
-    word-wrap: break-word;
+.bids-grid table{
+    max-width: 100%;
 }
 
-.grid-25 {
-    min-width: 25%;
+.bids-grid  table td, .bids-grid  table th {
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .grid-20 {
-    min-width: 20%;
+    width: 20%;
+}
+
+.grid-10 {
+    width: 10%;
 }
 
 .bid-menu {

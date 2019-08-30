@@ -16,7 +16,7 @@ $this->title = $title;
 <div>
     <h2> <?= $this->title . ' ' . \Yii::$app->user->identity->username ?></h2>
 
-    <div>
+    <div class="bids-grid">
         <div>
             <?= Html::a('Новая заявка', ['create'], ['class' => 'btn btn-success']) ?>
         </div>
@@ -41,18 +41,41 @@ $this->title = $title;
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
                         $text = date('d.m.Y H:i', strtotime($model->created_at));
-                        $html = Html::a($text, ['view', 'id' => $model->id]);
+                        $a = Html::a($text, ['view', 'id' => $model->id]);
+                        $html = Html::tag('div', $a);
                         return $html;
                     },
+                    'contentOptions' => ['class' => 'grid-10']
                 ],
                 [
-                    'attribute' => 'status_id',
+                    'attribute' => 'bid_number',
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $html = Html::tag('div', $model->status_id ? $model->status->name : '', ['class' => 'grid-table']);
+                        $html = Html::tag('div', $model->bid_number);
                         return $html;
                     },
+                    'contentOptions' => ['class' => 'grid-10']
+                ],
+                [
+                    'attribute' => 'bid_1C_number',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        /* @var $model app\models\Bid */
+                        $html = Html::tag('div', $model->bid_1C_number);
+                        return $html;
+                    },
+                    'contentOptions' => ['class' => 'grid-10']
+                ],
+                [
+                    'attribute' => 'equipment',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        /* @var $model app\models\Bid */
+                        $html = Html::tag('div', $model->equipment);
+                        return $html;
+                    },
+                    'contentOptions' => ['class' => 'grid-20']
                 ],
                 [
                     'attribute' => 'manufacturer_id',
@@ -60,37 +83,57 @@ $this->title = $title;
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
                         $html = $model->manufacturer_id
-                            ? Html::tag('div', $model->manufacturer->name, ['class' => 'grid-table grid-20'])
+                            ? Html::tag('div', $model->manufacturer->name)
                             : null;                        ;
                         return $html;
                     },
+                    'contentOptions' => ['class' => 'grid-10']
                 ],
                 [
-                    'attribute' => 'equipment',
+                    'attribute' => 'repair_status_id',
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $html = Html::tag('div', $model->equipment, ['class' => 'grid-table grid-20']);
+                        $html = $model->repair_status_id
+                            ? Html::tag('div', $model->repairStatus->name)
+                            : null;                        ;
                         return $html;
                     },
+                    'contentOptions' => ['class' => 'grid-10']
                 ],
                 [
-                    'attribute' => 'brand_name',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        $html = Html::tag('div', $model->brand_name, ['class' => 'grid-table grid-20']);
-                        return $html;
-                    },
-                ],
-                [
-                    'attribute' => 'brand_model_name',
+                    'attribute' => 'repair_status_id',
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $text = $model->brand_model_id ? $model->brandModel->name : $model->brand_model_name;
-                        $html = Html::tag('div', $text, ['class' => 'grid-table grid-20']);
+                        $html = $model->warranty_status_id
+                            ? Html::tag('div', $model->warrantyStatus->name)
+                            : null;                        ;
                         return $html;
                     },
+                    'contentOptions' => ['class' => 'grid-10']
+                ],
+                [
+                    'attribute' => 'user_id',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        /* @var $model app\models\Bid */
+                        $html = $model->user_id
+                            ? Html::tag('div', $model->user->name)
+                            : null;                        ;
+                        return $html;
+                    },
+                    'contentOptions' => ['class' => 'grid-10']
+                ],
+                [
+                    'attribute' => 'client_name',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        /* @var $model app\models\Bid */
+                        $html = Html::tag('div', $model->client_name);
+                        return $html;
+                    },
+                    'contentOptions' => ['class' => 'grid-10']
                 ],
             ],
         ]); ?>
