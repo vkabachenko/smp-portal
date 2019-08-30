@@ -1,6 +1,11 @@
 <?php
 
 
+use app\models\Manufacturer;
+use app\models\RepairStatus;
+use app\models\User;
+use app\models\WarrantyStatus;
+use kartik\date\DatePicker;
 use yii\bootstrap\Modal;
 use yii\grid\GridView;
 use yii\bootstrap\Html;
@@ -22,7 +27,7 @@ $this->title = $title;
         </div>
 
         <div class="bid-search-btn-wrap">
-            <?= Html::button('Поиск по параметрам', [
+            <?= Html::button('Расширенный поиск', [
                 'class' => 'btn btn-primary',
                 'onclick' => '$(".bid-search").show();$(".bid-search-text").hide();'
             ])
@@ -34,6 +39,7 @@ $this->title = $title;
 
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
             'columns' => [
                 [
                     'attribute' => 'created_at',
@@ -45,7 +51,15 @@ $this->title = $title;
                         $html = Html::tag('div', $a);
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-10']
+                    'contentOptions' => ['class' => 'grid-10'],
+                    'filter' => DatePicker::widget([
+                        'model' => $searchModel,
+                        'attribute' => 'created_at_from',
+                        'attribute2' => 'created_at_to',
+                        'type' => DatePicker::TYPE_RANGE,
+                        'separator' => '-',
+                        'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
+                    ])
                 ],
                 [
                     'attribute' => 'bid_number',
@@ -87,7 +101,8 @@ $this->title = $title;
                             : null;                        ;
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-10']
+                    'contentOptions' => ['class' => 'grid-10'],
+                    'filter' => Manufacturer::manufacturersAsMap()
                 ],
                 [
                     'attribute' => 'repair_status_id',
@@ -99,10 +114,11 @@ $this->title = $title;
                             : null;                        ;
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-10']
+                    'contentOptions' => ['class' => 'grid-10'],
+                    'filter' => RepairStatus::repairStatusAsMap()
                 ],
                 [
-                    'attribute' => 'repair_status_id',
+                    'attribute' => 'warranty_status_id',
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
@@ -111,7 +127,8 @@ $this->title = $title;
                             : null;                        ;
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-10']
+                    'contentOptions' => ['class' => 'grid-10'],
+                    'filter' => WarrantyStatus::warrantyStatusAsMap()
                 ],
                 [
                     'attribute' => 'user_id',
@@ -123,7 +140,8 @@ $this->title = $title;
                             : null;                        ;
                         return $html;
                     },
-                    'contentOptions' => ['class' => 'grid-10']
+                    'contentOptions' => ['class' => 'grid-10'],
+                    'filter' => User::mastersAsMap()
                 ],
                 [
                     'attribute' => 'client_name',
