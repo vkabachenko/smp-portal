@@ -20,7 +20,7 @@ $this->title = $title;
 ?>
 
 <div>
-    <h2> <?= $this->title . ' ' . \Yii::$app->user->identity->username ?></h2>
+    <h2> <?= $this->title . ' ' . \Yii::$app->user->identity->name ?></h2>
 
     <div class="bids-grid">
         <div>

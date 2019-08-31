@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 use app\helpers\bid\CompositionHelper;
+use app\helpers\bid\TitleHelper;
 use app\models\Bid;
 use app\models\BidComment;
 use app\models\BidHistory;
@@ -42,12 +43,14 @@ class BidController extends Controller
     }
 
 
-    public function actionIndex($title = 'Список заявок')
+    public function actionIndex()
     {
         $this->checkAccess('listBids');
 
         $searchModel = new BidSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $title = TitleHelper::getTitle(\Yii::$app->user->identity);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

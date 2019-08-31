@@ -29,6 +29,6 @@ class AdminController extends Controller
 
     public function actionIndex()
     {
-        return $this->redirect(['bid/index', 'title' => 'Личный кабинет администратора']);
+        return $this->redirect(['bid/index']);
     }
 }

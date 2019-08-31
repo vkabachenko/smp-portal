@@ -29,7 +29,7 @@ class MasterController extends Controller
 
     public function actionIndex()
     {
-        return $this->redirect(['bid/index', 'title' => 'Личный кабинет мастера']);
+        return $this->redirect(['bid/index']);
     }
 
 }
