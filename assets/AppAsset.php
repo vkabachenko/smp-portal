@@ -19,13 +19,33 @@ class AppAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
-    public $css = [
+    public $cssFiles = [
         'css/site.css',
     ];
-    public $js = [
+    public $jsFiles = [
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
+
+    public function init()
+    {
+        $this->css = $this->getVersionedFiles($this->cssFiles);
+        $this->js = $this->getVersionedFiles($this->jsFiles);
+
+        parent::init();
+    }
+
+    private function getVersionedFiles($files)
+    {
+        $out = [];
+
+        foreach ($files as $file) {
+            $filePath = \Yii::getAlias($this->basePath . '/' . $file);
+            $out[] = $file . (is_file($filePath) ? '?v='.filemtime($filePath) : '');
+        }
+
+        return $out;
+    }
 }
