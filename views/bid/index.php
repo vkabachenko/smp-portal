@@ -48,8 +48,7 @@ $this->title = $title;
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
                         $text = date('d.m.Y H:i', strtotime($model->created_at));
-                        $a = Html::a($text, ['view', 'id' => $model->id]);
-                        $html = Html::tag('div', $a);
+                        $html = Html::tag('div', $text);
                         return $html;
                     },
                     'filterOptions' => ['class' => 'grid-created-at'],
@@ -93,7 +92,8 @@ $this->title = $title;
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $html = Html::tag('div', $model->equipment);
+                        $a = Html::a($model->equipment, ['view', 'id' => $model->id]);
+                        $html = Html::tag('div', $a);
                         return $html;
                     },
                     'filterOptions' => ['class' => 'grid-equipmant'],
