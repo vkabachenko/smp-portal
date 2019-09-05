@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "bid_image".
@@ -89,5 +90,10 @@ class BidImage extends \yii\db\ActiveRecord
     public function getPath()
     {
         return \Yii::getAlias('@webroot/uploads/') . $this->src_name;
+    }
+
+    public function getAbsoluteUrl()
+    {
+        return Url::to('@web/uploads/' . $this->src_name, true);
     }
 }

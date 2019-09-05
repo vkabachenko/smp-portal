@@ -4,6 +4,7 @@
 namespace app\services\xml;
 
 use app\models\BidComment;
+use app\models\BidImage;
 use bupy7\xml\constructor\XmlConstructor;
 use app\models\Bid;
 use function GuzzleHttp\Psr7\str;
@@ -54,6 +55,7 @@ class WriteService extends BaseService
     private function getBidAsArray(Bid $model)
     {
         $attributes = [
+            'ПорталID' => $model->id,
             'GUID' => '',
             'БитриксID' => '',
             'Номер' => $model->bid_1C_number,
@@ -65,7 +67,7 @@ class WriteService extends BaseService
             'ДатаПринятияВРемонт' => date("dmYHis", strtotime($model->created_at)),
             'СтатусРемонта' => $model->repair_status_id ? $model->repairStatus->name : '',
             'Оборудование' => $model->equipment,
-            'Бренд' => $model->brand->name,
+            'Бренд' => $model->brand_name,
             'СерийныйНомер' => $model->serial_number,
             'ВнешнийВид' => $model->condition_id ? $model->condition->name : '',
             'Комплектность' => $model->composition_name,
@@ -78,7 +80,7 @@ class WriteService extends BaseService
             'Приемщик' => '',
             'РезультатДиагностики' => $model->diagnostic,
             'РекомендацииПоРемонту' => '',
-            'Представительство' => $model->brand->name,
+            'Представительство' => $model->brand_name,
             'Артикул' => $model->vendor_code,
             'Продавец' => '',
             'РезультатДиагностикиДляПредставительства' => $model->diagnostic,
@@ -92,12 +94,14 @@ class WriteService extends BaseService
             'ПоданоНаГарантию' => ''
         ];
         $comments = $this->getCommentsAsArray($model->bidComments);
+        $images = $this->getImagesAsArray($model->bidImages);
+        $elements = array_merge($comments, $images);
         $bid = [
             'tag' => 'ДС',
             'attributes' => $attributes
         ];
-        if (count($comments) > 0) {
-            $bid['elements'] = $comments;
+        if (count($elements) > 0) {
+            $bid['elements'] = $elements;
         }
         return $bid;
     }
@@ -125,6 +129,28 @@ class WriteService extends BaseService
             'attributes' => $attributes
         ];
         return $comment;
+    }
+
+    private function getImagesAsArray($bidImages)
+    {
+        $images = [];
+        foreach ($bidImages as $index => $bidImage) {
+            $images[] = $this->getImageAsArray($index, $bidImage);
+        }
+        return $images;
+    }
+
+    private function getImageAsArray($index, BidImage $bidImage)
+    {
+        $attributes = [
+            'НомерСтроки' => $index + 1,
+            'Ссылка' => $bidImage->getAbsoluteUrl(),
+        ];
+        $image = [
+            'tag' => 'ФотоСтрока',
+            'attributes' => $attributes
+        ];
+        return $image;
     }
 
     private function getRecentBids()
