@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 
+use app\models\Bid;
 use app\models\form\MultipleUploadForm;
 use app\models\BidHistory;
 use yii\filters\AccessControl;
@@ -44,6 +45,7 @@ class BidImageController  extends Controller
             $uploadForm->files = UploadedFile::getInstances($uploadForm, 'files');
             $uploadForm->upload($attributes);
             BidHistory::createRecord(['bid_id' => $bidId, 'user_id' => \Yii::$app->user->id, 'action' => 'Новые фото']);
+            Bid::setFlagExport($bidId, false);
 
             return $this->redirect(['bid/view', 'id' => $bidId]);
         }

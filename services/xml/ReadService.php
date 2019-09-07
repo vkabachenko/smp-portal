@@ -15,7 +15,7 @@ use app\models\WarrantyStatus;
 class ReadService extends BaseService
 {
     /* @var array */
-    private $xmlArray = [];
+    protected $xmlArray = [];
 
     public function __construct($filename, $folder = 'xml')
     {
@@ -37,7 +37,7 @@ class ReadService extends BaseService
         }
     }
 
-    private function setBid($bidArray)
+    protected function setBid($bidArray)
     {
         $attributes = $bidArray['@attributes'];
 
@@ -86,6 +86,7 @@ class ReadService extends BaseService
     {
         $brand = Brand::findByName(trim($attributes['Бренд']));
 
+        $model->guid = $attributes['GUID'];
         $model->bid_1C_number = $attributes['Номер'];
         $model->client_name = $attributes['КлиентНаименование'];
         $model->client_phone = $attributes['КлиентТелефон1'];
@@ -105,6 +106,7 @@ class ReadService extends BaseService
         $model->bid_manufacturer_number = $attributes['НомерЗаявкиУПредставительства'];
         $model->warranty_status_id = WarrantyStatus::findIdByName($attributes['СтатусГарантии']);
         $model->user_id = User::findIdByName($attributes['Мастер']);
+        $model->flag_export = true;
 
         if (!$model->validate()) {
             \Yii::error($attributes);

@@ -42,6 +42,8 @@ use yii\behaviors\TimestampBehavior;
  * @property int $repair_status_id
  * @property int $warranty_status_id
  * @property int $status_id
+ * @property string $guid
+ * @property int $flag_export
  *
  * @property Condition $condition
  * @property Brand $brand
@@ -101,7 +103,7 @@ class Bid extends \yii\db\ActiveRecord
                 'status_id',
                 'user_id'
             ], 'integer'],
-            [['composition_table', 'treatment_type', 'compositionCombined', 'brand_name'], 'string'],
+            [['composition_table', 'treatment_type', 'compositionCombined', 'brand_name', 'guid'], 'string'],
             [['purchase_date', 'application_date', 'created_at', 'updated_at'], 'safe'],
             [[
                 'brand_model_name',
@@ -168,7 +170,8 @@ class Bid extends \yii\db\ActiveRecord
             'repair_status_id' => 'Статус ремонта',
             'warranty_status_id' => 'Статус гарантии',
             'status_id' => 'Статус',
-            'user_id' => 'Мастер'
+            'user_id' => 'Мастер',
+            'guid' => 'GUID'
         ];
     }
 
@@ -331,6 +334,17 @@ class Bid extends \yii\db\ActiveRecord
             \Yii::error($e->getMessage());
             $transaction->rollBack();
             return false;
+        }
+    }
+
+    public static function setFlagExport($id, $flagValue)
+    {
+        $model = self::findOne($id);
+        if ($model) {
+            $model->flag_export = $flagValue;
+            if (!$model->save(false)) {
+                \Yii::error($model->getErrors());
+            }
         }
     }
 }

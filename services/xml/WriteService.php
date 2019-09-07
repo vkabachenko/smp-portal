@@ -56,8 +56,7 @@ class WriteService extends BaseService
     {
         $attributes = [
             'ПорталID' => $model->id,
-            'GUID' => '',
-            'БитриксID' => '',
+            'GUID' => $model->guid,
             'Номер' => $model->bid_1C_number,
             'Дата' => '',
             'КлиентНаименование' => $model->client_name,
@@ -156,7 +155,8 @@ class WriteService extends BaseService
     private function getRecentBids()
     {
         $models = Bid::find()
-            ->with(['bidComments', 'warrantyStatus', 'status', 'repairStatus', 'brand', 'condition'])
+            ->with(['bidComments', 'warrantyStatus', 'status', 'repairStatus', 'brand', 'condition', 'bidImages'])
+            ->where(['flag_export' => false])
             ->all();
         return $models;
     }

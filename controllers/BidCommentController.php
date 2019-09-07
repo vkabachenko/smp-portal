@@ -3,6 +3,7 @@
 
 namespace app\controllers;
 
+use app\models\Bid;
 use app\models\BidComment;
 use app\models\search\BidCommentSearch;
 use yii\filters\AccessControl;
@@ -53,6 +54,7 @@ class BidCommentController  extends Controller
         ]);
 
         if ($model->load(\Yii::$app->request->post()) && $model->save()) {
+            Bid::setFlagExport($bidId, false);
             return $this->redirect(['index', 'bidId' => $bidId]);
         }
 

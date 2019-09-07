@@ -90,6 +90,7 @@ class BidController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             BidHistory::createUpdated($model, \Yii::$app->user->id);
+            $model->flag_export = false;
             $model->save(false);
             return $this->redirect(['index']);
         }

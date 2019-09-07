@@ -18,15 +18,12 @@ class ExchangeController extends Controller
      */
     public function beforeAction($action)
     {
-        if ($action->id == 'import') {
-            $this->enableCsrfValidation = false;
-        }
-
+        $this->enableCsrfValidation = false;
         return parent::beforeAction($action);
     }
 
 
-    public function actionRead($filename = 'test.xml')
+    public function actionRead($filename = 'import_manual.xml')
     {
         $uploadForm = new UploadXmlForm();
         if (\Yii::$app->request->isPost) {
@@ -40,7 +37,7 @@ class ExchangeController extends Controller
         return $this->render('read', ['uploadForm' => $uploadForm]);
     }
 
-    public function actionWrite($filename = 'test.xml')
+    public function actionWrite($filename = 'export_manual.xml')
     {
         $service = new WriteService($filename);
         $service->createXmlfile();
@@ -62,27 +59,19 @@ class ExchangeController extends Controller
             throw new \Exception('Incorrect request type');
         }
 
-        if (empty($_FILES)) {
-            throw new \Exception('File not found');
-        }
-        reset($_FILES);
-        $fileName = key($_FILES);
-
-        $path =  \Yii::getAlias('@webroot') . '/xml/import.xml';
-        @unlink($path);
-
-        $upload = UploadedFile::getInstanceByName($fileName);
-
-        $upload->saveAs($path);
-
-        $service = new ReadService('import.xml');
-        $service->setBids();
+        $this->importFile('ReadService', 'import.xml');
 
         return ['status' => 'OK'];
     }
 
-    public function actionExport($filename = 'test.xml')
+    public function actionExport($filename = 'export.xml')
     {
+        if (\Yii::$app->request->isPost) {
+            \Yii::$app->response->format = Response::FORMAT_JSON;
+            $this->importFile('ExportAnswerService', 'export-answer.xml');
+            return ['status' => 'OK'];
+        }
+
         $service = new WriteService($filename);
         $service->createXmlfile();
 
@@ -94,4 +83,33 @@ class ExchangeController extends Controller
 
         return $xml;
     }
+
+    /**
+     * @param $servicename string
+     * @param $filename string
+     * @throws \Exception
+     * @fixme Use DI to apply service
+     */
+    private function importFile($servicename, $filename)
+    {
+        $serviceNamespace = 'app\services\xml';
+
+        if (empty($_FILES)) {
+            throw new \Exception('File not found');
+        }
+        reset($_FILES);
+        $fileName = key($_FILES);
+
+        $path =  \Yii::getAlias('@webroot') . '/xml/' . $filename;
+        @unlink($path);
+
+        $upload = UploadedFile::getInstanceByName($fileName);
+
+        $upload->saveAs($path);
+
+        $serviceFullName = $serviceNamespace . '\\' . $servicename;
+        $service = new $serviceFullName($filename);
+        $service->setBids();
+    }
+
 }
