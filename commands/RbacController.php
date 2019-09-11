@@ -40,6 +40,12 @@ class RbacController extends Controller
         $manageEmailTemplate = $auth->createPermission('manageEmailTemplate');
         $auth->add($manageEmailTemplate);
 
+        $manageWorkshops = $auth->createPermission('manageWorkshops');
+        $auth->add($manageWorkshops);
+
+        $manageMasters = $auth->createPermission('manageMasters');
+        $auth->add($manageMasters);
+
         $client = $auth->createRole('client');
         $auth->add($client);
 
@@ -75,6 +81,8 @@ class RbacController extends Controller
         $auth->addChild($admin, $manageCatalogs);
         $auth->addChild($admin, $viewComments);
         $auth->addChild($admin, $createComment);
+        $auth->addChild($admin, $manageWorkshops);
+        $auth->addChild($admin, $manageMasters);
 
         echo 'done' . "\n";
     }

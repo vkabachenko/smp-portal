@@ -40,6 +40,10 @@ if (\Yii::$app->user->can('admin')) {
             'label' => 'Справочники',
             'items' => [
                 [
+                    'label' => 'Мастерские',
+                    'url' => ['workshop/index']
+                ],
+                [
                     'label' => 'Производители',
                     'url' => ['manufacturer/index']
                 ],

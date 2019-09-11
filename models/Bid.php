@@ -242,6 +242,14 @@ class Bid extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getMaster()
+    {
+        return $this->hasOne(Master::className(), ['id' => 'master_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getWarrantyStatus()
     {
         return $this->hasOne(WarrantyStatus::className(), ['id' => 'warranty_status_id']);
