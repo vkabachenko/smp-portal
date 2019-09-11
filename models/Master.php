@@ -45,8 +45,8 @@ class Master extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'User ID',
-            'workshop_id' => 'Workshop ID',
+            'user_id' => 'Мастер',
+            'workshop_id' => 'Мастерская',
         ];
     }
 

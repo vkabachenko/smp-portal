@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "workshop".
@@ -55,5 +56,16 @@ class Workshop extends \yii\db\ActiveRecord
     public function getMasters()
     {
         return $this->hasMany(Master::className(), ['workshop_id' => 'id']);
+    }
+
+    /**
+     * return array
+     */
+    public static function workshopsAsMap()
+    {
+        $models = self::find()->orderBy('name')->all();
+        $list = ArrayHelper::map($models, 'id', 'name');
+
+        return $list;
     }
 }
