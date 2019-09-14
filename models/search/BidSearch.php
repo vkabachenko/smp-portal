@@ -17,6 +17,7 @@ class BidSearch extends Bid
     public $application_date_to;
     public $created_at_from;
     public $created_at_to;
+    public $restrictions;
 
     /**
      * {@inheritdoc}
@@ -80,7 +81,7 @@ class BidSearch extends Bid
      */
     public function search($params)
     {
-        $query = Bid::find()->orderBy('created_at DESC');
+        $query = Bid::find()->where($this->restrictions)->orderBy('created_at DESC');
 
         // add conditions that should always apply here
 

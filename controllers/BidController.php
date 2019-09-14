@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 use app\helpers\bid\CompositionHelper;
+use app\helpers\bid\QueryRestrictionHelper;
 use app\helpers\bid\TitleHelper;
 use app\models\Bid;
 use app\models\BidComment;
@@ -47,7 +48,8 @@ class BidController extends Controller
     {
         $this->checkAccess('listBids');
 
-        $searchModel = new BidSearch();
+        $restrictions = QueryRestrictionHelper::getRestrictions(\Yii::$app->user->identity);
+        $searchModel = new BidSearch(['restrictions' => $restrictions]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $title = TitleHelper::getTitle(\Yii::$app->user->identity);
@@ -84,7 +86,7 @@ class BidController extends Controller
 
     public function actionUpdate($id)
     {
-        $this->checkAccess('updateBid');
+        $this->checkAccess('updateBid', ['bidId' => $id]);
 
         $model = Bid::findOne($id);
 
@@ -102,7 +104,7 @@ class BidController extends Controller
 
     public function actionView($id)
     {
-        $this->checkAccess('viewBid');
+        $this->checkAccess('viewBid', ['bidId' => $id]);
 
         $model = Bid::findOne($id);
 

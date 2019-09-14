@@ -307,6 +307,11 @@ class Bid extends \yii\db\ActiveRecord
         return $this->treatment_type === self::TREATMENT_TYPE_WARRANTY;
     }
 
+    public function isPaid()
+    {
+        return $this->treatment_type === self::TREATMENT_TYPE_PRESALE;
+    }
+
     public function beforeValidate()
     {
         if (empty($this->brand_id)) {
