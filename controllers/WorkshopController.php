@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\form\WorkshopRulesForm;
 use Yii;
 use app\models\Workshop;
 use yii\data\ActiveDataProvider;
@@ -57,13 +58,17 @@ class WorkshopController extends Controller
     public function actionCreate()
     {
         $model = new Workshop();
+        $rules = new WorkshopRulesForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $rules->load(Yii::$app->request->post()) ) {
+            $model->rules = $rules->attributes;
+            $model->save();
             return $this->redirect(['index']);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'rules' => $rules
         ]);
     }
 
@@ -71,13 +76,17 @@ class WorkshopController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $rules = new WorkshopRulesForm($model->rules);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $rules->load(Yii::$app->request->post()) ) {
+            $model->rules = $rules->attributes;
+            $model->save();
             return $this->redirect(['index']);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'rules' => $rules
         ]);
     }
 

@@ -46,7 +46,7 @@ class Workshop extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Мастерская',
             'token' => 'Токен',
-            'rules' => 'Rules',
+            'rules' => 'Правила доступа',
         ];
     }
 

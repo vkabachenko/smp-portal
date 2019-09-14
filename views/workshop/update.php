@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Workshop */
+/* @var $rules app\models\form\WorkshopRulesForm */
 
 $this->title = 'Редактировать мастерскую: ' . $model->name;
 $this->params['back'] = ['index'];
@@ -14,6 +15,7 @@ $this->params['back'] = ['index'];
 
     <?= $this->render('_form', [
         'model' => $model,
+        'rules' => $rules
     ]) ?>
 
 </div>

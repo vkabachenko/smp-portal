@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Workshop */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $rules app\models\form\WorkshopRulesForm */
 ?>
 
 <div class="workshop-form">
@@ -25,6 +26,9 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
     <div class="clearfix"></div>
+
+    <?= $form->field($rules, 'paidBid')->checkbox() ?>
+
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
