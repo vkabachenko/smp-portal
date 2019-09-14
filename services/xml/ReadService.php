@@ -31,10 +31,13 @@ class ReadService extends BaseService
 
     public function setBids()
     {
+        $responseBids = [];
         $bidsArray = $this->xmlArray['ДС'];
         foreach ($bidsArray as $bidArray) {
-            $this->setBid($bidArray);
+            $responseBids[] = $this->setBid($bidArray);
         }
+
+        return $responseBids;
     }
 
     protected function setBid($bidArray)
@@ -50,6 +53,23 @@ class ReadService extends BaseService
             $bid = $this->createBid($attributes);
             $this->createComments($bid, $bidComments);
         }
+        if (is_null($bid)) {
+            $responseAttributes = [
+                'ПорталID' => $attributes['ПорталID'],
+                'GUID' => $attributes['GUID'],
+                'Успешно' => 'Ложь'
+            ];
+        } else {
+            $responseAttributes = [
+                'ПорталID' => $bid->id,
+                'GUID' => $bid->guid,
+                'Успешно' => 'Истина'
+            ];
+        }
+        return [
+            'tag' => 'ДС',
+            'attributes' => $responseAttributes
+        ];
     }
 
     private function isDuplicate($attributes)
@@ -84,7 +104,12 @@ class ReadService extends BaseService
 
     private function fillAndValidateBid(Bid $model, $attributes)
     {
-        $brand = Brand::findByName(trim($attributes['Бренд']));
+        $brandName = trim($attributes['Бренд']);
+        $brandName = $brandName ?: 'Нет бренда';
+        $brand = Brand::findByName($brandName);
+
+        $equipment = trim($attributes['Оборудование']);
+        $equipment = $equipment ?: 'Оборудование не задано';
 
         $model->guid = $attributes['GUID'];
         $model->bid_1C_number = $attributes['Номер'];
@@ -92,9 +117,9 @@ class ReadService extends BaseService
         $model->client_phone = $attributes['КлиентТелефон1'];
         $model->created_at = $this->setDate($attributes['ДатаПринятияВРемонт']);
         $model->repair_status_id = RepairStatus::findIdByName($attributes['СтатусРемонта']);
-        $model->equipment = $attributes['Оборудование'];
+        $model->equipment = $equipment;
         $model->brand_id = $brand ? $brand->id : null;
-        $model->brand_name = trim($attributes['Бренд']);
+        $model->brand_name = $brandName;
         $model->manufacturer_id = $brand ? $brand->manufacturer_id : null;
         $model->serial_number = $attributes['СерийныйНомер'];
         $model->condition_id = Condition::findIdByName($attributes['ВнешнийВид']);

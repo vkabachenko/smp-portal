@@ -5,7 +5,7 @@ namespace app\services\xml;
 
 use app\models\Bid;
 
-class ExportAnswerService extends ReadService
+class ExportResponseService extends ReadService
 {
     protected function setBid($bidArray)
     {
@@ -16,6 +16,12 @@ class ExportAnswerService extends ReadService
         if ($exportResult === 'Истина') {
             Bid::setFlagExport($id, true);
         }
+
+        return [
+            'GUID' => $attributes['GUID'],
+            'ПорталID' => $id,
+            'Экспортирован' => $exportResult
+        ];
     }
 
 }

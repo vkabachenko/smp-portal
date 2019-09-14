@@ -53,26 +53,33 @@ class ExchangeController extends Controller
 
     public function actionImport()
     {
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-
         if (!\Yii::$app->request->isPost) {
             throw new \Exception('Incorrect request type');
         }
 
-        $this->importFile('ReadService', 'import.xml');
+        $responseArray = $this->importFile('ReadService', $this->setFileName('import'));
 
-        return ['status' => 'OK'];
+        $service = new WriteService($this->setFileName('import-response'), $responseArray);
+        $service->createXmlfile();
+
+        $xml = file_get_contents($service->filename);
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+        $headers = \Yii::$app->response->headers;
+        $headers->add('Content-Type', 'text/xml; charset=utf-8');
+
+        return $xml;
     }
 
-    public function actionExport($filename = 'export.xml')
+    public function actionExport()
     {
         if (\Yii::$app->request->isPost) {
             \Yii::$app->response->format = Response::FORMAT_JSON;
-            $this->importFile('ExportAnswerService', 'export-answer.xml');
-            return ['status' => 'OK'];
+            $responseArray = $this->importFile('ExportResponseService', $this->setFileName('export-response'));
+            return $responseArray;
         }
 
-        $service = new WriteService($filename);
+        $service = new WriteService($this->setFileName('export'));
         $service->createXmlfile();
 
         $xml = file_get_contents($service->filename);
@@ -89,6 +96,7 @@ class ExchangeController extends Controller
      * @param $filename string
      * @throws \Exception
      * @fixme Use DI to apply service
+     * @return array
      */
     private function importFile($servicename, $filename)
     {
@@ -109,7 +117,16 @@ class ExchangeController extends Controller
 
         $serviceFullName = $serviceNamespace . '\\' . $servicename;
         $service = new $serviceFullName($filename);
-        $service->setBids();
+        $responseArray = $service->setBids();
+
+        return $responseArray;
+    }
+
+    private function setFileName($template)
+    {
+        $datePart = date("dmYHis");
+
+        return $template . $datePart . '.xml';
     }
 
 }

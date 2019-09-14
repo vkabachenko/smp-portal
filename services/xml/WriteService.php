@@ -15,10 +15,10 @@ class WriteService extends BaseService
     /* @var array */
     private $xmlArray = [];
 
-   public function __construct($filename)
+   public function __construct($filename, $bids = null)
     {
         parent::__construct($filename);
-        $this->createXmlArray();
+        $this->createXmlArray($bids);
     }
 
     public function createXmlfile()
@@ -28,9 +28,12 @@ class WriteService extends BaseService
         file_put_contents($this->filename, $xml);
     }
 
-    private function createXmlArray()
+    private function createXmlArray($bids)
     {
-        $bids = $this->getBidsAsArray();
+        if (is_null($bids)) {
+            $bids =$this->getBidsAsArray();
+        }
+
         $this->xmlArray = [
             [
                 'tag' => 'ФайлОбмена',
@@ -75,7 +78,7 @@ class WriteService extends BaseService
             'ТоварНаГарантии' => $model->isWarranty() ? 'Истина' : 'Ложь',
             'ДокументГарантииНомер' => $model->warranty_number,
             'ДокументГарантииДата' => $model->purchase_date ? date("dmYHis", strtotime($model->purchase_date)) : '',
-            'Мастер' => '',
+            'Мастер' => $model->user_id ? $model->user->name : '',
             'Приемщик' => '',
             'РезультатДиагностики' => $model->diagnostic,
             'РекомендацииПоРемонту' => '',
