@@ -90,6 +90,15 @@ use kartik\date\DatePicker;
         </span>
     <?php endif; ?>
 
+    <?php if($model->master_id): ?>
+        <span class="bid-search-head">
+            Мастер
+        </span>
+        <span class="bid-search-content">
+            <?= $model->master->user->name ?>
+        </span>
+    <?php endif; ?>
+
     <?php if($model->client_name): ?>
         <span class="bid-search-head">
             Клиент

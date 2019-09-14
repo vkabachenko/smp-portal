@@ -32,7 +32,8 @@ class BidSearch extends Bid
                 'status_id',
                 'warranty_status_id',
                 'repair_status_id',
-                'user_id'
+                'user_id',
+                'master_id'
             ],
                 'integer'],
             [[
@@ -101,7 +102,7 @@ class BidSearch extends Bid
             'repair_status_id' => $this->repair_status_id,
             'warranty_status_id' => $this->warranty_status_id,
             'status_id' => $this->status_id,
-            'user_id' => $this->user_id
+            'master_id' => $this->master_id
         ]);
 
         $query

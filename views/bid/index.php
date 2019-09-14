@@ -3,6 +3,7 @@
 
 use app\models\Bid;
 use app\models\Manufacturer;
+use app\models\Master;
 use app\models\RepairStatus;
 use app\models\User;
 use app\models\WarrantyStatus;
@@ -161,19 +162,19 @@ $this->title = $title;
                     'filter' => WarrantyStatus::warrantyStatusAsMap()
                 ],
                 [
-                    'attribute' => 'user_id',
+                    'attribute' => 'master_id',
                     'format' => 'raw',
                     'value' => function ($model) {
                         /* @var $model app\models\Bid */
-                        $html = $model->user_id
-                            ? Html::tag('div', $model->user->name)
+                        $html = $model->master_id
+                            ? Html::tag('div', $model->master->user->name)
                             : null;
                         return $html;
                     },
                     'filterOptions' => ['class' => 'grid-master'],
                     'headerOptions' => ['class' => 'grid-master'],
                     'contentOptions' => ['class' => 'grid-master'],
-                    'filter' => User::mastersAsMap()
+                    'filter' => Master::mastersAsMap()
                 ],
                 [
                     'attribute' => 'client_name',

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "master".
@@ -17,6 +18,8 @@ use Yii;
  */
 class Master extends \yii\db\ActiveRecord
 {
+    public $name;
+
     /**
      * {@inheritdoc}
      */
@@ -72,5 +75,20 @@ class Master extends \yii\db\ActiveRecord
     public function getWorkshop()
     {
         return $this->hasOne(Workshop::className(), ['id' => 'workshop_id']);
+    }
+
+    /**
+     * return array
+     */
+    public static function mastersAsMap()
+    {
+        $models = self::find()
+            ->select(['master.id', 'user.name'])
+            ->joinWith('user', false)
+            ->orderBy('user.name')->all();
+        //var_dump($models); die();
+        $list = ArrayHelper::map($models, 'id', 'name');
+
+        return $list;
     }
 }

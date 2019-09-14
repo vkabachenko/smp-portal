@@ -171,6 +171,7 @@ class Bid extends \yii\db\ActiveRecord
             'warranty_status_id' => 'Статус гарантии',
             'status_id' => 'Статус',
             'user_id' => 'Мастер',
+            'master_id' => 'Мастер',
             'guid' => 'GUID'
         ];
     }

@@ -217,15 +217,4 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
-
-    /**
-     * return array
-     */
-    public static function mastersAsMap()
-    {
-        $models = self::find()->where(['role' => 'master'])->orderBy('name')->all();
-        $list = ArrayHelper::map($models, 'id', 'name');
-
-        return $list;
-    }
 }

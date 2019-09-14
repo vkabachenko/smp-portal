@@ -68,7 +68,7 @@ $this->params['back'] = ['index'];
         ],
         [
             'label' => 'Мастер',
-            'value' => $model->user_id ? $model->user->name : null,
+            'value' => $model->master_id ? $model->master->user->name : null,
         ],
     ]
 
