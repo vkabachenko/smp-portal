@@ -8,6 +8,7 @@ use app\models\BidComment;
 use app\models\BidHistory;
 use app\models\Brand;
 use app\models\Condition;
+use app\models\Master;
 use app\models\RepairStatus;
 use app\models\User;
 use app\models\WarrantyStatus;
@@ -130,7 +131,7 @@ class ReadService extends BaseService
         $model->vendor_code = $attributes['Артикул'];
         $model->bid_manufacturer_number = $attributes['НомерЗаявкиУПредставительства'];
         $model->warranty_status_id = WarrantyStatus::findIdByName($attributes['СтатусГарантии']);
-        $model->user_id = User::findIdByName($attributes['Мастер']);
+        $model->master_id = Master::findIdByName($attributes['Мастер']);
         $model->flag_export = true;
 
         if (!$model->validate()) {

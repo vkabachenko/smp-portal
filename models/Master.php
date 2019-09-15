@@ -91,4 +91,21 @@ class Master extends \yii\db\ActiveRecord
 
         return $list;
     }
+
+    public static function findByUserId($userId)
+    {
+        return static::find()->where(['user_id' => $userId])->one();
+    }
+
+    public static function findByName($name)
+    {
+        return static::find()->joinWith('user', false)->where(['user.name' => $name])->one();
+    }
+
+    public static function findIdByName($name)
+    {
+        $model = static::findByName($name);
+        return $model ? $model->id : null;
+    }
+
 }

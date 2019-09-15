@@ -44,6 +44,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $status_id
  * @property string $guid
  * @property int $flag_export
+ * @property int $master_id
  *
  * @property Condition $condition
  * @property Brand $brand
@@ -101,7 +102,8 @@ class Bid extends \yii\db\ActiveRecord
                 'repair_status_id',
                 'warranty_status_id',
                 'status_id',
-                'user_id'
+                'user_id',
+                'master_id'
             ], 'integer'],
             [['composition_table', 'treatment_type', 'compositionCombined', 'brand_name', 'guid'], 'string'],
             [['purchase_date', 'application_date', 'created_at', 'updated_at'], 'safe'],
@@ -360,5 +362,10 @@ class Bid extends \yii\db\ActiveRecord
                 \Yii::error($model->getErrors());
             }
         }
+    }
+
+    public static function setAllFlagexport($flagValue)
+    {
+        static::updateAll(['flag_export' => $flagValue]);
     }
 }

@@ -61,11 +61,11 @@ class WriteService extends BaseService
             'ПорталID' => $model->id,
             'GUID' => $model->guid,
             'Номер' => $model->bid_1C_number,
-            'Дата' => '',
+            'Дата' => date("dmYHis", strtotime($model->created_at)),
             'КлиентНаименование' => $model->client_name,
             'КлиентТелефон1' => $model->client_phone,
-            'КлиентТелефон2' => '',
-            'КлиентЭлПочта' => '',
+            //'КлиентТелефон2' => '',
+            //'КлиентЭлПочта' => '',
             'ДатаПринятияВРемонт' => date("dmYHis", strtotime($model->created_at)),
             'СтатусРемонта' => $model->repair_status_id ? $model->repairStatus->name : '',
             'Оборудование' => $model->equipment,
@@ -74,26 +74,26 @@ class WriteService extends BaseService
             'ВнешнийВид' => $model->condition_id ? $model->condition->name : '',
             'Комплектность' => $model->composition_name,
             'Неисправность' => $model->defect,
-            'ДополнительныеОтметки' => '',
+            //'ДополнительныеОтметки' => '',
             'ТоварНаГарантии' => $model->isWarranty() ? 'Истина' : 'Ложь',
             'ДокументГарантииНомер' => $model->warranty_number,
             'ДокументГарантииДата' => $model->purchase_date ? date("dmYHis", strtotime($model->purchase_date)) : '',
-            'Мастер' => $model->user_id ? $model->user->name : '',
-            'Приемщик' => '',
+            'Мастер' => $model->master_id ? $model->master->user->name : '',
+            //'Приемщик' => '',
             'РезультатДиагностики' => $model->diagnostic,
             'РекомендацииПоРемонту' => '',
             'Представительство' => $model->brand_name,
             'Артикул' => $model->vendor_code,
-            'Продавец' => '',
+            //'Продавец' => '',
             'РезультатДиагностикиДляПредставительства' => $model->diagnostic,
-            'ЗаявленнаяНеисправностьДляПредставительства' => '',
+            //'ЗаявленнаяНеисправностьДляПредставительства' => '',
             'НомерЗаявкиУПредставительства' => $model->bid_manufacturer_number,
             'СтатусГарантии' => $model->warranty_status_id ? $model->warrantyStatus->name : '',
-            'ДатаПринятияВРемонтДляПредставительства' => '',
-            'ДатаГотовности' => '',
-            'ДефектГарантийный' => '',
-            'ПроведениеРемонтаВозможно' => '',
-            'ПоданоНаГарантию' => ''
+            //'ДатаПринятияВРемонтДляПредставительства' => '',
+            //'ДатаГотовности' => '',
+            //'ДефектГарантийный' => '',
+            //'ПроведениеРемонтаВозможно' => '',
+            //'ПоданоНаГарантию' => ''
         ];
         $comments = $this->getCommentsAsArray($model->bidComments);
         $images = $this->getImagesAsArray($model->bidImages);
@@ -122,7 +122,7 @@ class WriteService extends BaseService
     {
         $attributes = [
             'НомерСтроки' => $index + 1,
-            'Автор' => $bidComment->user->name,
+            'Автор' => $bidComment->user_id ? $bidComment->user->name : '',
             'ДатаВремя' => date("dmYHis", strtotime($bidComment->created_at)),
             'ТекстКомментария' => Html::encode($bidComment->comment)
         ];

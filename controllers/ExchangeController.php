@@ -3,6 +3,7 @@
 
 namespace app\controllers;
 
+use app\models\Bid;
 use app\models\form\UploadXmlForm;
 use app\services\xml\BaseService;
 use app\services\xml\ReadService;
@@ -83,6 +84,7 @@ class ExchangeController extends Controller
         $service->createXmlfile();
 
         $xml = file_get_contents($service->filename);
+        Bid::setAllFlagexport(true);
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
         $headers = \Yii::$app->response->headers;
