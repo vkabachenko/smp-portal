@@ -123,7 +123,7 @@ $this->title = $title;
                         /* @var $model app\models\Bid */
                         $html = $model->treatment_type
                             ? Html::tag('div', Bid::TREATMENT_TYPES[$model->treatment_type])
-                            : null;                        ;
+                            : null;
                         return $html;
                     },
                     'filterOptions' => ['class' => 'grid-treatment-type'],

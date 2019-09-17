@@ -135,6 +135,24 @@ use kartik\date\DatePicker;
         </span>
     <?php endif; ?>
 
+    <?php if($model->client_type): ?>
+        <span class="bid-search-head">
+            Тип клиента
+        </span>
+        <span class="bid-search-content">
+            <?= Bid::CLIENT_TYPES[$model->client_type] ?>
+        </span>
+    <?php endif; ?>
+
+    <?php if($model->saler_name): ?>
+        <span class="bid-search-head">
+            Продавец
+        </span>
+        <span class="bid-search-content">
+            <?= $model->saler_name ?>
+        </span>
+    <?php endif; ?>
+
     <?php if($model->purchase_date_from): ?>
         <span class="bid-search-head">
             Дата покупки
@@ -144,12 +162,30 @@ use kartik\date\DatePicker;
         </span>
     <?php endif; ?>
 
-    <?php if($model->purchase_date_from): ?>
+    <?php if($model->application_date_from): ?>
         <span class="bid-search-head">
             Дата обращения
         </span>
         <span class="bid-search-content">
             <?= $model->application_date_from . ' - ' . $model->application_date_to ?>
+        </span>
+    <?php endif; ?>
+
+    <?php if($model->date_manufacturer_from): ?>
+        <span class="bid-search-head">
+            Дата принятия в ремонт для представительства
+        </span>
+        <span class="bid-search-content">
+            <?= $model->date_manufacturer_from . ' - ' . $model->date_manufacturer_to ?>
+        </span>
+    <?php endif; ?>
+
+    <?php if($model->date_completion_from): ?>
+        <span class="bid-search-head">
+            Дата готовности
+        </span>
+        <span class="bid-search-content">
+            <?= $model->date_completion_from . ' - ' . $model->date_completion_to ?>
         </span>
     <?php endif; ?>
 
@@ -207,6 +243,42 @@ use kartik\date\DatePicker;
         </span>
     <?php endif; ?>
 
+    <?php if($model->defect_manufacturer): ?>
+        <span class="bid-search-head">
+            Заявленная неисправность для представительства
+        </span>
+        <span class="bid-search-content">
+            <?= $model->defect_manufacturer ?>
+        </span>
+    <?php endif; ?>
+
+    <?php if($model->is_warranty_defect): ?>
+        <span class="bid-search-head">
+            Дефект гарантийный
+        </span>
+        <span class="bid-search-content">
+            <?= $model->is_warranty_defect ?>
+        </span>
+    <?php endif; ?>
+
+    <?php if($model->is_repair_possible): ?>
+        <span class="bid-search-head">
+            Проведение ремонта возможно
+        </span>
+        <span class="bid-search-content">
+            <?= $model->is_repair_possible ?>
+        </span>
+    <?php endif; ?>
+
+    <?php if($model->is_for_warranty): ?>
+        <span class="bid-search-head">
+            Подано на гарантию
+        </span>
+        <span class="bid-search-content">
+            <?= $model->is_for_warranty ?>
+        </span>
+    <?php endif; ?>
+
     <?php if($model->diagnostic): ?>
         <span class="bid-search-head">
             Результат диагностики
@@ -216,12 +288,30 @@ use kartik\date\DatePicker;
         </span>
     <?php endif; ?>
 
+    <?php if($model->diagnostic_manufacturer): ?>
+        <span class="bid-search-head">
+            Результат диагностики для представительства
+        </span>
+        <span class="bid-search-content">
+            <?= $model->diagnostic_manufacturer ?>
+        </span>
+    <?php endif; ?>
+
     <?php if($model->repair_status_id): ?>
         <span class="bid-search-head">
             Статус ремонта
         </span>
         <span class="bid-search-content">
             <?= $model->repairStatus->name ?>
+        </span>
+    <?php endif; ?>
+
+    <?php if($model->repair_recommendations): ?>
+        <span class="bid-search-head">
+            Рекомендации по ремонту
+        </span>
+        <span class="bid-search-content">
+            <?= $model->repair_recommendations ?>
         </span>
     <?php endif; ?>
 
@@ -242,6 +332,17 @@ use kartik\date\DatePicker;
             <?= $model->status->name ?>
         </span>
     <?php endif; ?>
+
+    <?php if($model->comment): ?>
+        <span class="bid-search-head">
+            Дополнительные отметки
+        </span>
+        <span class="bid-search-content">
+            <?= $model->comment ?>
+        </span>
+    <?php endif; ?>
+
+
 
 </div>
 

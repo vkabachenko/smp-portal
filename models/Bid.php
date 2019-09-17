@@ -43,8 +43,19 @@ use yii\behaviors\TimestampBehavior;
  * @property int $warranty_status_id
  * @property int $status_id
  * @property string $guid
- * @property int $flag_export
+ * @property bool $flag_export
  * @property int $master_id
+ * @property string $client_type
+ * @property string $comment
+ * @property string $repair_recommendations
+ * @property string $saler_name
+ * @property string $diagnostic_manufacturer
+ * @property string $defect_manufacturer
+ * @property string $date_manufacturer
+ * @property string $date_completion
+ * @property bool $is_warranty_defect
+ * @property bool $is_repair_possible
+ * @property bool $is_for_warranty
  *
  * @property Condition $condition
  * @property Brand $brand
@@ -62,6 +73,14 @@ class Bid extends \yii\db\ActiveRecord
     const TREATMENT_TYPES = [
         self::TREATMENT_TYPE_WARRANTY => 'Гарантия',
         self::TREATMENT_TYPE_PRESALE => 'Предпродажа',
+    ];
+
+    const CLIENT_TYPE_PERSON = 'person';
+    const CLIENT_TYPE_LEGAL_ENTITY = 'legal_entity';
+
+    const CLIENT_TYPES = [
+      self::CLIENT_TYPE_PERSON => 'Физическое лицо',
+      self::CLIENT_TYPE_LEGAL_ENTITY => 'Юридическое лицо'
     ];
 
     /**
@@ -105,8 +124,32 @@ class Bid extends \yii\db\ActiveRecord
                 'user_id',
                 'master_id'
             ], 'integer'],
-            [['composition_table', 'treatment_type', 'compositionCombined', 'brand_name', 'guid'], 'string'],
-            [['purchase_date', 'application_date', 'created_at', 'updated_at'], 'safe'],
+            [[
+                'composition_table',
+                'treatment_type',
+                'compositionCombined',
+                'brand_name',
+                'guid',
+                'client_type',
+                'comment',
+                'repair_recommendations',
+                'saler_name',
+                'diagnostic_manufacturer',
+                'defect_manufacturer'
+            ], 'string'],
+            [[
+                'is_warranty_defect',
+                'is_repair_possible',
+                'is_for_warranty',
+            ], 'boolean'],
+            [[
+                'purchase_date',
+                'application_date',
+                'created_at',
+                'updated_at',
+                'date_manufacturer',
+                'date_completion'
+            ], 'safe'],
             [[
                 'brand_model_name',
                 'composition_name',
@@ -131,6 +174,8 @@ class Bid extends \yii\db\ActiveRecord
             [['warranty_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => WarrantyStatus::className(), 'targetAttribute' => ['warranty_status_id' => 'id']],
             ['treatment_type', 'default', 'value' => null],
             ['treatment_type', 'in', 'range' => array_keys(self::TREATMENT_TYPES)],
+            ['client_type', 'default', 'value' => null],
+            ['client_type', 'in', 'range' => array_keys(self::CLIENT_TYPES)],
         ];
     }
 
@@ -152,7 +197,7 @@ class Bid extends \yii\db\ActiveRecord
             'serial_number' => 'Серийный номер',
             'vendor_code' => 'Артикул',
             'client_id' => 'Client ID',
-            'client_name' => 'ФИО клиента',
+            'client_name' => 'Клиент',
             'client_phone' => 'Телефон клиента',
             'client_address' => 'Адрес клиента',
             'treatment_type' => 'Тип обращения',
@@ -164,7 +209,7 @@ class Bid extends \yii\db\ActiveRecord
             'warranty_number' => 'Номер гарантийного талона',
             'bid_number' => 'Номер заявки',
             'bid_1C_number' => 'Номер заявки в 1С',
-            'bid_manufacturer_number' => 'Номер заявки у производителя',
+            'bid_manufacturer_number' => 'Номер заявки у представительства',
             'condition_id' => 'Состояние',
             'equipment' => 'Оборудование',
             'defect' => 'Заявленная неисправность',
@@ -172,9 +217,20 @@ class Bid extends \yii\db\ActiveRecord
             'repair_status_id' => 'Статус ремонта',
             'warranty_status_id' => 'Статус гарантии',
             'status_id' => 'Статус',
-            'user_id' => 'Мастер',
+            'user_id' => 'Приемщик',
             'master_id' => 'Мастер',
-            'guid' => 'GUID'
+            'guid' => 'GUID',
+            'client_type' => 'Тип клиента',
+            'comment' => 'Дополнительные отметки',
+            'repair_recommendations' => 'Рекомендации по ремонту',
+            'saler_name' => 'Продавец',
+            'diagnostic_manufacturer' => 'Результат диагностики для представительства',
+            'defect_manufacturer' => 'Заявленная неисправность для представительства',
+            'date_manufacturer' => 'Дата принятия в ремонт для представительства',
+            'date_completion' => 'Дата готовности',
+            'is_warranty_defect' => 'Дефект гарантийный',
+            'is_repair_possible' => 'Проведение ремонта возможно',
+            'is_for_warranty' => 'Подано на гарантию'
         ];
     }
 

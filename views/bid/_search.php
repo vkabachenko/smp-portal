@@ -60,6 +60,8 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'treatment_type')->dropDownList(Bid::TREATMENT_TYPES ,['prompt' => 'Выбор']) ?>
 
+    <?= $form->field($model, 'saler_name') ?>
+
     <div class="form-group">
         <label class="control-label">Дата покупки</label>
         <?= DatePicker::widget([
@@ -84,6 +86,30 @@ use kartik\date\DatePicker;
         ]) ?>
     </div>
 
+    <div class="form-group">
+        <label class="control-label">Дата принятия в ремонт для представительства</label>
+        <?= DatePicker::widget([
+            'model' => $model,
+            'attribute' => 'date_manufacturer_from',
+            'attribute2' => 'date_manufacturer_to',
+            'type' => DatePicker::TYPE_RANGE,
+            'separator' => '-',
+            'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
+        ]) ?>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Дата готовности</label>
+        <?= DatePicker::widget([
+            'model' => $model,
+            'attribute' => 'date_completion_from',
+            'attribute2' => 'date_completion_to',
+            'type' => DatePicker::TYPE_RANGE,
+            'separator' => '-',
+            'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
+        ]) ?>
+    </div>
+
     <?= $form->field($model, 'warranty_number') ?>
 
     <?= $form->field($model, 'bid_number') ?>
@@ -94,15 +120,31 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'condition_id')->dropDownList(Condition::conditionsAsMap(),['prompt' => 'Выбор']) ?>
 
+    <?= $form->field($model, 'client_type')->dropDownList(Bid::CLIENT_TYPES, ['prompt' => 'Выбор']) ?>
+
     <?= $form->field($model, 'defect') ?>
+
+    <?= $form->field($model, 'defect_manufacturer') ?>
+
+    <?= $form->field($model, 'is_warranty_defect')->checkbox(); ?>
+
+    <?= $form->field($model, 'is_repair_possible')->checkbox(); ?>
+
+    <?= $form->field($model, 'is_for_warranty')->checkbox(); ?>
 
     <?= $form->field($model, 'diagnostic') ?>
 
+    <?= $form->field($model, 'diagnostic_manufacturer') ?>
+
     <?= $form->field($model, 'repair_status_id')->dropDownList(RepairStatus::repairStatusAsMap(),['prompt' => 'Выбор']) ?>
+
+    <?= $form->field($model, 'repair_recommendations') ?>
 
     <?= $form->field($model, 'warranty_status_id')->dropDownList(WarrantyStatus::warrantyStatusAsMap(),['prompt' => 'Выбор']) ?>
 
     <?= $form->field($model, 'status_id')->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']) ?>
+
+    <?= $form->field($model, 'comment') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Найти', ['class' => 'btn btn-primary']) ?>

@@ -207,10 +207,22 @@ QuaggaAsset::register($this);
 
     <?= $form->field($model, 'defect')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'defect_manufacturer')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'is_warranty_defect')->checkbox(); ?>
+
+    <?= $form->field($model, 'is_repair_possible')->checkbox(); ?>
+
+    <?= $form->field($model, 'is_for_warranty')->checkbox(); ?>
+
     <?= $form->field($model, 'diagnostic')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'diagnostic_manufacturer')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'condition_id')
         ->dropDownList(Condition::conditionsAsMap(),['prompt' => 'Выбор', 'class' => 'form-control bid-condition']); ?>
+
+    <?= $form->field($model, 'client_type')->dropDownList(Bid::CLIENT_TYPES, ['prompt' => 'Выбор']) ?>
 
     <?= $form->field($model, 'client_id')->hiddenInput()->label(false) ?>
 
@@ -222,6 +234,8 @@ QuaggaAsset::register($this);
 
     <?= $form->field($model, 'treatment_type')->dropDownList(Bid::TREATMENT_TYPES, ['prompt' => 'Выбор']) ?>
 
+    <?= $form->field($model, 'saler_name')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'purchase_date')->widget(DatePicker::class, [
         'language' => 'ru',
         'dateFormat' => 'yyyy-MM-dd',
@@ -229,6 +243,18 @@ QuaggaAsset::register($this);
     ]) ?>
 
     <?= $form->field($model, 'application_date')->widget(DatePicker::class, [
+        'language' => 'ru',
+        'dateFormat' => 'yyyy-MM-dd',
+        'options' => ['class' => 'form-control']
+    ]) ?>
+
+    <?= $form->field($model, 'date_manufacturer')->widget(DatePicker::class, [
+        'language' => 'ru',
+        'dateFormat' => 'yyyy-MM-dd',
+        'options' => ['class' => 'form-control']
+    ]) ?>
+
+    <?= $form->field($model, 'date_completion')->widget(DatePicker::class, [
         'language' => 'ru',
         'dateFormat' => 'yyyy-MM-dd',
         'options' => ['class' => 'form-control']
@@ -245,6 +271,8 @@ QuaggaAsset::register($this);
     <?= $form->field($model, 'repair_status_id')
         ->dropDownList(RepairStatus::repairStatusAsMap(),['prompt' => 'Выбор']); ?>
 
+    <?= $form->field($model, 'repair_recommendations')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'warranty_status_id')
         ->dropDownList(WarrantyStatus::warrantyStatusAsMap(),['prompt' => 'Выбор']); ?>
 
@@ -253,6 +281,8 @@ QuaggaAsset::register($this);
 
     <?= $form->field($model, 'master_id')
         ->dropDownList(Master::mastersAsMap(),['prompt' => 'Выбор']); ?>
+
+    <?= $form->field($model, 'comment')->textarea(); ?>
 
     <?php if ($model->isNewRecord): ?>
         <div class="form-group">

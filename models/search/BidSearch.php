@@ -17,6 +17,10 @@ class BidSearch extends Bid
     public $application_date_to;
     public $created_at_from;
     public $created_at_to;
+    public $date_manufacturer_from;
+    public $date_manufacturer_to;
+    public $date_completion_from;
+    public $date_completion_to;
     public $restrictions;
 
     /**
@@ -37,6 +41,12 @@ class BidSearch extends Bid
                 'master_id'
             ],
                 'integer'],
+            [[
+                'is_warranty_defect',
+                'is_repair_possible',
+                'is_for_warranty',
+            ],
+                'boolean'],
             [[
                 'brand_name',
                 'equipment',
@@ -59,7 +69,17 @@ class BidSearch extends Bid
                 'bid_1C_number',
                 'bid_manufacturer_number',
                 'defect',
-                'diagnostic'
+                'diagnostic',
+                'date_manufacturer_from',
+                'date_manufacturer_to',
+                'date_completion_from',
+                'date_completion_to',
+                'client_type',
+                'comment',
+                'repair_recommendations',
+                'saler_name',
+                'diagnostic_manufacturer',
+                'defect_manufacturer'
             ], 'safe'],
         ];
     }
@@ -98,6 +118,12 @@ class BidSearch extends Bid
         }
 
         $query->andFilterWhere([
+            'is_warranty_defect' => $this->is_warranty_defect,
+            'is_repair_possible' => $this->is_repair_possible,
+            'is_for_warranty' => $this->is_for_warranty,
+        ]);
+
+        $query->andFilterWhere([
             'manufacturer_id' => $this->manufacturer_id,
             'condition_id' => $this->condition_id,
             'repair_status_id' => $this->repair_status_id,
@@ -109,7 +135,9 @@ class BidSearch extends Bid
         $query
             ->andFilterWhere(['between', 'created_at', $this->created_at_from, $this->created_at_to])
             ->andFilterWhere(['between', 'purchase_date', $this->purchase_date_from, $this->purchase_date_to])
-            ->andFilterWhere(['between', 'application_date', $this->application_date_from, $this->application_date_to]);
+            ->andFilterWhere(['between', 'application_date', $this->application_date_from, $this->application_date_to])
+            ->andFilterWhere(['between', 'date_manufacturer', $this->date_manufacturer_from, $this->date_manufacturer_to])
+            ->andFilterWhere(['between', 'date_completion', $this->date_completion_from, $this->date_completion_to]);
 
         $query
             ->andFilterWhere(['like', 'brand_name', $this->brand_name])
@@ -127,7 +155,13 @@ class BidSearch extends Bid
             ->andFilterWhere(['like', 'bid_1C_number', $this->bid_1C_number])
             ->andFilterWhere(['like', 'bid_manufacturer_number', $this->bid_manufacturer_number])
             ->andFilterWhere(['like', 'defect', $this->defect])
-            ->andFilterWhere(['like', 'diagnostic', $this->diagnostic]);
+            ->andFilterWhere(['like', 'diagnostic', $this->diagnostic])
+            ->andFilterWhere(['like', 'client_type', $this->client_type])
+            ->andFilterWhere(['like', 'comment', $this->comment])
+            ->andFilterWhere(['like', 'repair_recommendations', $this->repair_recommendations])
+            ->andFilterWhere(['like', 'saler_name', $this->saler_name])
+            ->andFilterWhere(['like', 'diagnostic_manufacturer', $this->diagnostic_manufacturer])
+            ->andFilterWhere(['like', 'defect_manufacturer', $this->defect_manufacturer]);
 
 
         return $dataProvider;
