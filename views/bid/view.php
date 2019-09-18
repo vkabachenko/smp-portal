@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Bid;
 use yii\bootstrap\Html;
 
 /* @var $this yii\web\View */
@@ -28,6 +29,7 @@ $this->params['back'] = ['index'];
     'model' => $model,
     'attributes' => [
         'created_at',
+        'updated_at',
         'brand_name',
         [
             'label' => 'Производитель',
@@ -43,13 +45,35 @@ $this->params['back'] = ['index'];
             'value' => $model->condition_id ? $model->condition->name : null,
         ],
         'defect',
+        'defect_manufacturer',
         'diagnostic',
+        'diagnostic_manufacturer',
+        'repair_recommendations',
+        [
+            'label' => 'Тип клиента',
+            'value' => $model->client_type ? Bid::CLIENT_TYPES[$model->client_type] : null,
+        ],
+        [
+            'label' => 'Дефект гарантийный',
+            'value' => $model->is_warranty_defect ? 'Истина' : 'Ложь',
+        ],
+        [
+            'label' => 'Проведение ремонта возможно',
+            'value' => $model->is_repair_possible ? 'Истина' : 'Ложь',
+        ],
+        [
+            'label' => 'Подано на гарантию',
+            'value' => $model->is_for_warranty ? 'Истина' : 'Ложь',
+        ],
         'client_name',
         'client_phone',
         'client_address',
         'treatmentTypeName',
+        'saler_name',
         'purchase_date:date',
         'application_date:date',
+        'date_manufacturer:date',
+        'date_completion:date',
         'warranty_number',
         'bid_number',
         'bid_1C_number',
@@ -67,9 +91,14 @@ $this->params['back'] = ['index'];
             'value' => $model->status_id ? $model->status->name : null,
         ],
         [
+            'label' => 'Приемщик',
+            'value' => $model->user_id ? $model->user->name : null,
+        ],
+        [
             'label' => 'Мастер',
             'value' => $model->master_id ? $model->master->user->name : null,
         ],
+        'comment'
     ]
 
 ]);

@@ -205,7 +205,7 @@ class Bid extends \yii\db\ActiveRecord
             'purchase_date' => 'Дата покупки',
             'application_date' => 'Дата обращения',
             'created_at' => 'Создана',
-            'updated_at' => 'Updated At',
+            'updated_at' => 'Дата',
             'warranty_number' => 'Номер гарантийного талона',
             'bid_number' => 'Номер заявки',
             'bid_1C_number' => 'Номер заявки в 1С',

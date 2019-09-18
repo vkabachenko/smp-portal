@@ -230,7 +230,7 @@ QuaggaAsset::register($this);
 
     <?= $form->field($model, 'client_phone')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'client_address')->hiddenInput()->label(false) ?>
+    <?= $form->field($model, 'client_address')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'treatment_type')->dropDownList(Bid::TREATMENT_TYPES, ['prompt' => 'Выбор']) ?>
 

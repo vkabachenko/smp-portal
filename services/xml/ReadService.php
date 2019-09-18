@@ -56,8 +56,8 @@ class ReadService extends BaseService
         }
         if (is_null($bid)) {
             $responseAttributes = [
-                'ПорталID' => $attributes['ПорталID'],
-                'GUID' => $attributes['GUID'],
+                'ПорталID' => $this->getAttribute($attributes, 'ПорталID'),
+                'GUID' => $this->getAttribute($attributes, 'GUID'),
                 'Успешно' => 'Ложь'
             ];
         } else {
@@ -75,7 +75,7 @@ class ReadService extends BaseService
 
     private function isDuplicate($attributes)
     {
-        $bid1Cnumber = $attributes['Номер'];
+        $bid1Cnumber = $this->getAttribute($attributes, 'Номер');
         $isExists = Bid::find()->where(['bid_1C_number' => $bid1Cnumber])->exists();
 
         return $isExists;
@@ -105,33 +105,48 @@ class ReadService extends BaseService
 
     private function fillAndValidateBid(Bid $model, $attributes)
     {
-        $brandName = trim($attributes['Бренд']);
+        $brandName = trim($this->getAttribute($attributes, 'Бренд'));
         $brandName = $brandName ?: 'Нет бренда';
         $brand = Brand::findByName($brandName);
 
-        $equipment = trim($attributes['Оборудование']);
+        $equipment = trim($this->getAttribute($attributes, 'Оборудование'));
         $equipment = $equipment ?: 'Оборудование не задано';
 
-        $model->guid = $attributes['GUID'];
-        $model->bid_1C_number = $attributes['Номер'];
-        $model->client_name = $attributes['КлиентНаименование'];
-        $model->client_phone = $attributes['КлиентТелефон1'];
-        $model->created_at = $this->setDate($attributes['ДатаПринятияВРемонт']);
-        $model->repair_status_id = RepairStatus::findIdByName($attributes['СтатусРемонта']);
+        $model->guid = $this->getAttribute($attributes, 'GUID');
+        $model->bid_1C_number = $this->getAttribute($attributes, 'Номер');
+        $model->client_name = $this->getAttribute($attributes, 'КлиентНаименование');
+        $model->client_phone = $this->getAttribute($attributes, 'КлиентТелефон1');
+        $model->created_at = $this->setDate($this->getAttribute($attributes, 'ДатаПринятияВРемонт'));
+        $model->updated_at = $this->setDate($this->getAttribute($attributes, 'Дата'));
+        $model->client_type = $this->setClientType($this->getAttribute($attributes, 'КлиентТип'));
+        $model->repair_status_id = RepairStatus::findIdByName($this->getAttribute($attributes, 'СтатусРемонта'));
         $model->equipment = $equipment;
         $model->brand_id = $brand ? $brand->id : null;
         $model->brand_name = $brandName;
         $model->manufacturer_id = $brand ? $brand->manufacturer_id : null;
-        $model->serial_number = $attributes['СерийныйНомер'];
-        $model->condition_id = Condition::findIdByName($attributes['ВнешнийВид']);
-        $model->composition_name = $attributes['Комплектность'];
-        $model->defect = $attributes['Неисправность'];
-        $model->treatment_type = $this->setTreatmentType($attributes['ТоварНаГарантии']);
-        $model->purchase_date = $this->setDate($attributes['ДокументГарантииДата']);
-        $model->vendor_code = $attributes['Артикул'];
-        $model->bid_manufacturer_number = $attributes['НомерЗаявкиУПредставительства'];
-        $model->warranty_status_id = WarrantyStatus::findIdByName($attributes['СтатусГарантии']);
-        $model->master_id = Master::findIdByName($attributes['Мастер']);
+        $model->serial_number = $this->getAttribute($attributes, 'СерийныйНомер');
+        $model->condition_id = Condition::findIdByName($this->getAttribute($attributes, 'ВнешнийВид'));
+        $model->composition_name = $this->getAttribute($attributes, 'Комплектность');
+        $model->defect = $this->getAttribute($attributes, 'Неисправность');
+        $model->defect_manufacturer = $this->getAttribute($attributes, 'ЗаявленнаяНеисправностьДляПредставительства');
+        $model->diagnostic = $this->getAttribute($attributes, 'РезультатДиагностики');
+        $model->diagnostic_manufacturer = $this->getAttribute($attributes, 'РезультатДиагностикиДляПредставительства');
+        $model->treatment_type = $this->setTreatmentType($this->getAttribute($attributes, 'ТоварНаГарантии'));
+        $model->purchase_date = $this->setDate($this->getAttribute($attributes, 'ДокументГарантииДата'));
+        $model->date_manufacturer = $this->setDate($this->getAttribute($attributes, 'ДатаПринятияВРемонтДляПредставительства'));
+        $model->date_completion = $this->setDate($this->getAttribute($attributes, 'ДатаГотовности'));
+        $model->vendor_code = $this->getAttribute($attributes, 'Артикул');
+        $model->bid_manufacturer_number = $this->getAttribute($attributes, 'НомерЗаявкиУПредставительства');
+        $model->warranty_status_id = WarrantyStatus::findIdByName($this->getAttribute($attributes, 'СтатусГарантии'));
+        $model->master_id = Master::findIdByName($this->getAttribute($attributes, 'Мастер'));
+        $model->user_id = User::findIdByName($this->getAttribute($attributes, 'Приемщик'));
+        $model->saler_name = $this->getAttribute($attributes, 'Продавец');
+        $model->repair_recommendations = $this->getAttribute($attributes, 'РекомендацииПоРемонту');
+        $model->comment = $this->getAttribute($attributes, 'ДополнительныеОтметки');
+        $model->is_warranty_defect = $this->setBoolean($this->getAttribute($attributes, 'ДефектГарантийный'));
+        $model->is_repair_possible = $this->setBoolean($this->getAttribute($attributes, 'ПроведениеРемонтаВозможно'));
+        $model->is_for_warranty = $this->setBoolean($this->getAttribute($attributes, 'ПоданоНаГарантию'));
+
         $model->flag_export = true;
 
         if (!$model->validate()) {
@@ -145,7 +160,7 @@ class ReadService extends BaseService
     private function updateBid($attributes)
     {
         /* @var $model Bid */
-        $model = Bid::find()->where(['bid_1C_number' => $attributes['Номер']])->one();
+        $model = Bid::find()->where(['bid_1C_number' => $this->getAttribute($attributes, 'Номер')])->one();
 
         if (!$this->fillAndValidateBid($model, $attributes)) {
             return null;
@@ -175,19 +190,19 @@ class ReadService extends BaseService
 
     private function createComment($bid, $attributes)
     {
-        $createdAt = $this->setDate($attributes['ДатаВремя']);
+        $createdAt = $this->setDate($this->getAttribute($attributes, 'ДатаВремя'));
         $exists = BidComment::find()->where(['bid_id' => $bid->id, 'created_at' => $createdAt])->exists();
 
         if ($exists) {
             return;
         }
 
-        $user = User::findByName($attributes['Автор']);
+        $user = User::findByName($this->getAttribute($attributes, 'Автор'));
         $model = new BidComment();
         $model->bid_id = $bid->id;
         $model->user_id = $user ? $user->id : null;
         $model->created_at = $createdAt;
-        $model->comment = $attributes['ТекстКомментария'];
+        $model->comment = $this->getAttribute($attributes, 'ТекстКомментария');
 
         if (!$model->save()) {
             \Yii::error($attributes);
@@ -215,6 +230,37 @@ class ReadService extends BaseService
         }
 
         return null;
+    }
+
+    private function setClientType($xmlClientType)
+    {
+        if ($xmlClientType === 'Физлицо') {
+            return Bid::CLIENT_TYPE_PERSON;
+        }
+
+        if ($xmlClientType === 'Юрлицо') {
+            return Bid::CLIENT_TYPE_LEGAL_ENTITY;
+        }
+
+        return Bid::CLIENT_TYPE_PERSON;
+    }
+
+    private function setBoolean($xmlBoolean, $default = false)
+    {
+        if ($xmlBoolean === 'Ложь') {
+            return false;
+        }
+
+        if ($xmlBoolean === 'Истина') {
+            return true;
+        }
+
+        return $default;
+    }
+
+    private function getAttribute($attributes, $key)
+    {
+        return isset($attributes[$key]) ? $attributes[$key] : '';
     }
 
 }

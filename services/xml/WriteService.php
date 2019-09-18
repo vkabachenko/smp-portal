@@ -61,12 +61,13 @@ class WriteService extends BaseService
             'ПорталID' => $model->id,
             'GUID' => $model->guid,
             'Номер' => $model->bid_1C_number,
-            'Дата' => date("dmYHis", strtotime($model->created_at)),
+            'Дата' => $this->setXmlDate($model->updated_at),
+            'КлиентТип' => $this->setXmlClientType($model->client_type),
             'КлиентНаименование' => $model->client_name,
             'КлиентТелефон1' => $model->client_phone,
             //'КлиентТелефон2' => '',
             //'КлиентЭлПочта' => '',
-            'ДатаПринятияВРемонт' => date("dmYHis", strtotime($model->created_at)),
+            'ДатаПринятияВРемонт' => $this->setXmlDate($model->created_at),
             'СтатусРемонта' => $model->repair_status_id ? $model->repairStatus->name : '',
             'Оборудование' => $model->equipment,
             'Бренд' => $model->brand_name,
@@ -74,26 +75,26 @@ class WriteService extends BaseService
             'ВнешнийВид' => $model->condition_id ? $model->condition->name : '',
             'Комплектность' => $model->composition_name,
             'Неисправность' => $model->defect,
-            //'ДополнительныеОтметки' => '',
-            'ТоварНаГарантии' => $model->isWarranty() ? 'Истина' : 'Ложь',
+            'ДополнительныеОтметки' => $model->comment,
+            'ТоварНаГарантии' => $this->setXmlBoolean($model->isWarranty()),
             'ДокументГарантииНомер' => $model->warranty_number,
-            'ДокументГарантииДата' => $model->purchase_date ? date("dmYHis", strtotime($model->purchase_date)) : '',
+            'ДокументГарантииДата' => $this->setXmlDate($model->purchase_date),
             'Мастер' => $model->master_id ? $model->master->user->name : '',
-            //'Приемщик' => '',
+            'Приемщик' => $model->user_id ? $model->user->name : '',
             'РезультатДиагностики' => $model->diagnostic,
-            'РекомендацииПоРемонту' => '',
-            'Представительство' => $model->brand_name,
+            'РекомендацииПоРемонту' => $model->repair_recommendations,
+            'Представительство' => $model->manufacturer_id ? $model->manufacturer->name : '',
             'Артикул' => $model->vendor_code,
-            //'Продавец' => '',
-            'РезультатДиагностикиДляПредставительства' => $model->diagnostic,
-            //'ЗаявленнаяНеисправностьДляПредставительства' => '',
+            'Продавец' => $model->saler_name,
+            'РезультатДиагностикиДляПредставительства' => $model->diagnostic_manufacturer,
+            'ЗаявленнаяНеисправностьДляПредставительства' => $model->defect_manufacturer,
             'НомерЗаявкиУПредставительства' => $model->bid_manufacturer_number,
             'СтатусГарантии' => $model->warranty_status_id ? $model->warrantyStatus->name : '',
-            //'ДатаПринятияВРемонтДляПредставительства' => '',
-            //'ДатаГотовности' => '',
-            //'ДефектГарантийный' => '',
-            //'ПроведениеРемонтаВозможно' => '',
-            //'ПоданоНаГарантию' => ''
+            'ДатаПринятияВРемонтДляПредставительства' => $this->setXmlDate($model->date_manufacturer),
+            'ДатаГотовности' => $this->setXmlDate($model->date_completion),
+            'ДефектГарантийный' => $this->setXmlBoolean($model->is_warranty_defect),
+            'ПроведениеРемонтаВозможно' => $this->setXmlBoolean($model->is_repair_possible),
+            'ПоданоНаГарантию' => $this->setXmlBoolean($model->is_for_warranty)
         ];
         $comments = $this->getCommentsAsArray($model->bidComments);
         $images = $this->getImagesAsArray($model->bidImages);
@@ -162,5 +163,20 @@ class WriteService extends BaseService
             ->where(['flag_export' => false])
             ->all();
         return $models;
+    }
+
+    private function setXmlDate($attribute)
+    {
+        return $attribute ? date("dmYHis", strtotime($attribute)) : '';
+    }
+
+    private function setXmlBoolean($attribute)
+    {
+        return $attribute ? 'Истина' : 'Ложь';
+    }
+
+    private function setXmlClientType($attribute)
+    {
+        return $attribute === Bid::CLIENT_TYPE_LEGAL_ENTITY ? 'Юрлицо' : 'Физлицо';
     }
 }
