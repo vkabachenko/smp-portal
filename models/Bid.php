@@ -14,6 +14,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $user_id
  * @property int $manufacturer_id
  * @property int $brand_id
+ * @property int $brand_correspondence_id
  * @property string $brand_name
  * @property string $equipment
  * @property int $brand_model_id
@@ -59,6 +60,7 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property Condition $condition
  * @property Brand $brand
+ * @property BrandCorrespondence $brandCorrespondence
  * @property User $client
  * @property Manufacturer $manufacturer
  * @property BrandModel $brandModel
@@ -114,6 +116,7 @@ class Bid extends \yii\db\ActiveRecord
             [[
                 'manufacturer_id',
                 'brand_id',
+                'brand_correspondence_id',
                 'brand_model_id',
                 'composition_id',
                 'client_id',
@@ -188,6 +191,7 @@ class Bid extends \yii\db\ActiveRecord
             'id' => 'ID',
             'manufacturer_id' => 'Производитель',
             'brand_id' => 'Бренд',
+            'brand_correspondence_id' => 'Бренд',
             'brand_name' => 'Бренд',
             'brand_model_id' => 'Модель - список',
             'brand_model_name' => 'Модель',
@@ -248,6 +252,14 @@ class Bid extends \yii\db\ActiveRecord
     public function getBrand()
     {
         return $this->hasOne(Brand::className(), ['id' => 'brand_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBrandCorrespondence()
+    {
+        return $this->hasOne(BrandCorrespondence::className(), ['id' => 'brand_correspondence_id']);
     }
 
     /**

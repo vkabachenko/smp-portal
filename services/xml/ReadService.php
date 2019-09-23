@@ -7,11 +7,13 @@ use app\models\Bid;
 use app\models\BidComment;
 use app\models\BidHistory;
 use app\models\Brand;
+use app\models\BrandCorrespondence;
 use app\models\Condition;
 use app\models\Master;
 use app\models\RepairStatus;
 use app\models\User;
 use app\models\WarrantyStatus;
+use app\services\brand\BrandService;
 
 class ReadService extends BaseService
 {
@@ -100,14 +102,22 @@ class ReadService extends BaseService
             \Yii::error($bidHistory->getErrors());
         };
 
+        if (is_null($model->brand_id) && is_null($model->brand_correspondence_id)) {
+            $brandCorrespondence = new BrandCorrespondence([
+                'name' => $model->brand_name,
+                'brand_id' => null
+            ]);
+            if (!$brandCorrespondence->save()) {
+                \Yii::error($brandCorrespondence->getErrors());
+            };
+        }
+
         return $model;
     }
 
     private function fillAndValidateBid(Bid $model, $attributes)
     {
-        $brandName = trim($this->getAttribute($attributes, 'Бренд'));
-        $brandName = $brandName ?: 'Нет бренда';
-        $brand = Brand::findByName($brandName);
+        $brandService = new BrandService(trim($this->getAttribute($attributes, 'Бренд')));
 
         $equipment = trim($this->getAttribute($attributes, 'Оборудование'));
         $equipment = $equipment ?: 'Оборудование не задано';
@@ -121,9 +131,10 @@ class ReadService extends BaseService
         $model->client_type = $this->setClientType($this->getAttribute($attributes, 'КлиентТип'));
         $model->repair_status_id = RepairStatus::findIdByName($this->getAttribute($attributes, 'СтатусРемонта'));
         $model->equipment = $equipment;
-        $model->brand_id = $brand ? $brand->id : null;
-        $model->brand_name = $brandName;
-        $model->manufacturer_id = $brand ? $brand->manufacturer_id : null;
+        $model->brand_id = $brandService->getBrandId();
+        $model->brand_correspondence_id = $brandService->getBrandCorrespondenceId();
+        $model->brand_name = $brandService->getName();
+        $model->manufacturer_id = $brandService->getManufacturerId();
         $model->serial_number = $this->getAttribute($attributes, 'СерийныйНомер');
         $model->condition_id = Condition::findIdByName($this->getAttribute($attributes, 'ВнешнийВид'));
         $model->composition_name = $this->getAttribute($attributes, 'Комплектность');

@@ -52,6 +52,10 @@ if (\Yii::$app->user->can('admin')) {
                     'url' => ['manufacturer/index']
                 ],
                 [
+                    'label' => 'Соответствие брендов',
+                    'url' => ['brand-correspondence/index']
+                ],
+                [
                     'label' => 'Комплектность',
                     'url' => ['composition/index']
                 ],

@@ -87,6 +87,18 @@ class Brand extends \yii\db\ActiveRecord
     /**
      * return array
      */
+    public static function brandsAsMap()
+    {
+        $models = self::find()->orderBy('name')->all();
+        $list = ArrayHelper::map($models, 'id', 'name');
+
+        return $list;
+    }
+
+
+    /**
+     * return array
+     */
     public static function brandsManufacturer($manufacturerId)
     {
         $models = self::find()
