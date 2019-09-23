@@ -22,7 +22,13 @@ $this->params['back'] = ['admin/index'];
         'dataProvider' => $dataProvider,
         'columns' => [
             'name',
-            'brand_id',
+            [
+                'attribute' => 'brand_id',
+                'value' => function ($model) {
+                    /* @var $model app\models\BrandCorrespondence*/
+                    return $model->brand_id ? $model->brand->name : null;
+                },
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update}{delete}',
