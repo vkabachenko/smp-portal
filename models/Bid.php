@@ -112,7 +112,7 @@ class Bid extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['brand_name'], 'required'],
+            [['brand_name', 'client_type'], 'required'],
             [[
                 'manufacturer_id',
                 'brand_id',
@@ -387,7 +387,40 @@ class Bid extends \yii\db\ActiveRecord
         if (empty($this->brand_id)) {
             $this->manufacturer_id = null;
         }
+        if (empty($this->equipment)) {
+            $this->equipment = 'Оборудование не задано';
+        }
+
         return parent::beforeValidate();
+    }
+
+    public function afterFind()
+    {
+        parent::afterFind();
+        if ($this->brand_correspondence_id) {
+            if ($this->brandCorrespondence->brand_id) {
+                $this->brand_name = $this->brandCorrespondence->brand->name;
+                $this->manufacturer_id = $this->brandCorrespondence->brand->manufacturer_id;
+                $this->brand_id = $this->brandCorrespondence->brand_id;
+                $this->brand_correspondence_id = null;
+            }
+        }
+    }
+
+    public function checkBrandCorrespondence()
+    {
+        if ($this->brand_id) {
+            return;
+        }
+        $brandCorrespondence = BrandCorrespondence::findByName($this->brand_name);
+        if (is_null($brandCorrespondence)) {
+            $brandCorrespondence = new BrandCorrespondence([
+                'name' => $this->brand_name,
+                'brand_id' => null
+            ]);
+            $brandCorrespondence->save();
+        }
+        $this->brand_correspondence_id = $brandCorrespondence->id;
     }
 
     public function createBid($userId, MultipleUploadForm $uploadForm, CommentForm $commentForm)
@@ -395,6 +428,7 @@ class Bid extends \yii\db\ActiveRecord
         $transaction = \Yii::$app->db->beginTransaction();
 
         try {
+            $this->checkBrandCorrespondence();
             if ($this->save()) {
                 $bidHistory = new BidHistory([
                     'bid_id' => $this->id,

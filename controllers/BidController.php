@@ -91,6 +91,7 @@ class BidController extends Controller
         $model = Bid::findOne($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->checkBrandCorrespondence();
             BidHistory::createUpdated($model, \Yii::$app->user->id);
             $model->flag_export = false;
             $model->save(false);
