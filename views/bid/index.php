@@ -24,9 +24,11 @@ $this->title = $title;
     <h2> <?= $this->title . ' ' . \Yii::$app->user->identity->name ?></h2>
 
     <div class="bids-grid">
-        <div>
-            <?= Html::a('Новая заявка', ['create'], ['class' => 'btn btn-success']) ?>
-        </div>
+        <?php if (\Yii::$app->user->can('createBid')): ?>
+            <div>
+                <?= Html::a('Новая заявка', ['create'], ['class' => 'btn btn-success']) ?>
+            </div>
+        <?php endif; ?>
 
         <div class="bid-search-btn-wrap">
             <?= Html::button('Расширенный поиск', [

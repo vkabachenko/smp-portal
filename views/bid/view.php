@@ -17,9 +17,13 @@ $this->params['back'] = ['index'];
         <div class="col-sm-4 col-xs-6">
             <?= Html::a('История', ['bid-history/index', 'bidId' => $model->id], ['class' => 'btn btn-success']) ?>
         </div>
-        <div class="col-sm-4  col-xs-6">
-            <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        </div>
+
+        <?php if (\Yii::$app->user->can('updateBid')): ?>
+            <div class="col-sm-4  col-xs-6">
+                <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            </div>
+        <?php endif; ?>
+
         <div class="col-sm-4  col-xs-6 bid-view-send">
             <?= Html::a('Отправить', ['send-act/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
         </div>

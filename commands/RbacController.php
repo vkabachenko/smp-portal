@@ -4,6 +4,7 @@
 namespace app\commands;
 
 use app\rbac\rules\ManageRestrictedBidRule;
+use app\rbac\rules\ManagerBidRule;
 use yii\console\Controller;
 
 class RbacController extends Controller
@@ -25,6 +26,9 @@ class RbacController extends Controller
         $viewBid = $auth->createPermission('viewBid');
         $auth->add($viewBid);
 
+        $managerBidRule = new ManagerBidRule();
+        $auth->add($managerBidRule);
+
         $restrictBidRule = new ManageRestrictedBidRule();
         $auth->add($restrictBidRule);
 
@@ -37,6 +41,11 @@ class RbacController extends Controller
         $restrictViewBid->ruleName = $restrictBidRule->name;
         $auth->add($restrictViewBid);
         $auth->addChild($restrictViewBid, $viewBid);
+
+        $managerViewBid = $auth->createPermission('managerViewBid');
+        $managerViewBid->ruleName = $managerBidRule->name;
+        $auth->add($managerViewBid);
+        $auth->addChild($managerViewBid, $viewBid);
 
         $manageBrand = $auth->createPermission('manageBrand');
         $auth->add($manageBrand);
@@ -75,8 +84,6 @@ class RbacController extends Controller
         $manager = $auth->createRole('manager');
         $auth->add($manager);
         $auth->addChild($manager, $listBids);
-        $auth->addChild($manager, $createBid);
-        $auth->addChild($manager, $updateBid);
         $auth->addChild($manager, $viewBid);
         $auth->addChild($manager, $viewComments);
         $auth->addChild($manager, $createComment);

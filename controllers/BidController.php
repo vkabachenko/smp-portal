@@ -4,7 +4,7 @@
 namespace app\controllers;
 
 use app\helpers\bid\CompositionHelper;
-use app\helpers\bid\QueryRestrictionHelper;
+use app\services\access\QueryRestrictionService;
 use app\helpers\bid\TitleHelper;
 use app\models\Bid;
 use app\models\BidComment;
@@ -48,7 +48,9 @@ class BidController extends Controller
     {
         $this->checkAccess('listBids');
 
-        $restrictions = QueryRestrictionHelper::getRestrictions(\Yii::$app->user->identity);
+        $restrictionService = new QueryRestrictionService(\Yii::$app->user->identity);
+        $restrictions = $restrictionService->getRestrictions();
+
         $searchModel = new BidSearch(['restrictions' => $restrictions]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
