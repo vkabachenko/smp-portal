@@ -84,7 +84,7 @@ class RbacController extends Controller
         $manager = $auth->createRole('manager');
         $auth->add($manager);
         $auth->addChild($manager, $listBids);
-        $auth->addChild($manager, $viewBid);
+        $auth->addChild($manager, $managerViewBid);
         $auth->addChild($manager, $viewComments);
         $auth->addChild($manager, $createComment);
         $auth->addChild($manager, $manageEmailTemplate);

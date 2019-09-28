@@ -215,7 +215,7 @@ QuaggaAsset::register($this);
 
     <?= $form->field($model, 'is_for_warranty')->checkbox(); ?>
 
-    <?= $form->field($model, 'diagnostic')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'diagnostic')->textarea() ?>
 
     <?= $form->field($model, 'diagnostic_manufacturer')->textInput(['maxlength' => true]) ?>
 
