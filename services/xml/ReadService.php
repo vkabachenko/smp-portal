@@ -36,8 +36,12 @@ class ReadService extends BaseService
     {
         $responseBids = [];
         $bidsArray = $this->xmlArray['ДС'];
-        foreach ($bidsArray as $bidArray) {
-            $responseBids[] = $this->setBid($bidArray);
+        if (isset($bidsArray['@attributes'])) {
+            $responseBids[] = $this->setBid($bidsArray);
+        } else {
+            foreach ($bidsArray as $bidArray) {
+                $responseBids[] = $this->setBid($bidArray);
+            }
         }
 
         return $responseBids;
