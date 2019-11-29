@@ -12,6 +12,7 @@ use yii\helpers\ArrayHelper;
  * @property string $name
  * @property string $token
  * @property array $rules
+ * @property string $description
  *
  * @property Master[] $masters
  */
@@ -34,6 +35,7 @@ class Workshop extends \yii\db\ActiveRecord
             [['name', 'token'], 'required'],
             [['rules'], 'safe'],
             [['name', 'token'], 'string', 'max' => 255],
+            ['description', 'string']
         ];
     }
 
@@ -47,6 +49,7 @@ class Workshop extends \yii\db\ActiveRecord
             'name' => 'Мастерская',
             'token' => 'Токен',
             'rules' => 'Правила доступа',
+            'description' => 'Описание'
         ];
     }
 

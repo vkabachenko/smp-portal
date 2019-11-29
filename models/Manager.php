@@ -9,9 +9,11 @@ use Yii;
  *
  * @property int $id
  * @property int $user_id
- * @property int $manufacturer_id
+ * @property int $agency_id
+ * @property bool $main
+ * @property string $phone
  *
- * @property Manufacturer $manufacturer
+ * @property Agency $agency
  * @property User $user
  */
 class Manager extends \yii\db\ActiveRecord
@@ -30,10 +32,12 @@ class Manager extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'manufacturer_id'], 'required'],
-            [['user_id', 'manufacturer_id'], 'integer'],
-            [['manufacturer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manufacturer::className(), 'targetAttribute' => ['manufacturer_id' => 'id']],
+            [['user_id', 'agency_id'], 'required'],
+            [['user_id', 'agency_id'], 'integer'],
+            [['agency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Agency::className(), 'targetAttribute' => ['agency_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            ['main', 'boolean'],
+            ['phone', 'string']
         ];
     }
 
@@ -45,16 +49,17 @@ class Manager extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'Менеджер',
-            'manufacturer_id' => 'Представитель',
+            'main' => 'Основной',
+            'phone' => 'Телефон'
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getManufacturer()
+    public function getAgency()
     {
-        return $this->hasOne(Manufacturer::className(), ['id' => 'manufacturer_id']);
+        return $this->hasOne(Agency::className(), ['id' => 'agency_id']);
     }
 
     /**

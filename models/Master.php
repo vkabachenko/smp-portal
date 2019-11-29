@@ -11,6 +11,8 @@ use yii\helpers\ArrayHelper;
  * @property int $id
  * @property int $user_id
  * @property int $workshop_id
+ * @property bool $main
+ * @property string $phone
  *
  * @property Bid[] $bids
  * @property User $user
@@ -38,6 +40,8 @@ class Master extends \yii\db\ActiveRecord
             [['user_id', 'workshop_id'], 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['workshop_id'], 'exist', 'skipOnError' => true, 'targetClass' => Workshop::className(), 'targetAttribute' => ['workshop_id' => 'id']],
+            ['main', 'boolean'],
+            ['phone', 'string']
         ];
     }
 
@@ -50,6 +54,8 @@ class Master extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'Мастер',
             'workshop_id' => 'Мастерская',
+            'main' => 'Основной',
+            'phone' => 'Телефон'
         ];
     }
 
