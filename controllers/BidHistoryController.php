@@ -33,7 +33,7 @@ class BidHistoryController  extends Controller
 
     public function actionIndex($bidId)
     {
-        $this->checkAccess('viewBid');
+        $this->checkAccess('viewBid', ['bidId' => $bidId]);
 
         $searchModel = new BidHistorySearch();
         $dataProvider = $searchModel->search($bidId);

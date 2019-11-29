@@ -33,7 +33,7 @@ class SendActController extends Controller
 
     public function actionIndex($bidId)
     {
-        $this->checkAccess('viewBid');
+        $this->checkAccess('viewBid', ['bidId' => $bidId]);
         $model = new SendActForm(['bidId' => $bidId]);
         $uploadForm = new UploadExcelTemplateForm();
 
