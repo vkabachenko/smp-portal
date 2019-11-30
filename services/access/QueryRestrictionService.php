@@ -3,7 +3,7 @@
 namespace app\services\access;
 
 use app\models\Bid;
-use app\models\Manager;
+use app\models\Agency;
 use app\models\Master;
 use app\models\User;
 
@@ -53,15 +53,15 @@ class QueryRestrictionService
 
     public function getManagerRestrictions()
     {
-        $manager = Manager::find()->where(['user_id' => $this->user->id])->one();
+        $agency = Agency::find()->joinWith('managers', false)->where(['manager.user_id' => $this->user->id])->one();
 
-        if (is_null($manager)) {
+        if (is_null($agency)) {
             return [];
         }
 
         return [
                     'and',
-                    ['manufacturer_id' => $manager->manufacturer_id],
+                    ['manufacturer_id' => $agency->manufacturer_id],
                     [
                         'or', ['treatment_type' => Bid::TREATMENT_TYPE_WARRANTY], ['treatment_type' => null]
                     ]

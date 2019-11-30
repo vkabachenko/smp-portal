@@ -70,13 +70,7 @@ class LoginForm extends Model
     {
         if ($this->validate()) {
             \Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
-            $auth = \Yii::$app->authManager;
-            $role = $auth->getRole(\Yii::$app->user->identity->role);
-            if (!is_null($role)) {
-                if (is_null($auth->getAssignment($role->name, \Yii::$app->user->id))) {
-                    $auth->assign($role, \Yii::$app->user->id);
-                }
-            }
+            self::assignRole();
             return true;
         }
         return false;
@@ -94,5 +88,16 @@ class LoginForm extends Model
         }
 
         return $this->_user;
+    }
+
+    public static function assignRole()
+    {
+        $auth = \Yii::$app->authManager;
+        $role = $auth->getRole(\Yii::$app->user->identity->role);
+        if (!is_null($role)) {
+            if (is_null($auth->getAssignment($role->name, \Yii::$app->user->id))) {
+                $auth->assign($role, \Yii::$app->user->id);
+            }
+        }
     }
 }

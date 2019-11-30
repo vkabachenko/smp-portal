@@ -12,8 +12,28 @@ use app\widgets\BackWidget\BackWidget;
 
 AppAsset::register($this);
 
+if (Yii::$app->user->isGuest) {
+    $commonItems = [
+        ['label' => 'Вход', 'url' => ['/site/login']],
+        ['label' => 'Регистрация представительства', 'url' => ['/site/signup-agency']],
+        ['label' => 'Регистрация мастерской', 'url' => ['/site/signup-workshop']],
+    ];
+} else {
+    $commonItems = [
+        '<li>'
+        . Html::beginForm(['/site/logout'], 'post')
+        . Html::submitButton(
+            'Выйти (' . Yii::$app->user->identity->username . ')',
+            ['class' => 'btn btn-link logout']
+        )
+        . Html::endForm()
+        . '</li>'
+    ];
+}
+
+
 // Menu items
-$commonItems = [
+/*$commonItems = [
     Yii::$app->user->isGuest ? (
     ['label' => 'Вход', 'url' => ['/site/login']]
     ) : (
@@ -26,7 +46,7 @@ $commonItems = [
         . Html::endForm()
         . '</li>'
     )
-];
+];*/
 
 $customItems = [];
 
