@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\form\SignupWorkshopForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -110,6 +111,17 @@ class SiteController extends Controller
             return $this->goHome();
         }
         return $this->render('signup-agency', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionSignupWorkshop()
+    {
+        $model = new SignupWorkshopForm();
+        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            return $this->goHome();
+        }
+        return $this->render('signup-workshop', [
             'model' => $model,
         ]);
     }

@@ -13,6 +13,7 @@ class m191129_100349_alter_workshop_table extends Migration
     public function safeUp()
     {
         $this->addColumn('workshop', 'description', 'text');
+        $this->alterColumn('workshop', 'token', 'string');
     }
 
     /**
@@ -21,6 +22,7 @@ class m191129_100349_alter_workshop_table extends Migration
     public function safeDown()
     {
         $this->dropColumn('workshop', 'description');
+        $this->alterColumn('workshop', 'token', $this->string()->notNull());
     }
 
 }

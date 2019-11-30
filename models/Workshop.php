@@ -32,7 +32,7 @@ class Workshop extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'token'], 'required'],
+            [['name'], 'required'],
             [['rules'], 'safe'],
             [['name', 'token'], 'string', 'max' => 255],
             ['description', 'string']

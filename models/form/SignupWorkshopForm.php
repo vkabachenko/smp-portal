@@ -2,18 +2,16 @@
 
 namespace app\models\form;
 
-use app\models\Agency;
 use app\models\LoginForm;
-use app\models\Manager;
-use app\models\Manufacturer;
+use app\models\Master;
+use app\models\Workshop;
 use yii\base\Model;
 use app\models\User;
 
-class SignupAgencyForm extends Model
+class SignupWorkshopForm extends Model
 {
     public $userName;
-    public $agencyName;
-    public $manufacturerId;
+    public $workshopName;
     public $email;
     public $password;
     public $verifyCode;
@@ -24,16 +22,14 @@ class SignupAgencyForm extends Model
     public function rules()
     {
         return [
-            [['email', 'agencyName'], 'trim'],
-            [['email', 'agencyName', 'manufacturerId', 'userName'], 'required'],
+            [['email', 'workshopName'], 'trim'],
+            [['email', 'workshopName','userName'], 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
             ['email', 'unique', 'targetClass' => User::class, 'message' => 'This email address has already been taken.'],
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
-            [['agencyName', 'userName'], 'string', 'max' => 255],
-            [['manufacturerId'], 'integer'],
-            [['manufacturerId'], 'exist', 'skipOnError' => true, 'targetClass' => Manufacturer::className(), 'targetAttribute' => ['manufacturerId' => 'id']],
+            [['workshopName', 'userName'], 'string', 'max' => 255],
             ['verifyCode', 'captcha'],
         ];
     }
@@ -44,9 +40,8 @@ class SignupAgencyForm extends Model
     public function attributeLabels()
     {
         return [
-            'agencyName' => 'Название представительства',
-            'userName' => 'ФИО главного менеджера',
-            'manufacturerId' => 'Производитель',
+            'workshopName' => 'Название мастерской',
+            'userName' => 'ФИО начальника мастерской',
             'email' => 'E-mail',
             'password' => 'Пароль',
             'verifyCode' => 'Проверочный код с картинки'
@@ -66,7 +61,7 @@ class SignupAgencyForm extends Model
         $user->username = $this->email;
         $user->email = $this->email;
         $user->name = $this->userName;
-        $user->role = 'manager';
+        $user->role = 'master';
         $user->status = User::STATUS_ACTIVE;
         $user->setPassword($this->password);
         $user->generateAuthKey();
@@ -76,23 +71,22 @@ class SignupAgencyForm extends Model
             return false;
         }
 
-        $agency = new Agency([
-            'name' => $this->agencyName,
-            'manufacturer_id' => $this->manufacturerId
+        $workshop = new Workshop([
+            'name' => $this->workshopName,
         ]);
-        if (!$agency->save()) {
-            \Yii::error($agency->getErrors());
+        if (!$workshop->save()) {
+            \Yii::error($workshop->getErrors());
             $transaction->rollBack();
             return false;
         }
         
-        $manager = new Manager([
+        $master = new Master([
             'user_id' => $user->id,
-            'agency_id' => $agency->id,
+            'workshop_id' => $workshop->id,
             'main' => true
         ]);
-        if (!$manager->save()) {
-            \Yii::error($manager->getErrors());
+        if (!$master->save()) {
+            \Yii::error($master->getErrors());
             $transaction->rollBack();
             return false;
         }
