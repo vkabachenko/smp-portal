@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "agency".
@@ -66,5 +67,16 @@ class Agency extends \yii\db\ActiveRecord
     public function getManagers()
     {
         return $this->hasMany(Manager::className(), ['agency_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWorkshops()
+    {
+        return $this->hasMany(Workshop::class, ['id' => 'workshop_id'])
+            ->viaTable('agency_workshop', ['agency_id' => 'id'], function (ActiveQuery $query) {
+                $query->where(['active' => true]);
+            });
     }
 }

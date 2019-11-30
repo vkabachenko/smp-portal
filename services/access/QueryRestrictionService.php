@@ -4,8 +4,8 @@ namespace app\services\access;
 
 use app\models\Bid;
 use app\models\Agency;
-use app\models\Master;
 use app\models\User;
+use app\models\Workshop;
 
 class QueryRestrictionService
 {
@@ -32,39 +32,50 @@ class QueryRestrictionService
 
     public function getMasterRestrictions()
     {
-        $master = Master::find()->where(['user_id' => $this->user->id])->one();
+        $workshop = Workshop::find()->joinWith('masters', false)->where(['master.user_id' => $this->user->id])->one();
 
-        if (is_null($master)) {
-            return [];
+        if (is_null($workshop)) {
+            return ['id' => null];
         }
 
-        $rules = $master->workshop->rules;
+        $restrictionWorkshop = ['workshop_id' => $workshop->id];
+
+        $rules = $workshop->rules;
 
         if (!isset($rules['paidBid'])) {
-            return [];
+            return $restrictionWorkshop;
         }
 
         if ($rules['paidBid']) {
-            return [];
+            return $restrictionWorkshop;
         } else {
-            return ['or', ['treatment_type' => Bid::TREATMENT_TYPE_WARRANTY], ['treatment_type' => null]];
+            return [
+                'and',
+                $restrictionWorkshop,
+                ['or', ['treatment_type' => Bid::TREATMENT_TYPE_WARRANTY], ['treatment_type' => null]]
+            ];
         }
     }
 
     public function getManagerRestrictions()
     {
-        $agency = Agency::find()->joinWith('managers', false)->where(['manager.user_id' => $this->user->id])->one();
+        $agency = Agency::find()
+            ->with('workshops')
+            ->joinWith('managers', false)
+            ->where(['manager.user_id' => $this->user->id])
+            ->one();
 
         if (is_null($agency)) {
-            return [];
+            return ['id' => null];
         }
+
+        $workshops = array_map(function(Workshop $workshop) { return $workshop->id; }, $agency->workshops);
 
         return [
                     'and',
                     ['manufacturer_id' => $agency->manufacturer_id],
-                    [
-                        'or', ['treatment_type' => Bid::TREATMENT_TYPE_WARRANTY], ['treatment_type' => null]
-                    ]
+                    ['workshop_id' => $workshops],
+                    ['or', ['treatment_type' => Bid::TREATMENT_TYPE_WARRANTY], ['treatment_type' => null]]
                 ];
 
     }

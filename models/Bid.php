@@ -57,6 +57,7 @@ use yii\behaviors\TimestampBehavior;
  * @property bool $is_warranty_defect
  * @property bool $is_repair_possible
  * @property bool $is_for_warranty
+ * @property int $workshop_id
  *
  * @property Condition $condition
  * @property Brand $brand
@@ -321,6 +322,14 @@ class Bid extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getWorkshop()
+    {
+        return $this->hasOne(Workshop::className(), ['id' => 'workshop_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getWarrantyStatus()
     {
         return $this->hasOne(WarrantyStatus::className(), ['id' => 'warranty_status_id']);
@@ -428,6 +437,7 @@ class Bid extends \yii\db\ActiveRecord
         $transaction = \Yii::$app->db->beginTransaction();
 
         try {
+            $this->setWorkshop($userId);
             $this->checkBrandCorrespondence();
             if ($this->save()) {
                 $bidHistory = new BidHistory([
@@ -448,7 +458,7 @@ class Bid extends \yii\db\ActiveRecord
             } else {
                 return false;
             }
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             \Yii::error($e->getMessage());
             $transaction->rollBack();
             return false;
@@ -466,8 +476,11 @@ class Bid extends \yii\db\ActiveRecord
         }
     }
 
-    public static function setAllFlagexport($flagValue)
+    public function setWorkshop($userId)
     {
-        static::updateAll(['flag_export' => $flagValue]);
+        $master = Master::findByUserId($userId);
+        if ($master) {
+            $this->workshop_id = $master->workshop->id;
+        }
     }
 }
