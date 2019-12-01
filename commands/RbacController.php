@@ -5,6 +5,7 @@ namespace app\commands;
 
 use app\rbac\rules\ManageRestrictedBidRule;
 use app\rbac\rules\ManagerBidRule;
+use app\rbac\rules\ManagerAgencyRule;
 use yii\console\Controller;
 
 class RbacController extends Controller
@@ -25,6 +26,17 @@ class RbacController extends Controller
 
         $viewBid = $auth->createPermission('viewBid');
         $auth->add($viewBid);
+
+        $updateAgency = $auth->createPermission('updateAgency');
+        $auth->add($updateAgency);
+
+        $managerAgencyRule = new ManagerAgencyRule();
+        $auth->add($managerAgencyRule);
+
+        $managerUpdateAgency = $auth->createPermission('managerUpdateAgency');
+        $managerUpdateAgency->ruleName = $managerAgencyRule->name;
+        $auth->add($managerUpdateAgency);
+        $auth->addChild($managerUpdateAgency, $updateAgency);
 
         $managerBidRule = new ManagerBidRule();
         $auth->add($managerBidRule);
@@ -89,6 +101,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $createComment);
         $auth->addChild($manager, $manageEmailTemplate);
         $auth->addChild($manager, $manageBrand);
+        $auth->addChild($manager, $managerUpdateAgency);
 
         $director = $auth->createRole('director');
         $auth->add($director);
@@ -99,6 +112,7 @@ class RbacController extends Controller
         $auth->addChild($admin, $createBid);
         $auth->addChild($admin, $updateBid);
         $auth->addChild($admin, $viewBid);
+        $auth->addChild($admin, $updateAgency);
         $auth->addChild($admin, $manageCatalogs);
         $auth->addChild($admin, $viewComments);
         $auth->addChild($admin, $createComment);

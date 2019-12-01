@@ -32,22 +32,6 @@ if (Yii::$app->user->isGuest) {
 }
 
 
-// Menu items
-/*$commonItems = [
-    Yii::$app->user->isGuest ? (
-    ['label' => 'Вход', 'url' => ['/site/login']]
-    ) : (
-        '<li>'
-        . Html::beginForm(['/site/logout'], 'post')
-        . Html::submitButton(
-            'Выйти (' . Yii::$app->user->identity->username . ')',
-            ['class' => 'btn btn-link logout']
-        )
-        . Html::endForm()
-        . '</li>'
-    )
-];*/
-
 $customItems = [];
 
 if (\Yii::$app->user->can('admin')) {
@@ -107,21 +91,38 @@ if (\Yii::$app->user->can('admin')) {
 if (\Yii::$app->user->can('manager')) {
     $customItems = [
         [
+            'label' => 'Профиль',
+            'url' => ['manager/profile']
+        ],
+        [
             'label' => 'Заявки',
-            'url' => ['bid/index', 'title' => 'Личный кабинет менеджера']
+            'url' => ['bid/index']
         ],
         [
             'label' => 'Шаблоны',
             'items' => [
                 [
-                    'label' => 'Excel актов технического состояния',
+                    'label' => 'Акты технического состояния - excel',
                     'url' => ['manufacturer/index-template']
                 ],
                 [
-                    'label' => 'Писем актов технического состояния',
+                    'label' => 'Актов технического состояния - письмо',
                     'url' => ['email-template/update']
                 ],
             ]
+        ],
+    ];
+}
+
+if (\Yii::$app->user->can('master')) {
+    $customItems = [
+        [
+            'label' => 'Профиль',
+            'url' => ['master/profile']
+        ],
+        [
+            'label' => 'Заявки',
+            'url' => ['bid/index']
         ],
     ];
 }

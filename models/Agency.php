@@ -47,7 +47,7 @@ class Agency extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Название',
+            'name' => 'Название представителя',
             'description' => 'Описание',
             'manufacturer_id' => 'Производитель',
         ];
