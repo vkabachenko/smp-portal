@@ -24,7 +24,7 @@ $this->title = 'Профиль менеджера ' . $user->name;
     <?= $form->field($user, 'email')->textInput(['maxlength' => true, 'disabled' => true]) ?>
     <?= $form->field($manager, 'phone')->textInput(['maxlength' => true]) ?>
 
-    <?php if (\Yii::$app->user->can('updateAgency', ['agencyId' => $manager->agency_id])): ?>
+    <?php if (\Yii::$app->user->can('updateAgency')): ?>
         <?= $form->field($agency, 'name')->textInput(['maxlength' => true]) ?>
         <?= $form->field($agency, 'description')->textarea() ?>
         <?= $form->field($agency, 'manufacturer_id')

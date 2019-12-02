@@ -98,20 +98,29 @@ if (\Yii::$app->user->can('manager')) {
             'label' => 'Заявки',
             'url' => ['bid/index']
         ],
-        [
-            'label' => 'Шаблоны',
-            'items' => [
-                [
-                    'label' => 'Акты технического состояния - excel',
-                    'url' => ['manufacturer/index-template']
-                ],
-                [
-                    'label' => 'Актов технического состояния - письмо',
-                    'url' => ['email-template/update']
-                ],
-            ]
-        ],
     ];
+    if (\Yii::$app->user->can('updateAgency')) {
+        $agencyItems = [
+            [
+                'label' => 'Шаблоны',
+                'items' => [
+                    [
+                        'label' => 'Акты технического состояния - excel',
+                        'url' => ['manufacturer/index-template']
+                    ],
+                    [
+                        'label' => 'Актов технического состояния - письмо',
+                        'url' => ['email-template/update']
+                    ],
+                ]
+            ],
+            [
+                'label' => 'Мастерcкие',
+                'url' => ['agency/workshops']
+            ],
+        ];
+        $customItems = array_merge($customItems, $agencyItems);
+    }
 }
 
 if (\Yii::$app->user->can('master')) {

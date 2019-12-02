@@ -16,12 +16,8 @@ class ManagerAgencyRule extends Rule
     {
         /* @var $manager \app\models\Manager */
         $manager = Manager::findByUserId($user);
-        return true;
-        if (is_null($manager)) {
-            return false;
-        }
 
-        if ($manager->agency_id != $params['agencyId']) {
+        if (is_null($manager)) {
             return false;
         }
 

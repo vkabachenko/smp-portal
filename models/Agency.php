@@ -47,7 +47,7 @@ class Agency extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Название представителя',
+            'name' => 'Название представительства',
             'description' => 'Описание',
             'manufacturer_id' => 'Производитель',
         ];
@@ -79,4 +79,14 @@ class Agency extends \yii\db\ActiveRecord
                 $query->where(['active' => true]);
             });
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAllWorkshops()
+    {
+        return $this->hasMany(Workshop::class, ['id' => 'workshop_id'])
+            ->viaTable('agency_workshop', ['agency_id' => 'id']);
+    }
+
 }

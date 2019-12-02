@@ -44,7 +44,7 @@ class ManagerController extends Controller
         if (\Yii::$app->request->isPost) {
             $userCheck = intval($user->load(\Yii::$app->request->post()) && $user->validate());
             $managerCheck = intval($manager->load(\Yii::$app->request->post()) && $manager->validate());
-            $agencyCheck = \Yii::$app->user->can('updateAgency', ['agencyId' => $manager->agency_id])
+            $agencyCheck = \Yii::$app->user->can('updateAgency')
                 ? intval($agency->load(\Yii::$app->request->post()) && $agency->validate())
                 : 1;
             if ($userCheck * $managerCheck * $agencyCheck) {
@@ -61,7 +61,7 @@ class ManagerController extends Controller
                     $transaction->rollBack();
                     return $this->redirect(['index']);
                 }
-                if (\Yii::$app->user->can('updateAgency', ['agencyId' => $manager->agency_id])) {
+                if (\Yii::$app->user->can('updateAgency')) {
                     if (!$agency->save()) {
                         \Yii::$app->session->setFlash('error', 'Agency save error');
                         \Yii::error($agency->getErrors());

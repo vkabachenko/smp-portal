@@ -65,4 +65,14 @@ class AgencyWorkshop extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Workshop::className(), ['id' => 'workshop_id']);
     }
+
+    public static function getActive(Agency $agency, Workshop $workshop)
+    {
+        $model = self::find()->where(['agency_id' => $agency->id, 'workshop_id' => $workshop->id])->one();
+        if ($model) {
+            return (bool)$model->active;
+        } else {
+            return null;
+        }
+    }
 }
