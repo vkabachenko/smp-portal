@@ -116,7 +116,11 @@ if (\Yii::$app->user->can('manager')) {
             ],
             [
                 'label' => 'Мастерcкие',
-                'url' => ['agency/workshops']
+                'url' => ['agency-workshop/workshops']
+            ],
+            [
+                'label' => 'Менеджеры',
+                'url' => ['agency-manager/managers']
             ],
         ];
         $customItems = array_merge($customItems, $agencyItems);

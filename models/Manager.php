@@ -74,4 +74,23 @@ class Manager extends \yii\db\ActiveRecord
     {
         return static::find()->where(['user_id' => $userId])->one();
     }
+
+    public function saveManagerUser(User $user)
+    {
+        $transaction = \Yii::$app->db->beginTransaction();
+
+        if (!$user->save()) {
+            \Yii::error($user->getErrors());
+            $transaction->rollBack();
+            return false;
+        }
+
+        if (!$this->save()) {
+            \Yii::error($this->getErrors());
+            $transaction->rollBack();
+            return false;
+        }
+        $transaction->commit();
+        return true;
+    }
 }

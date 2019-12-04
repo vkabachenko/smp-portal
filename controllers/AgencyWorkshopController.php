@@ -12,7 +12,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 
-class AgencyController extends Controller
+class AgencyWorkshopController extends Controller
 {
     /* @var Agency */
     public $agency;
@@ -93,5 +93,15 @@ class AgencyController extends Controller
         $this->agency->link('allWorkshops', $workshop);
 
         return $this->redirect(['workshops']);
+    }
+
+    public function actionManagers()
+    {
+        $agency = $this->agency;
+        $managersDataProvider = new ActiveDataProvider([
+            'query' => $agency->getManagers()->where(['NOT', ['user_id' => \Yii::$app->user->id]]),
+        ]);
+
+        return $this->render('managers', compact('agency', 'managersDataProvider'));
     }
 }

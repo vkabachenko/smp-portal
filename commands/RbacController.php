@@ -6,6 +6,7 @@ namespace app\commands;
 use app\rbac\rules\ManageRestrictedBidRule;
 use app\rbac\rules\ManagerBidRule;
 use app\rbac\rules\ManagerAgencyRule;
+use app\rbac\rules\ManagerManagerRule;
 use yii\console\Controller;
 
 class RbacController extends Controller
@@ -81,6 +82,17 @@ class RbacController extends Controller
         $manageMasters = $auth->createPermission('manageMasters');
         $auth->add($manageMasters);
 
+        $manageManagers = $auth->createPermission('manageManagers');
+        $auth->add($manageManagers);
+
+        $managerManagerRule = new ManagerManagerRule();
+        $auth->add($managerManagerRule);
+
+        $managerUpdateManager = $auth->createPermission('managerUpdateManager');
+        $managerUpdateManager->ruleName = $managerManagerRule->name;
+        $auth->add($managerUpdateManager);
+        $auth->addChild($managerUpdateManager, $manageManagers);
+
         $client = $auth->createRole('client');
         $auth->add($client);
 
@@ -102,6 +114,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $manageEmailTemplate);
         $auth->addChild($manager, $manageBrand);
         $auth->addChild($manager, $managerUpdateAgency);
+        $auth->addChild($manager, $managerUpdateManager);
 
         $director = $auth->createRole('director');
         $auth->add($director);
@@ -118,6 +131,7 @@ class RbacController extends Controller
         $auth->addChild($admin, $createComment);
         $auth->addChild($admin, $manageWorkshops);
         $auth->addChild($admin, $manageMasters);
+        $auth->addChild($admin, $manageManagers);
 
         echo 'done' . "\n";
     }
