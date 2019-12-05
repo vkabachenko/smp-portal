@@ -6,10 +6,10 @@ use app\models\Manufacturer;
 use yii\captcha\Captcha;
 
 /* @var $this yii\web\View */
-/* @var $model \app\models\form\SignupAgencyForm */
+/* @var $model \app\models\form\SignupMasterForm */
 
-$this->title = 'Регистрация представительства';
-$this->params['back'] = ['site/index'];
+$this->title = 'Регистрация мастера';
+
 ?>
 
 <div>
@@ -19,15 +19,9 @@ $this->params['back'] = ['site/index'];
     <div class="col-lg-5">
         <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'agencyName')->textInput(['autofocus' => true]) ?>
-
-        <?= $form->field($model, 'manufacturerId')
-            ->dropDownList(Manufacturer::manufacturersAsMap(),[
-                'prompt' => 'Выбор',
-            ]); ?>
-
         <?= $form->field($model, 'userName') ?>
         <?= $form->field($model, 'email') ?>
+        <?= $form->field($model, 'phone') ?>
 
         <?= $form->field($model, 'password')->passwordInput() ?>
 

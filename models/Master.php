@@ -114,4 +114,23 @@ class Master extends \yii\db\ActiveRecord
         return $model ? $model->id : null;
     }
 
+    public function saveMasterUser(User $user)
+    {
+        $transaction = \Yii::$app->db->beginTransaction();
+
+        if (!$user->save()) {
+            \Yii::error($user->getErrors());
+            $transaction->rollBack();
+            return false;
+        }
+
+        if (!$this->save()) {
+            \Yii::error($this->getErrors());
+            $transaction->rollBack();
+            return false;
+        }
+        $transaction->commit();
+        return true;
+    }
+
 }

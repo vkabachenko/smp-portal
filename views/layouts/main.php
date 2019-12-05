@@ -109,7 +109,7 @@ if (\Yii::$app->user->can('manager')) {
                         'url' => ['manufacturer/index-template']
                     ],
                     [
-                        'label' => 'Актов технического состояния - письмо',
+                        'label' => 'Акты технического состояния - письмо',
                         'url' => ['email-template/update']
                     ],
                 ]
@@ -130,14 +130,27 @@ if (\Yii::$app->user->can('manager')) {
 if (\Yii::$app->user->can('master')) {
     $customItems = [
         [
-            'label' => 'Профиль',
-            'url' => ['master/profile']
-        ],
-        [
             'label' => 'Заявки',
             'url' => ['bid/index']
         ],
+        [
+            'label' => 'Профиль',
+            'url' => ['master/profile']
+        ],
     ];
+    if (\Yii::$app->user->can('manageWorkshops')) {
+        $workshopItems = [
+            [
+                'label' => 'Представительства',
+                'url' => ['workshop-agency/agencies']
+            ],
+            [
+                'label' => 'Мастера',
+                'url' => ['workshop-master/masters']
+            ],
+        ];
+        $customItems = array_merge($customItems, $workshopItems);
+    }
 }
 
 $items = array_merge($customItems, $commonItems);

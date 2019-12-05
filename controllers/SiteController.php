@@ -64,7 +64,7 @@ class SiteController extends Controller
     {
         try {
             return $this->redirect([\Yii::$app->user->identity->role .'/index']);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             \Yii::error($e->getMessage());
             throw new NotFoundHttpException('User cabinet not found');
         }
@@ -92,11 +92,6 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
     public function actionLogout()
     {
         Yii::$app->user->logout();

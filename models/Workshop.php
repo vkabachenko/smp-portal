@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -70,5 +71,25 @@ class Workshop extends \yii\db\ActiveRecord
         $list = ArrayHelper::map($models, 'id', 'name');
 
         return $list;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAgencies()
+    {
+        return $this->hasMany(Agency::class, ['id' => 'agency_id'])
+            ->viaTable('agency_workshop', ['workshop_id' => 'id'], function (ActiveQuery $query) {
+                $query->where(['active' => true]);
+            });
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAllAgencies()
+    {
+        return $this->hasMany(Agency::class, ['id' => 'agency_id'])
+            ->viaTable('agency_workshop', ['workshop_id' => 'id']);
     }
 }

@@ -5,7 +5,7 @@ use yii\grid\GridView;
 use app\models\Workshop;
 
 /* @var $this yii\web\View */
-/* @var $workshoDataProvider yii\data\ActiveDataProvider */
+/* @var $workshopDataProvider yii\data\ActiveDataProvider */
 /* @var $availableWorkshops array */
 /* @var $agency \app\models\Agency */
 
@@ -17,7 +17,7 @@ $this->params['back'] = ['manager/index'];
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= GridView::widget([
-        'dataProvider' => $workshoDataProvider,
+        'dataProvider' => $workshopDataProvider,
         'rowOptions'=>function (Workshop $workshop) use ($agency)
             {if (!\app\models\AgencyWorkshop::getActive($agency, $workshop)) {return ['style'=>'opacity:0.5;'];} },
         'columns' => [

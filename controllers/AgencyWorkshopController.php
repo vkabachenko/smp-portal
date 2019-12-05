@@ -61,7 +61,7 @@ class AgencyWorkshopController extends Controller
     public function actionWorkshops()
     {
         $agency = $this->agency;
-        $workshoDataProvider = new ActiveDataProvider([
+        $workshopDataProvider = new ActiveDataProvider([
             'query' => $agency->getAllWorkshops(),
         ]);
 
@@ -72,7 +72,7 @@ class AgencyWorkshopController extends Controller
             ->indexBy('id')
             ->column();
 
-        return $this->render('index', compact('agency','workshoDataProvider', 'availableWorkshops'));
+        return $this->render('index', compact('agency','workshopDataProvider', 'availableWorkshops'));
     }
 
     public function actionDelete($id)
@@ -93,15 +93,5 @@ class AgencyWorkshopController extends Controller
         $this->agency->link('allWorkshops', $workshop);
 
         return $this->redirect(['workshops']);
-    }
-
-    public function actionManagers()
-    {
-        $agency = $this->agency;
-        $managersDataProvider = new ActiveDataProvider([
-            'query' => $agency->getManagers()->where(['NOT', ['user_id' => \Yii::$app->user->id]]),
-        ]);
-
-        return $this->render('managers', compact('agency', 'managersDataProvider'));
     }
 }

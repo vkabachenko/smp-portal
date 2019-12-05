@@ -7,6 +7,8 @@ use app\rbac\rules\ManageRestrictedBidRule;
 use app\rbac\rules\ManagerBidRule;
 use app\rbac\rules\ManagerAgencyRule;
 use app\rbac\rules\ManagerManagerRule;
+use app\rbac\rules\MasterMasterRule;
+use app\rbac\rules\MasterWorkshopRule;
 use yii\console\Controller;
 
 class RbacController extends Controller
@@ -79,8 +81,24 @@ class RbacController extends Controller
         $manageWorkshops = $auth->createPermission('manageWorkshops');
         $auth->add($manageWorkshops);
 
+        $masterWorkshopRule = new MasterWorkshopRule();
+        $auth->add($masterWorkshopRule);
+
+        $masterUpdateWorkshop = $auth->createPermission('masterUpdateWorkshop');
+        $masterUpdateWorkshop->ruleName = $masterWorkshopRule->name;
+        $auth->add($masterUpdateWorkshop);
+        $auth->addChild($masterUpdateWorkshop, $manageWorkshops);
+
         $manageMasters = $auth->createPermission('manageMasters');
         $auth->add($manageMasters);
+
+        $masterMasterRule = new MasterMasterRule();
+        $auth->add($masterMasterRule);
+
+        $masterUpdateMaster = $auth->createPermission('masterUpdateMaster');
+        $masterUpdateMaster->ruleName = $masterMasterRule->name;
+        $auth->add($masterUpdateMaster);
+        $auth->addChild($masterUpdateMaster, $manageMasters);
 
         $manageManagers = $auth->createPermission('manageManagers');
         $auth->add($manageManagers);
@@ -104,6 +122,8 @@ class RbacController extends Controller
         $auth->addChild($master, $restrictViewBid);
         $auth->addChild($master, $viewComments);
         $auth->addChild($master, $createComment);
+        $auth->addChild($master, $masterUpdateWorkshop);
+        $auth->addChild($master, $masterUpdateMaster);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
