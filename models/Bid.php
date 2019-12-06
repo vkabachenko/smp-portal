@@ -383,7 +383,7 @@ class Bid extends \yii\db\ActiveRecord
 
     public function isWarranty()
     {
-        return $this->treatment_type === self::TREATMENT_TYPE_WARRANTY;
+        return ($this->treatment_type === self::TREATMENT_TYPE_WARRANTY) || is_null($this->treatment_type);
     }
 
     public function isPaid()

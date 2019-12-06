@@ -58,7 +58,7 @@ class SendActController extends Controller
 
     public function actionGenerate($bidId)
     {
-        $this->checkAccess('viewBid');
+        $this->checkAccess('viewBid', ['bidId' => $bidId]);
         $model = new SendActForm(['bidId' => $bidId]);
 
         if ($model->act->bid->manufacturer->isActTemplate()) {

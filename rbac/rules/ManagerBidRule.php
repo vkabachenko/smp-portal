@@ -30,11 +30,12 @@ class ManagerBidRule extends Rule
             return false;
         }
 
+
         $workshops = array_map(function(Workshop $workshop) { return $workshop->id; }, $agency->workshops);
 
         if (in_array($bid->workshop_id, $workshops)
-            && $bid->manufacturer_id = $agency->manufacturer_id
-            && boolval($bid->treatment_type) === false) {
+            && $bid->manufacturer_id == $agency->manufacturer_id
+            && $bid->isWarranty()) {
             return true;
         } else {
             return false;
