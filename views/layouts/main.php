@@ -48,14 +48,6 @@ if (\Yii::$app->user->can('admin')) {
                     'url' => ['workshop/index']
                 ],
                 [
-                    'label' => 'Мастера',
-                    'url' => ['master-crud/index']
-                ],
-                [
-                    'label' => 'Менеджеры',
-                    'url' => ['manager-crud/index']
-                ],
-                [
                     'label' => 'Производители',
                     'url' => ['manufacturer/index']
                 ],

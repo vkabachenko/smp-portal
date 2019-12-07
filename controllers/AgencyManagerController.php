@@ -73,6 +73,16 @@ class AgencyManagerController extends Controller
         return $this->render('index', compact('agency', 'managersDataProvider'));
     }
 
+    public function actionAllManagers()
+    {
+        $agency = $this->agency;
+        $managersDataProvider = new ActiveDataProvider([
+            'query' => $agency->getManagers(),
+        ]);
+
+        return $this->render('all-managers', compact('agency', 'managersDataProvider'));
+    }
+
     public function actionInvite()
     {
         $token = \Yii::$app->security->generateRandomString(16);
@@ -106,7 +116,9 @@ class AgencyManagerController extends Controller
             && $user->validate()
             && $manager->saveManagerUser($user))
         {
-            return $this->redirect(['managers']);
+            return \Yii::$app->user->can('admin')
+                ? $this->redirect(['all-managers', 'agencyId' => $manager->agency_id])
+                : $this->redirect(['managers']);
         }
         return $this->render('update', compact('manager', 'user'));
     }
@@ -117,6 +129,8 @@ class AgencyManagerController extends Controller
         $this->checkAccess('manageManagers', ['agencyId' => $manager->agency_id]);
         $manager->delete();
 
-        return $this->redirect(['managers']);
+        return \Yii::$app->user->can('admin')
+            ? $this->redirect(['all-managers', 'agencyId' => $manager->agency_id])
+            : $this->redirect(['managers']);
     }
 }

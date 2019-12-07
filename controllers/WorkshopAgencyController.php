@@ -5,12 +5,14 @@ namespace app\controllers;
 
 
 use app\models\Agency;
+use app\models\AgencyWorkshop;
 use app\models\Manager;
 use app\models\Master;
 use app\models\Workshop;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Controller;
 
 class WorkshopAgencyController extends Controller
@@ -38,7 +40,7 @@ class WorkshopAgencyController extends Controller
 
     public function beforeAction($action)
     {
-        $workshopId = \Yii::$app->request->get('agencyId');
+        $workshopId = \Yii::$app->request->get('workshopId');
         if (!$workshopId) {
             /* @var $master \app\models\Master */
             $master = Master::findByUserId(\Yii::$app->user->id);
@@ -59,7 +61,24 @@ class WorkshopAgencyController extends Controller
         $agencyDataProvider = new ActiveDataProvider([
             'query' => $workshop->getAllAgencies(),
         ]);
+        Url::remember();
 
-        return $this->render('index', compact('workshop','agencyDataProvider'));
+        return $this->render(\Yii::$app->user->can('admin') ? 'index-admin' : 'index',
+            compact('workshop','agencyDataProvider'));
+    }
+
+    public function actionToggleActive($workshopId, $agencyId)
+    {
+        /* @var $model \app\models\AgencyWorkshop */
+        $model = AgencyWorkshop::find()->where(['agency_id' => $agencyId, 'workshop_id' => $workshopId])->one();
+        if (is_null($model)) {
+            throw new \DomainException('AgencyWorkshop model not found');
+        }
+        $model->active = !$model->active;
+        if (!$model->save()) {
+            \Yii::error($model->getErrors());
+            throw new \DomainException('Fail AgencyWorkshop model save');
+        }
+        return $this->redirect(['agencies', 'workshopId' => $workshopId]);
     }
 }

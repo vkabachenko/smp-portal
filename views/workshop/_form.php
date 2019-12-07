@@ -27,6 +27,7 @@ use yii\widgets\ActiveForm;
     </div>
     <div class="clearfix"></div>
 
+    <?= $form->field($model, 'description')->textarea() ?>
     <?= $form->field($rules, 'paidBid')->checkbox() ?>
 
     <div class="form-group">

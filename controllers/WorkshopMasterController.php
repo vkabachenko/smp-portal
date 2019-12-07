@@ -45,7 +45,7 @@ class WorkshopMasterController extends Controller
 
     public function beforeAction($action)
     {
-        $workshopId = \Yii::$app->request->get('agencyId');
+        $workshopId = \Yii::$app->request->get('workshopId');
         if (!$workshopId) {
             /* @var $master \app\models\Master */
             $master = Master::findByUserId(\Yii::$app->user->id);
@@ -69,6 +69,16 @@ class WorkshopMasterController extends Controller
         ]);
 
         return $this->render('index', compact('workshop', 'mastersDataProvider'));
+    }
+
+    public function actionAllMasters()
+    {
+        $workshop = $this->workshop;
+        $mastersDataProvider = new ActiveDataProvider([
+            'query' => $workshop->getMasters(),
+        ]);
+
+        return $this->render('all-masters', compact('workshop', 'mastersDataProvider'));
     }
 
     public function actionInvite()
@@ -104,7 +114,9 @@ class WorkshopMasterController extends Controller
             && $user->validate()
             && $master->saveMasterUser($user))
         {
-            return $this->redirect(['masters']);
+            return \Yii::$app->user->can('admin')
+                ? $this->redirect(['all-masters', 'workshopId' => $master->workshop_id])
+                : $this->redirect(['masters']);
         }
         return $this->render('update', compact('master', 'user'));
     }
@@ -115,6 +127,8 @@ class WorkshopMasterController extends Controller
         $this->checkAccess('manageMasters', ['workshopId' => $master->workshop_id]);
         $master->delete();
 
-        return $this->redirect(['masters']);
+        return \Yii::$app->user->can('admin')
+            ? $this->redirect(['all-masters', 'workshopId' => $master->workshop_id])
+            : $this->redirect(['masters']);
     }
 }

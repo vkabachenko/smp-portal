@@ -2,14 +2,14 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use app\models\Workshop;
+use app\models\Agency;
 
 /* @var $this yii\web\View */
 /* @var $agencyDataProvider yii\data\ActiveDataProvider */
 /* @var $workshop \app\models\Workshop */
 
 $this->title = 'Представительства мастерской  ' . $workshop->name;
-$this->params['back'] = ['master/index'];
+$this->params['back'] = ['workshop/index'];
 ?>
 <div>
 
@@ -29,6 +29,23 @@ $this->params['back'] = ['master/index'];
                     $html = $model->manufacturer->name;
                     return $html;
                 },
+            ],
+            [
+                'header' => 'Менеджеры',
+                'format' => 'raw',
+                'value' => function (Agency $agency) {
+                    return Html::a('Менеджеры', ['agency-manager/all-managers', 'agencyId' => $agency->id]);
+                }
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{toggle}',
+                'buttons' => [
+                    'toggle' => function ($url, $model, $key) use ($workshop) {
+                        return Html::a('', ['toggle-active', 'agencyId' => $model->id, 'workshopId' => $workshop->id],
+                            ['class' => 'glyphicon glyphicon-repeat']);
+                    },
+                ],
             ],
         ],
     ]); ?>

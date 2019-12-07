@@ -31,7 +31,8 @@ class AgencyWorkshop extends \yii\db\ActiveRecord
     {
         return [
             [['agency_id', 'workshop_id'], 'required'],
-            [['agency_id', 'workshop_id', 'active'], 'integer'],
+            [['agency_id', 'workshop_id'], 'integer'],
+            ['active', 'boolean'],
             [['agency_id', 'workshop_id'], 'unique', 'targetAttribute' => ['agency_id', 'workshop_id']],
             [['agency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Agency::className(), 'targetAttribute' => ['agency_id' => 'id']],
             [['workshop_id'], 'exist', 'skipOnError' => true, 'targetClass' => Workshop::className(), 'targetAttribute' => ['workshop_id' => 'id']],

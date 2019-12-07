@@ -8,7 +8,9 @@ use yii\widgets\ActiveForm;
 /* @var $user \app\models\User */
 
 $this->title = 'Редактирование мастера ' . $user->name;
-$this->params['back'] = ['masters'];
+$this->params['back'] = \Yii::$app->user->can('admin')
+    ? ['all-masters', 'workshopId' => $master->workshop_id]
+    : ['masters'];
 ?>
 <div>
 
@@ -18,6 +20,9 @@ $this->params['back'] = ['masters'];
 
         <?= $form->field($user, 'name')->textInput(['maxlength' => true]) ?>
         <?= $form->field($master, 'phone')->textInput(['maxlength' => true]) ?>
+        <?php if (\Yii::$app->user->can('admin')): ?>
+            <?= $form->field($master, 'main')->checkbox() ?>
+        <?php endif; ?>
 
         <div class="form-group">
             <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
