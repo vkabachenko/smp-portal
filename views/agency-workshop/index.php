@@ -29,7 +29,7 @@ $this->params['back'] = ['manager/index'];
         ],
     ]); ?>
 
-    <?= Html::beginForm(['agency/new-workshop']) ?>
+    <?= Html::beginForm(['new-workshop']) ?>
 
     <div class="form-group">
         <?= Html::label('Добавьте мастерскую', 'available-workshops-id', ['class' => 'control-label']) ?>

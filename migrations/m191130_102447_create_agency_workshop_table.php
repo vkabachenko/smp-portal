@@ -22,14 +22,16 @@ class m191130_102447_create_agency_workshop_table extends Migration
             'agency_workshop',
             'agency_id',
             'agency',
-            'id'
+            'id',
+            'CASCADE'
         );
         $this->addForeignKey(
             'fk_agency_workshop_workshop_id_workshop',
             'agency_workshop',
             'workshop_id',
             'workshop',
-            'id'
+            'id',
+            'CASCADE'
         );
         $this->addPrimaryKey('pk_agency_workshop', 'agency_workshop', ['agency_id', 'workshop_id']);
     }
