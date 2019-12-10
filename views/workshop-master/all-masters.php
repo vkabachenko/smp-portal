@@ -17,6 +17,8 @@ $this->params['back'] = ['workshop/index'];
 
     <?= GridView::widget([
         'dataProvider' => $mastersDataProvider,
+        'rowOptions'=>function (\app\models\Master $master)
+        {if (!$master->isActive()) {return ['class'=>'disabled enabled-events'];} },
         'columns' => [
             'user.name',
             [

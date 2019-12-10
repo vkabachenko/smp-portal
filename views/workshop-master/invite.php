@@ -4,10 +4,10 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model \app\models\form\InviteManagerForm */
+/* @var $model \app\models\form\InviteMasterForm */
 
-$this->title = 'Приглашение менеджера';
-$this->params['back'] = ['managers'];
+$this->title = 'Приглашение мастера';
+$this->params['back'] = ['masters'];
 ?>
 <div>
 

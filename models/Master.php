@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
  * @property int $workshop_id
  * @property bool $main
  * @property string $phone
+ * @property string $invite_token
  *
  * @property Bid[] $bids
  * @property User $user
@@ -41,7 +42,7 @@ class Master extends \yii\db\ActiveRecord
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['workshop_id'], 'exist', 'skipOnError' => true, 'targetClass' => Workshop::className(), 'targetAttribute' => ['workshop_id' => 'id']],
             ['main', 'boolean'],
-            ['phone', 'string']
+            [['phone', 'invite_token'], 'string']
         ];
     }
 
@@ -55,7 +56,8 @@ class Master extends \yii\db\ActiveRecord
             'user_id' => 'Мастер',
             'workshop_id' => 'Мастерская',
             'main' => 'Основной',
-            'phone' => 'Телефон'
+            'phone' => 'Телефон',
+            'invite_token' > 'Invite_token'
         ];
     }
 
@@ -133,4 +135,12 @@ class Master extends \yii\db\ActiveRecord
         return true;
     }
 
+    public function isActive()
+    {
+        if ($this->user->status == User::STATUS_ACTIVE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

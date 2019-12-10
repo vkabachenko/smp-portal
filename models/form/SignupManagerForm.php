@@ -82,6 +82,7 @@ class SignupManagerForm extends Model
         }
 
         $this->manager->phone = $this->phone;
+        $this->manager->invite_token = null;
         if (!$this->manager->save()) {
             \Yii::error($this->manager->getErrors());
             $transaction->rollBack();

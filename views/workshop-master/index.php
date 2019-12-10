@@ -17,6 +17,8 @@ $this->params['back'] = ['master/index'];
 
     <?= GridView::widget([
         'dataProvider' => $mastersDataProvider,
+        'rowOptions'=>function (\app\models\Master $master)
+        {if (!$master->isActive()) {return ['class'=>'disabled'];} },
         'columns' => [
             'user.name',
             'phone',

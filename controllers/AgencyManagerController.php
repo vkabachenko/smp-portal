@@ -90,6 +90,7 @@ class AgencyManagerController extends Controller
 
         if ($model->load(\Yii::$app->request->post()) && $model->signup($this->agency)) {
             // send mail
+            \Yii::$app->session->setFlash('success', 'Направлено письмо с приглашением');
             return $this->redirect(['managers']);
         }
         return $this->render('invite', [

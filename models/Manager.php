@@ -12,6 +12,7 @@ use Yii;
  * @property int $agency_id
  * @property bool $main
  * @property string $phone
+ * @property string $invite_token
  *
  * @property Agency $agency
  * @property User $user
@@ -37,7 +38,7 @@ class Manager extends \yii\db\ActiveRecord
             [['agency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Agency::className(), 'targetAttribute' => ['agency_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             ['main', 'boolean'],
-            ['phone', 'string']
+            [['phone', 'invite_token'], 'string']
         ];
     }
 
@@ -50,7 +51,8 @@ class Manager extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'Менеджер',
             'main' => 'Основной',
-            'phone' => 'Телефон'
+            'phone' => 'Телефон',
+            'invite_token' => 'Invite token'
         ];
     }
 

@@ -20,7 +20,7 @@ $this->title = 'Регистрация мастера';
         <?php $form = ActiveForm::begin(); ?>
 
         <?= $form->field($model, 'userName') ?>
-        <?= $form->field($model, 'email') ?>
+        <?= $form->field($model, 'email')->textInput(['disabled' => true])  ?>
         <?= $form->field($model, 'phone') ?>
 
         <?= $form->field($model, 'password')->passwordInput() ?>

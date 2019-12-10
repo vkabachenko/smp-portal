@@ -3,6 +3,7 @@
 
 namespace app\controllers;
 
+use app\models\form\InviteMasterForm;
 use app\models\Master;
 use app\models\MasterSignup;
 use app\models\User;
@@ -83,23 +84,16 @@ class WorkshopMasterController extends Controller
 
     public function actionInvite()
     {
-        $token = \Yii::$app->security->generateRandomString(16);
-        $masterSignupModel = new MasterSignup([
-            'workshop_id' => $this->workshop->id,
-            'token' => $token
-        ]);
+        $model = new InviteMasterForm();
 
-        if (!$masterSignupModel->save()) {
-            \Yii::error($masterSignupModel->getErrors());
-            \Yii::$app->session->setFlash('error', 'Fail saving master signup model');
-        } else {
-            \Yii::$app->session->setFlash('success',
-                'Передайте в e-mail или мессенджере ссылку на приглашение мастера: ' .
-                \Yii::$app->urlManager->createAbsoluteUrl(['master-signup/index', 'token' => $token])
-                );
+        if ($model->load(\Yii::$app->request->post()) && $model->signup($this->workshop)) {
+            // send mail
+            \Yii::$app->session->setFlash('success', 'Направлено письмо с приглашением');
+            return $this->redirect(['masters']);
         }
-
-        return $this->redirect(['masters']);
+        return $this->render('invite', [
+            'model' => $model,
+        ]);
     }
 
     public function actionUpdate($id)

@@ -6,14 +6,11 @@ namespace app\controllers;
 
 use app\models\form\SignupManagerForm;
 use app\models\Manager;
-use app\models\ManagerSignup;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 
 class ManagerSignupController extends Controller
 {
-    const EXPIRED_TOKEN_PERIOD = 30 * 24 * 60 * 60;
-
     public function behaviors()
     {
         return [
@@ -38,13 +35,12 @@ class ManagerSignupController extends Controller
         }
 
         $model = new SignupManagerForm($manager);
-        if ($model->load(\Yii::$app->request->post()) && $model->signup($manager)) {
+        if ($model->load(\Yii::$app->request->post()) && $model->signup()) {
             return $this->goHome();
         }
         return $this->render('index', [
             'model' => $model,
         ]);
-
     }
 
 }
