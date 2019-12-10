@@ -17,6 +17,8 @@ $this->params['back'] = \yii\helpers\Url::previous();
 
     <?= GridView::widget([
         'dataProvider' => $managersDataProvider,
+        'rowOptions'=>function (\app\models\Manager $manager)
+        {if (!$manager->isActive()) {return ['class'=>'disabled enabled-events'];} },
         'columns' => [
             'user.name',
             [

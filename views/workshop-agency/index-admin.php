@@ -18,7 +18,7 @@ $this->params['back'] = ['workshop/index'];
     <?= GridView::widget([
         'dataProvider' => $agencyDataProvider,
         'rowOptions'=>function (\app\models\Agency $agency) use ($workshop)
-            {if (!\app\models\AgencyWorkshop::getActive($agency, $workshop)) {return ['style'=>'opacity:0.5;'];} },
+            {if (!\app\models\AgencyWorkshop::getActive($agency, $workshop)) {return ['class'=>'disabled enabled-events'];} },
         'columns' => [
             'name',
             [

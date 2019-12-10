@@ -5,6 +5,7 @@ namespace app\controllers;
 
 
 use app\models\form\SignupManagerForm;
+use app\models\Manager;
 use app\models\ManagerSignup;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -30,17 +31,14 @@ class ManagerSignupController extends Controller
 
     public function actionIndex($token)
     {
-        /* @var $managerSignupModel \app\models\ManagerSignup */
-        $managerSignupModel = ManagerSignup::find()->where(['token' => $token])->one();
-        if (is_null($managerSignupModel)) {
+        $manager = Manager::find()->where(['invite_token' => $token])->one();
+
+        if (is_null($manager)) {
             throw new \DomainException('Token not found');
         }
-        if (time() - strtotime($managerSignupModel->created_at) > self::EXPIRED_TOKEN_PERIOD) {
-            throw new \DomainException('Token is expired');
-        }
 
-        $model = new SignupManagerForm();
-        if ($model->load(\Yii::$app->request->post()) && $model->signup($managerSignupModel)) {
+        $model = new SignupManagerForm($manager);
+        if ($model->load(\Yii::$app->request->post()) && $model->signup($manager)) {
             return $this->goHome();
         }
         return $this->render('index', [

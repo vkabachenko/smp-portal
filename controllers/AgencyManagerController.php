@@ -5,6 +5,7 @@ namespace app\controllers;
 
 
 use app\models\Agency;
+use app\models\form\InviteManagerForm;
 use app\models\Manager;
 use app\models\ManagerSignup;
 use app\models\User;
@@ -85,23 +86,15 @@ class AgencyManagerController extends Controller
 
     public function actionInvite()
     {
-        $token = \Yii::$app->security->generateRandomString(16);
-        $managerSignupModel = new ManagerSignup([
-            'agency_id' => $this->agency->id,
-            'token' => $token
-        ]);
+        $model = new InviteManagerForm();
 
-        if (!$managerSignupModel->save()) {
-            \Yii::error($managerSignupModel->getErrors());
-            \Yii::$app->session->setFlash('error', 'Fail saving manager signup model');
-        } else {
-            \Yii::$app->session->setFlash('success',
-                'Передайте в e-mail или мессенджере ссылку на приглашение менеджера: ' .
-                \Yii::$app->urlManager->createAbsoluteUrl(['manager-signup/index', 'token' => $token])
-                );
+        if ($model->load(\Yii::$app->request->post()) && $model->signup($this->agency)) {
+            // send mail
+            return $this->redirect(['managers']);
         }
-
-        return $this->redirect(['managers']);
+        return $this->render('invite', [
+            'model' => $model,
+        ]);
     }
 
     public function actionUpdate($id)

@@ -93,4 +93,13 @@ class Manager extends \yii\db\ActiveRecord
         $transaction->commit();
         return true;
     }
+
+    public function isActive()
+    {
+        if ($this->user->status == User::STATUS_ACTIVE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

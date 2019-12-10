@@ -11,6 +11,7 @@ use yii\helpers\Html;
 use app\models\Manufacturer;
 
 $this->title = 'Профиль менеджера ' . $user->name;
+$this->params['back'] = ['manager/index'];
 
 ?>
 

@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\Manager;
 use app\models\User;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
 
 class ManagerController extends Controller
@@ -31,7 +32,8 @@ class ManagerController extends Controller
 
     public function actionIndex()
     {
-        return $this->redirect(['profile']);
+        Url::remember();
+        return $this->render('index');
     }
 
     public function actionProfile()

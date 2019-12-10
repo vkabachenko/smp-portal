@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
 
 class AdminController extends Controller
@@ -29,6 +30,7 @@ class AdminController extends Controller
 
     public function actionIndex()
     {
-        return $this->redirect(['bid/index']);
+        Url::remember();
+        return $this->render('index');
     }
 }

@@ -54,12 +54,9 @@ class BidController extends Controller
         $searchModel = new BidSearch(['restrictions' => $restrictions]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $title = TitleHelper::getTitle(\Yii::$app->user->identity);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'title' => $title
+            'dataProvider' => $dataProvider
         ]);
     }
 

@@ -8,6 +8,7 @@ body {
     height: auto;
     margin: 0 auto -60px;
     padding: 0 0 60px;
+    display: flex;
 }
 
 .wrap > .container {
@@ -182,8 +183,12 @@ a.desc:after {
 }
 
 .disabled {
-    pointer-events:none;
     opacity:0.6;
+    pointer-events: none;
+}
+
+.enabled-events {
+    pointer-events: all;
 }
 
 .bid-view .detail-view th {
@@ -220,5 +225,31 @@ a.desc:after {
 
 .bid-search-content {
     color: dodgerblue;
+}
+
+.center-menu-container {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.center-menu {
+    width: 250px;
+}
+
+a.center-menu-item {
+    background-color: #1F85DE;
+    color: #fff;
+    border-color: #1F85DE;
+    margin-bottom: 15px;
+}
+
+a.center-menu-item:hover {
+    background-color: #a5d0ae;
+    color: #fff;
+    border-color: #a5d0ae;
 }
 

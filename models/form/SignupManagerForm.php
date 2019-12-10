@@ -10,11 +10,21 @@ use app\models\User;
 
 class SignupManagerForm extends Model
 {
+    /* @var Manager */
+    public $manager;
+
     public $userName;
     public $email;
     public $password;
     public $phone;
     public $verifyCode;
+
+
+    public function __construct(Manager $manager,$config = [] )
+    {
+        $this->manager = $manager;
+        parent::__construct($config);
+    }
 
     /**
      * {@inheritdoc}
@@ -22,16 +32,19 @@ class SignupManagerForm extends Model
     public function rules()
     {
         return [
-            [['email'], 'trim'],
-            [['email', 'userName'], 'required'],
-            ['email', 'email'],
-            [['email', 'phone'], 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => User::class, 'message' => 'This email address has already been taken.'],
+            [['userName'], 'required'],
+            [['phone'], 'string', 'max' => 255],
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
             [['userName'], 'string', 'max' => 255],
             ['verifyCode', 'captcha'],
         ];
+    }
+
+    public function init()
+    {
+        $this->email = $this->manager->user->email;
+        parent::init();
     }
 
     /**
@@ -48,7 +61,7 @@ class SignupManagerForm extends Model
         ];
     }
     
-    public function signup(ManagerSignup $managerSignup)
+    public function signup()
     {
         if (!$this->validate()) {
             return false;
@@ -57,11 +70,8 @@ class SignupManagerForm extends Model
         $transaction = \Yii::$app->db->beginTransaction();
 
 
-        $user = new User();
-        $user->username = $this->email;
-        $user->email = $this->email;
+        $user = $this->manager->user;
         $user->name = $this->userName;
-        $user->role = 'manager';
         $user->status = User::STATUS_ACTIVE;
         $user->setPassword($this->password);
         $user->generateAuthKey();
@@ -70,22 +80,10 @@ class SignupManagerForm extends Model
             $transaction->rollBack();
             return false;
         }
-        
-        $manager = new Manager([
-            'user_id' => $user->id,
-            'agency_id' => $managerSignup->agency_id,
-            'phone' => $this->phone,
-            'main' => false
-        ]);
-        if (!$manager->save()) {
-            \Yii::error($manager->getErrors());
-            $transaction->rollBack();
-            return false;
-        }
 
-        $managerSignup->active = false;
-        if (!$managerSignup->save()) {
-            \Yii::error($managerSignup->getErrors());
+        $this->manager->phone = $this->phone;
+        if (!$this->manager->save()) {
+            \Yii::error($this->manager->getErrors());
             $transaction->rollBack();
             return false;
         }

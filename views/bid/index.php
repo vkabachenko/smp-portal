@@ -15,13 +15,13 @@ use yii\bootstrap\Html;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\BidSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $title string */
 
-$this->title = $title;
+$this->title = 'Заявки';
+$this->params['back'] = \yii\helpers\Url::previous();
 ?>
 
 <div>
-    <h2> <?= $this->title . ' ' . \Yii::$app->user->identity->name ?></h2>
+    <h2> <?= $this->title ?></h2>
 
     <div class="bids-grid">
         <?php if (\Yii::$app->user->can('createBid')): ?>

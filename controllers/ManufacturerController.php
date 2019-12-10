@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\form\UploadExcelTemplateForm;
+use app\models\Manager;
 use Yii;
 use app\models\Manufacturer;
 use yii\data\ActiveDataProvider;
@@ -57,8 +58,15 @@ class ManufacturerController extends Controller
     {
         $this->checkAccess('manageBrand');
 
+        $query = Manufacturer::find()->orderBy('name');
+
+        $manager = Manager::findByUserId(\Yii::$app->user->id);
+        if ($manager) {
+            $query->where(['id' => $manager->agency->manufacturer_id]);
+        }
+
         $dataProvider = new ActiveDataProvider([
-            'query' => Manufacturer::find()->orderBy('name'),
+            'query' => $query,
         ]);
 
         return $this->render('index-template', [

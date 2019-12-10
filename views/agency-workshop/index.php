@@ -19,7 +19,7 @@ $this->params['back'] = ['manager/index'];
     <?= GridView::widget([
         'dataProvider' => $workshopDataProvider,
         'rowOptions'=>function (Workshop $workshop) use ($agency)
-            {if (!\app\models\AgencyWorkshop::getActive($agency, $workshop)) {return ['style'=>'opacity:0.5;'];} },
+            {if (!\app\models\AgencyWorkshop::getActive($agency, $workshop)) {return ['class'=>'disabled'];} },
         'columns' => [
             'name',
             [
@@ -29,21 +29,22 @@ $this->params['back'] = ['manager/index'];
         ],
     ]); ?>
 
-    <?= Html::beginForm(['new-workshop']) ?>
+    <?php if (!empty($availableWorkshops)): ?>
+        <?= Html::beginForm(['new-workshop']) ?>
 
-    <div class="form-group">
-        <?= Html::label('Добавьте мастерскую', 'available-workshops-id', ['class' => 'control-label']) ?>
-        <?= Html::dropDownList('new_workshop', null, $availableWorkshops, [
-            'id' => 'available-workshops-id',
-            'class' => 'form-control'
-        ]) ?>
-    </div>
-    <div class="form-group">
-        <?= Html::submitButton('Добавить', ['class' => 'btn btn-success']) ?>
+            <div class="form-group">
+                <?= Html::label('Добавьте мастерскую', 'available-workshops-id', ['class' => 'control-label']) ?>
+                <?= Html::dropDownList('new_workshop', null, $availableWorkshops, [
+                    'id' => 'available-workshops-id',
+                    'class' => 'form-control'
+                ]) ?>
+            </div>
+            <div class="form-group">
+                <?= Html::submitButton('Добавить', ['class' => 'btn btn-success']) ?>
 
-    </div>
+            </div>
 
-    <?= Html::endForm() ?>
-
+        <?= Html::endForm() ?>
+    <?php endif ?>
 
 </div>

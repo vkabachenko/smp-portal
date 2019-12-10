@@ -15,137 +15,19 @@ AppAsset::register($this);
 if (Yii::$app->user->isGuest) {
     $commonItems = [
         ['label' => 'Вход', 'url' => ['/site/login']],
-        ['label' => 'Регистрация представительства', 'url' => ['/site/signup-agency']],
-        ['label' => 'Регистрация мастерской', 'url' => ['/site/signup-workshop']],
     ];
 } else {
     $commonItems = [
         '<li>'
         . Html::beginForm(['/site/logout'], 'post')
         . Html::submitButton(
-            'Выйти (' . Yii::$app->user->identity->username . ')',
+            'Выйти (' . Yii::$app->user->identity->name . ')',
             ['class' => 'btn btn-link logout']
         )
         . Html::endForm()
         . '</li>'
     ];
 }
-
-
-$customItems = [];
-
-if (\Yii::$app->user->can('admin')) {
-    $customItems = [
-            [
-                'label' => 'Заявки',
-                'url' => ['bid/index', 'title' => 'Личный кабинет администратора']
-            ],
-        [
-            'label' => 'Справочники',
-            'items' => [
-                [
-                    'label' => 'Мастерские',
-                    'url' => ['workshop/index']
-                ],
-                [
-                    'label' => 'Производители',
-                    'url' => ['manufacturer/index']
-                ],
-                [
-                    'label' => 'Соответствие брендов',
-                    'url' => ['brand-correspondence/index']
-                ],
-                [
-                    'label' => 'Комплектность',
-                    'url' => ['composition/index']
-                ],
-                [
-                    'label' => 'Состояния',
-                    'url' => ['condition/index']
-                ],
-                [
-                    'label' => 'Статусы ремонта',
-                    'url' => ['repair-status/index']
-                ],
-                [
-                    'label' => 'Статусы гарантии',
-                    'url' => ['warranty-status/index']
-                ],
-                [
-                    'label' => 'Статусы заявки',
-                    'url' => ['bid-status/index']
-                ],
-            ]
-        ],
-    ];
-}
-
-if (\Yii::$app->user->can('manager')) {
-    $customItems = [
-        [
-            'label' => 'Профиль',
-            'url' => ['manager/profile']
-        ],
-        [
-            'label' => 'Заявки',
-            'url' => ['bid/index']
-        ],
-    ];
-    if (\Yii::$app->user->can('updateAgency')) {
-        $agencyItems = [
-            [
-                'label' => 'Шаблоны',
-                'items' => [
-                    [
-                        'label' => 'Акты технического состояния - excel',
-                        'url' => ['manufacturer/index-template']
-                    ],
-                    [
-                        'label' => 'Акты технического состояния - письмо',
-                        'url' => ['email-template/update']
-                    ],
-                ]
-            ],
-            [
-                'label' => 'Мастерcкие',
-                'url' => ['agency-workshop/workshops']
-            ],
-            [
-                'label' => 'Менеджеры',
-                'url' => ['agency-manager/managers']
-            ],
-        ];
-        $customItems = array_merge($customItems, $agencyItems);
-    }
-}
-
-if (\Yii::$app->user->can('master')) {
-    $customItems = [
-        [
-            'label' => 'Заявки',
-            'url' => ['bid/index']
-        ],
-        [
-            'label' => 'Профиль',
-            'url' => ['master/profile']
-        ],
-    ];
-    if (\Yii::$app->user->can('manageWorkshops')) {
-        $workshopItems = [
-            [
-                'label' => 'Представительства',
-                'url' => ['workshop-agency/agencies']
-            ],
-            [
-                'label' => 'Мастера',
-                'url' => ['workshop-master/masters']
-            ],
-        ];
-        $customItems = array_merge($customItems, $workshopItems);
-    }
-}
-
-$items = array_merge($customItems, $commonItems);
 
 ?>
 <?php $this->beginPage() ?>
@@ -173,7 +55,7 @@ $items = array_merge($customItems, $commonItems);
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => $items
+        'items' => $commonItems
     ]);
     NavBar::end();
     ?>
