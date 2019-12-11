@@ -11,6 +11,9 @@ class InviteMasterForm extends Model
 {
     public $email;
 
+    /* @var Master */
+    public $master;
+
     /**
      * {@inheritdoc}
      */
@@ -57,14 +60,14 @@ class InviteMasterForm extends Model
             return false;
         }
         
-        $master = new Master([
+        $this->master = new Master([
             'user_id' => $user->id,
             'workshop_id' => $workshop->id,
             'main' => false,
             'invite_token' => \Yii::$app->security->generateRandomString(16)
         ]);
-        if (!$master->save()) {
-            \Yii::error($master->getErrors());
+        if (!$this->master->save()) {
+            \Yii::error($this->master->getErrors());
             $transaction->rollBack();
             return false;
         }

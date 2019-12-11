@@ -13,6 +13,11 @@ class InviteManagerForm extends Model
     public $email;
 
     /**
+     * @var \app\models\Manager
+     */
+    public $manager;
+
+    /**
      * {@inheritdoc}
      */
     public function rules()
@@ -59,14 +64,14 @@ class InviteManagerForm extends Model
             return false;
         }
         
-        $manager = new Manager([
+        $this->manager = new Manager([
             'user_id' => $user->id,
             'agency_id' => $agency->id,
             'main' => false,
             'invite_token' => \Yii::$app->security->generateRandomString(16)
         ]);
-        if (!$manager->save()) {
-            \Yii::error($manager->getErrors());
+        if (!$this->manager->save()) {
+            \Yii::error($this->manager->getErrors());
             $transaction->rollBack();
             return false;
         }

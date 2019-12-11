@@ -8,6 +8,7 @@ use app\models\Master;
 use app\models\MasterSignup;
 use app\models\User;
 use app\models\Workshop;
+use app\services\mail\InviteMaster;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -87,7 +88,8 @@ class WorkshopMasterController extends Controller
         $model = new InviteMasterForm();
 
         if ($model->load(\Yii::$app->request->post()) && $model->signup($this->workshop)) {
-            // send mail
+            $mailService = new InviteMaster($model->master);
+            $mailService->send();
             \Yii::$app->session->setFlash('success', 'Направлено письмо с приглашением');
             return $this->redirect(['masters']);
         }

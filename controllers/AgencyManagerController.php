@@ -10,6 +10,7 @@ use app\models\Manager;
 use app\models\ManagerSignup;
 use app\models\User;
 use app\models\Workshop;
+use app\services\mail\InviteManager;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -89,7 +90,8 @@ class AgencyManagerController extends Controller
         $model = new InviteManagerForm();
 
         if ($model->load(\Yii::$app->request->post()) && $model->signup($this->agency)) {
-            // send mail
+            $mailService = new InviteManager($model->manager);
+            $mailService->send();
             \Yii::$app->session->setFlash('success', 'Направлено письмо с приглашением');
             return $this->redirect(['managers']);
         }
