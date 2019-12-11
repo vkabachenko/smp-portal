@@ -11,6 +11,14 @@ use yii\db\ActiveQuery;
  * @property int $id
  * @property string $name
  * @property string $description
+ * @property string $phone1
+ * @property string $phone2
+ * @property string $phone3
+ * @property string $phone4
+ * @property string $email1
+ * @property string $email2
+ * @property string $email3
+ * @property string $email4
  * @property int $manufacturer_id
  *
  * @property Manufacturer $manufacturer
@@ -34,6 +42,9 @@ class Agency extends \yii\db\ActiveRecord
         return [
             [['name', 'manufacturer_id'], 'required'],
             [['description'], 'string'],
+            [['phone1', 'phone2', 'phone3', 'phone4'], 'string'],
+            [['email1', 'email2', 'email3', 'email4'], 'string'],
+            [['email1', 'email2', 'email3', 'email4'], 'email'],
             [['manufacturer_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['manufacturer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manufacturer::className(), 'targetAttribute' => ['manufacturer_id' => 'id']],
@@ -50,6 +61,14 @@ class Agency extends \yii\db\ActiveRecord
             'name' => 'Название представительства',
             'description' => 'Описание',
             'manufacturer_id' => 'Производитель',
+            'phone1' => 'Телефон 1',
+            'phone2' => 'Телефон 2',
+            'phone3' => 'Телефон 3',
+            'phone4' => 'Телефон 4',
+            'email1' => 'Email 1',
+            'email2' => 'Email 2',
+            'email3' => 'Email 3',
+            'email4' => 'Email 4',
         ];
     }
 

@@ -21,11 +21,6 @@ $this->params['back'] = ['site/index'];
 
         <?= $form->field($model, 'agencyName')->textInput(['autofocus' => true]) ?>
 
-        <?= $form->field($model, 'manufacturerId')
-            ->dropDownList(Manufacturer::manufacturersAsMap(),[
-                'prompt' => 'Выбор',
-            ]); ?>
-
         <?= $form->field($model, 'userName') ?>
         <?= $form->field($model, 'email') ?>
 

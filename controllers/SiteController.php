@@ -11,6 +11,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\form\SignupAgencyForm;
+use app\services\mail\InviteAgency;
 
 class SiteController extends Controller
 {
@@ -103,6 +104,9 @@ class SiteController extends Controller
     {
         $model = new SignupAgencyForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            $mailService = new InviteAgency($model->manager);
+            $mailService->send();
+            \Yii::$app->session->setFlash('success', 'Направлено письмо с кодом верификации. Перейдите по ссылке в письме для завершения регистрации');
             return $this->goHome();
         }
         return $this->render('signup-agency', [

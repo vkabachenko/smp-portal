@@ -1,8 +1,6 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $user app\models\User */
-/* @var $manager app\models\Manager */
 /* @var $agency app\models\Agency */
 /* @var $form yii\widgets\ActiveForm */
 
@@ -10,8 +8,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use app\models\Manufacturer;
 
-$this->title = 'Профиль менеджера ' . $user->name;
-$this->params['back'] = ['manager/index'];
+$this->title = 'Заполните данные представительства';
 
 ?>
 
@@ -21,11 +18,6 @@ $this->params['back'] = ['manager/index'];
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($user, 'name')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($user, 'email')->textInput(['maxlength' => true, 'disabled' => true]) ?>
-    <?= $form->field($manager, 'phone')->textInput(['maxlength' => true]) ?>
-
-    <?php if (\Yii::$app->user->can('updateAgency')): ?>
         <?= $form->field($agency, 'name')->textInput(['maxlength' => true]) ?>
         <?= $form->field($agency, 'description')->textarea() ?>
         <?= $form->field($agency, 'manufacturer_id')
@@ -40,7 +32,6 @@ $this->params['back'] = ['manager/index'];
         <?= $form->field($agency, 'email2')->textInput(['maxlength' => true]) ?>
         <?= $form->field($agency, 'email3')->textInput(['maxlength' => true]) ?>
         <?= $form->field($agency, 'email4')->textInput(['maxlength' => true]) ?>
-    <?php endif ?>
 
 
     <div class="form-group">
