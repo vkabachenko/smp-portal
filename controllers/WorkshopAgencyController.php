@@ -79,6 +79,6 @@ class WorkshopAgencyController extends Controller
             \Yii::error($model->getErrors());
             throw new \DomainException('Fail AgencyWorkshop model save');
         }
-        return $this->redirect(['agencies', 'workshopId' => $workshopId]);
+        return $this->redirect(Url::previous());
     }
 }

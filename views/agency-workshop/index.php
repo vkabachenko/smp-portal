@@ -10,7 +10,7 @@ use app\models\Workshop;
 /* @var $agency \app\models\Agency */
 
 $this->title = 'Мастерские представительства ' . $agency->name;
-$this->params['back'] = ['manager/index'];
+$this->params['back'] = \Yii::$app->user->can('admin') ? ['agency/index'] : ['manager/index'];
 ?>
 <div>
 
@@ -19,18 +19,35 @@ $this->params['back'] = ['manager/index'];
     <?= GridView::widget([
         'dataProvider' => $workshopDataProvider,
         'rowOptions'=>function (Workshop $workshop) use ($agency)
-            {if (!\app\models\AgencyWorkshop::getActive($agency, $workshop)) {return ['class'=>'disabled'];} },
+            {if (!\app\models\AgencyWorkshop::getActive($agency, $workshop)) {return ['class'=>'disabled enabled-events'];} },
         'columns' => [
             'name',
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{delete}',
-            ],
+            \Yii::$app->user->can('admin')
+                ?
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{delete}{toggle}',
+                    'buttons' => [
+                        'delete' => function ($url, $model, $key) use ($agency) {
+                            return Html::a('', $url. '&agencyId=' . $agency->id,
+                                ['class' => 'glyphicon glyphicon-trash', 'data' => ['method' => 'post']]);
+                        },
+                        'toggle' => function ($url, $model, $key) use ($agency) {
+                            return Html::a('', ['workshop-agency/toggle-active', 'agencyId' => $agency->id, 'workshopId' => $model->id],
+                                ['class' => 'glyphicon glyphicon-repeat']);
+                        },
+                    ],
+                ]
+                :
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{delete}',
+                ],
         ],
     ]); ?>
 
     <?php if (!empty($availableWorkshops)): ?>
-        <?= Html::beginForm(['new-workshop']) ?>
+        <?= Html::beginForm(['new-workshop','agencyId' => $agency->id]) ?>
 
             <div class="form-group">
                 <?= Html::label('Добавьте мастерскую', 'available-workshops-id', ['class' => 'control-label']) ?>

@@ -129,4 +129,5 @@ class AgencyManagerController extends Controller
             ? $this->redirect(['all-managers', 'agencyId' => $manager->agency_id])
             : $this->redirect(['managers']);
     }
+
 }

@@ -10,6 +10,7 @@ use app\models\Workshop;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Controller;
 
 class AgencyWorkshopController extends Controller
@@ -65,12 +66,13 @@ class AgencyWorkshopController extends Controller
             'query' => $agency->getAllWorkshops(),
         ]);
 
-        $workshopsId = array_map(function(Workshop $workshop) { return $workshop->id; }, $agency->workshops);
+        $workshopsId = array_map(function(Workshop $workshop) { return $workshop->id; }, $agency->allWorkshops);
         $availableWorkshops = Workshop::find()
             ->select(['name', 'id'])
             ->where(['NOT',['id' => $workshopsId]])
             ->indexBy('id')
             ->column();
+        Url::remember();
 
         return $this->render('index', compact('agency','workshopDataProvider', 'availableWorkshops'));
     }
@@ -80,7 +82,7 @@ class AgencyWorkshopController extends Controller
         $workshop = Workshop::findOne($id);
         $this->agency->unlink('allWorkshops', $workshop, true);
 
-        return $this->redirect(['workshops']);
+        return $this->redirect(['workshops', 'agencyId' => $this->agency->id]);
     }
 
     public function actionNewWorkshop()
@@ -92,6 +94,6 @@ class AgencyWorkshopController extends Controller
         $workshop = Workshop::findOne($newWorkshopId);
         $this->agency->link('allWorkshops', $workshop);
 
-        return $this->redirect(['workshops']);
+        return $this->redirect(['workshops', 'agencyId' => $this->agency->id]);
     }
 }

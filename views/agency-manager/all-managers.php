@@ -9,7 +9,7 @@ use app\models\Workshop;
 /* @var $agency \app\models\Agency */
 
 $this->title = 'Менеджеры представительства ' . $agency->name;
-$this->params['back'] = \yii\helpers\Url::previous();
+$this->params['back'] = \Yii::$app->user->can('admin') ? ['agency/index'] : \yii\helpers\Url::previous();
 ?>
 <div>
 
