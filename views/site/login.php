@@ -27,7 +27,9 @@ $this->title = 'Вход';
             <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
 
             <?= $form->field($model, 'password')->passwordInput() ?>
-
+            <div class="form-group">
+                <?= Html::a('Восстановить пароль', ['reset-password-request']); ?>
+            </div>
             <?= $form->field($model, 'rememberMe')->checkbox([
                 'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
             ]) ?>

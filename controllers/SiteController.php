@@ -12,6 +12,8 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\form\SignupAgencyForm;
 use app\services\mail\InviteAgency;
+use app\models\form\ResetPasswordRequestForm;
+use app\services\mail\ResetPassword;
 
 class SiteController extends Controller
 {
@@ -105,8 +107,12 @@ class SiteController extends Controller
         $model = new SignupAgencyForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             $mailService = new InviteAgency($model->manager);
-            $mailService->send();
-            \Yii::$app->session->setFlash('success', 'Направлено письмо с кодом верификации. Перейдите по ссылке в письме для завершения регистрации');
+            if ($mailService->send()) {
+                \Yii::$app->session->setFlash('success', 'Направлено письмо с кодом верификации. Перейдите по ссылке в письме для завершения регистрации');
+            } else {
+                \Yii::$app->session->setFlash('error', 'Не удалось отправить письмо на ваш e-mail. Обратитесь к администратору сайта или попробуйте позднее');
+            }
+
             return $this->goHome();
         }
         return $this->render('signup-agency', [
@@ -121,6 +127,26 @@ class SiteController extends Controller
             return $this->goHome();
         }
         return $this->render('signup-workshop', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionResetPasswordRequest()
+    {
+        $model = new ResetPasswordRequestForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $user = $model->getUser();
+            $mailService = new ResetPassword($user);
+
+            if ($mailService->send()) {
+                \Yii::$app->session->setFlash('success', 'На ваш e-mail отправлена ссылка на восстановление пароля');
+            } else {
+                \Yii::$app->session->setFlash('error', 'Не удалось отправить письмо на ваш e-mail. Обратитесь к администратору сайта или попробуйте позднее');
+            }
+
+            return $this->goHome();
+        }
+        return $this->render('reset-password-request', [
             'model' => $model,
         ]);
     }

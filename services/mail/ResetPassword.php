@@ -1,18 +1,18 @@
 <?php
 namespace app\services\mail;
 
-use app\models\Manager;
+use app\models\User;
 
-class InviteAgency implements SendMail
+class ResetPassword implements SendMail
 {
     /**
-     * @var \app\models\Manager
+     * @var \app\models\User
      */
-    private $manager;
+    private $user;
 
-    public function __construct(Manager $manager)
+    public function __construct(User $user)
     {
-        $this->manager = $manager;
+        $this->user = $user;
     }
 
     public function send()
@@ -21,17 +21,17 @@ class InviteAgency implements SendMail
             $result = \Yii::$app->mailer
                 ->compose(
                     [
-                        'html' => 'invite-agency/html'
+                        'html' => 'reset-password/html'
                     ],
                     [
-                        'manager' => $this->manager,
+                        'user' => $this->user,
                     ]
                 )
                 ->setFrom(\Yii::$app->params['adminEmail'])
                 ->setTo(
-                    $this->manager->user->email
+                    $this->user->email
                 )
-                ->setSubject('Подтвердите регистрацию представительства ' . $this->manager->agency->name)
+                ->setSubject('Восстановление пароля на сайте SMP-портал')
                 ->send();
         } catch (\Exception $exc) {
             $result = false;

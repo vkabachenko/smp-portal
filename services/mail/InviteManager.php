@@ -4,7 +4,7 @@ namespace app\services\mail;
 use app\models\Manager;
 use yii\helpers\Html;
 
-class InviteManager
+class InviteManager implements SendMail
 {
     /**
      * @var \app\models\Manager
@@ -38,5 +38,6 @@ class InviteManager
             $result = false;
             \Yii::error($exc->getMessage());
         }
+        return $result;
     }
 }

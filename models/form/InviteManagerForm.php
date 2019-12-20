@@ -2,9 +2,7 @@
 
 namespace app\models\form;
 
-use app\models\LoginForm;
 use app\models\Manager;
-use app\models\ManagerSignup;
 use yii\base\Model;
 use app\models\User;
 

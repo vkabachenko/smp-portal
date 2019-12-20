@@ -89,8 +89,11 @@ class WorkshopMasterController extends Controller
 
         if ($model->load(\Yii::$app->request->post()) && $model->signup($this->workshop)) {
             $mailService = new InviteMaster($model->master);
-            $mailService->send();
-            \Yii::$app->session->setFlash('success', 'Направлено письмо с приглашением');
+            if ($mailService->send()) {
+                \Yii::$app->session->setFlash('success', 'Направлено письмо с приглашением');
+            } else {
+                \Yii::$app->session->setFlash('error', 'Не удалось отправить письмо на ваш e-mail. Обратитесь к администратору сайта или попробуйте позднее');
+            }
             return $this->redirect(['masters']);
         }
         return $this->render('invite', [

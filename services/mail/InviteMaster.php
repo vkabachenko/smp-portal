@@ -3,7 +3,7 @@ namespace app\services\mail;
 
 use app\models\Master;
 
-class InviteMaster
+class InviteMaster implements SendMail
 {
     /**
      * @var \app\models\Master
@@ -37,5 +37,6 @@ class InviteMaster
             $result = false;
             \Yii::error($exc->getMessage());
         }
+        return $result;
     }
 }
