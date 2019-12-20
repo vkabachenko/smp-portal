@@ -10,6 +10,9 @@ use app\models\User;
 
 class SignupWorkshopForm extends Model
 {
+    /* @var Master */
+    public $master;
+
     public $userName;
     public $workshopName;
     public $email;
@@ -62,7 +65,8 @@ class SignupWorkshopForm extends Model
         $user->email = $this->email;
         $user->name = $this->userName;
         $user->role = 'master';
-        $user->status = User::STATUS_ACTIVE;
+        $user->status = User::STATUS_INACTIVE;
+        $user->verification_token = \Yii::$app->security->generateRandomString(16);
         $user->setPassword($this->password);
         $user->generateAuthKey();
         if (!$user->save()) {
@@ -80,21 +84,18 @@ class SignupWorkshopForm extends Model
             return false;
         }
         
-        $master = new Master([
+        $this->master = new Master([
             'user_id' => $user->id,
             'workshop_id' => $workshop->id,
             'main' => true
         ]);
-        if (!$master->save()) {
-            \Yii::error($master->getErrors());
+        if (!$this->master->save()) {
+            \Yii::error($this->master->getErrors());
             $transaction->rollBack();
             return false;
         }
 
         $transaction->commit();
-
-        \Yii::$app->user->login($user, 0);
-        LoginForm::assignRole();
         
         return true;
     }

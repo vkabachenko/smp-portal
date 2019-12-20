@@ -14,6 +14,7 @@ use app\models\form\SignupAgencyForm;
 use app\services\mail\InviteAgency;
 use app\models\form\ResetPasswordRequestForm;
 use app\services\mail\ResetPassword;
+use app\services\mail\InviteWorkshop;
 
 class SiteController extends Controller
 {
@@ -124,6 +125,12 @@ class SiteController extends Controller
     {
         $model = new SignupWorkshopForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            $mailService = new InviteWorkshop($model->master);
+            if ($mailService->send()) {
+                \Yii::$app->session->setFlash('success', 'Направлено письмо с кодом верификации. Перейдите по ссылке в письме для завершения регистрации');
+            } else {
+                \Yii::$app->session->setFlash('error', 'Не удалось отправить письмо на ваш e-mail. Обратитесь к администратору сайта или попробуйте позднее');
+            }
             return $this->goHome();
         }
         return $this->render('signup-workshop', [
