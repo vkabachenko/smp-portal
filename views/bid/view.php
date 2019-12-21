@@ -9,7 +9,7 @@ use yii\bootstrap\Html;
 $this->title = 'Просмотр заявки';
 $this->params['back'] = ['index'];
 ?>
-<div class="bid-view">
+<div>
 
     <h3><?= Html::encode($this->title) ?></h3>
 
@@ -28,6 +28,8 @@ $this->params['back'] = ['index'];
             <?= Html::a('Отправить', ['send-act/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
+
+</div>
 
 <?= \yii\widgets\DetailView::widget([
     'model' => $model,
