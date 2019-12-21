@@ -35,7 +35,7 @@ class BidImageController  extends Controller
 
     public function actionCreate($bidId)
     {
-        $this->checkAccess('createBid');
+        $this->checkAccess('viewBid', ['bidId' => $bidId]);
 
         $attributes = ['bid_id' => $bidId, 'user_id' => \Yii::$app->user->id];
 
