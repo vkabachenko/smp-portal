@@ -4,11 +4,11 @@ use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 
 /**
- * @var $model \app\models\form\ResetPasswordRequestForm
+ * @var $model \app\models\form\CreatePasswordForm
  * @var $form yii\bootstrap\ActiveForm
  */
 
-$this->title = 'Восстановление пароля';
+$this->title = 'Новый пароль';
 $this->params['back'] = ['login'];
 
 ?>
@@ -19,7 +19,8 @@ $this->params['back'] = ['login'];
     <div>
         <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'email') ?>
+        <?= $form->field($model, 'password')->passwordInput() ?>
+        <?= $form->field($model, 'passwordAgain')->passwordInput() ?>
 
         <div class="form-group">
             <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>

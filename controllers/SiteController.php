@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\form\SignupWorkshopForm;
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -15,6 +16,7 @@ use app\services\mail\InviteAgency;
 use app\models\form\ResetPasswordRequestForm;
 use app\services\mail\ResetPassword;
 use app\services\mail\InviteWorkshop;
+use app\models\form\CreatePasswordForm;
 
 class SiteController extends Controller
 {
@@ -154,6 +156,30 @@ class SiteController extends Controller
             return $this->goHome();
         }
         return $this->render('reset-password-request', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionCreatePassword($token)
+    {
+        $user = User::findByPasswordResetToken($token);
+        if (is_null($user)) {
+            throw new \DomainException('User not found');
+        }
+        $model = new CreatePasswordForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $user->setPassword($model->password);
+            $user->password_reset_token = null;
+            if (!$user->save()) {
+                \Yii::error($user->getErrors());
+                \Yii::$app->session->setFlash('error', 'Не удалось сохранить измененный пароль. Обратитесь к администратору сайта или попробуйте позднее');
+            }
+            \Yii::$app->session->setFlash('success', 'Пароль успешно изменен');
+            return $this->goHome();
+        }
+
+        return $this->render('create-password', [
             'model' => $model,
         ]);
     }
