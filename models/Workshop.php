@@ -62,6 +62,11 @@ class Workshop extends \yii\db\ActiveRecord
         return $this->hasMany(Master::className(), ['workshop_id' => 'id']);
     }
 
+    public function getMainMaster()
+    {
+        return Master::find()->where(['workshop_id' => $this->id, 'main' => true])->one();
+    }
+
     /**
      * return array
      */

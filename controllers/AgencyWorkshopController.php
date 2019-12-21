@@ -7,6 +7,7 @@ namespace app\controllers;
 use app\models\Agency;
 use app\models\Manager;
 use app\models\Workshop;
+use app\services\mail\CreateAgencyWorkshop;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -72,7 +73,6 @@ class AgencyWorkshopController extends Controller
             ->where(['NOT',['id' => $workshopsId]])
             ->indexBy('id')
             ->column();
-        Url::remember();
 
         return $this->render('index', compact('agency','workshopDataProvider', 'availableWorkshops'));
     }
@@ -93,6 +93,9 @@ class AgencyWorkshopController extends Controller
         }
         $workshop = Workshop::findOne($newWorkshopId);
         $this->agency->link('allWorkshops', $workshop);
+
+        $mailService = new CreateAgencyWorkshop($this->agency, $workshop);
+        $mailService->send();
 
         return $this->redirect(['workshops', 'agencyId' => $this->agency->id]);
     }

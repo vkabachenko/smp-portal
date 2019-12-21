@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\Workshop;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $workshopDataProvider yii\data\ActiveDataProvider */
@@ -33,7 +34,11 @@ $this->params['back'] = \Yii::$app->user->can('admin') ? ['agency/index'] : ['ma
                                 ['class' => 'glyphicon glyphicon-trash', 'data' => ['method' => 'post']]);
                         },
                         'toggle' => function ($url, $model, $key) use ($agency) {
-                            return Html::a('', ['workshop-agency/toggle-active', 'agencyId' => $agency->id, 'workshopId' => $model->id],
+                            return Html::a('', ['workshop-agency/toggle-active',
+                                'agencyId' => $agency->id,
+                                'workshopId' => $model->id,
+                                'returnUrl' => Url::to(['agency-workshop/workshops', 'agencyId' => $agency->id])
+                            ],
                                 ['class' => 'glyphicon glyphicon-repeat']);
                         },
                     ],

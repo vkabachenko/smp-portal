@@ -61,13 +61,12 @@ class WorkshopAgencyController extends Controller
         $agencyDataProvider = new ActiveDataProvider([
             'query' => $workshop->getAllAgencies(),
         ]);
-        Url::remember();
 
         return $this->render(\Yii::$app->user->can('admin') ? 'index-admin' : 'index',
             compact('workshop','agencyDataProvider'));
     }
 
-    public function actionToggleActive($workshopId, $agencyId)
+    public function actionToggleActive($workshopId, $agencyId, $returnUrl)
     {
         /* @var $model \app\models\AgencyWorkshop */
         $model = AgencyWorkshop::find()->where(['agency_id' => $agencyId, 'workshop_id' => $workshopId])->one();
@@ -79,6 +78,6 @@ class WorkshopAgencyController extends Controller
             \Yii::error($model->getErrors());
             throw new \DomainException('Fail AgencyWorkshop model save');
         }
-        return $this->redirect(Url::previous());
+        return $this->redirect($returnUrl);
     }
 }
