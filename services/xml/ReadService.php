@@ -106,7 +106,7 @@ class ReadService extends BaseService
             \Yii::error($bidHistory->getErrors());
         };
 
-        if (is_null($model->brand_id) && is_null($model->brand_correspondence_id)) {
+        if (is_null($model->brand_id) && is_null($model->brand_correspondence_id) && $model->isBrandName()) {
             $brandCorrespondence = new BrandCorrespondence([
                 'name' => $model->brand_name,
                 'brand_id' => null

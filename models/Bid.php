@@ -403,19 +403,6 @@ class Bid extends \yii\db\ActiveRecord
         return parent::beforeValidate();
     }
 
-    public function afterFind()
-    {
-        parent::afterFind();
-        if ($this->brand_correspondence_id) {
-            if ($this->brandCorrespondence->brand_id) {
-                $this->brand_name = $this->brandCorrespondence->brand->name;
-                $this->manufacturer_id = $this->brandCorrespondence->brand->manufacturer_id;
-                $this->brand_id = $this->brandCorrespondence->brand_id;
-                $this->brand_correspondence_id = null;
-            }
-        }
-    }
-
     public function checkBrandCorrespondence()
     {
         if ($this->brand_id) {
@@ -481,6 +468,14 @@ class Bid extends \yii\db\ActiveRecord
         $master = Master::findByUserId($userId);
         if ($master) {
             $this->workshop_id = $master->workshop->id;
+        }
+    }
+
+    public function isBrandName() {
+        if ($this->brand_name === 'Нет бренда' || empty($this->brand_name)) {
+            return false;
+        } else {
+            return true;
         }
     }
 }

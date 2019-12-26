@@ -78,4 +78,31 @@ class BrandCorrespondence extends \yii\db\ActiveRecord
 
         return $model;
     }
+
+    public function beforeDelete()
+    {
+        Bid::updateAll(['brand_correspondence_id' => null], ['brand_correspondence_id' => $this->id]);
+        return parent::beforeDelete();
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!$insert) {
+            if ($this->brand_id) {
+                $update = [
+                    'brand_name' => $this->brand->name,
+                    'brand_id' => $this->brand_id,
+                    'manufacturer_id' => $this->brand->manufacturer_id
+                ];
+            } else {
+                $update = [
+                    'brand_name' => $this->name,
+                    'brand_id' => null,
+                    'manufacturer_id' => null
+                ];
+            }
+            Bid::updateAll($update, ['brand_correspondence_id' => $this->id]);
+        }
+        return parent::beforeSave($insert);
+    }
 }

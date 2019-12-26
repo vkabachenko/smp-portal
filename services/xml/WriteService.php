@@ -70,7 +70,7 @@ class WriteService extends BaseService
             'ДатаПринятияВРемонт' => $this->setXmlDate($model->created_at),
             'СтатусРемонта' => $model->repair_status_id ? $model->repairStatus->name : '',
             'Оборудование' => $model->equipment,
-            'Бренд' => $model->brand_name,
+            'Бренд' => $model->brand_correspondence_id ? $model->brandCorrespondence->name : $model->brand_name,
             'СерийныйНомер' => $model->serial_number,
             'ВнешнийВид' => $model->condition_id ? $model->condition->name : '',
             'Комплектность' => $model->composition_name,
