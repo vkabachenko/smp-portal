@@ -154,6 +154,8 @@ QuaggaAsset::register($this);
 
     <?= $form->field($model, 'vendor_code')->textInput(['maxlength' => true]) ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
+
     <?= $form->field($model, 'compositionCombined')->hiddenInput([
         'id' => 'bid-composition-id',
         'data-url' => Url::to(['bid/composition'])
@@ -204,18 +206,29 @@ QuaggaAsset::register($this);
             'id' => 'bid-composition-name'
         ]
     ]) ?>
+    <?php endif; ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'defect')->textInput(['maxlength' => true]) ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'defect_manufacturer')->textInput(['maxlength' => true]) ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'is_warranty_defect')->checkbox(); ?>
+    <?php endif; ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'is_repair_possible')->checkbox(); ?>
+    <?php endif; ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'is_for_warranty')->checkbox(); ?>
+    <?php endif; ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'diagnostic')->textarea() ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'diagnostic_manufacturer')->textInput(['maxlength' => true]) ?>
 
@@ -230,7 +243,9 @@ QuaggaAsset::register($this);
 
     <?= $form->field($model, 'client_phone')->textInput(['maxlength' => true]) ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'client_address')->textInput(['maxlength' => true]) ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'treatment_type')->dropDownList(Bid::TREATMENT_TYPES, ['prompt' => 'Выбор']) ?>
 
@@ -248,17 +263,21 @@ QuaggaAsset::register($this);
         'options' => ['class' => 'form-control']
     ]) ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'date_manufacturer')->widget(DatePicker::class, [
         'language' => 'ru',
         'dateFormat' => 'yyyy-MM-dd',
         'options' => ['class' => 'form-control']
     ]) ?>
+    <?php endif; ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'date_completion')->widget(DatePicker::class, [
         'language' => 'ru',
         'dateFormat' => 'yyyy-MM-dd',
         'options' => ['class' => 'form-control']
     ]) ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'warranty_number')->textInput(['maxlength' => true]) ?>
 
@@ -266,21 +285,33 @@ QuaggaAsset::register($this);
 
     <?= $form->field($model, 'bid_1C_number')->textInput(['maxlength' => true]) ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'bid_manufacturer_number')->textInput(['maxlength' => true]) ?>
+    <?php endif; ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'repair_status_id')
         ->dropDownList(RepairStatus::repairStatusAsMap(),['prompt' => 'Выбор']); ?>
+    <?php endif; ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'repair_recommendations')->textInput(['maxlength' => true]) ?>
+    <?php endif; ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'warranty_status_id')
         ->dropDownList(WarrantyStatus::warrantyStatusAsMap(),['prompt' => 'Выбор']); ?>
+    <?php endif; ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'status_id')
         ->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']); ?>
+    <?php endif; ?>
 
+    <?php if (\Yii::$app->user->can('admin')): ?>
     <?= $form->field($model, 'master_id')
         ->dropDownList(Master::mastersAsMap(),['prompt' => 'Выбор']); ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'comment')->textarea(); ?>
 
