@@ -86,6 +86,47 @@ class Bid extends \yii\db\ActiveRecord
       self::CLIENT_TYPE_LEGAL_ENTITY => 'Юридическое лицо'
     ];
 
+    const EDITABLE_ATTRIBUTES = [
+        'manufacturer_id' => 'Производитель',
+        'brand_name' => 'Бренд',
+        'brand_model_name' => 'Модель',
+        'composition_name' => 'Комплектность',
+        'serial_number' => 'Серийный номер',
+        'vendor_code' => 'Артикул',
+        'client_name' => 'Клиент',
+        'client_phone' => 'Телефон клиента',
+        'client_address' => 'Адрес клиента',
+        'treatment_type' => 'Тип обращения',
+        'purchase_date' => 'Дата покупки',
+        'application_date' => 'Дата обращения',
+        'created_at' => 'Создана',
+        'updated_at' => 'Изменена',
+        'warranty_number' => 'Номер гарантийного талона',
+        'bid_number' => 'Номер заявки',
+        'bid_1C_number' => 'Номер заявки в 1С',
+        'bid_manufacturer_number' => 'Номер заявки у представительства',
+        'condition_id' => 'Состояние',
+        'equipment' => 'Оборудование',
+        'defect' => 'Заявленная неисправность',
+        'diagnostic' => 'Результат диагностики',
+        'repair_status_id' => 'Статус ремонта',
+        'warranty_status_id' => 'Статус гарантии',
+        'status_id' => 'Статус',
+        'user_id' => 'Приемщик',
+        'master_id' => 'Мастер',
+        'client_type' => 'Тип клиента',
+        'comment' => 'Дополнительные отметки',
+        'repair_recommendations' => 'Рекомендации по ремонту',
+        'saler_name' => 'Продавец',
+        'diagnostic_manufacturer' => 'Результат диагностики для представительства',
+        'defect_manufacturer' => 'Заявленная неисправность для представительства',
+        'date_manufacturer' => 'Дата принятия в ремонт для представительства',
+        'date_completion' => 'Дата готовности',
+        'is_warranty_defect' => 'Дефект гарантийный',
+        'is_repair_possible' => 'Проведение ремонта возможно',
+        'is_for_warranty' => 'Подано на гарантию'
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -188,55 +229,7 @@ class Bid extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
-        return [
-            'id' => 'ID',
-            'manufacturer_id' => 'Производитель',
-            'brand_id' => 'Бренд',
-            'brand_correspondence_id' => 'Бренд',
-            'brand_name' => 'Бренд',
-            'brand_model_id' => 'Модель - список',
-            'brand_model_name' => 'Модель',
-            'composition_id' => 'Комплектность',
-            'composition_table' => 'Composition Table',
-            'composition_name' => 'Комплектность',
-            'serial_number' => 'Серийный номер',
-            'vendor_code' => 'Артикул',
-            'client_id' => 'Client ID',
-            'client_name' => 'Клиент',
-            'client_phone' => 'Телефон клиента',
-            'client_address' => 'Адрес клиента',
-            'treatment_type' => 'Тип обращения',
-            'treatmentTypeName' => 'Тип обращения',
-            'purchase_date' => 'Дата покупки',
-            'application_date' => 'Дата обращения',
-            'created_at' => 'Создана',
-            'updated_at' => 'Дата',
-            'warranty_number' => 'Номер гарантийного талона',
-            'bid_number' => 'Номер заявки',
-            'bid_1C_number' => 'Номер заявки в 1С',
-            'bid_manufacturer_number' => 'Номер заявки у представительства',
-            'condition_id' => 'Состояние',
-            'equipment' => 'Оборудование',
-            'defect' => 'Заявленная неисправность',
-            'diagnostic' => 'Результат диагностики',
-            'repair_status_id' => 'Статус ремонта',
-            'warranty_status_id' => 'Статус гарантии',
-            'status_id' => 'Статус',
-            'user_id' => 'Приемщик',
-            'master_id' => 'Мастер',
-            'guid' => 'GUID',
-            'client_type' => 'Тип клиента',
-            'comment' => 'Дополнительные отметки',
-            'repair_recommendations' => 'Рекомендации по ремонту',
-            'saler_name' => 'Продавец',
-            'diagnostic_manufacturer' => 'Результат диагностики для представительства',
-            'defect_manufacturer' => 'Заявленная неисправность для представительства',
-            'date_manufacturer' => 'Дата принятия в ремонт для представительства',
-            'date_completion' => 'Дата готовности',
-            'is_warranty_defect' => 'Дефект гарантийный',
-            'is_repair_possible' => 'Проведение ремонта возможно',
-            'is_for_warranty' => 'Подано на гарантию'
-        ];
+        return  self::EDITABLE_ATTRIBUTES;
     }
 
     /**

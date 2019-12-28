@@ -74,7 +74,10 @@ $this->params['back'] = ['index'];
         'client_name',
         'client_phone',
         'client_address',
-        'treatmentTypeName',
+        [
+            'label' => 'Тип обращения',
+            'value' => $model->treatmentTypeName,
+        ],
         'saler_name',
         'purchase_date:date',
         'application_date:date',
