@@ -17,8 +17,8 @@ class m191228_103222_create_bid_attribute_table extends Migration
             'attribute' => $this->string(),
             'description' => $this->text(),
             'short_description' => $this->string(),
-            'is_enabled_agencies' => $this->boolean(),
-            'is_enabled_workshops' => $this->boolean()
+            'is_disabled_agencies' => $this->boolean()->notNull()->defaultValue(false),
+            'is_disabled_workshops' => $this->boolean()->notNull()->defaultValue(false)
         ]);
     }
 

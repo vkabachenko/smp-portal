@@ -31,18 +31,22 @@ $this->params['back'] = ['admin/index'];
             ],
             'short_description',
             [
-                'attribute' => 'is_enabled_agencies',
+                'attribute' => 'is_disabled_agencies',
+                'format' => 'raw',
                 'value' => function ($model) {
                     /* @var $model app\models\BidAttribute */
-                    return $model->asText('is_enabled_agencies');
-                },
+                    $html = $model->is_disabled_agencies ? Html::tag('span', '', ['class' => 'glyphicon glyphicon-ok']) : '';
+                    return $html;
+                }
             ],
             [
-                'attribute' => 'is_enabled_workshops',
+                'attribute' => 'is_disabled_workshops',
+                'format' => 'raw',
                 'value' => function ($model) {
                     /* @var $model app\models\BidAttribute */
-                    return $model->asText('is_enabled_workshops');
-                },
+                    $html = $model->is_disabled_workshops ? Html::tag('span', '', ['class' => 'glyphicon glyphicon-ok']) : '';
+                    return $html;
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

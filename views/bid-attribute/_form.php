@@ -21,9 +21,9 @@ use app\models\BidAttribute;
 
     <?= $form->field($model, 'short_description')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'is_enabled_agencies')->dropDownList(BidAttribute::ATTRIBUTE_ACTIONS, ['prompt' => '']) ?>
+    <?= $form->field($model, 'is_disabled_agencies')->checkbox() ?>
 
-    <?= $form->field($model, 'is_enabled_workshops')->dropDownList(BidAttribute::ATTRIBUTE_ACTIONS, ['prompt' => '']) ?>
+    <?= $form->field($model, 'is_disabled_workshops')->checkbox() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

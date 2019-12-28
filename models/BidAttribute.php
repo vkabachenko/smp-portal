@@ -12,16 +12,11 @@ use Yii;
  * @property string $attribute
  * @property string $description
  * @property string $short_description
- * @property int $is_enabled_agencies
- * @property int $is_enabled_workshops
+ * @property int $is_disabled_agencies
+ * @property int $is_disabled_workshops
  */
 class BidAttribute extends \yii\db\ActiveRecord
 {
-    const ATTRIBUTE_ACTIONS = [
-        0 => 'Скрыть',
-        1 => 'Показать'
-    ];
-
     /**
      * {@inheritdoc}
      */
@@ -50,7 +45,7 @@ class BidAttribute extends \yii\db\ActiveRecord
     {
         return [
             [['description'], 'string'],
-            [['is_enabled_agencies', 'is_enabled_workshops'], 'integer'],
+            [['is_disabled_agencies', 'is_disabled_workshops'], 'integer'],
             [['attribute', 'short_description'], 'string', 'max' => 255],
         ];
     }
@@ -64,17 +59,9 @@ class BidAttribute extends \yii\db\ActiveRecord
             'attribute' => 'Поле',
             'description' => 'Описание',
             'short_description' => 'Краткое описание',
-            'is_enabled_agencies' => 'Для представительств фиксировано',
-            'is_enabled_workshops' => 'Для мастерских фиксировано',
+            'is_disabled_agencies' => 'Скрыть для представительств',
+            'is_disabled_workshops' => 'Скрыть для мастерских',
         ];
     }
 
-    public function asText($attribute)
-    {
-        if (is_null($this->$attribute)) {
-            return '';
-        } else {
-            return self::ATTRIBUTE_ACTIONS[$this->$attribute];
-        }
-    }
 }
