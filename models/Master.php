@@ -88,13 +88,26 @@ class Master extends \yii\db\ActiveRecord
     /**
      * return array
      */
-    public static function mastersAsMap()
+    public static function mastersAsMap(User $user)
     {
-        $models = self::find()
+        $query = self::find()
             ->select(['master.id', 'user.name'])
             ->joinWith('user', false)
-            ->orderBy('user.name')->all();
-        //var_dump($models); die();
+            ->orderBy('user.name');
+
+        $master = $user->master;
+        if ($master) {
+            $query->where(['master.workshop_id' => $master->workshop_id]);
+        } else {
+            $manager = $user->manager;
+            if ($manager) {
+                $workshops = array_map(function(Workshop $workshop) { return $workshop->id; }, $manager->agency->workshops);
+                $query->where(['master.workshop_id' => $workshops]);
+            }
+        }
+
+        $models = $query->all();
+
         $list = ArrayHelper::map($models, 'id', 'name');
 
         return $list;

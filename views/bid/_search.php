@@ -50,7 +50,7 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'vendor_code') ?>
 
-    <?= $form->field($model, 'master_id')->dropDownList(Master::mastersAsMap(),['prompt' => 'Выбор']) ?>
+    <?= $form->field($model, 'master_id')->dropDownList(Master::mastersAsMap(\Yii::$app->user->identity),['prompt' => 'Выбор']) ?>
 
     <?= $form->field($model, 'client_name') ?>
 

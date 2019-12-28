@@ -280,7 +280,7 @@ QuaggaAsset::register($this);
         ->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']); ?>
 
     <?= $form->field($model, 'master_id')
-        ->dropDownList(Master::mastersAsMap(),['prompt' => 'Выбор']); ?>
+        ->dropDownList(Master::mastersAsMap(\Yii::$app->user->identity),['prompt' => 'Выбор']); ?>
 
     <?= $form->field($model, 'comment')->textarea(); ?>
 

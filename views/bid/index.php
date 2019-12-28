@@ -176,7 +176,7 @@ $this->params['back'] = \yii\helpers\Url::previous();
                     'filterOptions' => ['class' => 'grid-master'],
                     'headerOptions' => ['class' => 'grid-master'],
                     'contentOptions' => ['class' => 'grid-master'],
-                    'filter' => Master::mastersAsMap()
+                    'filter' => Master::mastersAsMap(\Yii::$app->user->identity)
                 ],
                 [
                     'attribute' => 'client_name',
