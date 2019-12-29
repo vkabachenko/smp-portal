@@ -25,14 +25,6 @@ class BidAttribute extends \yii\db\ActiveRecord
         return 'bid_attribute';
     }
 
-    public static function getEnabledAttributes()
-    {
-        $attributes = self::find()->active()->select(['attribute'])->column();
-        return array_filter(Bid::EDITABLE_ATTRIBUTES, function($value, $key) use ($attributes) {
-            return !in_array($key, $attributes);
-        }, ARRAY_FILTER_USE_BOTH);
-    }
-
     public static function find()
     {
         return new BidAttributeQuery(get_called_class());
@@ -62,6 +54,29 @@ class BidAttribute extends \yii\db\ActiveRecord
             'is_disabled_agencies' => 'Скрыть для представительств',
             'is_disabled_workshops' => 'Скрыть для мастерских',
         ];
+    }
+
+    public static function getEnabledAttributes()
+    {
+        $attributes = self::find()->active()->select(['attribute'])->column();
+        return self::getAttributeIds($attributes);
+    }
+
+    public static function getAvailableAttributes($attribute)
+    {
+        $hiddenAttributes = self::find()->active()->select(['attribute'])->where([$attribute => true])->column();
+        return array_keys(self::getAttributeIds($hiddenAttributes));
+    }
+
+    /**
+     * @param $attributes[] BidAttribute
+     * @return array
+     */
+    private static function getAttributeIds($attributes)
+    {
+        return array_filter(Bid::EDITABLE_ATTRIBUTES, function($value, $key) use ($attributes) {
+            return !in_array($key, $attributes);
+        }, ARRAY_FILTER_USE_BOTH);
     }
 
 }

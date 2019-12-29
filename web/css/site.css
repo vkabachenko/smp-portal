@@ -253,3 +253,32 @@ a.center-menu-item:hover {
     border-color: #a5d0ae;
 }
 
+.bid-attributes-title {
+    margin: 20px 0;
+    font-weight: bold;
+    text-align: center;
+}
+
+.bid-attributes-list ul {
+    list-style-type: none;
+}
+
+.bid-attributes-list li {
+    padding: 5px;
+    margin: 10px 0;
+    border: solid #ddd 1px;
+    cursor: pointer;
+}
+
+.bid-attributes-list li:hover {
+    background-color: #a5d0ae;
+    color: #fff;
+    border-color: #a5d0ae;
+}
+
+.bid-attributes-list li.active {
+    background-color: #1F85DE;
+    color: #fff;
+    border-color: #1F85DE;
+}
+

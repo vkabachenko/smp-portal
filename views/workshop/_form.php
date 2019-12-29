@@ -28,7 +28,19 @@ use yii\widgets\ActiveForm;
     <div class="clearfix"></div>
 
     <?= $form->field($model, 'description')->textarea() ?>
-    <?= $form->field($rules, 'paidBid')->checkbox() ?>
+    <div>
+        <div class="col-xs-6">
+            <?= $form->field($rules, 'paidBid')->checkbox() ?>
+        </div>
+        <div class="col-xs-6 form-group">
+            <?php if (!$model->isNewRecord): ?>
+                <?= Html::a('Поля заявки',
+                    ['workshop/bid-attributes', 'workshopId' => $model->id],
+                    ['class' => 'btn btn-primary'])
+                 ?>
+            <?php endif; ?>
+        </div>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

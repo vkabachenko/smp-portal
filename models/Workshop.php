@@ -14,6 +14,7 @@ use yii\helpers\ArrayHelper;
  * @property string $token
  * @property array $rules
  * @property string $description
+ * @property array $bid_attributes
  *
  * @property Master[] $masters
  */
@@ -34,7 +35,7 @@ class Workshop extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['rules'], 'safe'],
+            [['rules', 'bid_attributes'], 'safe'],
             [['name', 'token'], 'string', 'max' => 255],
             ['description', 'string']
         ];
@@ -96,5 +97,10 @@ class Workshop extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Agency::class, ['id' => 'agency_id'])
             ->viaTable('agency_workshop', ['workshop_id' => 'id']);
+    }
+
+    public function getBidAttributes()
+    {
+        return is_null($this->bid_attributes) ? [] : $this->bid_attributes;
     }
 }

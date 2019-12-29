@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\BidAttribute;
 use app\models\form\WorkshopRulesForm;
 use Yii;
 use app\models\Workshop;
@@ -95,6 +96,43 @@ class WorkshopController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionBidAttributes($workshopId)
+    {
+        $workshop = $this->findModel($workshopId);
+        $ownAttributes = $workshop->getBidAttributes();
+        $availableAttributes = array_diff(
+            BidAttribute::getAvailableAttributes('is_disabled_workshops'), $ownAttributes);
+
+        return $this->render('bid-attributes', compact('workshop', 'ownAttributes', 'availableAttributes'));
+    }
+
+    public function actionBidAttributeMove($workshopId)
+    {
+        $workshop = $this->findModel($workshopId);
+        $ownAttributes = $workshop->getBidAttributes();
+
+        $attribute = [\Yii::$app->request->post('attribute')];
+        $action = \Yii::$app->request->post('action');
+
+        switch ($action) {
+            case 'add':
+                $ownAttributes = array_merge($ownAttributes, $attribute);
+                break;
+            case 'remove':
+                $ownAttributes = array_diff($ownAttributes, $attribute);
+                break;
+            default:
+                throw new \DomainException('Unknown action');
+        }
+        $workshop->bid_attributes = $ownAttributes;
+        if (!$workshop->save()) {
+            \Yii::error($workshop->getErrors());
+            throw new \DomainException('Fail to save workshop');
+        }
+
+        return $this->redirect(['bid-attributes', 'workshopId' => $workshop->id]);
     }
 
 
