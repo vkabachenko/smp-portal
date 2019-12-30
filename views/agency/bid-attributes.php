@@ -5,12 +5,12 @@ use app\models\Bid;
 
 
 /* @var $this yii\web\View */
-/* @var $workshop \app\models\Workshop */
+/* @var $agency \app\models\Agency */
 /* @var $ownAttributes array */
 /* @var $availableAttributes array */
 
-$this->title = 'Скрыть поля заявки для мастерской ' . $workshop->name;
-$this->params['back'] = ['workshop/update', 'id' => $workshop->id];
+$this->title = 'Скрыть поля заявки для представительства ' . $agency->name;
+$this->params['back'] = ['agency/update', 'id' => $agency->id];
 
 ?>
 <div>
@@ -43,7 +43,7 @@ $this->params['back'] = ['workshop/update', 'id' => $workshop->id];
             </div>
             <div class="col-xs-2 bid-attributes-move">
                 <?= Html::a('Перенести',
-                    ['bid-attribute-move', 'workshopId' => $workshop->id],
+                    ['bid-attribute-move', 'agencyId' => $agency->id],
                     ['class' => 'btn btn-primary', 'data' => ['method' => 'post']]);
                 ?>
             </div>

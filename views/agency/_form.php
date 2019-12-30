@@ -9,7 +9,7 @@ use app\models\Manufacturer;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="workshop-form">
+<div class="agency-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -29,9 +29,20 @@ use app\models\Manufacturer;
     <?= $form->field($model, 'email3')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'email4')->textInput(['maxlength' => true]) ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+    <div>
+        <div class="form-group col-xs-6">
+            <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+        </div>
+        <div class="form-group col-xs-6">
+            <?php if (!$model->isNewRecord): ?>
+                <?= Html::a('Поля заявки',
+                    ['agency/bid-attributes', 'agencyId' => $model->id],
+                    ['class' => 'btn btn-primary'])
+                ?>
+            <?php endif; ?>
+        </div>
     </div>
+
 
     <?php ActiveForm::end(); ?>
 

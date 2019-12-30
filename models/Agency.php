@@ -20,6 +20,7 @@ use yii\db\ActiveQuery;
  * @property string $email3
  * @property string $email4
  * @property int $manufacturer_id
+ * @property array $bid_attributes
  *
  * @property Manufacturer $manufacturer
  * @property Manager[] $managers
@@ -41,6 +42,7 @@ class Agency extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'manufacturer_id'], 'required'],
+            [['bid_attributes'], 'safe'],
             [['description'], 'string'],
             [['phone1', 'phone2', 'phone3', 'phone4'], 'string'],
             [['email1', 'email2', 'email3', 'email4'], 'string'],
@@ -106,6 +108,11 @@ class Agency extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Workshop::class, ['id' => 'workshop_id'])
             ->viaTable('agency_workshop', ['agency_id' => 'id']);
+    }
+
+    public function getBidAttributes()
+    {
+        return is_null($this->bid_attributes) ? [] : $this->bid_attributes;
     }
 
 }

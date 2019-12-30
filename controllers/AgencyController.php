@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Agency;
+use app\models\BidAttribute;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -75,6 +76,43 @@ class AgencyController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function actionBidAttributes($agencyId)
+    {
+        $agency = $this->findModel($agencyId);
+        $ownAttributes = $agency->getBidAttributes();
+        $availableAttributes = array_diff(
+            BidAttribute::getAvailableAttributes('is_disabled_agencies'), $ownAttributes);
+
+        return $this->render('bid-attributes', compact('agency', 'ownAttributes', 'availableAttributes'));
+    }
+
+    public function actionBidAttributeMove($agencyId)
+    {
+        $agency = $this->findModel($agencyId);
+        $ownAttributes = $agency->getBidAttributes();
+
+        $attribute = [\Yii::$app->request->post('attribute')];
+        $action = \Yii::$app->request->post('action');
+
+        switch ($action) {
+            case 'add':
+                $ownAttributes = array_merge($ownAttributes, $attribute);
+                break;
+            case 'remove':
+                $ownAttributes = array_diff($ownAttributes, $attribute);
+                break;
+            default:
+                throw new \DomainException('Unknown action');
+        }
+        $agency->bid_attributes = $ownAttributes;
+        if (!$agency->save()) {
+            \Yii::error($agency->getErrors());
+            throw new \DomainException('Fail to save agency');
+        }
+
+        return $this->redirect(['bid-attributes', 'agencyId' => $agency->id]);
     }
 
     protected function findModel($id)
