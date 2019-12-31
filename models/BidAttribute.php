@@ -62,9 +62,14 @@ class BidAttribute extends \yii\db\ActiveRecord
         return self::getAttributeIds($attributes);
     }
 
+    public static function getHiddenAttributes($attribute)
+    {
+        return self::find()->active()->select(['attribute'])->where([$attribute => true])->column();
+    }
+
     public static function getAvailableAttributes($attribute)
     {
-        $hiddenAttributes = self::find()->active()->select(['attribute'])->where([$attribute => true])->column();
+        $hiddenAttributes = self::getHiddenAttributes($attribute);
         return array_keys(self::getAttributeIds($hiddenAttributes));
     }
 

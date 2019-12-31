@@ -8,6 +8,192 @@ use yii\bootstrap\Html;
 
 $this->title = 'Просмотр заявки';
 $this->params['back'] = ['index'];
+
+$attributes = [
+    'created_at',
+    'updated_at',
+    'brand_name',
+    [
+        'label' => 'Производитель',
+        'value' => $model->manufacturer_id ? $model->manufacturer->name : null,
+    ],
+    'equipment'
+];
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'brand_model_name'])) {
+    $attributes[] = 'brand_model_name';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'serial_number'])) {
+    $attributes[] = 'serial_number';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'vendor_code'])) {
+    $attributes[] = 'vendor_code';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'composition_name'])) {
+    $attributes[] = 'composition_name';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_id'])) {
+    $attributes[] =     [
+        'label' => 'Состояние',
+        'value' => $model->condition_id ? $model->condition->name : null,
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'defect'])) {
+    $attributes[] = 'defect';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'defect_manufacturer'])) {
+   $attributes[] = [
+        'label' => \Yii::$app->user->can('manager') ? 'Заявленная неисправность' : 'Заявленная неисправность для представительства',
+        'value' => $model->defect_manufacturer,
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'diagnostic'])) {
+    $attributes[] = 'diagnostic';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'diagnostic_manufacturer'])) {
+   $attributes[] = [
+        'label' => \Yii::$app->user->can('manager') ? 'Результат диагностики' : 'Результат диагностики для представительства',
+        'value' => $model->diagnostic_manufacturer,
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'repair_recommendations'])) {
+    $attributes[] = 'repair_recommendations';
+}
+
+$attributes[] =  [
+    'label' => 'Тип клиента',
+    'value' => $model->client_type ? Bid::CLIENT_TYPES[$model->client_type] : null,
+];
+
+$attributes[] =  'client_name';
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_phone'])) {
+    $attributes[] = 'client_phone';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_address'])) {
+    $attributes[] = 'client_address';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_warranty_defect'])) {
+    $attributes[] = [
+        'label' => 'Дефект гарантийный',
+        'value' => $model->is_warranty_defect ? 'Истина' : 'Ложь',
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_repair_possible'])) {
+    $attributes[] =  [
+        'label' => 'Проведение ремонта возможно',
+        'value' => $model->is_repair_possible ? 'Истина' : 'Ложь',
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_for_warranty'])) {
+    $attributes[] =  [
+        'label' => 'Подано на гарантию',
+        'value' => $model->is_for_warranty ? 'Истина' : 'Ложь',
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'treatment_type'])) {
+    $attributes[] = [
+        'label' => 'Тип обращения',
+        'value' => $model->treatmentTypeName,
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'saler_name'])) {
+    $attributes[] = 'saler_name';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'purchase_date'])) {
+    $attributes[] = 'purchase_date:date';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'application_date'])) {
+    $attributes[] = 'application_date:date';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'date_manufacturer'])) {
+    $attributes[] = [
+        'label' => \Yii::$app->user->can('manager') ? 'Дата принятия в ремонт' : 'Дата принятия в ремонт для представительства',
+        'value' => $model->date_manufacturer,
+    ];
+}
+
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'date_completion'])) {
+    $attributes[] = 'date_completion:date';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'warranty_number'])) {
+    $attributes[] = 'warranty_number';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_number'])) {
+    $attributes[] = 'bid_number';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_manufacturer_number'])) {
+    $attributes[] = [
+        'label' => \Yii::$app->user->can('manager') ? 'Номер заявки' : 'Номер заявки у представительства',
+        'value' => $model->bid_manufacturer_number,
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_1C_number'])) {
+    $attributes[] = 'bid_1C_number';
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'repair_status_id'])) {
+    $attributes[] =  [
+        'label' => 'Статус ремонта',
+        'value' => $model->repair_status_id ? $model->repairStatus->name : null,
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'warranty_status_id'])) {
+    $attributes[] =  [
+        'label' => 'Статус гарантии',
+        'value' => $model->warranty_status_id ? $model->warrantyStatus->name : null,
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'status_id'])) {
+    $attributes[] =  [
+        'label' => 'Статус заявки',
+        'value' => $model->status_id ? $model->status->name : null,
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'user_id'])) {
+    $attributes[] =  [
+        'label' => 'Приемщик',
+        'value' => $model->user_id ? $model->user->name : null,
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'master_id'])) {
+    $attributes[] =      [
+        'label' => 'Мастер',
+        'value' => $model->master_id ? $model->master->user->name : null,
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])) {
+    $attributes[] =  'comment';
+}
+
 ?>
 <div>
 
@@ -33,83 +219,7 @@ $this->params['back'] = ['index'];
 
 <?= \yii\widgets\DetailView::widget([
     'model' => $model,
-    'attributes' => [
-        'created_at',
-        'updated_at',
-        'brand_name',
-        [
-            'label' => 'Производитель',
-            'value' => $model->manufacturer_id ? $model->manufacturer->name : null,
-        ],
-        'equipment',
-        'brand_model_name',
-        'serial_number',
-        'vendor_code',
-        'composition_name',
-        [
-            'label' => 'Состояние',
-            'value' => $model->condition_id ? $model->condition->name : null,
-        ],
-        'defect',
-        'defect_manufacturer',
-        'diagnostic',
-        'diagnostic_manufacturer',
-        'repair_recommendations',
-        [
-            'label' => 'Тип клиента',
-            'value' => $model->client_type ? Bid::CLIENT_TYPES[$model->client_type] : null,
-        ],
-        [
-            'label' => 'Дефект гарантийный',
-            'value' => $model->is_warranty_defect ? 'Истина' : 'Ложь',
-        ],
-        [
-            'label' => 'Проведение ремонта возможно',
-            'value' => $model->is_repair_possible ? 'Истина' : 'Ложь',
-        ],
-        [
-            'label' => 'Подано на гарантию',
-            'value' => $model->is_for_warranty ? 'Истина' : 'Ложь',
-        ],
-        'client_name',
-        'client_phone',
-        'client_address',
-        [
-            'label' => 'Тип обращения',
-            'value' => $model->treatmentTypeName,
-        ],
-        'saler_name',
-        'purchase_date:date',
-        'application_date:date',
-        'date_manufacturer:date',
-        'date_completion:date',
-        'warranty_number',
-        'bid_number',
-        'bid_1C_number',
-        'bid_manufacturer_number',
-        [
-            'label' => 'Статус ремонта',
-            'value' => $model->repair_status_id ? $model->repairStatus->name : null,
-        ],
-        [
-            'label' => 'Статус гарантии',
-            'value' => $model->warranty_status_id ? $model->warrantyStatus->name : null,
-        ],
-        [
-            'label' => 'Статус заявки',
-            'value' => $model->status_id ? $model->status->name : null,
-        ],
-        [
-            'label' => 'Приемщик',
-            'value' => $model->user_id ? $model->user->name : null,
-        ],
-        [
-            'label' => 'Мастер',
-            'value' => $model->master_id ? $model->master->user->name : null,
-        ],
-        'comment'
-    ]
-
+    'attributes' => $attributes
 ]);
 ?>
 

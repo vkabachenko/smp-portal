@@ -18,6 +18,176 @@ use yii\bootstrap\Html;
 
 $this->title = 'Заявки';
 $this->params['back'] = \yii\helpers\Url::previous();
+
+$columns = [
+    [
+        'attribute' => 'created_at',
+        'format' => 'raw',
+        'value' => function ($model) {
+            /* @var $model app\models\Bid */
+            $text = date('d.m.Y H:i', strtotime($model->created_at));
+            $html = Html::tag('div', $text);
+            return $html;
+        },
+        'filterOptions' => ['class' => 'grid-created-at'],
+        'headerOptions' => ['class' => 'grid-created-at'],
+        'contentOptions' => ['class' => 'grid-created-at'],
+        'filter' => DatePicker::widget([
+            'model' => $searchModel,
+            'attribute' => 'created_at_from',
+            'attribute2' => 'created_at_to',
+            'type' => DatePicker::TYPE_RANGE,
+            'separator' => '-',
+            'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
+        ])
+    ],
+];
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_number'])) {
+    $columns[] = [
+        'attribute' => 'bid_number',
+        'format' => 'raw',
+        'value' => function ($model) {
+            /* @var $model app\models\Bid */
+            $html = Html::tag('div', $model->bid_number);
+            return $html;
+        },
+        'filterOptions' => ['class' => 'grid-bid-number'],
+        'headerOptions' => ['class' => 'grid-bid-number'],
+        'contentOptions' => ['class' => 'grid-bid-number']
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_1C_number'])) {
+    $columns[] =  [
+        'attribute' => 'bid_1C_number',
+        'format' => 'raw',
+        'value' => function ($model) {
+            /* @var $model app\models\Bid */
+            $html = Html::tag('div', $model->bid_1C_number);
+            return $html;
+        },
+        'filterOptions' => ['class' => 'grid-bid-1C-number'],
+        'headerOptions' => ['class' => 'grid-bid-1C-number'],
+        'contentOptions' => ['class' => 'grid-bid-1C-number']
+    ];
+}
+
+$columns[] =  [
+    'attribute' => 'equipment',
+    'format' => 'raw',
+    'value' => function ($model) {
+        /* @var $model app\models\Bid */
+        $a = Html::a($model->equipment, ['view', 'id' => $model->id]);
+        $html = Html::tag('div', $a);
+        return $html;
+    },
+    'filterOptions' => ['class' => 'grid-equipmant'],
+    'headerOptions' => ['class' => 'grid-equipmant'],
+    'contentOptions' => ['class' => 'grid-equipmant']
+];
+
+$columns[] = [
+        'attribute' => 'manufacturer_id',
+        'format' => 'raw',
+        'value' => function ($model) {
+            /* @var $model app\models\Bid */
+            $html = $model->manufacturer_id
+                ? Html::tag('div', $model->manufacturer->name)
+                : null;                        ;
+            return $html;
+        },
+        'filterOptions' => ['class' => 'grid-manufacturer'],
+        'headerOptions' => ['class' => 'grid-manufacturer'],
+        'contentOptions' => ['class' => 'grid-manufacturer'],
+        'filter' => Manufacturer::manufacturersAsMap()
+];
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'treatment_type'])) {
+    $columns[] =      [
+        'attribute' => 'treatment_type',
+        'format' => 'raw',
+        'value' => function ($model) {
+            /* @var $model app\models\Bid */
+            $html = $model->treatment_type
+                ? Html::tag('div', Bid::TREATMENT_TYPES[$model->treatment_type])
+                : null;
+            return $html;
+        },
+        'filterOptions' => ['class' => 'grid-treatment-type'],
+        'contentOptions' => ['class' => 'grid-treatment-type'],
+        'headerOptions' => ['class' => 'grid-treatment-type'],
+        'filter' => Bid::TREATMENT_TYPES
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'repair_status_id'])) {
+    $columns[] =  [
+        'attribute' => 'repair_status_id',
+        'format' => 'raw',
+        'value' => function ($model) {
+            /* @var $model app\models\Bid */
+            $html = $model->repair_status_id
+                ? Html::tag('div', $model->repairStatus->name)
+                : null;                        ;
+            return $html;
+        },
+        'filterOptions' => ['class' => 'grid-repair-status'],
+        'headerOptions' => ['class' => 'grid-repair-status'],
+        'contentOptions' => ['class' => 'grid-repair-status'],
+        'filter' => RepairStatus::repairStatusAsMap()
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'warranty_status_id'])) {
+    $columns[] =      [
+        'attribute' => 'warranty_status_id',
+        'format' => 'raw',
+        'value' => function ($model) {
+            /* @var $model app\models\Bid */
+            $html = $model->warranty_status_id
+                ? Html::tag('div', $model->warrantyStatus->name)
+                : null;
+            return $html;
+        },
+        'filterOptions' => ['class' => 'grid-warranty-status'],
+        'headerOptions' => ['class' => 'grid-warranty-status'],
+        'contentOptions' => ['class' => 'grid-warranty-status'],
+        'filter' => WarrantyStatus::warrantyStatusAsMap()
+    ];
+}
+
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'master_id'])) {
+    $columns[] =   [
+        'attribute' => 'master_id',
+        'format' => 'raw',
+        'value' => function ($model) {
+            /* @var $model app\models\Bid */
+            $html = $model->master_id
+                ? Html::tag('div', $model->master->user->name)
+                : null;
+            return $html;
+        },
+        'filterOptions' => ['class' => 'grid-master'],
+        'headerOptions' => ['class' => 'grid-master'],
+        'contentOptions' => ['class' => 'grid-master'],
+        'filter' => Master::mastersAsMap(\Yii::$app->user->identity)
+    ];
+}
+
+$columns[] = [
+        'attribute' => 'client_name',
+        'format' => 'raw',
+        'value' => function ($model) {
+            /* @var $model app\models\Bid */
+            $html = Html::tag('div', $model->client_name);
+            return $html;
+        },
+        'filterOptions' => ['class' => 'grid-client'],
+        'headerOptions' => ['class' => 'grid-client'],
+        'contentOptions' => ['class' => 'grid-client']
+    ];
+
 ?>
 
 <div>
@@ -44,153 +214,7 @@ $this->params['back'] = \yii\helpers\Url::previous();
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'columns' => [
-                [
-                    'attribute' => 'created_at',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        /* @var $model app\models\Bid */
-                        $text = date('d.m.Y H:i', strtotime($model->created_at));
-                        $html = Html::tag('div', $text);
-                        return $html;
-                    },
-                    'filterOptions' => ['class' => 'grid-created-at'],
-                    'headerOptions' => ['class' => 'grid-created-at'],
-                    'contentOptions' => ['class' => 'grid-created-at'],
-                    'filter' => DatePicker::widget([
-                        'model' => $searchModel,
-                        'attribute' => 'created_at_from',
-                        'attribute2' => 'created_at_to',
-                        'type' => DatePicker::TYPE_RANGE,
-                        'separator' => '-',
-                        'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
-                    ])
-                ],
-                [
-                    'attribute' => 'bid_number',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        /* @var $model app\models\Bid */
-                        $html = Html::tag('div', $model->bid_number);
-                        return $html;
-                    },
-                    'filterOptions' => ['class' => 'grid-bid-number'],
-                    'headerOptions' => ['class' => 'grid-bid-number'],
-                    'contentOptions' => ['class' => 'grid-bid-number']
-                ],
-                [
-                    'attribute' => 'bid_1C_number',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        /* @var $model app\models\Bid */
-                        $html = Html::tag('div', $model->bid_1C_number);
-                        return $html;
-                    },
-                    'filterOptions' => ['class' => 'grid-bid-1C-number'],
-                    'headerOptions' => ['class' => 'grid-bid-1C-number'],
-                    'contentOptions' => ['class' => 'grid-bid-1C-number']
-                ],
-                [
-                    'attribute' => 'equipment',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        /* @var $model app\models\Bid */
-                        $a = Html::a($model->equipment, ['view', 'id' => $model->id]);
-                        $html = Html::tag('div', $a);
-                        return $html;
-                    },
-                    'filterOptions' => ['class' => 'grid-equipmant'],
-                    'headerOptions' => ['class' => 'grid-equipmant'],
-                    'contentOptions' => ['class' => 'grid-equipmant']
-                ],
-                [
-                    'attribute' => 'manufacturer_id',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        /* @var $model app\models\Bid */
-                        $html = $model->manufacturer_id
-                            ? Html::tag('div', $model->manufacturer->name)
-                            : null;                        ;
-                        return $html;
-                    },
-                    'filterOptions' => ['class' => 'grid-manufacturer'],
-                    'headerOptions' => ['class' => 'grid-manufacturer'],
-                    'contentOptions' => ['class' => 'grid-manufacturer'],
-                    'filter' => Manufacturer::manufacturersAsMap()
-                ],
-                [
-                    'attribute' => 'treatment_type',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        /* @var $model app\models\Bid */
-                        $html = $model->treatment_type
-                            ? Html::tag('div', Bid::TREATMENT_TYPES[$model->treatment_type])
-                            : null;
-                        return $html;
-                    },
-                    'filterOptions' => ['class' => 'grid-treatment-type'],
-                    'contentOptions' => ['class' => 'grid-treatment-type'],
-                    'headerOptions' => ['class' => 'grid-treatment-type'],
-                    'filter' => Bid::TREATMENT_TYPES
-                ],
-                [
-                    'attribute' => 'repair_status_id',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        /* @var $model app\models\Bid */
-                        $html = $model->repair_status_id
-                            ? Html::tag('div', $model->repairStatus->name)
-                            : null;                        ;
-                        return $html;
-                    },
-                    'filterOptions' => ['class' => 'grid-repair-status'],
-                    'headerOptions' => ['class' => 'grid-repair-status'],
-                    'contentOptions' => ['class' => 'grid-repair-status'],
-                    'filter' => RepairStatus::repairStatusAsMap()
-                ],
-                [
-                    'attribute' => 'warranty_status_id',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        /* @var $model app\models\Bid */
-                        $html = $model->warranty_status_id
-                            ? Html::tag('div', $model->warrantyStatus->name)
-                            : null;
-                        return $html;
-                    },
-                    'filterOptions' => ['class' => 'grid-warranty-status'],
-                    'headerOptions' => ['class' => 'grid-warranty-status'],
-                    'contentOptions' => ['class' => 'grid-warranty-status'],
-                    'filter' => WarrantyStatus::warrantyStatusAsMap()
-                ],
-                [
-                    'attribute' => 'master_id',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        /* @var $model app\models\Bid */
-                        $html = $model->master_id
-                            ? Html::tag('div', $model->master->user->name)
-                            : null;
-                        return $html;
-                    },
-                    'filterOptions' => ['class' => 'grid-master'],
-                    'headerOptions' => ['class' => 'grid-master'],
-                    'contentOptions' => ['class' => 'grid-master'],
-                    'filter' => Master::mastersAsMap(\Yii::$app->user->identity)
-                ],
-                [
-                    'attribute' => 'client_name',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        /* @var $model app\models\Bid */
-                        $html = Html::tag('div', $model->client_name);
-                        return $html;
-                    },
-                    'filterOptions' => ['class' => 'grid-client'],
-                    'headerOptions' => ['class' => 'grid-client'],
-                    'contentOptions' => ['class' => 'grid-client']
-                ],
-            ],
+            'columns' => $columns,
         ]); ?>
     </div>
 </div>

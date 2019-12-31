@@ -9,6 +9,7 @@ use app\rbac\rules\ManagerAgencyRule;
 use app\rbac\rules\ManagerManagerRule;
 use app\rbac\rules\MasterMasterRule;
 use app\rbac\rules\MasterWorkshopRule;
+use app\rbac\rules\BidAttributeRule;
 use yii\console\Controller;
 
 class RbacController extends Controller
@@ -111,6 +112,16 @@ class RbacController extends Controller
         $auth->add($managerUpdateManager);
         $auth->addChild($managerUpdateManager, $manageManagers);
 
+        $adminBidAttribute = $auth->createPermission('adminBidAttribute');
+        $auth->add($adminBidAttribute);
+
+        $bidAttributeRule = new BidAttributeRule();
+        $auth->add($bidAttributeRule);
+        $manageBidAttribute = $auth->createPermission('manageBidAttribute');
+        $manageBidAttribute->ruleName = $bidAttributeRule->name;
+        $auth->add($manageBidAttribute);
+        $auth->addChild($manageBidAttribute, $adminBidAttribute);
+
         $client = $auth->createRole('client');
         $auth->add($client);
 
@@ -124,6 +135,7 @@ class RbacController extends Controller
         $auth->addChild($master, $createComment);
         $auth->addChild($master, $masterUpdateWorkshop);
         $auth->addChild($master, $masterUpdateMaster);
+        $auth->addChild($master, $manageBidAttribute);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
@@ -135,6 +147,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $manageBrand);
         $auth->addChild($manager, $managerUpdateAgency);
         $auth->addChild($manager, $managerUpdateManager);
+        $auth->addChild($manager, $manageBidAttribute);
 
         $director = $auth->createRole('director');
         $auth->add($director);
@@ -152,6 +165,8 @@ class RbacController extends Controller
         $auth->addChild($admin, $manageWorkshops);
         $auth->addChild($admin, $manageMasters);
         $auth->addChild($admin, $manageManagers);
+        $auth->addChild($admin, $adminBidAttribute);
+
 
         echo 'done' . "\n";
     }

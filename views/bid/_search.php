@@ -42,109 +42,177 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'equipment') ?>
 
-    <?= $form->field($model, 'brand_model_name') ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'brand_model_name'])): ?>
+        <?= $form->field($model, 'brand_model_name') ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'composition_name') ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'composition_name'])): ?>
+        <?= $form->field($model, 'composition_name') ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'serial_number') ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'serial_number'])): ?>
+        <?= $form->field($model, 'serial_number') ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'vendor_code') ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'vendor_code'])): ?>
+        <?= $form->field($model, 'vendor_code') ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'master_id')->dropDownList(Master::mastersAsMap(\Yii::$app->user->identity),['prompt' => 'Выбор']) ?>
-
-    <?= $form->field($model, 'client_name') ?>
-
-    <?= $form->field($model, 'client_phone') ?>
-
-    <?= $form->field($model, 'client_address') ?>
-
-    <?= $form->field($model, 'treatment_type')->dropDownList(Bid::TREATMENT_TYPES ,['prompt' => 'Выбор']) ?>
-
-    <?= $form->field($model, 'saler_name') ?>
-
-    <div class="form-group">
-        <label class="control-label">Дата покупки</label>
-        <?= DatePicker::widget([
-            'model' => $model,
-            'attribute' => 'purchase_date_from',
-            'attribute2' => 'purchase_date_to',
-            'type' => DatePicker::TYPE_RANGE,
-            'separator' => '-',
-            'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
-        ]) ?>
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Дата обращения</label>
-        <?= DatePicker::widget([
-            'model' => $model,
-            'attribute' => 'application_date_from',
-            'attribute2' => 'application_date_to',
-            'type' => DatePicker::TYPE_RANGE,
-            'separator' => '-',
-            'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
-        ]) ?>
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Дата принятия в ремонт для представительства</label>
-        <?= DatePicker::widget([
-            'model' => $model,
-            'attribute' => 'date_manufacturer_from',
-            'attribute2' => 'date_manufacturer_to',
-            'type' => DatePicker::TYPE_RANGE,
-            'separator' => '-',
-            'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
-        ]) ?>
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Дата готовности</label>
-        <?= DatePicker::widget([
-            'model' => $model,
-            'attribute' => 'date_completion_from',
-            'attribute2' => 'date_completion_to',
-            'type' => DatePicker::TYPE_RANGE,
-            'separator' => '-',
-            'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
-        ]) ?>
-    </div>
-
-    <?= $form->field($model, 'warranty_number') ?>
-
-    <?= $form->field($model, 'bid_number') ?>
-
-    <?= $form->field($model, 'bid_1C_number') ?>
-
-    <?= $form->field($model, 'bid_manufacturer_number') ?>
-
-    <?= $form->field($model, 'condition_id')->dropDownList(Condition::conditionsAsMap(),['prompt' => 'Выбор']) ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'vendor_code'])): ?>
+        <?= $form->field($model, 'master_id')->dropDownList(Master::mastersAsMap(\Yii::$app->user->identity),['prompt' => 'Выбор']) ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'client_type')->dropDownList(Bid::CLIENT_TYPES, ['prompt' => 'Выбор']) ?>
 
-    <?= $form->field($model, 'defect') ?>
+    <?= $form->field($model, 'client_name') ?>
 
-    <?= $form->field($model, 'defect_manufacturer') ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_phone'])): ?>
+        <?= $form->field($model, 'client_phone') ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'is_warranty_defect')->checkbox(); ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_address'])): ?>
+        <?= $form->field($model, 'client_address') ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'is_repair_possible')->checkbox(); ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'treatment_type'])): ?>
+        <?= $form->field($model, 'treatment_type')->dropDownList(Bid::TREATMENT_TYPES ,['prompt' => 'Выбор']) ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'is_for_warranty')->checkbox(); ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'saler_name'])): ?>
+        <?= $form->field($model, 'saler_name') ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'diagnostic') ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'purchase_date'])): ?>
+        <div class="form-group">
+            <label class="control-label">Дата покупки</label>
+            <?= DatePicker::widget([
+                'model' => $model,
+                'attribute' => 'purchase_date_from',
+                'attribute2' => 'purchase_date_to',
+                'type' => DatePicker::TYPE_RANGE,
+                'separator' => '-',
+                'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
+            ]) ?>
+        </div>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'diagnostic_manufacturer') ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'application_date'])): ?>
+        <div class="form-group">
+            <label class="control-label">Дата обращения</label>
+            <?= DatePicker::widget([
+                'model' => $model,
+                'attribute' => 'application_date_from',
+                'attribute2' => 'application_date_to',
+                'type' => DatePicker::TYPE_RANGE,
+                'separator' => '-',
+                'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
+            ]) ?>
+        </div>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'repair_status_id')->dropDownList(RepairStatus::repairStatusAsMap(),['prompt' => 'Выбор']) ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'date_manufacturer'])): ?>
+        <div class="form-group">
+            <label class="control-label">
+                <?= \Yii::$app->user->can('manager') ? 'Дата принятия в ремонт' : 'Дата принятия в ремонт для представительства' ?>
+            </label>
+            <?= DatePicker::widget([
+                'model' => $model,
+                'attribute' => 'date_manufacturer_from',
+                'attribute2' => 'date_manufacturer_to',
+                'type' => DatePicker::TYPE_RANGE,
+                'separator' => '-',
+                'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
+            ]) ?>
+        </div>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'repair_recommendations') ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'date_completion'])): ?>
+        <div class="form-group">
+            <label class="control-label">Дата готовности</label>
+            <?= DatePicker::widget([
+                'model' => $model,
+                'attribute' => 'date_completion_from',
+                'attribute2' => 'date_completion_to',
+                'type' => DatePicker::TYPE_RANGE,
+                'separator' => '-',
+                'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
+            ]) ?>
+        </div>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'warranty_status_id')->dropDownList(WarrantyStatus::warrantyStatusAsMap(),['prompt' => 'Выбор']) ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'warranty_number'])): ?>
+        <?= $form->field($model, 'warranty_number') ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'status_id')->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']) ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_number'])): ?>
+        <?= $form->field($model, 'bid_number') ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'comment') ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_1C_number'])): ?>
+        <?= $form->field($model, 'bid_1C_number') ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_manufacturer_number'])): ?>
+        <?= $form->field($model, 'bid_manufacturer_number')->label(
+            \Yii::$app->user->can('manager') ? 'Номер заявки' : 'Номер заявки у представительства'
+        ) ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_id'])): ?>
+        <?= $form->field($model, 'condition_id')->dropDownList(Condition::conditionsAsMap(),['prompt' => 'Выбор']) ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'defect'])): ?>
+        <?= $form->field($model, 'defect') ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'defect_manufacturer'])): ?>
+        <?= $form->field($model, 'defect_manufacturer')->label(
+            \Yii::$app->user->can('manager') ? 'Заявленная неисправность' : 'Заявленная неисправность для представительства'
+        ) ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_warranty_defect'])): ?>
+        <?= $form->field($model, 'is_warranty_defect')->checkbox(); ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_repair_possible'])): ?>
+        <?= $form->field($model, 'is_repair_possible')->checkbox(); ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_for_warranty'])): ?>
+        <?= $form->field($model, 'is_for_warranty')->checkbox(); ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'diagnostic'])): ?>
+        <?= $form->field($model, 'diagnostic') ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'diagnostic_manufacturer'])): ?>
+        <?= $form->field($model, 'diagnostic_manufacturer')->label(
+            \Yii::$app->user->can('manager') ? 'Результат диагностики' : 'Результат диагностики для представительства'
+        ) ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'repair_status_id'])): ?>
+        <?= $form->field($model, 'repair_status_id')->dropDownList(RepairStatus::repairStatusAsMap(),['prompt' => 'Выбор']) ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'repair_recommendations'])): ?>
+        <?= $form->field($model, 'repair_recommendations') ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'warranty_status_id'])): ?>
+        <?= $form->field($model, 'warranty_status_id')->dropDownList(WarrantyStatus::warrantyStatusAsMap(),['prompt' => 'Выбор']) ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'status_id'])): ?>
+        <?= $form->field($model, 'status_id')->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']) ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])): ?>
+        <?= $form->field($model, 'comment') ?>
+    <?php endif; ?>
 
     <div class="form-group">
         <?= Html::submitButton('Найти', ['class' => 'btn btn-primary']) ?>
