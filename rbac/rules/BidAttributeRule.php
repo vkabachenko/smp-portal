@@ -15,22 +15,28 @@ class BidAttributeRule extends Rule
 
     public function execute($user, $item, $params)
     {
-        /* @var $master Master */
-        $master = Master::findByUserId($user);
-        if ($master) {
-            $commonAttributes = BidAttribute::getHiddenAttributes('is_disabled_workshops');
-            $ownAttributes = $master->workshop->getBidAttributes();
-        } else {
-            /* @var $manager Manager */
-            $manager = Manager::findByUserId($user);
-            if ($manager) {
-                $commonAttributes = BidAttribute::getHiddenAttributes('is_disabled_agencies');
-                $ownAttributes = $manager->agency->getBidAttributes();
+        $keyCache = 'bid-attributes-' . $user;
+        $allAttributes = \Yii::$app->cache->get($keyCache);
+
+        if ($allAttributes === false) {
+            /* @var $master Master */
+            $master = Master::findByUserId($user);
+            if ($master) {
+                $commonAttributes = BidAttribute::getHiddenAttributes('is_disabled_workshops');
+                $ownAttributes = $master->workshop->getBidAttributes();
             } else {
-                return false;
+                /* @var $manager Manager */
+                $manager = Manager::findByUserId($user);
+                if ($manager) {
+                    $commonAttributes = BidAttribute::getHiddenAttributes('is_disabled_agencies');
+                    $ownAttributes = $manager->agency->getBidAttributes();
+                } else {
+                    return false;
+                }
             }
+            $allAttributes = array_merge($commonAttributes, $ownAttributes);
+            \Yii::$app->cache->set($keyCache, $allAttributes);
         }
-        $allAttributes = array_merge($commonAttributes, $ownAttributes);
 
         return !in_array($params['attribute'], $allAttributes);
     }
