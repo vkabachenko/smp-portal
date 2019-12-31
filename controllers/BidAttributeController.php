@@ -43,6 +43,7 @@ class BidAttributeController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => BidAttribute::find()->active(),
+            'pagination' => false
         ]);
 
         return $this->render('index', [
