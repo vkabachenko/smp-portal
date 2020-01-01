@@ -61,11 +61,21 @@ if (Yii::$app->user->isGuest) {
     ?>
 
     <div class="container">
-        <?= BackWidget::widget([
-            'backLink' => isset($this->params['back']) ? $this->params['back'] : null,
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
+        <?php if (isset($this->blocks['news'])): ?>
+            <?php if (isset($this->blocks['header'])): ?>
+                <?= $this->blocks['header'] ?>
+            <?php endif; ?>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <?= $this->render('partial/common', compact('content')); ?>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <?= $this->blocks['news'] ?>
+                </div>
+            </div>
+        <?php else: ?>
+            <?= $this->render('partial/common', compact('content')); ?>
+        <?php endif; ?>
     </div>
 </div>
 

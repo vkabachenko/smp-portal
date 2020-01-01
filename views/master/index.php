@@ -6,7 +6,9 @@ use yii\bootstrap\Html;
 $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);
 ?>
 
-<h2 style="text-align: center;"> <?= $this->title ?> </h2>
+<?php $this->beginBlock('header'); ?>
+    <h1 style="text-align: center;"> <?= $this->title ?> </h1>
+<?php $this->endBlock(); ?>
 
 <div class="center-menu-container">
     <div class="list-group center-menu">
@@ -22,3 +24,6 @@ $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);
     </div>
 </div>
 
+<?php $this->beginBlock('news'); ?>
+    <?= $this->render('//layouts/partial/news'); ?>
+<?php $this->endBlock(); ?>
