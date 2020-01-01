@@ -15,6 +15,7 @@ $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);;
         <?= Html::a('Поля заявки', ['bid-attribute/index'], ['class' => 'list-group-item center-menu-item']) ?>
         <?= Html::a('Мастерские', ['workshop/index'], ['class' => 'list-group-item center-menu-item']) ?>
         <?= Html::a('Представительства', ['agency/index'], ['class' => 'list-group-item center-menu-item']) ?>
+        <?= Html::a('Новости', ['news/index'], ['class' => 'list-group-item center-menu-item']) ?>
         <?= Html::a('Производители', ['manufacturer/index'], ['class' => 'list-group-item center-menu-item']) ?>
         <?= Html::a('Соответствие брендов', ['brand-correspondence/index'], ['class' => 'list-group-item center-menu-item']) ?>
         <?= Html::a('Комплектность', ['composition/index'], ['class' => 'list-group-item center-menu-item']) ?>
