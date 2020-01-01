@@ -282,3 +282,12 @@ a.center-menu-item:hover {
     border-color: #1F85DE;
 }
 
+.news-wrap {
+    background-color: #eee;
+}
+
+.news-date {
+    font-size: 12px;
+    font-style: italic;
+}
+

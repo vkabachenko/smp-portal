@@ -3,6 +3,8 @@
 use app\helpers\bid\TitleHelper;
 use yii\bootstrap\Html;
 
+/* @var $news \app\models\News[] */
+
 $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);
 ?>
 
@@ -28,6 +30,6 @@ $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);
 </div>
 
 <?php $this->beginBlock('news'); ?>
-    <?= $this->render('//layouts/partial/news'); ?>
+    <?= $this->render('//layouts/partial/news', compact('news')); ?>
 <?php $this->endBlock(); ?>
 

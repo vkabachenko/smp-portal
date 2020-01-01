@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\query\NewsQuery;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -30,6 +31,11 @@ class News extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'news';
+    }
+
+    public static function find()
+    {
+        return new NewsQuery(get_called_class());
     }
 
 
@@ -72,5 +78,13 @@ class News extends \yii\db\ActiveRecord
             'active' => 'Опубликована',
             'target' => 'Публиковать для',
         ];
+    }
+
+    public static function getPublishedNews($target)
+    {
+        return self::find()
+            ->published()
+            ->andWhere(['or', ['target' => 'all'], ['target' => $target]])
+            ->all();
     }
 }

@@ -3,6 +3,7 @@
 
 namespace app\controllers;
 
+use app\models\News;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -33,7 +34,8 @@ class MasterController extends Controller
     public function actionIndex()
     {
         Url::remember();
-        return $this->render('index');
+        $news = News::getPublishedNews('workshops');
+        return $this->render('index', compact('news'));
     }
 
     public function actionProfile()

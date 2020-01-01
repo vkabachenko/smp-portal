@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 use app\models\Manager;
+use app\models\News;
 use app\models\User;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
@@ -33,7 +34,8 @@ class ManagerController extends Controller
     public function actionIndex()
     {
         Url::remember();
-        return $this->render('index');
+        $news = News::getPublishedNews('agencies');
+        return $this->render('index', compact('news'));
     }
 
     public function actionProfile()

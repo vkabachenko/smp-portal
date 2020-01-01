@@ -69,7 +69,7 @@ if (Yii::$app->user->isGuest) {
                 <div class="col-xs-12 col-sm-6">
                     <?= $this->render('partial/common', compact('content')); ?>
                 </div>
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-12 col-sm-6 news-wrap">
                     <?= $this->blocks['news'] ?>
                 </div>
             </div>
