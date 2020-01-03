@@ -8,7 +8,7 @@ $(function(){
 
     $('.bid-attributes-move a').click(function() {
         if ($('.bid-attributes-list li.active').length === 0) {
-            alert('Для переноса выделите поле');
+            swal('Ошибка', 'Для переноса выделите поле', 'error');
             return false;
         }
     });
@@ -16,20 +16,19 @@ $(function(){
     $('#feedback-form').submit(function(evt) {
         evt.preventDefault();
         var form = $(this);
-        //var formdata = new FormData(form[0]);
         $.ajax({
             url: form.attr('action'),
             method: form.attr('method'),
-            //contentType: false, // обязательно
-            //processData: false, // для FormData
-            //data: formdata
             data: form.serialize()
         }).then(function(result) {
             $('#feedback-modal').modal('hide');
-            var msg = result ? 'Сообщение успешно отправлено' : 'Ошибка при отправке сообщения';
-            alert(msg);
+            if (result) {
+                swal('Успех', 'Сообщение успешно отправлено', 'success');
+            } else {
+                swal('Ошибка', 'Ошибка при отправке сообщения', 'error');
+            }
         }).catch(function(error) {
-            alert(error.message);
+            swal('Ошибка', error.message, 'error');
         })
     });
 });

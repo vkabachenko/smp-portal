@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7df3f17664956d19be6bbaa64048d15b",
+    "content-hash": "7cbc216182d99d77c90651f0ed7c19cb",
     "packages": [
         {
             "name": "alhimik1986/php-excel-templator",
@@ -1196,6 +1196,18 @@
             ]
         },
         {
+            "name": "npm-asset/es6-object-assign",
+            "version": "1.1.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/es6-object-assign/-/es6-object-assign-1.1.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "npm-asset/extend",
             "version": "3.0.2",
             "dist": {
@@ -1852,6 +1864,18 @@
             ]
         },
         {
+            "name": "npm-asset/promise-polyfill",
+            "version": "6.1.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/promise-polyfill/-/promise-polyfill-6.1.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "npm-asset/psl",
             "version": "1.2.0",
             "dist": {
@@ -1989,6 +2013,22 @@
                 "npm-asset/jsbn": "~0.1.0",
                 "npm-asset/safer-buffer": ">=2.0.2,<3.0.0",
                 "npm-asset/tweetnacl": "~0.14.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/sweetalert",
+            "version": "2.1.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/sweetalert/-/sweetalert-2.1.2.tgz"
+            },
+            "require": {
+                "npm-asset/es6-object-assign": ">=1.1.0,<2.0.0",
+                "npm-asset/promise-polyfill": ">=6.0.2,<7.0.0"
             },
             "type": "npm-asset",
             "license": [
