@@ -291,3 +291,7 @@ a.center-menu-item:hover {
     font-style: italic;
 }
 
+.label-hint {
+    margin-right: 5px;
+}
+
