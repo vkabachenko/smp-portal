@@ -26,7 +26,8 @@
         "bupy7/xml-constructor": "dev-master",
         "kartik-v/yii2-widget-datepicker": "dev-master",
         "kartik-v/yii2-field-range": "*",
-        "vova07/yii2-imperavi-widget": "*"
+        "vova07/yii2-imperavi-widget": "*",
+        "vkabachenko/yii2-filepond": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

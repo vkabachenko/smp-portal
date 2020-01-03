@@ -8,7 +8,6 @@ use app\models\RepairStatus;
 use app\models\User;
 use app\models\WarrantyStatus;
 use kartik\date\DatePicker;
-use yii\bootstrap\Modal;
 use yii\grid\GridView;
 use yii\bootstrap\Html;
 

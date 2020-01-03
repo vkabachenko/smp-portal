@@ -3,12 +3,12 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use app\assets\AppAsset;
-use app\widgets\BackWidget\BackWidget;
+use yii\bootstrap\Modal;
+
 
 AppAsset::register($this);
 
@@ -80,8 +80,28 @@ if (Yii::$app->user->isGuest) {
 </div>
 
 <footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; SMP <?= date('Y') ?></p>
+    <div>
+        <div class="col-xs-6">
+            <?php if (!\Yii::$app->user->isGuest): ?>
+                <?php Modal::begin([
+                    'id' => 'feedback-modal',
+                    'header' => '<h3>Заполните форму обратной связи</h3>',
+                    'toggleButton' => [
+                        'tag' => 'a',
+                        'label' => 'Написать разработчику',
+                        'style' => 'cursor: pointer'
+                    ],
+                ]);
+
+                echo $this->render('partial/feedback');
+
+                Modal::end(); ?>
+            <?php endif; ?>
+        </div>
+        <div class="col-xs-6">
+            <p class="pull-left">&copy; SMP <?= date('Y') ?></p>
+        </div>
+
 
     </div>
 </footer>

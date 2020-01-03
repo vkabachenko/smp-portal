@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9d2aa49ec14162045ba7030073d000d9",
+    "content-hash": "7df3f17664956d19be6bbaa64048d15b",
     "packages": [
         {
             "name": "alhimik1986/php-excel-templator",
@@ -1244,6 +1244,180 @@
             ]
         },
         {
+            "name": "npm-asset/filepond",
+            "version": "4.9.3",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/filepond/-/filepond-4.9.3.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/filepond-plugin-file-encode",
+            "version": "2.1.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/filepond-plugin-file-encode/-/filepond-plugin-file-encode-2.1.4.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/filepond-plugin-file-metadata",
+            "version": "1.0.6",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/filepond-plugin-file-metadata/-/filepond-plugin-file-metadata-1.0.6.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/filepond-plugin-file-poster",
+            "version": "2.2.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/filepond-plugin-file-poster/-/filepond-plugin-file-poster-2.2.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/filepond-plugin-file-rename",
+            "version": "1.1.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/filepond-plugin-file-rename/-/filepond-plugin-file-rename-1.1.4.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/filepond-plugin-file-validate-size",
+            "version": "2.2.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/filepond-plugin-file-validate-size/-/filepond-plugin-file-validate-size-2.2.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/filepond-plugin-file-validate-type",
+            "version": "1.2.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/filepond-plugin-file-validate-type/-/filepond-plugin-file-validate-type-1.2.4.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/filepond-plugin-image-crop",
+            "version": "2.0.3",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/filepond-plugin-image-crop/-/filepond-plugin-image-crop-2.0.3.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/filepond-plugin-image-edit",
+            "version": "1.5.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/filepond-plugin-image-edit/-/filepond-plugin-image-edit-1.5.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/filepond-plugin-image-exif-orientation",
+            "version": "1.0.6",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/filepond-plugin-image-exif-orientation/-/filepond-plugin-image-exif-orientation-1.0.6.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/filepond-plugin-image-preview",
+            "version": "4.6.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/filepond-plugin-image-preview/-/filepond-plugin-image-preview-4.6.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/filepond-plugin-image-resize",
+            "version": "2.0.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/filepond-plugin-image-resize/-/filepond-plugin-image-resize-2.0.4.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/filepond-plugin-image-transform",
+            "version": "3.20",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:pqina/filepond-plugin-image-transform.git",
+                "reference": "1747bf28ab52516c40839e00bc2ae96b3301aab4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pqina/filepond-plugin-image-transform/zipball/1747bf28ab52516c40839e00bc2ae96b3301aab4",
+                "reference": "1747bf28ab52516c40839e00bc2ae96b3301aab4"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/filepond-plugin-image-validate-size",
+            "version": "1.2.3",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/filepond-plugin-image-validate-size/-/filepond-plugin-image-validate-size-1.2.3.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "npm-asset/forever-agent",
             "version": "0.6.1",
             "dist": {
@@ -2118,6 +2292,63 @@
                 "mailer"
             ],
             "time": "2018-07-31T09:26:32+00:00"
+        },
+        {
+            "name": "vkabachenko/yii2-filepond",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vkabachenko/yii2-filepond.git",
+                "reference": "d8474d9a707b7e8c83c49f2b9d7385f5f8596e8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vkabachenko/yii2-filepond/zipball/d8474d9a707b7e8c83c49f2b9d7385f5f8596e8c",
+                "reference": "d8474d9a707b7e8c83c49f2b9d7385f5f8596e8c",
+                "shasum": ""
+            },
+            "require": {
+                "npm-asset/filepond": "^4.4.11",
+                "npm-asset/filepond-plugin-file-encode": "^2.1.4",
+                "npm-asset/filepond-plugin-file-metadata": "^1.0.6",
+                "npm-asset/filepond-plugin-file-poster": "^2.2.0",
+                "npm-asset/filepond-plugin-file-rename": "^1.1.4",
+                "npm-asset/filepond-plugin-file-validate-size": "^2.2.0",
+                "npm-asset/filepond-plugin-file-validate-type": "^1.2.4",
+                "npm-asset/filepond-plugin-image-crop": "^2.0.3",
+                "npm-asset/filepond-plugin-image-edit": "^1.4.0",
+                "npm-asset/filepond-plugin-image-exif-orientation": "^1.0.6",
+                "npm-asset/filepond-plugin-image-preview": "^4.4.0",
+                "npm-asset/filepond-plugin-image-resize": "^2.0.4",
+                "npm-asset/filepond-plugin-image-transform": "^3.4.3",
+                "npm-asset/filepond-plugin-image-validate-size": "^1.2.3",
+                "php": "^7.1",
+                "yiisoft/yii2": "~2.0.14"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "vkabachenko\\filepond\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kabachenko Viktor",
+                    "email": "vkabachenko@gmail.com"
+                }
+            ],
+            "description": "Yii2 upload file module based on filepond js library",
+            "keywords": [
+                "file",
+                "filepond",
+                "upload",
+                "yii"
+            ],
+            "time": "2019-10-06T06:12:46+00:00"
         },
         {
             "name": "vova07/yii2-imperavi-widget",
@@ -5509,7 +5740,8 @@
         "kartik-v/yii2-widget-fileinput": 20,
         "alhimik1986/php-excel-templator": 20,
         "bupy7/xml-constructor": 20,
-        "kartik-v/yii2-widget-datepicker": 20
+        "kartik-v/yii2-widget-datepicker": 20,
+        "vkabachenko/yii2-filepond": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
