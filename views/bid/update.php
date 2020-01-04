@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
+/* @var $hints array */
 
 $this->title = 'Редактирование заявки';
 $this->params['back'] = ['view', 'id' => $model->id];
@@ -14,6 +15,7 @@ $this->params['back'] = ['view', 'id' => $model->id];
 
     <?= $this->render('_form', [
         'model' => $model,
+        'hints' => $hints
     ]) ?>
 
 </div>

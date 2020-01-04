@@ -73,6 +73,17 @@ class BidAttribute extends \yii\db\ActiveRecord
         return array_keys(self::getAttributeIds($hiddenAttributes));
     }
 
+    public static function getHints()
+    {
+        $models = self::find()
+            ->select(['attribute', 'short_description', 'description'])
+            ->indexBy('attribute')
+            ->asArray()
+            ->all();
+
+        return $models;
+    }
+
     /**
      * @param $attributes[] BidAttribute
      * @return array

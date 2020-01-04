@@ -15,12 +15,14 @@ use app\models\WarrantyStatus;
 use app\models\BidStatus;
 use app\assets\QuaggaAsset;
 use app\models\Master;
+use app\helpers\bid\HintHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $uploadForm \app\models\form\MultipleUploadForm */
 /* @var $commentForm \app\models\form\CommentForm */
+/* @var $hints array */
 
 QuaggaAsset::register($this);
 ?>
@@ -35,7 +37,8 @@ QuaggaAsset::register($this);
     ])
         ->label(false); ?>
 
-    <?= $form->field($model, 'brand_name')->widget(AutoComplete::class, [
+    <?= $form->field($model, 'brand_name')
+        ->widget(AutoComplete::class, [
         'clientOptions' => [
             'source' => new JsExpression('
                 function (request, response) {
@@ -99,7 +102,10 @@ QuaggaAsset::register($this);
             ->label(false); ?>
 
 
-        <?= $form->field($model, 'brand_model_name')->widget(AutoComplete::class, [
+        <?= $form->field($model, 'brand_model_name',
+            ['labelOptions' => HintHelper::getLabelOptions('brand_model_name', $hints)]
+            )
+            ->widget(AutoComplete::class, [
             'clientOptions' => [
                 'source' => new JsExpression('
                     function (request, response) {
@@ -146,7 +152,9 @@ QuaggaAsset::register($this);
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'serial_number'])): ?>
-        <?= $form->field($model, 'serial_number')->textInput([
+        <?= $form->field($model, 'serial_number',
+            ['labelOptions' => HintHelper::getLabelOptions('serial_number', $hints)]
+        )->textInput([
             'id' => 'bid-serial-number',
             'maxlength' => true
         ]) ?>
@@ -169,7 +177,9 @@ QuaggaAsset::register($this);
         ])
             ->label(false); ?>
 
-        <?= $form->field($model, 'composition_name')->widget(AutoComplete::class, [
+        <?= $form->field($model, 'composition_name',
+                ['labelOptions' => HintHelper::getLabelOptions('composition_name', $hints)]
+            )->widget(AutoComplete::class, [
             'clientOptions' => [
                 'source' => new JsExpression('
                     function (request, response) {
@@ -216,35 +226,51 @@ QuaggaAsset::register($this);
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'defect'])): ?>
-        <?= $form->field($model, 'defect')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'defect',
+                ['labelOptions' => HintHelper::getLabelOptions('defect', $hints)]
+            )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'defect_manufacturer'])): ?>
-        <?= $form->field($model, 'defect_manufacturer')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'defect_manufacturer',
+                ['labelOptions' => HintHelper::getLabelOptions('defect_manufacturer', $hints)]
+            )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_warranty_defect'])): ?>
-        <?= $form->field($model, 'is_warranty_defect')->checkbox(); ?>
+        <?= $form->field($model, 'is_warranty_defect',
+                ['labelOptions' => HintHelper::getLabelOptions('is_warranty_defect', $hints)]
+            )->checkbox(); ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_repair_possible'])): ?>
-        <?= $form->field($model, 'is_repair_possible')->checkbox(); ?>
+        <?= $form->field($model, 'is_repair_possible',
+                ['labelOptions' => HintHelper::getLabelOptions('is_repair_possible', $hints)]
+            )->checkbox(); ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_for_warranty'])): ?>
-        <?= $form->field($model, 'is_for_warranty')->checkbox(); ?>
+        <?= $form->field($model, 'is_for_warranty',
+                ['labelOptions' => HintHelper::getLabelOptions('is_for_warranty', $hints)]
+            )->checkbox(); ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'diagnostic'])): ?>
-        <?= $form->field($model, 'diagnostic')->textarea() ?>
+        <?= $form->field($model, 'diagnostic',
+                ['labelOptions' => HintHelper::getLabelOptions('diagnostic', $hints)]
+            )->textarea() ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'diagnostic_manufacturer'])): ?>
-        <?= $form->field($model, 'diagnostic_manufacturer')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'diagnostic_manufacturer',
+                ['labelOptions' => HintHelper::getLabelOptions('diagnostic_manufacturer', $hints)]
+            )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_id'])): ?>
-        <?= $form->field($model, 'condition_id')
+        <?= $form->field($model, 'condition_id',
+                ['labelOptions' => HintHelper::getLabelOptions('condition_id', $hints)]
+            )
             ->dropDownList(Condition::conditionsAsMap(),['prompt' => 'Выбор', 'class' => 'form-control bid-condition']); ?>
     <?php endif; ?>
 
@@ -255,23 +281,33 @@ QuaggaAsset::register($this);
     <?= $form->field($model, 'client_name')->textInput(['maxlength' => true]) ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_phone'])): ?>
-        <?= $form->field($model, 'client_phone')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'client_phone',
+                ['labelOptions' => HintHelper::getLabelOptions('client_phone', $hints)]
+            )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_address'])): ?>
-        <?= $form->field($model, 'client_address')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'client_address',
+                ['labelOptions' => HintHelper::getLabelOptions('client_address', $hints)]
+            )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'treatment_type'])): ?>
-        <?= $form->field($model, 'treatment_type')->dropDownList(Bid::TREATMENT_TYPES, ['prompt' => 'Выбор']) ?>
+        <?= $form->field($model, 'treatment_type',
+                ['labelOptions' => HintHelper::getLabelOptions('treatment_type', $hints)]
+            )->dropDownList(Bid::TREATMENT_TYPES, ['prompt' => 'Выбор']) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'saler_name'])): ?>
-        <?= $form->field($model, 'saler_name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'saler_name',
+                ['labelOptions' => HintHelper::getLabelOptions('saler_name', $hints)]
+            )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'purchase_date'])): ?>
-        <?= $form->field($model, 'purchase_date')->widget(DatePicker::class, [
+        <?= $form->field($model, 'purchase_date',
+                ['labelOptions' => HintHelper::getLabelOptions('purchase_date', $hints)]
+            )->widget(DatePicker::class, [
             'language' => 'ru',
             'dateFormat' => 'yyyy-MM-dd',
             'options' => ['class' => 'form-control']
@@ -279,7 +315,9 @@ QuaggaAsset::register($this);
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'application_date'])): ?>
-        <?= $form->field($model, 'application_date')->widget(DatePicker::class, [
+        <?= $form->field($model, 'application_date',
+                ['labelOptions' => HintHelper::getLabelOptions('application_date', $hints)]
+            )->widget(DatePicker::class, [
             'language' => 'ru',
             'dateFormat' => 'yyyy-MM-dd',
             'options' => ['class' => 'form-control']
@@ -287,7 +325,9 @@ QuaggaAsset::register($this);
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'date_manufacturer'])): ?>
-        <?= $form->field($model, 'date_manufacturer')->widget(DatePicker::class, [
+        <?= $form->field($model, 'date_manufacturer',
+                ['labelOptions' => HintHelper::getLabelOptions('date_manufacturer', $hints)]
+            )->widget(DatePicker::class, [
             'language' => 'ru',
             'dateFormat' => 'yyyy-MM-dd',
             'options' => ['class' => 'form-control']
@@ -295,7 +335,9 @@ QuaggaAsset::register($this);
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'date_completion'])): ?>
-        <?= $form->field($model, 'date_completion')->widget(DatePicker::class, [
+        <?= $form->field($model, 'date_completion',
+                ['labelOptions' => HintHelper::getLabelOptions('date_completion', $hints)]
+            )->widget(DatePicker::class, [
             'language' => 'ru',
             'dateFormat' => 'yyyy-MM-dd',
             'options' => ['class' => 'form-control']
@@ -303,45 +345,65 @@ QuaggaAsset::register($this);
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'warranty_number'])): ?>
-        <?= $form->field($model, 'warranty_number')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'warranty_number',
+                ['labelOptions' => HintHelper::getLabelOptions('warranty_number', $hints)]
+            )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_number'])): ?>
-        <?= $form->field($model, 'bid_number')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'bid_number',
+                ['labelOptions' => HintHelper::getLabelOptions('bid_number', $hints)]
+            )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_1C_number'])): ?>
-        <?= $form->field($model, 'bid_1C_number')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'bid_1C_number',
+                ['labelOptions' => HintHelper::getLabelOptions('bid_1C_number', $hints)]
+            )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_manufacturer_number'])): ?>
-        <?= $form->field($model, 'bid_manufacturer_number')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'bid_manufacturer_number',
+                ['labelOptions' => HintHelper::getLabelOptions('bid_manufacturer_number', $hints)]
+            )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'repair_status_id'])): ?>
-        <?= $form->field($model, 'repair_status_id')
+        <?= $form->field($model, 'repair_status_id',
+                ['labelOptions' => HintHelper::getLabelOptions('repair_status_id', $hints)]
+            )
             ->dropDownList(RepairStatus::repairStatusAsMap(),['prompt' => 'Выбор']); ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'repair_recommendations'])): ?>
-        <?= $form->field($model, 'repair_recommendations')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'repair_recommendations',
+                ['labelOptions' => HintHelper::getLabelOptions('repair_recommendations', $hints)]
+            )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'warranty_status_id'])): ?>
-        <?= $form->field($model, 'warranty_status_id')
+        <?= $form->field($model, 'warranty_status_id',
+                ['labelOptions' => HintHelper::getLabelOptions('warranty_status_id', $hints)]
+            )
             ->dropDownList(WarrantyStatus::warrantyStatusAsMap(),['prompt' => 'Выбор']); ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'status_id'])): ?>
-        <?= $form->field($model, 'status_id')
+        <?= $form->field($model, 'status_id',
+                ['labelOptions' => HintHelper::getLabelOptions('status_id', $hints)]
+            )
             ->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']); ?>
     <?php endif; ?>
 
-    <?= $form->field($model, 'master_id')
+    <?= $form->field($model, 'master_id',
+            ['labelOptions' => HintHelper::getLabelOptions('master_id', $hints)]
+        )
         ->dropDownList(Master::mastersAsMap(\Yii::$app->user->identity),['prompt' => 'Выбор']); ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])): ?>
-        <?= $form->field($model, 'comment')->textarea(); ?>
+        <?= $form->field($model, 'comment',
+                ['labelOptions' => HintHelper::getLabelOptions('comment', $hints)]
+            )->textarea(); ?>
     <?php endif; ?>
 
     <?php if ($model->isNewRecord): ?>

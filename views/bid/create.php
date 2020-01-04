@@ -6,6 +6,7 @@ use yii\helpers\Html;
 /* @var $model app\models\Bid */
 /* @var $uploadForm \app\models\form\MultipleUploadForm */
 /* @var $commentForm \app\models\form\CommentForm */
+/* @var $hints array */
 
 $this->title = 'Новая заявка';
 $this->params['back'] = ['index'];
@@ -17,7 +18,8 @@ $this->params['back'] = ['index'];
     <?= $this->render('_form', [
         'model' => $model,
         'uploadForm' => $uploadForm,
-        'commentForm' => $commentForm
+        'commentForm' => $commentForm,
+        'hints' => $hints
     ]) ?>
 
 </div>

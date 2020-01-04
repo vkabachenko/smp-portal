@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 use app\helpers\bid\CompositionHelper;
+use app\models\BidAttribute;
 use app\services\access\QueryRestrictionService;
 use app\helpers\bid\TitleHelper;
 use app\models\Bid;
@@ -67,6 +68,7 @@ class BidController extends Controller
         $model = new Bid();
         $uploadForm = new MultipleUploadForm();
         $commentForm = new CommentForm();
+        $hints = BidAttribute::getHints();
 
         if ($model->load(Yii::$app->request->post())) {
             $uploadForm->files = UploadedFile::getInstances($uploadForm, 'files');
@@ -79,7 +81,8 @@ class BidController extends Controller
         return $this->render('create', [
             'model' => $model,
             'uploadForm' => $uploadForm,
-            'commentForm' => $commentForm
+            'commentForm' => $commentForm,
+            'hints' => $hints
         ]);
     }
 
@@ -88,6 +91,7 @@ class BidController extends Controller
         $this->checkAccess('updateBid', ['bidId' => $id]);
 
         $model = Bid::findOne($id);
+        $hints = BidAttribute::getHints();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->checkBrandCorrespondence();
@@ -99,6 +103,7 @@ class BidController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'hints' => $hints
         ]);
     }
 
