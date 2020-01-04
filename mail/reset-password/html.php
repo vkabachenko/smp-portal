@@ -11,6 +11,6 @@ $url = Url::to(['site/create-password', 'token' => $user->password_reset_token],
 
 <h2>Здравствуйте</h2>
 <p>
-    Для создания нового пароля к вашему аккаунту на сайте SMP-портал перейдите по ссылке <?= Html::a($url, $url) ?>
+    Для создания нового пароля к вашему аккаунту на сайте <a href="https:://garantportal.ru">garantportal.ru</a> перейдите по ссылке <?= Html::a($url, $url) ?>
 </p>
 

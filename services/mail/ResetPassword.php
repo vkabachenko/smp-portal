@@ -31,7 +31,7 @@ class ResetPassword implements SendMail
                 ->setTo(
                     $this->user->email
                 )
-                ->setSubject('Восстановление пароля на сайте SMP-портал')
+                ->setSubject('Восстановление пароля на сайте garantportal.ru')
                 ->send();
         } catch (\Exception $exc) {
             $result = false;

@@ -99,7 +99,7 @@ if (Yii::$app->user->isGuest) {
             <?php endif; ?>
         </div>
         <div class="col-xs-6">
-            <p class="pull-left">&copy; SMP <?= date('Y') ?></p>
+            <p class="pull-left">&copy; <a href="https:://garantportal.ru">garantportal.ru</a> <?= date('Y') ?></p>
         </div>
 
 

@@ -5,13 +5,18 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
-    'name' => 'SMP',
-    'language' => 'ru',
+    'name' => 'garantportal.ru',
+    'language' => 'ru-RU',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+    ],
+    'modules' => [
+        'filepond' => [
+            'class' => \vkabachenko\filepond\Module::class
+        ]
     ],
     'components' => [
         'request' => [
@@ -19,7 +24,7 @@ $config = [
             'cookieValidationKey' => 'test',
         ],
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => yii\caching\ArrayCache::class,
         ],
         'user' => [
             'identityClass' => 'app\models\User',
@@ -30,14 +35,15 @@ $config = [
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            'transport' => [
+            'useFileTransport' => true,
+            /*'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.mail.ru',
                 'username' => 'sale@smt-service.ru',
                 'password' => '10fs9uka0+',
                 'port' => '465',
                 'encryption' => 'ssl',
-            ],
+            ],*/
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
