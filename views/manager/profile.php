@@ -32,14 +32,30 @@ $this->params['back'] = ['manager/index'];
             ->dropDownList(Manufacturer::manufacturersAsMap(),[
                 'prompt' => 'Выбор',
             ]); ?>
-        <?= $form->field($agency, 'phone1')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($agency, 'phone2')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($agency, 'phone3')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($agency, 'phone4')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($agency, 'email1')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($agency, 'email2')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($agency, 'email3')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($agency, 'email4')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($agency, 'phone1',
+            ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'phone 1 title']])
+            ->textInput(['maxlength' => true]) ?>
+        <?= $form->field($agency, 'phone2',
+            ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'phone 2 title']])
+            ->textInput(['maxlength' => true]) ?>
+        <?= $form->field($agency, 'phone3',
+            ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'phone 3 title']])
+            ->textInput(['maxlength' => true]) ?>
+        <?= $form->field($agency, 'phone4',
+            ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'phone 4 title']])
+            ->textInput(['maxlength' => true]) ?>
+        <?= $form->field($agency, 'email1',
+            ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'email 1 title']])
+            ->textInput(['maxlength' => true]) ?>
+        <?= $form->field($agency, 'email2',
+            ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'email 2 title']])
+            ->textInput(['maxlength' => true]) ?>
+        <?= $form->field($agency, 'email3',
+            ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'email 3 title']])
+            ->textInput(['maxlength' => true]) ?>
+        <?= $form->field($agency, 'email4',
+            ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'email 4 title']])
+            ->textInput(['maxlength' => true]) ?>
     <?php endif ?>
 
 

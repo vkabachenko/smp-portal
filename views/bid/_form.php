@@ -166,7 +166,9 @@ QuaggaAsset::register($this);
         <?php endif; ?>
 
         <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'vendor_code'])): ?>
-        <?= $form->field($model, 'vendor_code')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'vendor_code',
+                ['labelOptions' => HintHelper::getLabelOptions('vendor_code', $hints)]
+            )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
 
@@ -238,21 +240,18 @@ QuaggaAsset::register($this);
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_warranty_defect'])): ?>
-        <?= $form->field($model, 'is_warranty_defect',
-                ['labelOptions' => HintHelper::getLabelOptions('is_warranty_defect', $hints)]
-            )->checkbox(); ?>
+        <?= $form->field($model, 'is_warranty_defect')
+            ->checkbox(['labelOptions' => HintHelper::getLabelOptions('is_warranty_defect', $hints)]) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_repair_possible'])): ?>
-        <?= $form->field($model, 'is_repair_possible',
-                ['labelOptions' => HintHelper::getLabelOptions('is_repair_possible', $hints)]
-            )->checkbox(); ?>
+        <?= $form->field($model, 'is_repair_possible')
+            ->checkbox(['labelOptions' => HintHelper::getLabelOptions('is_repair_possible', $hints)]); ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_for_warranty'])): ?>
-        <?= $form->field($model, 'is_for_warranty',
-                ['labelOptions' => HintHelper::getLabelOptions('is_for_warranty', $hints)]
-            )->checkbox(); ?>
+        <?= $form->field($model, 'is_for_warranty')
+            ->checkbox(['labelOptions' => HintHelper::getLabelOptions('is_for_warranty', $hints)]); ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'diagnostic'])): ?>
