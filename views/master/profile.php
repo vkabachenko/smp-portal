@@ -26,8 +26,7 @@ $this->params['back'] = ['master/index'];
     <?= $form->field($master, 'phone')->textInput(['maxlength' => true]) ?>
 
     <?php if (\Yii::$app->user->can('manageWorkshops')): ?>
-        <?= $form->field($workshop, 'name')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($workshop, 'description')->textarea() ?>
+        <?= $this->render('//workshop/partial/_form', ['form' => $form, 'model' => $workshop]) ?>
     <?php endif ?>
 
 

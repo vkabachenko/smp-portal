@@ -13,9 +13,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-
-    <div>
+<!--    <div>
         <div class="col-md-9 col-sm-6 col-xs-12" style="padding-left: 0;">
             <?= $form->field($model, 'token')->textInput(['maxlength' => true, 'id' => 'workshop-token']) ?>
         </div>
@@ -26,8 +24,8 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
     <div class="clearfix"></div>
-
-    <?= $form->field($model, 'description')->textarea() ?>
+-->
+    <?= $this->render('partial/_form', ['form' => $form, 'model' => $model]) ?>
     <div>
         <div class="col-xs-6">
             <?= $form->field($rules, 'paidBid')->checkbox() ?>
