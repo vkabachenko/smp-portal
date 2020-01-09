@@ -200,19 +200,27 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])) {
     <h3><?= Html::encode($this->title) ?></h3>
 
     <div class="row" style="margin-bottom: 10px;">
-        <div class="col-sm-4 col-xs-6">
+        <div class="col-sm-3 col-xs-6">
             <?= Html::a('История', ['bid-history/index', 'bidId' => $model->id], ['class' => 'btn btn-success']) ?>
         </div>
 
         <?php if (\Yii::$app->user->can('updateBid', ['bidId' => $model->id])): ?>
-            <div class="col-sm-4  col-xs-6">
+            <div class="col-sm-3  col-xs-6">
                 <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             </div>
         <?php endif; ?>
 
-        <div class="col-sm-4  col-xs-6 bid-view-send">
-            <?= Html::a('Отправить', ['send-act/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
-        </div>
+        <?php if (\Yii::$app->user->can('updateBidStatus', ['bidId' => $model->id])): ?>
+            <div class="col-sm-3  col-xs-6">
+                <?= Html::a('Статус', ['update-status', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (\Yii::$app->user->can('sendAct', ['bidId' => $model->id])): ?>
+            <div class="col-sm-3  col-xs-6 bid-view-send">
+                <?= Html::a('Отправить', ['send-act/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
+            </div>
+        <?php endif; ?>
     </div>
 
 </div>

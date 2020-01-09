@@ -107,6 +107,24 @@ class BidController extends Controller
         ]);
     }
 
+    public function actionUpdateStatus($id)
+    {
+        $this->checkAccess('updateBidStatus', ['bidId' => $id]);
+
+        $model = Bid::findOne($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            BidHistory::createUpdated($model, \Yii::$app->user->id);
+            $model->flag_export = false;
+            $model->save(false);
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('update-status', [
+            'model' => $model,
+        ]);
+    }
+
     public function actionView($id)
     {
         $this->checkAccess('viewBid', ['bidId' => $id]);

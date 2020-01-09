@@ -4,7 +4,10 @@
 namespace app\models\form;
 
 
+use app\models\Bid;
 use app\models\BidImage;
+use app\models\Manager;
+use app\models\Master;
 use app\models\TemplateModel;
 use app\templates\excel\act\ExcelAct;
 use himiklab\thumbnail\EasyThumbnailImage;
@@ -13,6 +16,7 @@ use yii\web\UploadedFile;
 
 class SendActForm extends Model
 {
+    public $userId;
     public $bidId;
     public $images = [];
     public $email;
@@ -31,6 +35,7 @@ class SendActForm extends Model
             $this->images[$model->id] = EasyThumbnailImage::thumbnailImg($model->getPath(), 50, 50);
         }
         $this->act = new ExcelAct(['id' => $this->bidId]);
+        $this->email = $this->getStoredEmail();
     }
 
     /**
@@ -42,7 +47,6 @@ class SendActForm extends Model
             [['bidId', 'email'], 'required'],
             [['images'], 'safe'],
             [['email'], 'email'],
-
         ];
     }
 
@@ -74,12 +78,33 @@ class SendActForm extends Model
 
         $message->attach($this->act->getPath());
 
-        foreach ($this->images as $imageId) {
-            $model = BidImage::findOne($imageId);
-            $message->attach($model->getPath());
+        if ($this->images) {
+            foreach ($this->images as $imageId) {
+                $model = BidImage::findOne($imageId);
+                $message->attach($model->getPath());
+            }
         }
-
+        
         return $message->send();
+    }
+
+    private function getStoredEmail() {
+        $bid = Bid::findOne($this->bidId);
+        $workshop = $bid->workshop;
+        $agency = $bid->getAgency();
+        /* @var $master Master */
+        $master = Master::findByUserId($this->userId);
+        if ($master) {
+            return $agency ? $agency->email2 : '';
+        } else {
+            /* @var $manager Manager */
+            $manager = Manager::findByUserId($this->userId);
+            if ($manager) {
+                return $workshop->email2;
+            } else {
+                return '';
+            }
+        }
     }
 
     private function setUploadedAct(UploadExcelTemplateForm $uploadForm)

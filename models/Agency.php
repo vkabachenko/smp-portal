@@ -110,6 +110,13 @@ class Agency extends \yii\db\ActiveRecord
             ->viaTable('agency_workshop', ['agency_id' => 'id']);
     }
 
+    public function getWorkshop($workshopId)
+    {
+        return array_filter($this->workshops, function ($item) use ($workshopId) {
+            return $item->id == $workshopId;
+        });
+    }
+
     public function getBidAttributes()
     {
         return is_null($this->bid_attributes) ? [] : $this->bid_attributes;

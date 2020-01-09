@@ -6,6 +6,7 @@ namespace app\rbac\rules;
 
 use app\models\Agency;
 use app\models\Bid;
+use app\models\BidHistory;
 use app\models\Workshop;
 use yii\rbac\Rule;
 
@@ -15,6 +16,14 @@ class ManagerBidRule extends Rule
 
     public function execute($user, $item, $params)
     {
+        $isSent = BidHistory::find()
+            ->where(['bid_id' => $params['bidId'], 'action' => BidHistory::BID_SENT_WORKSHOP])
+            ->exists();
+
+        if (!$isSent) {
+            return false;
+        }
+
         $agency = Agency::find()
             ->with('workshops')
             ->joinWith('managers', false)
@@ -29,7 +38,6 @@ class ManagerBidRule extends Rule
         if (is_null($bid)) {
             return false;
         }
-
 
         $workshops = array_map(function(Workshop $workshop) { return $workshop->id; }, $agency->workshops);
 

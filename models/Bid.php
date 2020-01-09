@@ -474,4 +474,19 @@ class Bid extends \yii\db\ActiveRecord
             return true;
         }
     }
+
+    public function getAgency()
+    {
+        $agencies = Agency::find()->where(['manufacturer_id' => $this->manufacturer_id])->all();
+        $agenciesWorkshop = $this->workshop->agencies;
+
+        $intersect = array_uintersect($agencies, $agenciesWorkshop, function(Agency $v1, Agency $v2) {
+            return $v1->id - $v2->id;
+        });
+        if (empty($intersect)) {
+            return null;
+        } else {
+            return $intersect[0];
+        }
+    }
 }

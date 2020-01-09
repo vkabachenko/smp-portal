@@ -10,6 +10,9 @@ use app\rbac\rules\ManagerManagerRule;
 use app\rbac\rules\MasterMasterRule;
 use app\rbac\rules\MasterWorkshopRule;
 use app\rbac\rules\BidAttributeRule;
+use app\rbac\rules\SendActRule;
+use app\rbac\rules\UpdateBidRule;
+use app\rbac\rules\UpdateBidStatusRule;
 use yii\console\Controller;
 
 class RbacController extends Controller
@@ -48,8 +51,11 @@ class RbacController extends Controller
         $restrictBidRule = new ManageRestrictedBidRule();
         $auth->add($restrictBidRule);
 
+        $updateBidRule = new UpdateBidRule();
+        $auth->add($updateBidRule);
+
         $restrictUpdateBid = $auth->createPermission('restrictUpdateBid');
-        $restrictUpdateBid->ruleName = $restrictBidRule->name;
+        $restrictUpdateBid->ruleName = $updateBidRule->name;
         $auth->add($restrictUpdateBid);
         $auth->addChild($restrictUpdateBid, $updateBid);
 
@@ -122,6 +128,18 @@ class RbacController extends Controller
         $auth->add($manageBidAttribute);
         $auth->addChild($manageBidAttribute, $adminBidAttribute);
 
+        $sendActRule = new SendActRule();
+        $auth->add($sendActRule);
+        $sendAct = $auth->createPermission('sendAct');
+        $sendAct->ruleName = $sendActRule->name;
+        $auth->add($sendAct);
+
+        $updateBidStatusRule = new UpdateBidStatusRule();
+        $auth->add($updateBidStatusRule);
+        $updateBidStatus = $auth->createPermission('updateBidStatus');
+        $updateBidStatus->ruleName = $updateBidStatusRule->name;
+        $auth->add($updateBidStatus);
+
         $client = $auth->createRole('client');
         $auth->add($client);
 
@@ -136,6 +154,8 @@ class RbacController extends Controller
         $auth->addChild($master, $masterUpdateWorkshop);
         $auth->addChild($master, $masterUpdateMaster);
         $auth->addChild($master, $manageBidAttribute);
+        $auth->addChild($master, $sendAct);
+        $auth->addChild($master, $updateBidStatus);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
@@ -148,6 +168,8 @@ class RbacController extends Controller
         $auth->addChild($manager, $managerUpdateAgency);
         $auth->addChild($manager, $managerUpdateManager);
         $auth->addChild($manager, $manageBidAttribute);
+        $auth->addChild($manager, $sendAct);
+        $auth->addChild($manager, $updateBidStatus);
 
         $director = $auth->createRole('director');
         $auth->add($director);

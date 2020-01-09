@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 
+use app\models\BidHistory;
 use app\models\form\SendActForm;
 use app\models\form\UploadExcelTemplateForm;
 use yii\filters\AccessControl;
@@ -33,8 +34,8 @@ class SendActController extends Controller
 
     public function actionIndex($bidId)
     {
-        $this->checkAccess('viewBid', ['bidId' => $bidId]);
-        $model = new SendActForm(['bidId' => $bidId]);
+        $this->checkAccess('sendAct', ['bidId' => $bidId]);
+        $model = new SendActForm(['bidId' => $bidId, 'userId' => \Yii::$app->user->id]);
         $uploadForm = new UploadExcelTemplateForm();
 
         if (!\Yii::$app->request->isPost && !$model->act->isGenerated()) {
@@ -44,6 +45,7 @@ class SendActController extends Controller
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             if ($model->send($uploadForm)) {
                 \Yii::$app->session->setFlash('success', 'Письмо успешно отправлено');
+                BidHistory::sendBid($bidId, \Yii::$app->user->id);
             } else {
                 \Yii::$app->session->setFlash('error', 'Ошибка при отправке письма');
             }
@@ -58,7 +60,7 @@ class SendActController extends Controller
 
     public function actionGenerate($bidId)
     {
-        $this->checkAccess('viewBid', ['bidId' => $bidId]);
+        $this->checkAccess('sendAct', ['bidId' => $bidId]);
         $model = new SendActForm(['bidId' => $bidId]);
 
         if ($model->act->bid->manufacturer->isActTemplate()) {

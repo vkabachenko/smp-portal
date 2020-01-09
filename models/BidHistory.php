@@ -21,6 +21,9 @@ use yii\behaviors\TimestampBehavior;
  */
 class BidHistory extends \yii\db\ActiveRecord
 {
+    const BID_SENT_WORKSHOP = 'Отправка заявки мастерской';
+    const BID_SENT_AGENCY = 'Отправка заявки представительством';
+
     /**
      * {@inheritdoc}
      */
@@ -116,7 +119,7 @@ class BidHistory extends \yii\db\ActiveRecord
                     \Yii::error($model->getErrors());
                 }
             }
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             \Yii::error($e->getMessage());
         }
     }
@@ -127,5 +130,24 @@ class BidHistory extends \yii\db\ActiveRecord
         if (!$model->save()) {
             \Yii::error($attributes);
         }
+    }
+
+    public static function sendBid($bidId, $userId)
+    {
+        $attributes = ['bid_id' => $bidId, 'user_id' => $userId];
+        $master = Master::findByUserId($userId);
+        if ($master) {
+            $attributes['action'] = self::BID_SENT_WORKSHOP;
+        } else {
+            /* @var $manager Manager */
+            $manager = Manager::findByUserId($userId);
+            if ($manager) {
+                $attributes['action'] = self::BID_SENT_AGENCY;
+            } else {
+                return;
+            }
+        }
+
+        self::createRecord($attributes);
     }
 }

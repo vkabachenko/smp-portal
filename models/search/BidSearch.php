@@ -101,7 +101,10 @@ class BidSearch extends Bid
      */
     public function search($params)
     {
-        $query = Bid::find()->where($this->restrictions)->orderBy('created_at DESC');
+        $query = Bid::find()
+            ->joinWith('bidHistories', false)
+            ->where($this->restrictions)
+            ->orderBy('created_at DESC');
 
         // add conditions that should always apply here
 
