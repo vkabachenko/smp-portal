@@ -295,3 +295,7 @@ a.center-menu-item:hover {
     margin-right: 5px;
 }
 
+.not-viewed {
+    font-weight: bold;
+}
+

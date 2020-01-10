@@ -13,14 +13,9 @@ class UpdateBidStatusRule extends Rule
 
     public function execute($user, $item, $params)
     {
-        /* @var $bidHistory BidHistory */
-        $bidHistory = BidHistory::find()
-            ->where(['bid_id' => $params['bidId']])
-            ->andWhere(['or', ['action' => BidHistory::BID_SENT_WORKSHOP], ['action' => BidHistory::BID_SENT_AGENCY]])
-            ->orderBy('created_at DESC')
-            ->one();
+        $sentBidStatus = BidHistory::sentBidStatus($params['bidId']);
 
-        if (!$bidHistory) {
+        if (is_null($sentBidStatus)) {
             return false;
         }
 
@@ -30,8 +25,8 @@ class UpdateBidStatusRule extends Rule
         }
 
         if (
-            ($user->master && $bidHistory->action == BidHistory::BID_SENT_AGENCY) ||
-            ($user->manager && $bidHistory->action == BidHistory::BID_SENT_WORKSHOP)
+            ($user->master && $sentBidStatus == BidHistory::BID_SENT_AGENCY) ||
+            ($user->manager && $sentBidStatus == BidHistory::BID_SENT_WORKSHOP)
         ) {
             return true;
         } else {

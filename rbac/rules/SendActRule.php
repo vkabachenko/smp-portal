@@ -16,12 +16,7 @@ class SendActRule extends Rule
 
     public function execute($user, $item, $params)
     {
-        /* @var $bidHistory BidHistory */
-        $bidHistory = BidHistory::find()
-            ->where(['bid_id' => $params['bidId']])
-            ->andWhere(['or', ['action' => BidHistory::BID_SENT_WORKSHOP], ['action' => BidHistory::BID_SENT_AGENCY]])
-            ->orderBy('created_at DESC')
-            ->one();
+        $sentBidStatus = BidHistory::sentBidStatus($params['bidId']);
 
         /* @var $bid Bid */
         $bid = Bid::findOne($params['bidId']);
@@ -38,7 +33,8 @@ class SendActRule extends Rule
         /* @var $master \app\models\Master */
         $master = $user->master;
         if ($master) {
-            if ($master->workshop_id == $bid->workshop_id && (!$bidHistory || $bidHistory->action == BidHistory::BID_SENT_AGENCY)) {
+            if ($master->workshop_id == $bid->workshop_id
+                && (is_null($sentBidStatus) || $sentBidStatus == BidHistory::BID_SENT_AGENCY)) {
                 return true;
             } else {
                 return false;
@@ -48,8 +44,7 @@ class SendActRule extends Rule
             $manager = $user->manager;
             if ($manager) {
                 if (AgencyWorkshop::getActive($manager->agency, $bid->workshop)
-                    && $bidHistory
-                    && $bidHistory->action == BidHistory::BID_SENT_WORKSHOP) {
+                    && $sentBidStatus == BidHistory::BID_SENT_WORKSHOP) {
                     return true;
                 } else {
                     return false;

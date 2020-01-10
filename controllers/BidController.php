@@ -135,6 +135,8 @@ class BidController extends Controller
             throw new NotFoundHttpException('Page not found');
         }
 
+        BidHistory::setViewStatus($id, \Yii::$app->user->identity);
+
         return $this->render('view', [
             'model' => $model,
         ]);

@@ -10,6 +10,7 @@ use app\models\WarrantyStatus;
 use kartik\date\DatePicker;
 use yii\grid\GridView;
 use yii\bootstrap\Html;
+use app\helpers\bid\RowOptionsHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\BidSearch */
@@ -214,6 +215,9 @@ $columns[] = [
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => $columns,
+            'rowOptions' => function(Bid $bid) {
+                return ['class' => RowOptionsHelper::getClass($bid->id, \Yii::$app->user->identity->role)];
+            }
         ]); ?>
     </div>
 </div>
