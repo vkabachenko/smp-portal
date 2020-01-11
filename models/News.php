@@ -20,7 +20,7 @@ use yii\behaviors\TimestampBehavior;
 class News extends \yii\db\ActiveRecord
 {
     const TARGETS = [
-        'all' => 'Все',
+        'all' => 'Портал',
         'agencies' => 'Представительства',
         'workshops' => 'Мастерские'
     ];
@@ -80,11 +80,21 @@ class News extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getPublishedNews($target)
+    public static function getPublishedNews($target, $limit = null)
     {
-        return self::find()
+        $targetNews = self::find()
             ->published()
-            ->andWhere(['or', ['target' => 'all'], ['target' => $target]])
+            ->andWhere(['target' => $target])
+            ->orderBy('updated_at DESC')
+            ->limit($limit)
             ->all();
+        $allNews = self::find()
+            ->published()
+            ->andWhere(['target' => 'all'])
+            ->orderBy('updated_at DESC')
+            ->limit($limit)
+            ->all();
+
+        return array_merge($targetNews, $allNews);
     }
 }

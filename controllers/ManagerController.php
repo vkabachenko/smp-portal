@@ -33,8 +33,8 @@ class ManagerController extends Controller
 
     public function actionIndex()
     {
-        Url::remember();
-        $news = News::getPublishedNews('agencies');
+        Url::remember('', 'main-page');
+        $news = News::getPublishedNews('agencies', \Yii::$app->params['limitNews']);
         return $this->render('index', compact('news'));
     }
 

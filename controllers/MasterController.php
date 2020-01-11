@@ -33,8 +33,8 @@ class MasterController extends Controller
 
     public function actionIndex()
     {
-        Url::remember();
-        $news = News::getPublishedNews('workshops');
+        Url::remember('', 'main-page');
+        $news = News::getPublishedNews('workshops', \Yii::$app->params['limitNews']);
         return $this->render('index', compact('news'));
     }
 

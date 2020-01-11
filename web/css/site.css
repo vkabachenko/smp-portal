@@ -282,13 +282,33 @@ a.center-menu-item:hover {
     border-color: #1F85DE;
 }
 
-.news-wrap {
-    background-color: #eee;
+.news-article {
+    border: 1px solid #eee;
+    padding: 5px;
+}
+
+.news-article-all {
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    padding: 10px;
+}
+
+.news-wrap a {
+    color: #333;
+    font-weight: 600;
+}
+
+.news-wrap a.btn-feedback {
+    color: #fff;
 }
 
 .news-date {
     font-size: 12px;
     font-style: italic;
+}
+
+.news-all {
+    margin: 10px 0;
 }
 
 .label-hint {

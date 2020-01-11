@@ -13,6 +13,7 @@ use app\rbac\rules\BidAttributeRule;
 use app\rbac\rules\SendActRule;
 use app\rbac\rules\UpdateBidRule;
 use app\rbac\rules\UpdateBidStatusRule;
+use app\rbac\rules\ViewNewsRule;
 use yii\console\Controller;
 
 class RbacController extends Controller
@@ -140,6 +141,12 @@ class RbacController extends Controller
         $updateBidStatus->ruleName = $updateBidStatusRule->name;
         $auth->add($updateBidStatus);
 
+        $viewNewsRule = new ViewNewsRule();
+        $auth->add($viewNewsRule);
+        $viewNews = $auth->createPermission('viewNews');
+        $viewNews->ruleName = $viewNewsRule->name;
+        $auth->add($viewNews);
+
         $client = $auth->createRole('client');
         $auth->add($client);
 
@@ -156,6 +163,7 @@ class RbacController extends Controller
         $auth->addChild($master, $manageBidAttribute);
         $auth->addChild($master, $sendAct);
         $auth->addChild($master, $updateBidStatus);
+        $auth->addChild($master, $viewNews);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
@@ -170,6 +178,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $manageBidAttribute);
         $auth->addChild($manager, $sendAct);
         $auth->addChild($manager, $updateBidStatus);
+        $auth->addChild($manager, $viewNews);
 
         $director = $auth->createRole('director');
         $auth->add($director);
