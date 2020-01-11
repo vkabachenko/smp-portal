@@ -232,7 +232,20 @@ class Bid extends \yii\db\ActiveRecord
      */
     public function attributeLabels()
     {
-        return  array_merge(self::EDITABLE_ATTRIBUTES, self::ALWAYS_VISIBLE_ATTRIBUTES);
+        $keyCache = 'bid-custom-labels';
+        $customLabels = \Yii::$app->cache->get($keyCache);
+
+        if ($customLabels === false) {
+            $customLabels = BidAttribute::find()
+                ->active()
+                ->select(['short_description', 'attribute'])
+                ->andWhere(['>', 'short_description', ''])
+                ->indexBy('attribute')
+                ->column();
+            \Yii::$app->cache->set($keyCache, $customLabels);
+        }
+
+        return  array_merge(self::EDITABLE_ATTRIBUTES, self::ALWAYS_VISIBLE_ATTRIBUTES, $customLabels);
     }
 
     /**
@@ -489,4 +502,5 @@ class Bid extends \yii\db\ActiveRecord
             return $intersect[0];
         }
     }
+
 }

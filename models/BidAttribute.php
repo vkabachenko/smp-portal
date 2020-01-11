@@ -50,7 +50,7 @@ class BidAttribute extends \yii\db\ActiveRecord
         return [
             'attribute' => 'Поле',
             'description' => 'Описание',
-            'short_description' => 'Краткое описание',
+            'short_description' => 'Название для пользователя',
             'is_disabled_agencies' => 'Скрыть для представительств',
             'is_disabled_workshops' => 'Скрыть для мастерских',
         ];

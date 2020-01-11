@@ -12,14 +12,9 @@ class HintHelper
             return [];
         }
 
-        $shortDescription = $hints[$attribute]['short_description'];
         $description = $hints[$attribute]['description'];
 
         $options = [];
-
-        if (!empty($shortDescription)) {
-            $options['title'] = $shortDescription;
-        }
 
         if (!empty($description)) {
             $options['class'] = 'column-hint';
