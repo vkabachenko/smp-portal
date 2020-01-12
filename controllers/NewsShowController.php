@@ -3,15 +3,31 @@
 namespace app\controllers;
 
 use app\models\News;
+use app\services\news\NewsShowService;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
-
+use yii\web\ForbiddenHttpException;
+use yii\web\Response;
 
 class NewsShowController extends Controller
 {
+    /* @var NewsShowService */
+    private $service;
+
     use AccessTrait;
+
+    public function __construct(
+        $id,
+        $module,
+        NewsShowService $service,
+        $config = []
+    ) {
+        $this->service = $service;
+        parent::__construct($id, $module, $config = []);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -33,9 +49,15 @@ class NewsShowController extends Controller
     public function actionArticle($id)
     {
         $this->checkAccess('viewNews', ['newsId' => $id]);
-        $article = News::findOne($id);
 
-        return $this->render('article', compact('article'));
+        $article = News::findOne($id);
+        $this->service->countLikes($id, \Yii::$app->user->id);
+
+        return $this->render('article', [
+            'article' => $article,
+            'countUp' => $this->service->countUp,
+            'countDown' => $this->service->countDown,
+            ]);
     }
 
     public function actionAllNews()
@@ -66,5 +88,20 @@ class NewsShowController extends Controller
         ]);
 
         return $this->render('all-news', compact('dataProvider'));
+    }
+
+    public function actionAddLike($id)
+    {
+        $this->checkAccess('viewNews', ['newsId' => $id]);
+
+        if (!\Yii::$app->request->isPost) {
+            throw new ForbiddenHttpException();
+        }
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $this->service->addOrDeleteStatus($id, \Yii::$app->user->id, \Yii::$app->request->post('status'));
+        $this->service->countLikes($id, \Yii::$app->user->id);
+
+        return ['countUp' => $this->service->countUp, 'countDown' => $this->service->countDown];
     }
 }

@@ -311,6 +311,10 @@ a.center-menu-item:hover {
     margin: 10px 0;
 }
 
+.news-like {
+    cursor: pointer;
+}
+
 .label-hint {
     margin-right: 5px;
 }
