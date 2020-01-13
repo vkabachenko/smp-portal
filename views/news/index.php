@@ -53,7 +53,15 @@ $this->params['back'] = ['admin/index'];
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}{delete}',
+                'template' => '{likes}{update}{delete}',
+                'buttons' => [
+                    'likes' => function ($url, $model, $key) {
+                        return Html::a('', ['likes',
+                            'id' => $model->id,
+                        ],
+                            ['class' => 'glyphicon glyphicon-thumbs-up']);
+                    },
+                ],
             ],
         ],
     ]); ?>

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\NewsLike;
 use Yii;
 use app\models\News;
 use yii\data\ActiveDataProvider;
@@ -90,5 +91,14 @@ class NewsController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionLikes($id)
+    {
+        $model = $this->findModel($id);
+        $usersUp = NewsLike::usersLikes($id, 'like');
+        $usersDown = NewsLike::usersLikes($id, 'dislike');
+
+        return $this->render('likes', compact('model', 'usersUp', 'usersDown'));
     }
 }

@@ -93,6 +93,18 @@ class NewsLike extends \yii\db\ActiveRecord
             ->count();
     }
 
+    public static function usersLikes($newsId, $status)
+    {
+        $userIds = self::find()
+            ->select(['user_id'])
+            ->where(['news_id' => $newsId, 'status' => $status])
+            ->column();
+        return User::find()
+            ->orderBy('name')
+            ->where(['id' => $userIds])
+            ->all();
+    }
+
     public static function isUserLike($newsId, $userId, $status)
     {
         return self::find()
