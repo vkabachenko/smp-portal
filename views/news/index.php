@@ -13,9 +13,15 @@ $this->params['back'] = ['admin/index'];
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Создать новость', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <div class="row form-group">
+        <div class="col-xs-6 col-sm-4">
+            <?= Html::a('Создать новость', ['create'], ['class' => 'btn btn-success']) ?>
+        </div>
+        <div class="col-xs-6 col-sm-4">
+            <?= Html::a('Разделы', ['news-section/index'], ['class' => 'btn btn-primary']) ?>
+        </div>
+    </div>
+    <div class="clearfix"></div>
 
 
     <?= GridView::widget([
