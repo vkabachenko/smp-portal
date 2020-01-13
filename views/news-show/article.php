@@ -4,8 +4,8 @@ use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $article \app\models\News */
-/* @var int $countUp */
-/* @var int $countDown */
+/* @var \app\services\news\NewsShowService $newsShowService */
+
 
 $this->title = $article->title;
 $this->params['back'] = Url::previous();
@@ -26,8 +26,8 @@ $this->params['back'] = Url::previous();
 
     <div>
         <div class="col-xs-3 col-sm-2">
-            <span class="news-like news-like-up">
-                <span class="news-like-count"><?= $countUp ?></span>
+            <span class="news-like news-like-up <?= $newsShowService->isUserUp ? 'news-own-like' : '' ?>">
+                <span class="news-like-count"><?= $newsShowService->countUp ?></span>
                 &nbsp;
                 <i class="glyphicon glyphicon-thumbs-up"></i>
             </span>
@@ -35,9 +35,9 @@ $this->params['back'] = Url::previous();
 
         <div class="col-xs-3 col-sm-2">
             <span class="news-like news-like-down">
-                <i class="glyphicon glyphicon-thumbs-down"></i>
+                <i class="glyphicon glyphicon-thumbs-down <?= $newsShowService->isUserDown ? 'news-own-like' : '' ?>"></i>
                 &nbsp;
-                <span class="news-like-count"><?= $countDown ?></span>
+                <span class="news-like-count"><?= $newsShowService->countDown ?></span>
             </span>
         </div>
     </div>
@@ -47,7 +47,6 @@ $this->params['back'] = Url::previous();
 $script = <<<JS
 $('.news-like').click(function() {
    var self = $(this);
-   self.off('click');
    var status = self.hasClass('news-like-up') ? 'like' : 'dislike';
    var wrap = $(".news-article-wrap");
    
@@ -61,6 +60,18 @@ $('.news-like').click(function() {
    .then(function(result) {
        $('.news-like-up .news-like-count').text(result.countUp);
        $('.news-like-down .news-like-count').text(result.countDown);
+       
+       if (result.isUserUp) {
+           $('.news-like-up').addClass('news-own-like');
+       } else {
+           $('.news-like-up').removeClass('news-own-like');
+       }
+       
+       if (result.isUserDown) {
+           $('.news-like-down').addClass('news-own-like');
+       } else {
+           $('.news-like-down').removeClass('news-own-like');
+       }
    })
    .catch(function(error) {
        swal('Ошибка', error.message, 'error');  

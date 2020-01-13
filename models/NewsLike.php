@@ -28,13 +28,6 @@ class NewsLike extends \yii\db\ActiveRecord
         return 'news_like';
     }
 
-    public static function countLikes($newsId, $userId, $status)
-    {
-        return self::find()
-            ->where(['user_id' => $userId, 'news_id' => $newsId, 'status' => $status])
-            ->count();
-    }
-
     public function behaviors()
     {
         return [
@@ -92,4 +85,19 @@ class NewsLike extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    public static function countLikes($newsId, $status)
+    {
+        return self::find()
+            ->where(['news_id' => $newsId, 'status' => $status])
+            ->count();
+    }
+
+    public static function isUserLike($newsId, $userId, $status)
+    {
+        return self::find()
+            ->where(['user_id' => $userId, 'news_id' => $newsId, 'status' => $status])
+            ->exists();
+    }
+
 }

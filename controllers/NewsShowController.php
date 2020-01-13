@@ -14,17 +14,17 @@ use yii\web\Response;
 class NewsShowController extends Controller
 {
     /* @var NewsShowService */
-    private $service;
+    private $newsShowService;
 
     use AccessTrait;
 
     public function __construct(
         $id,
         $module,
-        NewsShowService $service,
+        NewsShowService $newsShowService,
         $config = []
     ) {
-        $this->service = $service;
+        $this->newsShowService = $newsShowService;
         parent::__construct($id, $module, $config = []);
     }
 
@@ -51,12 +51,11 @@ class NewsShowController extends Controller
         $this->checkAccess('viewNews', ['newsId' => $id]);
 
         $article = News::findOne($id);
-        $this->service->countLikes($id, \Yii::$app->user->id);
+        $this->newsShowService->countLikes($id, \Yii::$app->user->id);
 
         return $this->render('article', [
             'article' => $article,
-            'countUp' => $this->service->countUp,
-            'countDown' => $this->service->countDown,
+            'newsShowService' => $this->newsShowService,
             ]);
     }
 
@@ -99,9 +98,14 @@ class NewsShowController extends Controller
         }
         \Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $this->service->addOrDeleteStatus($id, \Yii::$app->user->id, \Yii::$app->request->post('status'));
-        $this->service->countLikes($id, \Yii::$app->user->id);
+        $this->newsShowService->addOrDeleteStatus($id, \Yii::$app->user->id, \Yii::$app->request->post('status'));
+        $this->newsShowService->countLikes($id, \Yii::$app->user->id);
 
-        return ['countUp' => $this->service->countUp, 'countDown' => $this->service->countDown];
+        return [
+                    'countUp' => $this->newsShowService->countUp,
+                    'countDown' => $this->newsShowService->countDown,
+                    'isUserUp' => $this->newsShowService->isUserUp,
+                    'isUserDown' => $this->newsShowService->isUserDown,
+               ];
     }
 }

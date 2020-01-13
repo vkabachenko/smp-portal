@@ -315,6 +315,10 @@ a.center-menu-item:hover {
     cursor: pointer;
 }
 
+.news-own-like {
+    color: #1F85DE;
+}
+
 .label-hint {
     margin-right: 5px;
 }
