@@ -16,6 +16,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $content
  * @property string $target
  * @property boolean $active
+ * @property int $news_section_id
  */
 class News extends \yii\db\ActiveRecord
 {
@@ -62,6 +63,9 @@ class News extends \yii\db\ActiveRecord
             [['content'], 'string'],
             [['title', 'target'], 'string', 'max' => 255],
             [['active'], 'boolean'],
+            [['news_section_id'], 'integer'],
+            [['news_section_id'], 'exist', 'skipOnError' => true, 'targetClass' => NewsSection::className(), 'targetAttribute' => ['news_section_id' => 'id']],
+
         ];
     }
 
@@ -77,7 +81,22 @@ class News extends \yii\db\ActiveRecord
             'content' => 'Содержание',
             'active' => 'Опубликована',
             'target' => 'Публиковать для',
+            'news_section_id' => 'Раздел'
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNewsSection()
+    {
+        return $this->hasOne(NewsSection::className(), ['id' => 'news_section_id']);
+    }
+
+    public function getNewsInfo()
+    {
+        $section = $this->news_section_id ? $this->newsSection->name : '';
+        return News::TARGETS[$this->target] . ' ' . $section . ' ' . $this->updated_at;
     }
 
     public static function getPublishedNews($target, $limit = null)

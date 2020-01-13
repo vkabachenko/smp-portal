@@ -21,7 +21,7 @@ $this->params['back'] = Url::previous();
     </div>
 
     <p class="news-date">
-        <?= News::TARGETS[$article->target] . ' ' . $article->updated_at ?>
+        <?= $article->getNewsInfo() ?>
     </p>
 
     <div>

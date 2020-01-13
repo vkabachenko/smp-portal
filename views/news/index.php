@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\models\News;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -31,17 +32,21 @@ $this->params['back'] = ['admin/index'];
             'title',
             [
                 'attribute' => 'target',
-                'value' => function ($model) {
-                    /* @var $model app\models\News */
+                'value' => function (News $model) {
                     $html = \app\models\News::TARGETS[$model->target];
                     return $html;
                 }
             ],
             [
+                'attribute' => 'news_section_id',
+                'value' => function (News $model) {
+                    return $model->news_section_id ? $model->newsSection->name : null;
+                }
+            ],
+            [
                 'attribute' => 'active',
                 'format' => 'raw',
-                'value' => function ($model) {
-                    /* @var $model app\models\News */
+                'value' => function (News $model) {
                     $html = $model->active ? Html::tag('span', '', ['class' => 'glyphicon glyphicon-ok']) : '';
                     return $html;
                 }

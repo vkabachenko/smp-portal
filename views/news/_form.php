@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use vova07\imperavi\Widget;
 use app\models\News;
+use app\models\NewsSection;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\News */
@@ -24,6 +25,9 @@ use app\models\News;
     ]) ?>
 
     <?= $form->field($model, 'target')->dropDownList(News::TARGETS) ?>
+    <?= $form->field($model, 'news_section_id')->dropDownList(NewsSection::newsSectionAsMap(),
+        ['prompt' => 'Выбор'])
+    ?>
 
     <?php if (!$model->isNewRecord): ?>
         <?= $form->field($model, 'active')->checkbox() ?>

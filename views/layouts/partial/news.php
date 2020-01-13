@@ -15,7 +15,7 @@ use app\models\News;
                 <?= Html::a($article->title, ['news-show/article', 'id' => $article->id]) ?>
             </p>
             <p class="news-date">
-                <?= News::TARGETS[$article->target] . ' ' . $article->updated_at ?>
+                <?= $article->getNewsInfo() ?>
             </p>
         </div>
     <?php endforeach; ?>

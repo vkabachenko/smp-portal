@@ -10,6 +10,6 @@ use app\models\News;
         <?= Html::a($model->title, ['news-show/article', 'id' => $model->id]) ?>
     </p>
     <p class="news-date">
-        <?= News::TARGETS[$model->target] . ' ' . $model->updated_at ?>
+        <?= $model->getNewsInfo() ?>
     </p>
 </div>

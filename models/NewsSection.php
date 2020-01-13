@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "news_section".
@@ -40,5 +41,16 @@ class NewsSection extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Название раздела',
         ];
+    }
+
+    /**
+     * return array
+     */
+    public static function newsSectionAsMap()
+    {
+        $models = self::find()->orderBy('name')->all();
+        $list = ArrayHelper::map($models, 'id', 'name');
+
+        return $list;
     }
 }
