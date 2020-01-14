@@ -14,27 +14,27 @@ use app\models\Manufacturer;
         'disabled' => !$model->isNewRecord
     ]); ?>
 <?= $form->field($model, 'phone1',
-    ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'phone 1 title']])
+    ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['phone1']]])
     ->textInput(['maxlength' => true]) ?>
 <?= $form->field($model, 'phone2',
-    ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'phone 2 title']])
+    ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['phone2']]])
     ->textInput(['maxlength' => true]) ?>
 <?= $form->field($model, 'phone3',
-    ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'phone 3 title']])
+    ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['phone3']]])
     ->textInput(['maxlength' => true]) ?>
 <?= $form->field($model, 'phone4',
-    ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'phone 4 title']])
+    ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['phone4']]])
     ->textInput(['maxlength' => true]) ?>
 <?= $form->field($model, 'email1',
-    ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'email 1 title']])
+    ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['email1']]])
     ->textInput(['maxlength' => true]) ?>
 <?= $form->field($model, 'email2',
-    ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'email 2 title']])
+    ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['email2']]])
     ->textInput(['maxlength' => true]) ?>
 <?= $form->field($model, 'email3',
-    ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'email 3 title']])
+    ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['email3']]])
     ->textInput(['maxlength' => true]) ?>
 <?= $form->field($model, 'email4',
-    ['labelOptions' => ['class' => 'column-hint', 'data-title' => 'email 4 title']])
+    ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['email4']]])
     ->textInput(['maxlength' => true]) ?>
 

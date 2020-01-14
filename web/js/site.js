@@ -3,11 +3,13 @@ $(function() {
 
         $('.column-hint').each(function () {
             var label = $(this);
-            var hint = $('<span>')
-                .addClass('glyphicon glyphicon-question-sign label-hint')
-                .attr('title', label.data('title'))
-                .attr('data-toggle', 'tooltip');
-            label.prepend(hint);
+            if (label.data('title')) {
+                var hint = $('<span>')
+                    .addClass('glyphicon glyphicon-question-sign label-hint')
+                    .attr('title', label.data('title'))
+                    .attr('data-toggle', 'tooltip');
+                label.prepend(hint);
+            }
         });
 
         $('[data-toggle="tooltip"]').tooltip();
