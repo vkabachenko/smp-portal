@@ -5,7 +5,6 @@ use app\models\Bid;
 use app\models\Manufacturer;
 use app\models\Master;
 use app\models\RepairStatus;
-use app\models\User;
 use app\models\WarrantyStatus;
 use kartik\date\DatePicker;
 use yii\grid\GridView;
@@ -58,20 +57,21 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_number'])) {
     ];
 }
 
-if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_1C_number'])) {
-    $columns[] =  [
-        'attribute' => 'bid_1C_number',
-        'format' => 'raw',
-        'value' => function ($model) {
-            /* @var $model app\models\Bid */
-            $html = Html::tag('div', $model->bid_1C_number);
-            return $html;
-        },
-        'filterOptions' => ['class' => 'grid-bid-1C-number'],
-        'headerOptions' => ['class' => 'grid-bid-1C-number'],
-        'contentOptions' => ['class' => 'grid-bid-1C-number']
-    ];
-}
+$columns[] = [
+    'attribute' => 'status_id',
+    'format' => 'raw',
+    'value' => function ($model) {
+        /* @var $model app\models\Bid */
+        $html = $model->status_id
+            ? Html::tag('div', $model->status->name)
+            : null;
+        return $html;
+    },
+    'filterOptions' => ['class' => 'grid-status'],
+    'headerOptions' => ['class' => 'grid-status'],
+    'contentOptions' => ['class' => 'grid-status'],
+    'filter' => \app\models\BidStatus::bidStatusAsMap()
+];
 
 $columns[] =  [
     'attribute' => 'equipment',

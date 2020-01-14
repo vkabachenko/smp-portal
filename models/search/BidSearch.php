@@ -102,7 +102,12 @@ class BidSearch extends Bid
     public function search($params)
     {
         $query = Bid::find()
+            ->distinct()
             ->joinWith('bidHistories', false)
+            ->with([
+                'condition', 'brand', 'brandCorrespondence', 'brandModel', 'client', 'manufacturer', 'repairStatus',
+                'status', 'master', 'workshop', 'warrantyStatus'
+                ])
             ->where($this->restrictions)
             ->orderBy('created_at DESC');
 
