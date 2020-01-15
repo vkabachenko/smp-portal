@@ -14,6 +14,7 @@ use Yii;
  * @property string $short_description
  * @property int $is_disabled_agencies
  * @property int $is_disabled_workshops
+ * @property int $is_html_description
  */
 class BidAttribute extends \yii\db\ActiveRecord
 {
@@ -37,7 +38,7 @@ class BidAttribute extends \yii\db\ActiveRecord
     {
         return [
             [['description'], 'string'],
-            [['is_disabled_agencies', 'is_disabled_workshops'], 'integer'],
+            [['is_disabled_agencies', 'is_disabled_workshops', 'is_html_description'], 'integer'],
             [['attribute', 'short_description'], 'string', 'max' => 255],
         ];
     }
@@ -53,6 +54,7 @@ class BidAttribute extends \yii\db\ActiveRecord
             'short_description' => 'Название для пользователя',
             'is_disabled_agencies' => 'Скрыть для представительств',
             'is_disabled_workshops' => 'Скрыть для мастерских',
+            'is_html_description' => 'Добавить картинку'
         ];
     }
 
@@ -76,7 +78,7 @@ class BidAttribute extends \yii\db\ActiveRecord
     public static function getHints()
     {
         $models = self::find()
-            ->select(['attribute', 'short_description', 'description'])
+            ->select(['attribute', 'is_html_description', 'description'])
             ->indexBy('attribute')
             ->asArray()
             ->all();

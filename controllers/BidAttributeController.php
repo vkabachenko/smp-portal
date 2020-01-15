@@ -2,10 +2,12 @@
 
 namespace app\controllers;
 
+use vova07\imperavi\actions\UploadFileAction;
 use Yii;
 use app\models\BidAttribute;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -38,6 +40,17 @@ class BidAttributeController extends Controller
 
     }
 
+    public function actions()
+    {
+        return [
+            'image-upload' => [
+                'class' => UploadFileAction::class,
+                'url' => Url::to('@web/uploads/hints/'),
+                'path' => '@webroot/uploads/hints',
+            ],
+        ];
+    }
+
 
     public function actionIndex()
     {
@@ -55,9 +68,14 @@ class BidAttributeController extends Controller
     {
         $model = new BidAttribute();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())
+            && !\Yii::$app->request->post('is_html_description_revert')
+            && $model->save()
+        ) {
             return $this->redirect(['index']);
         }
+
+        $model->description = null;
 
         return $this->render('create', [
             'model' => $model,
@@ -69,8 +87,15 @@ class BidAttributeController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())
+            && !\Yii::$app->request->post('is_html_description_revert')
+            && $model->save()
+        ) {
             return $this->redirect(['index']);
+        }
+
+        if (\Yii::$app->request->post('is_html_description_revert')) {
+            $model->description = null;
         }
 
         return $this->render('update', [

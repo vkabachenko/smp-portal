@@ -7,12 +7,13 @@ $(function() {
                 var hint = $('<span>')
                     .addClass('glyphicon glyphicon-question-sign label-hint')
                     .attr('title', label.data('title'))
+                    .attr('data-html', label.data('html'))
                     .attr('data-toggle', 'tooltip');
                 label.prepend(hint);
             }
         });
 
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip({placement: top});
     });
 
 
