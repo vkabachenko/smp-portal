@@ -46,7 +46,8 @@ class SendActForm extends Model
         return [
             [['bidId', 'email'], 'required'],
             [['images'], 'safe'],
-            [['email'], 'email'],
+            [['email'], 'string'],
+            [['email'], 'filter', 'filter' => 'trim'],
         ];
     }
 
@@ -65,13 +66,14 @@ class SendActForm extends Model
     public function send(UploadExcelTemplateForm $uploadForm)
     {
         $this->setUploadedAct($uploadForm);
+        $to = preg_split("/,[\s]*/", $this->email);
 
         /* @var $mailer \yii\swiftmailer\Mailer */
         $mailer = \Yii::$app->mailer;
         $message = $mailer->compose();
 
         $message->setFrom(\Yii::$app->params['adminEmail'])
-            ->setTo($this->email)
+            ->setTo($to)
             ->setSubject('Акт')
             ->setTextBody($this->getMailContent());
 
@@ -95,12 +97,12 @@ class SendActForm extends Model
         /* @var $master Master */
         $master = Master::findByUserId($this->userId);
         if ($master) {
-            return $agency ? $agency->email2 : '';
+            return $agency ? $this->getEmailsList($agency->email2, $agency->email4) : '';
         } else {
             /* @var $manager Manager */
             $manager = Manager::findByUserId($this->userId);
             if ($manager) {
-                return $workshop->email2;
+                return $this->getEmailsList($workshop->email2, $workshop->email4);
             } else {
                 return '';
             }
@@ -127,4 +129,12 @@ class SendActForm extends Model
             return $content . "\n" . "\n" . '-----------------' . "\n" . $signature . "\n";
         }
     }
+
+    private function getEmailsList(...$emails) {
+        $emails = array_filter(array_unique($emails), function($email) {
+            return !empty($email);
+        });
+        return implode(', ', $emails);
+    }
+
 }
