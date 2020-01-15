@@ -3,10 +3,12 @@
 namespace app\controllers;
 
 use app\models\NewsLike;
+use vova07\imperavi\actions\UploadFileAction;
 use Yii;
 use app\models\News;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -36,6 +38,17 @@ class NewsController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
+            ],
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'image-upload' => [
+                'class' => UploadFileAction::class,
+                'url' => Url::to('@web/uploads/news/'),
+                'path' => '@webroot/uploads/news',
             ],
         ];
     }

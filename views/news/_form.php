@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use vova07\imperavi\Widget;
 use app\models\News;
 use app\models\NewsSection;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\News */
@@ -21,6 +22,10 @@ use app\models\NewsSection;
         'settings' => [
             'lang' => 'ru',
             'minHeight' => 200,
+            'imageUpload' => Url::to(['image-upload']),
+            'plugins' => [
+                'imagemanager',
+            ],
         ],
     ]) ?>
 
