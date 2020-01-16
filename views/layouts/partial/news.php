@@ -24,15 +24,5 @@ use app\models\News;
     </p>
 </div>
 
-<div>
-    <?= Html::a('Написать разработчику', '#', ['class' => 'btn btn-danger btn-feedback']) ?>
-</div>
 
-<?php
-    $script = <<<JS
-    $('.btn-feedback').click(function() {
-        $('[data-target="#feedback-modal"]').trigger('click');  
-    });
-JS;
-    $this->registerJs($script);
 

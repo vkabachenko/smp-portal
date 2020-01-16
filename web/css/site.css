@@ -253,6 +253,11 @@ a.center-menu-item:hover {
     border-color: #a5d0ae;
 }
 
+a.btn-feedback {
+    background-color: #eb5a46;
+    border-color: #eb5a46;
+}
+
 .bid-attributes-title {
     margin: 20px 0;
     font-weight: bold;

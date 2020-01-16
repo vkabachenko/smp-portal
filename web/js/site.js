@@ -31,6 +31,10 @@ $(function() {
         }
     });
 
+    $('.btn-feedback').click(function() {
+        $('[data-target="#feedback-modal"]').trigger('click');
+    });
+
     $('#feedback-form').submit(function(evt) {
         evt.preventDefault();
         var form = $(this);

@@ -26,6 +26,7 @@ $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);
             <?= Html::a('Менеджеры', ['agency-manager/managers'], ['class' => 'list-group-item center-menu-item']) ?>
 
         <?php endif; ?>
+        <?= Html::a('Написать разработчику', '#', ['class' => 'list-group-item center-menu-item btn-feedback']) ?>
     </div>
 </div>
 
