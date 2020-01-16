@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Таблица соответствия брендов';
-$this->params['back'] = ['admin/index'];
+$this->params['back'] = ['admin/catalogs'];
 ?>
 <div class="brand-correspondence-index">
 

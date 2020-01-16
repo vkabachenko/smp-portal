@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Состояния';
-$this->params['back'] = ['admin/index'];
+$this->params['back'] = ['admin/catalogs'];
 ?>
 <div>
 

@@ -8,7 +8,7 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Производители';
-$this->params['back'] = ['admin/index'];
+$this->params['back'] = ['admin/catalogs'];
 
 $columns = [
     [

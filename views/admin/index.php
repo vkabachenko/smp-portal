@@ -6,7 +6,7 @@ use yii\bootstrap\Html;
 $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);;
 
 ?>
-<h2 style="text-align: center;"> <?= $this->title ?> </h2>
+<h1 style="text-align: center;"> <?= $this->title ?> </h1>
 
 <div class="center-menu-container">
 
@@ -16,13 +16,7 @@ $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);;
         <?= Html::a('Мастерские', ['workshop/index'], ['class' => 'list-group-item center-menu-item']) ?>
         <?= Html::a('Представительства', ['agency/index'], ['class' => 'list-group-item center-menu-item']) ?>
         <?= Html::a('Новости', ['news/index'], ['class' => 'list-group-item center-menu-item']) ?>
-        <?= Html::a('Производители', ['manufacturer/index'], ['class' => 'list-group-item center-menu-item']) ?>
-        <?= Html::a('Соответствие брендов', ['brand-correspondence/index'], ['class' => 'list-group-item center-menu-item']) ?>
-        <?= Html::a('Комплектность', ['composition/index'], ['class' => 'list-group-item center-menu-item']) ?>
-        <?= Html::a('Состояния', ['condition/index'], ['class' => 'list-group-item center-menu-item']) ?>
-        <?= Html::a('Статусы ремонта', ['repair-status/index'], ['class' => 'list-group-item center-menu-item']) ?>
-        <?= Html::a('Статусы гарантии', ['warranty-status/index'], ['class' => 'list-group-item center-menu-item']) ?>
-        <?= Html::a('Статусы заявки', ['bid-status/index'], ['class' => 'list-group-item center-menu-item']) ?>
+        <?= Html::a('Справочники', ['admin/catalogs'], ['class' => 'list-group-item center-menu-item']) ?>
 
     </div>
 </div>

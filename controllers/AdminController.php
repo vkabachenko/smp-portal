@@ -26,11 +26,15 @@ class AdminController extends Controller
             ],
         ];
     }
-
-
+    
     public function actionIndex()
     {
         Url::remember();
         return $this->render('index');
+    }
+
+    public function actionCatalogs()
+    {
+        return $this->render('catalogs');
     }
 }
