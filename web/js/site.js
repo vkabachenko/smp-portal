@@ -53,4 +53,37 @@ $(function() {
             swal('Ошибка', error.message, 'error');
         })
     });
+
+    $('.news-like').click(function() {
+        var self = $(this);
+        var status = self.hasClass('news-like-up') ? 'like' : 'dislike';
+        var wrap = self.closest('.news-article-wrap');
+
+        $.ajax({
+            url: self.data("url"),
+            method: "POST",
+            data: {
+                status: status
+            }
+        })
+            .then(function(result) {
+                wrap.find('.news-like-up .news-like-count').text(result.countUp);
+                wrap.find('.news-like-down .news-like-count').text(result.countDown);
+
+                if (result.isUserUp) {
+                    wrap.find('.news-like-up').addClass('news-own-like');
+                } else {
+                    wrap.find('.news-like-up').removeClass('news-own-like');
+                }
+
+                if (result.isUserDown) {
+                    wrap.find('.news-like-down').addClass('news-own-like');
+                } else {
+                    wrap.find('.news-like-down').removeClass('news-own-like');
+                }
+            })
+            .catch(function(error) {
+                swal('Ошибка', error.message, 'error');
+            });
+    });
 });

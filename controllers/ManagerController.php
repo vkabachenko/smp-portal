@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\Manager;
 use app\models\News;
 use app\models\User;
+use app\services\news\NewsShowService;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -35,7 +36,8 @@ class ManagerController extends Controller
     {
         Url::remember('', 'main-page');
         $news = News::getPublishedNews('agencies', \Yii::$app->params['limitNews']);
-        return $this->render('index', compact('news'));
+        $newsShowServices = NewsShowService::getAll($news, \Yii::$app->user->identity);
+        return $this->render('index', compact('news', 'newsShowServices'));
     }
 
     public function actionProfile()

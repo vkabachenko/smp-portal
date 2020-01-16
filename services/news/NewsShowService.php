@@ -4,7 +4,9 @@
 namespace app\services\news;
 
 
+use app\models\News;
 use app\models\NewsLike;
+use app\models\User;
 
 class NewsShowService
 {
@@ -31,6 +33,23 @@ class NewsShowService
             $model = new NewsLike(['user_id' => $userId, 'news_id' => $newsId, 'status' => $status]);
             $model->save();
         }
+    }
+
+    /**
+     * @param $news News[]
+     * @param $user User
+     * @return NewsShowService[]
+     */
+    public static function getAll($news, $user)
+    {
+        $services = [];
+        foreach ($news as $article) {
+            $service = new self();
+            $service->countLikes($article->id, $user->id);
+            $services[$article->id] = $service;
+        }
+
+        return $services;
     }
 
 }

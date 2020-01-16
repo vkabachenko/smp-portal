@@ -1,9 +1,9 @@
 <?php
 
 use yii\bootstrap\Html;
-use app\models\News;
 
 /* @var $news \app\models\News[] */
+/* @var $newsShowServices \app\services\news\NewsShowService[] */
 
 ?>
 
@@ -17,6 +17,10 @@ use app\models\News;
             <p class="news-date">
                 <?= $article->getNewsInfo() ?>
             </p>
+            <?= $this->render('//news-show/_like',
+                ['article' => $article, 'newsShowService' => $newsShowServices[$article->id]])
+            ?>
+            <div class="clearfix"></div>
         </div>
     <?php endforeach; ?>
     <p class="news-all">

@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 use app\models\News;
+use app\services\news\NewsShowService;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -35,7 +36,8 @@ class MasterController extends Controller
     {
         Url::remember('', 'main-page');
         $news = News::getPublishedNews('workshops', \Yii::$app->params['limitNews']);
-        return $this->render('index', compact('news'));
+        $newsShowServices = NewsShowService::getAll($news, \Yii::$app->user->identity);
+        return $this->render('index', compact('news', 'newsShowServices'));
     }
 
     public function actionProfile()
