@@ -8,6 +8,30 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+<?php if (!$model->isNewRecord): ?>
+
+    <div class="form-group">
+
+        <div class="col-xs-6 col-sm-3">
+            <?= Html::a('Справочник работ',
+                ['jobs-catalog/index', 'agencyId' => $model->id],
+                ['class' => 'btn btn-success'])
+            ?>
+        </div>
+
+        <div class="col-xs-6 col-sm-3">
+                <?= Html::a('Поля заявки',
+                    ['agency/bid-attributes', 'agencyId' => $model->id],
+                    ['class' => 'btn btn-primary'])
+                ?>
+        </div>
+
+    </div>
+
+    <div class="clearfix form-group"></div>
+
+<?php endif; ?>
+
 <div class="agency-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -15,17 +39,7 @@ use yii\widgets\ActiveForm;
     <?= $this->render('partial/_form', compact('form','model')) ?>
 
     <div>
-        <div class="form-group col-xs-6">
-            <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
-        </div>
-        <div class="form-group col-xs-6">
-            <?php if (!$model->isNewRecord): ?>
-                <?= Html::a('Поля заявки',
-                    ['agency/bid-attributes', 'agencyId' => $model->id],
-                    ['class' => 'btn btn-primary'])
-                ?>
-            <?php endif; ?>
-        </div>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
 
 

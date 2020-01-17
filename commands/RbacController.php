@@ -147,6 +147,9 @@ class RbacController extends Controller
         $viewNews->ruleName = $viewNewsRule->name;
         $auth->add($viewNews);
 
+        $manageJobsCatalog = $auth->createPermission('manageJobsCatalog');
+        $auth->add($manageJobsCatalog);
+
         $client = $auth->createRole('client');
         $auth->add($client);
 
@@ -197,7 +200,7 @@ class RbacController extends Controller
         $auth->addChild($admin, $manageMasters);
         $auth->addChild($admin, $manageManagers);
         $auth->addChild($admin, $adminBidAttribute);
-
+        $auth->addChild($admin, $manageJobsCatalog);
 
         echo 'done' . "\n";
     }

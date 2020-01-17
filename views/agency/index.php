@@ -23,7 +23,10 @@ $this->params['back'] = ['admin/index'];
         'dataProvider' => $dataProvider,
         'columns' => [
             'name',
-            'manufacturer.name',
+            [
+                'header' => 'Производитель',
+                'value' => 'manufacturer.name'
+            ],
             [
                 'header' => 'Менеджеры',
                 'format' => 'raw',

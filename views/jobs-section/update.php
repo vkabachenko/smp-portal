@@ -3,10 +3,10 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Agency */
+/* @var $model app\models\JobsSection */
 
-$this->title = 'Редактировать представительство: ' . $model->name;
-$this->params['back'] = ['index'];
+$this->title = 'Редактирование раздела работ';
+$this->params['back'] = ['index', 'agencyId' => $model->agency_id];
 ?>
 <div>
 
