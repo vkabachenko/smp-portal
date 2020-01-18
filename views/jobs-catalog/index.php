@@ -11,7 +11,9 @@ use app\models\JobsCatalog;
 /* @var $agency \app\models\Agency */
 
 $this->title = 'Справочник видов работ представительства ' . $agency->name;
-$this->params['back'] = ['agency/update', 'id' => $agency->id];
+$this->params['back'] = \Yii::$app->user->can('admin')
+    ? ['agency/update', 'id' => $agency->id]
+    : ['manager/index'];
 ?>
 
 <div>
@@ -42,6 +44,7 @@ $this->params['back'] = ['agency/update', 'id' => $agency->id];
                     },
                 ],
                 'vendor_code',
+                'name',
                 'hour_tariff',
                 'hours_required',
                 'price',

@@ -13,7 +13,7 @@ use yii\widgets\ActiveForm;
     <div class="form-group">
 
         <div class="col-xs-6 col-sm-3">
-            <?= Html::a('Справочник работ',
+            <?= Html::a('Виды работ',
                 ['jobs-catalog/index', 'agencyId' => $model->id],
                 ['class' => 'btn btn-success'])
             ?>

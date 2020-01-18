@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "jobs_section".
@@ -63,5 +64,16 @@ class JobsSection extends \yii\db\ActiveRecord
     public function getAgency()
     {
         return $this->hasOne(Agency::className(), ['id' => 'agency_id']);
+    }
+
+    /**
+     * return array
+     */
+    public static function jobsSectionAsMap($agencyId)
+    {
+        $models = self::find()->where(['agency_id' => $agencyId])->orderBy('name')->all();
+        $list = ArrayHelper::map($models, 'id', 'name');
+
+        return $list;
     }
 }

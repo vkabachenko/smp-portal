@@ -3,6 +3,7 @@
 
 namespace app\commands;
 
+use app\rbac\rules\JobsCatalogRule;
 use app\rbac\rules\ManageRestrictedBidRule;
 use app\rbac\rules\ManagerBidRule;
 use app\rbac\rules\ManagerAgencyRule;
@@ -150,6 +151,13 @@ class RbacController extends Controller
         $manageJobsCatalog = $auth->createPermission('manageJobsCatalog');
         $auth->add($manageJobsCatalog);
 
+        $jobsCatalogRule = new JobsCatalogRule();
+        $auth->add($jobsCatalogRule);
+        $updateJobsCatalog = $auth->createPermission('updateJobsCatalog');
+        $updateJobsCatalog->ruleName = $jobsCatalogRule->name;
+        $auth->add($updateJobsCatalog);
+        $auth->addChild($updateJobsCatalog, $manageJobsCatalog);
+
         $client = $auth->createRole('client');
         $auth->add($client);
 
@@ -182,6 +190,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $sendAct);
         $auth->addChild($manager, $updateBidStatus);
         $auth->addChild($manager, $viewNews);
+        $auth->addChild($manager, $updateJobsCatalog);
 
         $director = $auth->createRole('director');
         $auth->add($director);
