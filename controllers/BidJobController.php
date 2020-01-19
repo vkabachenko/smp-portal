@@ -2,15 +2,19 @@
 
 namespace app\controllers;
 
-use app\models\Agency;
-use app\models\JobsCatalog;
+use app\models\Bid;
+use Yii;
+use app\models\BidJob;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
-class JobsCatalogController  extends Controller
+/**
+ * BidJobController implements the CRUD actions for BidJob model.
+ */
+class BidJobController extends Controller
 {
     use AccessTrait;
 
@@ -38,53 +42,54 @@ class JobsCatalogController  extends Controller
         ];
     }
 
-    public function actionIndex($agencyId)
+    public function actionIndex($bidId)
     {
-        $this->checkAccess('manageJobsCatalog', compact('agencyId'));
-        $agency = Agency::findOne($agencyId);
-        //$dateActual = $dateActual ?: date('Y-m-d', time());
-        $query = JobsCatalog::find()
-            -> where(['agency_id' => $agencyId])
-            -> orderBy('date_actual');
-        $dataProvider = new ActiveDataProvider(['query' => $query]);
+        $this->checkAccess('manageJobs', compact('bidId'));
+        $dataProvider = new ActiveDataProvider([
+            'query' => BidJob::find()->where(['bid_id' => $bidId])->orderBy('updated_at'),
+        ]);
 
         return $this->render('index', [
-            'agency' => $agency,
             'dataProvider' => $dataProvider,
+            'bidId' => $bidId
         ]);
     }
 
-    public function actionCreate($agencyId)
+    public function actionCreate($bidId)
     {
-        $this->checkAccess('manageJobsCatalog', compact('agencyId'));
-        $model = new JobsCatalog(['agency_id' => $agencyId]);
+        $this->checkAccess('manageJobs', compact('bidId'));
+        $bid = Bid::findOne($bidId);
+        $model = new BidJob(['bid_id' => $bidId]);
 
-        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index', 'agencyId' => $agencyId]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index', 'bidId' => $bidId]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'bid' => $bid
         ]);
     }
 
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $this->checkAccess('manageJobsCatalog', ['agencyId' => $model->agency_id]);
+        $this->checkAccess('manageJobs', ['bidId' => $model->bid_id]);
+        $bid = Bid::findOne($model->bid_id);
 
-        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index', 'agencyId' => $model->agency_id]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['index', 'bidId' => $model->bid_id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'bid' => $bid
         ]);
     }
 
     protected function findModel($id)
     {
-        if (($model = JobsCatalog::findOne($id)) !== null) {
+        if (($model = BidJob::findOne($id)) !== null) {
             return $model;
         }
 
@@ -94,11 +99,10 @@ class JobsCatalogController  extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $agencyId = $model->agency_id;
-        $this->checkAccess('manageJobsCatalog', ['agencyId' => $agencyId]);
+        $bidId = $model->bid_id;
+        $this->checkAccess('manageJobs', ['bidId' => $model->bid_id]);
         $model->delete();
 
-        return $this->redirect(['index', 'agencyId' => $agencyId]);
+        return $this->redirect(['index', 'bidId' => $bidId]);
     }
-
 }

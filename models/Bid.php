@@ -58,6 +58,7 @@ use yii\behaviors\TimestampBehavior;
  * @property bool $is_repair_possible
  * @property bool $is_for_warranty
  * @property int $workshop_id
+ * @property int $agency_id
  *
  * @property Condition $condition
  * @property Brand $brand
@@ -170,7 +171,8 @@ class Bid extends \yii\db\ActiveRecord
                 'warranty_status_id',
                 'status_id',
                 'user_id',
-                'master_id'
+                'master_id',
+                'agency_id'
             ], 'integer'],
             [[
                 'composition_table',
@@ -488,19 +490,33 @@ class Bid extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * @return Agency|null
+     */
     public function getAgency()
     {
-        $agencies = Agency::find()->where(['manufacturer_id' => $this->manufacturer_id])->all();
-        $agenciesWorkshop = $this->workshop->agencies;
+        if (!$this->agency_id) {
+            $agencies = Agency::find()->where(['manufacturer_id' => $this->manufacturer_id])->all();
+            $agenciesWorkshop = $this->workshop->agencies;
 
-        $intersect = array_uintersect($agencies, $agenciesWorkshop, function(Agency $v1, Agency $v2) {
-            return $v1->id - $v2->id;
-        });
-        if (empty($intersect)) {
-            return null;
-        } else {
-            return $intersect[0];
+            $intersect = array_uintersect($agencies, $agenciesWorkshop, function(Agency $v1, Agency $v2) {
+                return $v1->id - $v2->id;
+            });
+            if (empty($intersect)) {
+                return null;
+            } else {
+                $this->agency_id = $intersect[0]->id;
+                if (!$this->save()) {
+                    \Yii::error($this->getErrors());
+                    throw new \DomainException('Fail to set agency_id to bid');
+                }
+            }
         }
+        $agency = Agency::findOne($this->agency_id);
+        if (is_null($agency)) {
+            throw new \DomainException('Fail to find agency by agency_id = ' . $this->agency_id);
+        }
+        return $agency;
     }
 
 }

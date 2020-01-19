@@ -99,7 +99,7 @@ class JobsSectionController extends Controller
         $model = $this->findModel($id);
         $agencyId = $model->agency_id;
         $this->checkAccess('manageJobsCatalog', ['agencyId' => $agencyId]);
-        $this->findModel($id)->delete();
+        $model->delete();
 
         return $this->redirect(['index', 'agencyId' => $agencyId]);
     }

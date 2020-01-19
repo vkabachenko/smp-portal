@@ -4,6 +4,7 @@
 namespace app\commands;
 
 use app\rbac\rules\JobsCatalogRule;
+use app\rbac\rules\ManageJobsRule;
 use app\rbac\rules\ManageRestrictedBidRule;
 use app\rbac\rules\ManagerBidRule;
 use app\rbac\rules\ManagerAgencyRule;
@@ -158,6 +159,14 @@ class RbacController extends Controller
         $auth->add($updateJobsCatalog);
         $auth->addChild($updateJobsCatalog, $manageJobsCatalog);
 
+
+        $manageJobsRule = new ManageJobsRule();
+        $auth->add($manageJobsRule);
+        $manageJobs = $auth->createPermission('manageJobs');
+        $manageJobs->ruleName = $manageJobsRule->name;
+        $auth->add($manageJobs);
+
+
         $client = $auth->createRole('client');
         $auth->add($client);
 
@@ -175,6 +184,7 @@ class RbacController extends Controller
         $auth->addChild($master, $sendAct);
         $auth->addChild($master, $updateBidStatus);
         $auth->addChild($master, $viewNews);
+        $auth->addChild($master, $manageJobs);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
@@ -191,6 +201,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $updateBidStatus);
         $auth->addChild($manager, $viewNews);
         $auth->addChild($manager, $updateJobsCatalog);
+        $auth->addChild($manager, $manageJobs);
 
         $director = $auth->createRole('director');
         $auth->add($director);
@@ -210,6 +221,7 @@ class RbacController extends Controller
         $auth->addChild($admin, $manageManagers);
         $auth->addChild($admin, $adminBidAttribute);
         $auth->addChild($admin, $manageJobsCatalog);
+        $auth->addChild($admin, $manageJobs);
 
         echo 'done' . "\n";
     }
