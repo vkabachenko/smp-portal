@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Bid;
+use app\models\BidHistory;
 use Yii;
 use app\models\BidJob;
 use yii\data\ActiveDataProvider;
@@ -61,7 +62,9 @@ class BidJobController extends Controller
         $bid = Bid::findOne($bidId);
         $model = new BidJob(['bid_id' => $bidId]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            BidHistory::createUpdated($bidId, $model, \Yii::$app->user->id, 'Создана запись о работе');
+            $model->save();
             return $this->redirect(['index', 'bidId' => $bidId]);
         }
 
@@ -77,7 +80,9 @@ class BidJobController extends Controller
         $this->checkAccess('manageJobs', ['bidId' => $model->bid_id]);
         $bid = Bid::findOne($model->bid_id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            BidHistory::createUpdated($model->bid_id, $model, \Yii::$app->user->id, 'Изменена запись о работе');
+            $model->save();
             return $this->redirect(['index', 'bidId' => $model->bid_id]);
         }
 
@@ -101,6 +106,7 @@ class BidJobController extends Controller
         $model = $this->findModel($id);
         $bidId = $model->bid_id;
         $this->checkAccess('manageJobs', ['bidId' => $model->bid_id]);
+        BidHistory::createUpdated($model->bid_id, $model, \Yii::$app->user->id, 'Удалена запись о работе', false);
         $model->delete();
 
         return $this->redirect(['index', 'bidId' => $bidId]);

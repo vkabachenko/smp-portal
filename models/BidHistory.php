@@ -94,7 +94,12 @@ class BidHistory extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public static function createUpdated($bidId, TranslatableInterface $model, $userId, $actionText = 'Изменена на портале')
+    public static function createUpdated($bidId,
+                                         TranslatableInterface $model,
+                                         $userId,
+                                         $actionText = 'Изменена на портале',
+                                         $updated = true
+                            )
     {
         /* @var $model ActiveRecord */
         try {
@@ -106,13 +111,23 @@ class BidHistory extends \yii\db\ActiveRecord
             ]);
 
             $changedAttributes = [];
-            foreach ($model->getDirtyAttributes() as $name => $value) {
-                $oldValue = $model->getOldAttribute($name);
-                if ($value != $oldValue) {
+            if ($updated) {
+                foreach ($model->getDirtyAttributes() as $name => $value) {
+                    $oldValue = $model->getOldAttribute($name);
+                    if ($value != $oldValue) {
+                        $changedAttributes[] = [
+                            'name' => $name,
+                            'value' => $value,
+                            'old_value' => $oldValue
+                        ];
+                    }
+                }
+            } else {
+                foreach ($model->attributes as $name => $value) {
                     $changedAttributes[] = [
                         'name' => $name,
-                        'value' => $value,
-                        'old_value' => $oldValue
+                        'value' => '',
+                        'old_value' => $value
                     ];
                 }
             }
