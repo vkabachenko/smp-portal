@@ -68,7 +68,7 @@ use yii\behaviors\TimestampBehavior;
  * @property BrandModel $brandModel
  * @property BidHistory[] $bidHistories
  */
-class Bid extends \yii\db\ActiveRecord
+class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
 {
 
     const TREATMENT_TYPE_WARRANTY = 'warranty';
@@ -137,6 +137,11 @@ class Bid extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'bid';
+    }
+
+    public static function translateName()
+    {
+        return 'Заявка';
     }
 
     public function behaviors()

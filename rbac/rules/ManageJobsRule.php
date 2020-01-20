@@ -5,10 +5,7 @@ namespace app\rbac\rules;
 
 use app\models\Bid;
 use app\models\BidHistory;
-use app\models\Manager;
-
 use app\models\User;
-use DeepCopy\f001\B;
 use yii\rbac\Rule;
 
 class ManageJobsRule extends Rule

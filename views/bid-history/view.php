@@ -2,7 +2,7 @@
 /* @var $this yii\web\View */
 /* @var $model \app\models\BidHistory */
 
-$this->title = 'Этап заявки';
+$this->title = 'История изменений заявки';
 $this->params['back'] = ['bid-history/index', 'bidId' => $model->bid_id];
 
 ?>
@@ -15,6 +15,10 @@ $this->params['back'] = ['bid-history/index', 'bidId' => $model->bid_id];
         [
             'label' => 'Создатель',
             'value' => $model->user_id ? $model->user->username : null,
+        ],
+        [
+            'label' => 'Объект',
+            'value' => $model->model_class ? ($model->model_class)::translateName() : 'Заявка',
         ],
         'action'
     ]

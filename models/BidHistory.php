@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "bid_history".
@@ -15,6 +16,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $created_at
  * @property string $updated_at
  * @property array $updated_attributes
+ * @property string $model_class
  *
  * @property Bid $bid
  * @property User $user
@@ -53,7 +55,7 @@ class BidHistory extends \yii\db\ActiveRecord
         return [
             [['bid_id'], 'required'],
             [['bid_id', 'user_id'], 'integer'],
-            [['action'], 'string'],
+            [['action', 'model_class'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['bid_id'], 'exist', 'skipOnError' => true, 'targetClass' => Bid::className(), 'targetAttribute' => ['bid_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -92,18 +94,20 @@ class BidHistory extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public static function createUpdated(Bid $bid, $userId, $actionText = 'Изменена на портале')
+    public static function createUpdated($bidId, TranslatableInterface $model, $userId, $actionText = 'Изменена на портале')
     {
+        /* @var $model ActiveRecord */
         try {
-            $model = new self([
-                'bid_id' => $bid->id,
+            $bidHistory = new self([
+                'bid_id' => $bidId,
                 'user_id' => $userId,
-                'action' => $actionText
+                'action' => $actionText,
+                'model_class' => get_class($model)
             ]);
 
             $changedAttributes = [];
-            foreach ($bid->getDirtyAttributes() as $name => $value) {
-                $oldValue = $bid->getOldAttribute($name);
+            foreach ($model->getDirtyAttributes() as $name => $value) {
+                $oldValue = $model->getOldAttribute($name);
                 if ($value != $oldValue) {
                     $changedAttributes[] = [
                         'name' => $name,
@@ -114,10 +118,10 @@ class BidHistory extends \yii\db\ActiveRecord
             }
 
             if (!empty($changedAttributes)) {
-                $model->updated_attributes = $changedAttributes;
+                $bidHistory->updated_attributes = $changedAttributes;
 
-                if (!$model->save()) {
-                    \Yii::error($model->getErrors());
+                if (!$bidHistory->save()) {
+                    \Yii::error($bidHistory->getErrors());
                 }
             }
         } catch (\Exception $e) {

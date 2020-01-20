@@ -19,7 +19,7 @@ use yii\behaviors\TimestampBehavior;
  * @property Bid $bid
  * @property JobsCatalog $jobsCatalog
  */
-class BidJob extends \yii\db\ActiveRecord
+class BidJob extends \yii\db\ActiveRecord implements TranslatableInterface
 {
     /**
      * {@inheritdoc}
@@ -27,6 +27,11 @@ class BidJob extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'bid_job';
+    }
+
+    public static function translateName()
+    {
+        return 'Работы';
     }
 
     public function behaviors()
