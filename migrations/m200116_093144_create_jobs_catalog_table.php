@@ -14,6 +14,7 @@ class m200116_093144_create_jobs_catalog_table extends Migration
     {
         $this->createTable('{{%jobs_catalog}}', [
             'id' => $this->primaryKey(),
+            'uuid'  => $this->string()->notNull(),
             'agency_id' => $this->integer()->notNull(),
             'jobs_section_id' => $this->integer(),
             'date_actual' => $this->date()->notNull(),
@@ -41,11 +42,6 @@ class m200116_093144_create_jobs_catalog_table extends Migration
             'id',
             'SET NULL'
         );
-        $this->createIndex('idx_jobs_catalog_agency_id_vendor_code',
-            'jobs_catalog',
-            ['agency_id', 'vendor_code'],
-            true
-            );
     }
 
     /**

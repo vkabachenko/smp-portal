@@ -4,7 +4,9 @@ namespace app\controllers;
 
 use app\models\Agency;
 use app\models\JobsCatalog;
+use app\services\job\JobsCatalogService;
 use yii\data\ActiveDataProvider;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -38,14 +40,15 @@ class JobsCatalogController  extends Controller
         ];
     }
 
+
     public function actionIndex($agencyId)
     {
         $this->checkAccess('manageJobsCatalog', compact('agencyId'));
         $agency = Agency::findOne($agencyId);
-        //$dateActual = $dateActual ?: date('Y-m-d', time());
-        $query = JobsCatalog::find()
-            -> where(['agency_id' => $agencyId])
-            -> orderBy('date_actual');
+
+        $service = new JobsCatalogService($agencyId, date('Y-m-d'));
+        $query = $service->dateActualQuery();
+
         $dataProvider = new ActiveDataProvider(['query' => $query]);
 
         return $this->render('index', [
@@ -57,7 +60,11 @@ class JobsCatalogController  extends Controller
     public function actionCreate($agencyId)
     {
         $this->checkAccess('manageJobsCatalog', compact('agencyId'));
-        $model = new JobsCatalog(['agency_id' => $agencyId]);
+        $model = new JobsCatalog([
+            'agency_id' => $agencyId,
+            'date_actual' => '1970-01-01',
+            'uuid' => \Yii::$app->security->generateRandomString()
+        ]);
 
         if ($model->load(\Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index', 'agencyId' => $agencyId]);
@@ -73,7 +80,24 @@ class JobsCatalogController  extends Controller
         $model = $this->findModel($id);
         $this->checkAccess('manageJobsCatalog', ['agencyId' => $model->agency_id]);
 
-        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+            if ($model->bidJobs && $model->price != $model->getOldAttribute('price')) {
+                $now = date('Y-m-d');
+                if ($model->getOldAttribute('date_actual') >= $now) {
+                    \Yii::$app->session->setFlash('error', 'Вид работвы на текущую дату уже задан');
+                } else {
+                    $agencyId = $model->agency_id;
+                    $uuid = $model->uuid;
+                    $model = new JobsCatalog([
+                        'agency_id' => $agencyId,
+                        'uuid' => $uuid,
+                        'date_actual' => $now,
+                    ]);
+                    $model->load(\Yii::$app->request->post());
+                    \Yii::$app->session->setFlash('info', 'Создана новая запись на текущую дату');
+                }
+            }
+            $model->save();
             return $this->redirect(['index', 'agencyId' => $model->agency_id]);
         }
 
@@ -96,9 +120,15 @@ class JobsCatalogController  extends Controller
         $model = $this->findModel($id);
         $agencyId = $model->agency_id;
         $this->checkAccess('manageJobsCatalog', ['agencyId' => $agencyId]);
-        $model->delete();
+        if ($this->bidJob) {
+            \Yii::$app->session->setFlash('error', 'Удаление невозможно! Существует запись о произведенной работе');
+        } else {
+            $model->delete();
+            \Yii::$app->session->setFlash('success', 'Удалена запись о виде работ на текущую дату');
+        }
 
         return $this->redirect(['index', 'agencyId' => $agencyId]);
     }
+
 
 }

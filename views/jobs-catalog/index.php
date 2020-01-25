@@ -36,21 +36,47 @@ $this->params['back'] = \Yii::$app->user->can('admin')
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'columns' => [
-                'date_actual',
                 [
-                    'attribute' => 'jobs_section_id',
-                    'value' => function (JobsCatalog $model) {
-                        return $model->jobs_section_id ? $model->jobsSection->name : null;
-                    },
+                    'attribute' => 'jobs_section_name',
+                    'header' => 'Раздел работ'
                 ],
-                'vendor_code',
-                'name',
-                'hour_tariff',
-                'hours_required',
-                'price',
+                [
+                    'attribute' => 'vendor_code',
+                    'header' => 'Артикул'
+                ],
+                [
+                    'attribute' => 'name',
+                    'header' => 'Наименование'
+                ],
+                [
+                    'attribute' => 'hour_tariff',
+                    'header' => 'Цена нормочаса'
+                ],
+                [
+                    'attribute' => 'hours_required',
+                    'header' => 'Нормочасов'
+                ],
+                [
+                    'attribute' => 'price',
+                    'header' => 'Стоимость'
+                ],
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{update}{delete}',
+                    'buttons' => [
+                        'update' => function ($url, $model, $key) {
+                            return Html::a('',
+                                ['update', 'id' => $model['id']],
+                                ['class' => 'glyphicon glyphicon-pencil']
+                            );
+                        },
+                        'delete' => function ($url, $model, $key) {
+                            return Html::a('',
+                                ['delete', 'id' => $model['id']],
+                                ['class' => 'glyphicon glyphicon-trash', 'data' => ['method' => 'post']]
+                            );
+                        }
+                    ],
                 ],
             ],
         ]); ?>

@@ -5,6 +5,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\BidJob */
 /* @var $bid app\models\Bid */
+/* @var $jobsCatalog \app\models\JobsCatalog */
+
+/* @var $jobsCatalogService \app\services\job\JobsCatalogService */
 
 $this->title = 'Редактирование работы';
 $this->params['back'] = ['index', 'bidId' => $model->bid_id];
@@ -15,7 +18,9 @@ $this->params['back'] = ['index', 'bidId' => $model->bid_id];
 
     <?= $this->render('_form', [
         'model' => $model,
-        'bid' => $bid
+        'bid' => $bid,
+        'jobsCatalog' => $jobsCatalog,
+        'jobsCatalogService' => $jobsCatalogService
     ]) ?>
 
 </div>

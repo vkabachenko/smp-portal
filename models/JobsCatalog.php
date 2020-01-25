@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
  * This is the model class for table "jobs_catalog".
  *
  * @property int $id
+ * @property string $uuid
  * @property int $agency_id
  * @property int $jobs_section_id
  * @property string $date_actual
@@ -24,6 +25,7 @@ use yii\helpers\ArrayHelper;
  */
 class JobsCatalog extends \yii\db\ActiveRecord
 {
+    public $jobsSectionName;
     /**
      * {@inheritdoc}
      */
@@ -38,13 +40,11 @@ class JobsCatalog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['agency_id', 'date_actual', 'name', 'price'], 'required'],
+            [['agency_id', 'date_actual', 'name', 'price', 'uuid'], 'required'],
             [['agency_id', 'jobs_section_id'], 'integer'],
-            [['date_actual'], 'safe'],
-            [['description'], 'string'],
+            [['description', 'uuid'], 'string'],
             [['hour_tariff', 'hours_required', 'price'], 'number'],
             [['vendor_code', 'name'], 'string', 'max' => 255],
-            [['agency_id', 'vendor_code'], 'unique', 'targetAttribute' => ['agency_id', 'vendor_code']],
             [['agency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Agency::className(), 'targetAttribute' => ['agency_id' => 'id']],
             [['jobs_section_id'], 'exist', 'skipOnError' => true, 'targetClass' => JobsSection::className(), 'targetAttribute' => ['jobs_section_id' => 'id']],
         ];
@@ -66,6 +66,7 @@ class JobsCatalog extends \yii\db\ActiveRecord
             'hour_tariff' => 'Цена нормочаса',
             'hours_required' => 'Нормочасов',
             'price' => 'Стоимость',
+            'jobsSectionName' => 'Раздел работ',
         ];
     }
 
@@ -85,14 +86,15 @@ class JobsCatalog extends \yii\db\ActiveRecord
         return $this->hasOne(JobsSection::className(), ['id' => 'jobs_section_id']);
     }
 
-    /**
-     * return array
-     */
-    public static function jobsCatalogAsMap($agencyId)
+    public function getBidJobs()
     {
-        $models = self::find()->where(['agency_id' => $agencyId])->orderBy('name')->all();
-        $list = ArrayHelper::map($models, 'id', 'name');
-
-        return $list;
+        return $this->hasMany(BidJob::class, ['jobs_catalog_id' => 'id']);
     }
+
+    public function afterFind()
+    {
+        parent::afterFind();
+        $this->jobsSectionName = $this->jobs_section_id ? $this->jobsSection->name : '';
+    }
+
 }

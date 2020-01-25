@@ -5,6 +5,7 @@ namespace app\rbac\rules;
 
 use app\models\Bid;
 use app\models\BidHistory;
+use app\models\JobsCatalog;
 use app\models\User;
 use yii\rbac\Rule;
 
@@ -25,6 +26,10 @@ class ManageJobsRule extends Rule
             return false;
         }
 
+        $jobsCatalog = JobsCatalog::find()->where(['agency_id' => $agency->id])->exists();
+        if (!$jobsCatalog) {
+            return false;
+        }
 
         $userModel = User::findOne($user);
         if (is_null($userModel)) {

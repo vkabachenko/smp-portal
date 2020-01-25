@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\models\Bid;
 use app\models\BidHistory;
+use app\models\JobsCatalog;
+use app\services\job\JobsCatalogService;
 use Yii;
 use app\models\BidJob;
 use yii\data\ActiveDataProvider;
@@ -61,6 +63,8 @@ class BidJobController extends Controller
         $this->checkAccess('manageJobs', compact('bidId'));
         $bid = Bid::findOne($bidId);
         $model = new BidJob(['bid_id' => $bidId]);
+        $jobsCatalogService = new JobsCatalogService($bid->agency_id, $bid->created_at);
+        $jobsCatalog = JobsCatalog::findOne(array_key_first($jobsCatalogService->jobsCatalogAsMap()));
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             BidHistory::createUpdated($bidId, $model, \Yii::$app->user->id, 'Создана запись о работе');
@@ -70,15 +74,19 @@ class BidJobController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'bid' => $bid
+            'bid' => $bid,
+            'jobsCatalog' => $jobsCatalog,
+            'jobsCatalogService' => $jobsCatalogService
         ]);
     }
 
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $jobsCatalog = $model->jobsCatalog;
         $this->checkAccess('manageJobs', ['bidId' => $model->bid_id]);
         $bid = Bid::findOne($model->bid_id);
+        $jobsCatalogService = new JobsCatalogService($bid->agency_id, $bid->created_at);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             BidHistory::createUpdated($model->bid_id, $model, \Yii::$app->user->id, 'Изменена запись о работе');
@@ -88,7 +96,9 @@ class BidJobController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'bid' => $bid
+            'bid' => $bid,
+            'jobsCatalog' => $jobsCatalog,
+            'jobsCatalogService' => $jobsCatalogService
         ]);
     }
 

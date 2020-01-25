@@ -13,12 +13,6 @@ use yii\jui\DatePicker;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'date_actual')->widget(DatePicker::class, [
-        'language' => 'ru',
-        'dateFormat' => 'yyyy-MM-dd',
-        'options' => ['class' => 'form-control']
-    ]) ?>
-
     <?= $form->field($model, 'jobs_section_id')
         ->dropDownList(\app\models\JobsSection::jobsSectionAsMap($model->agency_id),[
             'prompt' => 'Выбор',

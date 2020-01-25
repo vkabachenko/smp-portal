@@ -7,6 +7,8 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\BidJob */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $bid app\models\Bid */
+/* @var $jobsCatalog \app\models\JobsCatalog */
+/* @var $jobsCatalogService \app\services\job\JobsCatalogService */
 ?>
 
 <div>
@@ -14,9 +16,13 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'jobs_catalog_id')
-        ->dropDownList(\app\models\JobsCatalog::jobsCatalogAsMap($bid->agency_id)) ?>
+        ->dropDownList($jobsCatalogService->jobsCatalogAsMap()) ?>
 
-    <?= $form->field($model, 'price')->textInput() ?>
+    <?= $form->field($jobsCatalog, 'vendor_code')->textInput(['disabled' => true]) ?>
+    <?= $form->field($jobsCatalog, 'jobsSectionName')->textInput(['disabled' => true]) ?>
+    <?= $form->field($jobsCatalog, 'hour_tariff')->textInput(['disabled' => true]) ?>
+    <?= $form->field($jobsCatalog, 'hours_required')->textInput(['disabled' => true]) ?>
+    <?= $form->field($jobsCatalog, 'price')->textInput(['disabled' => true]) ?>
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 

@@ -510,7 +510,8 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
             if (empty($intersect)) {
                 return null;
             } else {
-                $this->agency_id = $intersect[0]->id;
+                $firstAgency = reset($intersect);
+                $this->agency_id = $firstAgency->id;
                 if (!$this->save()) {
                     \Yii::error($this->getErrors());
                     throw new \DomainException('Fail to set agency_id to bid');
