@@ -20,9 +20,9 @@ use yii\jui\DatePicker;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'vendor_code')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'hour_tariff')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'hours_required')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'hour_tariff')->textInput(['maxlength' => true, 'id' => 'catalog-hour-tariff']) ?>
+    <?= $form->field($model, 'hours_required')->textInput(['maxlength' => true, 'id' => 'catalog-hours-required']) ?>
+    <?= $form->field($model, 'price')->textInput(['maxlength' => true, 'id' => 'catalog-price']) ?>
     <?= $form->field($model, 'description')->textarea() ?>
 
     <div class="form-group">
@@ -32,3 +32,35 @@ use yii\jui\DatePicker;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+$script = <<<JS
+$(function() {
+    function getPrice(tariff, hours) {
+        var price = tariff * hours;
+        return isNaN(price) ? '' : price.toFixed();
+    }
+    
+    function getNumber(strVar) {
+        return parseFloat(strVar);
+    }
+    
+    function performCalc() {
+        var tariff = getNumber($('#catalog-hour-tariff').val());
+        var hours = getNumber($('#catalog-hours-required').val());
+        $('#catalog-price').val(getPrice(tariff, hours));
+    }
+    
+    $('#catalog-hour-tariff').change(function() {
+        performCalc();
+    });
+    
+    $('#catalog-hours-required').change(function() {
+        performCalc();
+    });
+});
+JS;
+
+$this->registerJs($script);
+
+
