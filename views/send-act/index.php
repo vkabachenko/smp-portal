@@ -16,15 +16,26 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
 
     <?php $form = ActiveForm::begin(); ?>
 
+        <div class="form-group">
+            <?= Html::a('', '#', ['class' => 'btn btn-primary toggle-extended hidden-extended']) ?>
+        </div>
+
         <?php if (count($model->images) > 0): ?>
             <?= $form->field($model, 'images')
-                ->checkboxList($model->images,['encode' => false, 'separator'=>'<br/>']) ?>
+                ->checkboxList($model->images,[
+                    'encode' => false,
+                    'separator'=>'<br/>',
+                    'itemOptions' => ['checked' => true]
+                ])
+            ?>
         <?php endif; ?>
 
-        <?= $form->field($model, 'email') ?>
+        <div class="extended-form email-field">
+            <?= $form->field($model, 'email') ?>
+        </div>
 
     <?php if ($model->act->isGenerated()): ?>
-        <div class="form-group">
+        <div class="form-group extended-form">
             <?= Html::a('Акт технического состояния', [
                     'download/act-excel',
                     'filename' => $model->act->getFilename(),
@@ -33,7 +44,7 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
         </div>
     <?php endif; ?>
 
-    <div class="form-group">
+    <div class="form-group  extended-form">
         <?= $form->field($uploadForm, 'file')->widget(FileInput::class, [
             'pluginOptions'=>['allowedFileExtensions'=>['xlsx'],'showUpload' => false,]
         ])
@@ -48,7 +59,7 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
         <div class="col-lg-4">
             <?= Html::submitButton('Отправить', ['class' => 'btn btn-success']) ?>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-4  extended-form">
             <?= Html::a('Сгенерировать акт', ['generate', 'bidId' => $model->bidId], ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
@@ -56,3 +67,26 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+$script = <<<JS
+$(function() {
+    $('.toggle-extended').click(function(evt) {
+        evt.preventDefault();
+        
+        var self = $(this);
+        if (self.hasClass('hidden-extended')) {
+            self.text('Показать расширенные настройки');
+            self.removeClass('hidden-extended');
+        } else {
+            self.text('Скрыть расширенные настройки');
+            self.addClass('hidden-extended');
+        }
+        $('.extended-form').toggle();
+    });
+    $('.toggle-extended').trigger('click');
+});
+
+JS;
+
+$this->registerJs($script);

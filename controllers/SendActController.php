@@ -44,10 +44,10 @@ class SendActController extends Controller
 
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             if ($model->send($uploadForm)) {
-                \Yii::$app->session->setFlash('success', 'Письмо успешно отправлено');
+                \Yii::$app->session->setFlash('success', 'Заявка успешно отправлена');
                 BidHistory::sendBid($bidId, \Yii::$app->user->id);
             } else {
-                \Yii::$app->session->setFlash('error', 'Ошибка при отправке письма');
+                \Yii::$app->session->setFlash('error', 'Ошибка при отправке заявки');
             }
             return $this->redirect(['bid/view', 'id' => $bidId]);
         }

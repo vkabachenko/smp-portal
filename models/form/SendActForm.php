@@ -74,7 +74,7 @@ class SendActForm extends Model
 
         $message->setFrom(\Yii::$app->params['adminEmail'])
             ->setTo($to)
-            ->setSubject('Акт')
+            ->setSubject($this->getSubject())
             ->setTextBody($this->getMailContent());
 
 
@@ -97,12 +97,12 @@ class SendActForm extends Model
         /* @var $master Master */
         $master = Master::findByUserId($this->userId);
         if ($master) {
-            return $agency ? $this->getEmailsList($agency->email2, $agency->email4) : '';
+            return $agency ? $this->getEmailsList($workshop->email2, $agency->email2, $agency->email4) : '';
         } else {
             /* @var $manager Manager */
             $manager = Manager::findByUserId($this->userId);
             if ($manager) {
-                return $this->getEmailsList($workshop->email2);
+                return $this->getEmailsList($agency->email2, $workshop->email2);
             } else {
                 return '';
             }
@@ -135,6 +135,17 @@ class SendActForm extends Model
             return !empty($email);
         });
         return implode(', ', $emails);
+    }
+
+    private function getSubject()
+    {
+        $bid = Bid::findOne($this->bidId);
+        $subject = 'Акт технического состояния. ';
+        $bidNumber = $bid->bid_number ? 'Заявка № ' . $bid->bid_number . '. ' : ' ';
+        $workshopName = 'Мастерская ' . $bid->workshop->name . '. ';
+        $agencyName = 'Представительство ' . $bid->getAgency()->name;
+
+        return $subject . $bidNumber . $workshopName . $agencyName;
     }
 
 }

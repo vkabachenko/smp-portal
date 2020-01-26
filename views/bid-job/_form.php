@@ -61,6 +61,7 @@ use yii\helpers\Url;
 
 <?php
 $script = <<<JS
+$(function() {
     $('#jobs-catalog-select').change(function() {
         var self = $(this);
         $.ajax({
@@ -77,6 +78,7 @@ $script = <<<JS
             swal('Ошибка', error.message, 'error');
         });
     });
+});
 
 JS;
 
