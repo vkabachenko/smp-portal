@@ -28,6 +28,4 @@
 <?= $form->field($model, 'email3',
     ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['email3']]])
     ->textInput(['maxlength' => true]) ?>
-<?= $form->field($model, 'email4',
-    ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['email4']]])
-    ->textInput(['maxlength' => true]) ?>
+

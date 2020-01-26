@@ -102,7 +102,7 @@ class SendActForm extends Model
             /* @var $manager Manager */
             $manager = Manager::findByUserId($this->userId);
             if ($manager) {
-                return $this->getEmailsList($workshop->email2, $workshop->email4);
+                return $this->getEmailsList($workshop->email2);
             } else {
                 return '';
             }

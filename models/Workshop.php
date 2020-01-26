@@ -22,7 +22,6 @@ use yii\helpers\ArrayHelper;
  * @property string $email1
  * @property string $email2
  * @property string $email3
- * @property string $email4
  *
  * @property Master[] $masters
  */
@@ -46,8 +45,8 @@ class Workshop extends \yii\db\ActiveRecord
             [['rules', 'bid_attributes'], 'safe'],
             [['name', 'token'], 'string', 'max' => 255],
             [['phone1', 'phone2', 'phone3', 'phone4'], 'string'],
-            [['email1', 'email2', 'email3', 'email4'], 'string'],
-            [['email1', 'email2', 'email3', 'email4'], 'email'],
+            [['email1', 'email2', 'email3'], 'string'],
+            [['email1', 'email2', 'email3'], 'email'],
             ['description', 'string']
         ];
     }
@@ -70,7 +69,6 @@ class Workshop extends \yii\db\ActiveRecord
             'email1' => 'Email 1',
             'email2' => 'Email 2',
             'email3' => 'Email 3',
-            'email4' => 'Email 4',
         ];
     }
 

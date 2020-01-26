@@ -74,11 +74,6 @@ if ($master) {
             'value' => $workshop->email3,
             'captionOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['workshop']['email3']]
         ],
-        [
-            'label' => 'Email4',
-            'value' => $workshop->email4,
-            'captionOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['workshop']['email4']]
-        ],
     ];
 
     $attributes = array_merge($userAttributes, $masterAttributes, $workshopAttributes);
