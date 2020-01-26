@@ -11,8 +11,10 @@ use app\models\BidJob;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\MethodNotAllowedHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * BidJobController implements the CRUD actions for BidJob model.
@@ -120,5 +122,29 @@ class BidJobController extends Controller
         $model->delete();
 
         return $this->redirect(['index', 'bidId' => $bidId]);
+    }
+
+    public function actionChangeJobsCatalog()
+    {
+        if (!\Yii::$app->request->isPost) {
+            throw new MethodNotAllowedHttpException();
+        }
+
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $model = JobsCatalog::findOne(\Yii::$app->request->post('id'));
+        if (is_null($model)) {
+            throw new NotFoundHttpException();
+        }
+
+        $this->checkAccess('manageJobsCatalog', ['agencyId' => $model->agency_id]);
+
+        return [
+            'vendor_code' => $model->vendor_code,
+            'section_name' => $model->jobsSectionName,
+            'hour_tariff' => $model->hour_tariff,
+            'hours_required' => $model->hours_required,
+            'price' => $model->price
+        ];
     }
 }
