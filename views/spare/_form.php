@@ -17,11 +17,11 @@ use yii\jui\DatePicker;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'quantity')->textInput() ?>
+    <?= $form->field($model, 'quantity')->textInput(['id' => 'spare-quantity']) ?>
 
-    <?= $form->field($model, 'price')->textInput() ?>
+    <?= $form->field($model, 'price')->textInput(['id' => 'spare-price']) ?>
 
-    <?= $form->field($model, 'total_price')->textInput() ?>
+    <?= $form->field($model, 'total_price')->textInput(['id' => 'spare-total-price']) ?>
 
     <?= $form->field($model, 'invoice_number')->textInput(['maxlength' => true]) ?>
 
@@ -40,3 +40,29 @@ use yii\jui\DatePicker;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+$script = <<<JS
+$(function() {
+    function getTotalPrice(quantity, price) {
+        var totalPrice = quantity * price;
+        return isNaN(totalPrice) ? '' : totalPrice.toFixed();
+    }
+    
+    function performCalc() {
+        var quantity = parseInt($('#spare-quantity').val());
+        var price = parseFloat($('#spare-price').val());
+        $('#spare-total-price').val(getTotalPrice(quantity, price));
+    }
+    
+    $('#spare-quantity').change(function() {
+        performCalc();
+    });
+    
+    $('#spare-price').change(function() {
+        performCalc();
+    });
+});
+JS;
+
+$this->registerJs($script);
