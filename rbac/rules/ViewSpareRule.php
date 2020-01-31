@@ -5,29 +5,18 @@ namespace app\rbac\rules;
 
 use app\models\Bid;
 use app\models\BidHistory;
-use app\models\JobsCatalog;
 use app\models\User;
 use yii\rbac\Rule;
 
-class ManageJobsRule extends Rule
+class ViewSpareRule extends Rule
 {
-    public $name = 'isManageJobs';
+    public $name = 'isViewSpare';
 
     public function execute($user, $item, $params)
     {
         /* @var $bid Bid */
         $bid = Bid::findOne($params['bidId']);
         if (is_null($bid)) {
-            return false;
-        }
-
-        $agency = $bid->getAgency();
-        if (is_null($agency)) {
-            return false;
-        }
-
-        $jobsCatalog = JobsCatalog::find()->where(['agency_id' => $agency->id])->exists();
-        if (!$jobsCatalog) {
             return false;
         }
 
@@ -42,13 +31,21 @@ class ManageJobsRule extends Rule
 
         $sentBidStatus = BidHistory::sentBidStatus($params['bidId']);
 
-        if ($manager = $userModel->manager) {
-            return $manager->agency_id == $agency->id && $sentBidStatus == BidHistory::BID_SENT_WORKSHOP;
-        }
-
+        /* @var $master \app\models\Master */
         if ($master = $userModel->master) {
             return $master->workshop_id == $bid->workshop_id
                 && (is_null($sentBidStatus) || $sentBidStatus == BidHistory::BID_SENT_AGENCY);
+        }
+
+        $agency = $bid->getAgency();
+        if (is_null($agency)) {
+            return false;
+        }
+
+        /* @var $manager \app\models\Manager */
+        if ($manager = $userModel->manager) {
+            return $manager->agency_id == $agency->id && $sentBidStatus == BidHistory::BID_SENT_WORKSHOP;
+
         }
 
         return false;

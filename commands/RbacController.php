@@ -16,6 +16,8 @@ use app\rbac\rules\SendActRule;
 use app\rbac\rules\UpdateBidRule;
 use app\rbac\rules\UpdateBidStatusRule;
 use app\rbac\rules\ViewNewsRule;
+use app\rbac\rules\ManageSpareRule;
+use app\rbac\rules\ViewSpareRule;
 use yii\console\Controller;
 
 class RbacController extends Controller
@@ -159,13 +161,23 @@ class RbacController extends Controller
         $auth->add($updateJobsCatalog);
         $auth->addChild($updateJobsCatalog, $manageJobsCatalog);
 
-
         $manageJobsRule = new ManageJobsRule();
         $auth->add($manageJobsRule);
         $manageJobs = $auth->createPermission('manageJobs');
         $manageJobs->ruleName = $manageJobsRule->name;
         $auth->add($manageJobs);
 
+        $manageSpareRule = new ManageSpareRule();
+        $auth->add($manageSpareRule);
+        $manageSpare = $auth->createPermission('manageSpare');
+        $manageSpare->ruleName = $manageSpareRule->name;
+        $auth->add($manageSpare);
+
+        $viewSpareRule = new ViewSpareRule();
+        $auth->add($viewSpareRule);
+        $viewSpare = $auth->createPermission('viewSpare');
+        $viewSpare->ruleName = $viewSpareRule->name;
+        $auth->add($viewSpare);
 
         $client = $auth->createRole('client');
         $auth->add($client);
@@ -185,6 +197,8 @@ class RbacController extends Controller
         $auth->addChild($master, $updateBidStatus);
         $auth->addChild($master, $viewNews);
         $auth->addChild($master, $manageJobs);
+        $auth->addChild($master, $manageSpare);
+        $auth->addChild($master, $viewSpare);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
@@ -202,6 +216,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $viewNews);
         $auth->addChild($manager, $updateJobsCatalog);
         $auth->addChild($manager, $manageJobs);
+        $auth->addChild($manager, $viewSpare);
 
         $director = $auth->createRole('director');
         $auth->add($director);
@@ -222,6 +237,8 @@ class RbacController extends Controller
         $auth->addChild($admin, $adminBidAttribute);
         $auth->addChild($admin, $manageJobsCatalog);
         $auth->addChild($admin, $manageJobs);
+        $auth->addChild($admin, $manageSpare);
+        $auth->addChild($admin, $viewSpare);
 
         echo 'done' . "\n";
     }
