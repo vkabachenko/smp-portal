@@ -25,9 +25,6 @@ use app\models\Manufacturer;
 <?= $form->field($model, 'phone4',
     ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['phone4']]])
     ->textInput(['maxlength' => true]) ?>
-<?= $form->field($model, 'email1',
-    ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['email1']]])
-    ->textInput(['maxlength' => true]) ?>
 <?= $form->field($model, 'email2',
     ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['email2']]])
     ->textInput(['maxlength' => true]) ?>

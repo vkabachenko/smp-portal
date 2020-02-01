@@ -15,7 +15,6 @@ use yii\db\ActiveQuery;
  * @property string $phone2
  * @property string $phone3
  * @property string $phone4
- * @property string $email1
  * @property string $email2
  * @property string $email3
  * @property string $email4
@@ -45,8 +44,8 @@ class Agency extends \yii\db\ActiveRecord
             [['bid_attributes'], 'safe'],
             [['description'], 'string'],
             [['phone1', 'phone2', 'phone3', 'phone4'], 'string'],
-            [['email1', 'email2', 'email3', 'email4'], 'string'],
-            [['email1', 'email2', 'email3', 'email4'], 'email'],
+            [['email2', 'email3', 'email4'], 'string'],
+            [['email2', 'email3', 'email4'], 'email'],
             [['manufacturer_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['manufacturer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manufacturer::className(), 'targetAttribute' => ['manufacturer_id' => 'id']],
@@ -67,7 +66,6 @@ class Agency extends \yii\db\ActiveRecord
             'phone2' => 'Телефон 2',
             'phone3' => 'Телефон 3',
             'phone4' => 'Телефон 4',
-            'email1' => 'Email 1',
             'email2' => 'Email 2',
             'email3' => 'Email 3',
             'email4' => 'Email 4',

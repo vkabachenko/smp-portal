@@ -60,11 +60,6 @@ if ($master) {
             'captionOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['workshop']['phone4']]
         ],
         [
-            'label' => 'Email1',
-            'value' => $workshop->email1,
-            'captionOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['workshop']['email1']]
-        ],
-        [
             'label' => 'Email2',
             'value' => $workshop->email2,
             'captionOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['workshop']['email2']]
@@ -121,11 +116,6 @@ if ($master) {
                 'label' => 'Телефон4',
                 'value' => $agency->phone4,
                 'captionOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['phone4']]
-            ],
-            [
-                'label' => 'Email1',
-                'value' => $agency->email1,
-                'captionOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['email1']]
             ],
             [
                 'label' => 'Email2',

@@ -26,7 +26,7 @@
     </div>
 
     <div class="form-group">
-        <?= Html::label('Загрузить изображения', null, ['class' => 'control-label']) ?>
+        <?= Html::label('Загрузить файлы', null, ['class' => 'control-label']) ?>
         <?= FilepondWidget::widget([
             'name' => 'files[]',
             'multiple' => true
