@@ -420,7 +420,18 @@ QuaggaAsset::register($this);
 
 
     <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+        <div class="col-md-2 col-sm-3 col-xs-6">
+            <?= Html::submitButton('Сохранить', ['name' => 'save', 'class' => 'btn btn-success', 'value' => '1']) ?>
+        </div>
+        <div class="col-md-2 col-sm-3 col-xs-6">
+            <?= Html::submitButton('Отправить', ['name' => 'send', 'class' => 'btn btn-primary', 'value' => '1']) ?>
+        </div>
+        <div class="col-md-2 col-sm-3 col-xs-6">
+            <?= Html::submitButton('Работы', ['name' => 'job', 'class' => 'btn btn-primary', 'value' => '1']) ?>
+        </div>
+        <div class="col-md-2 col-sm-3 col-xs-6">
+            <?= Html::submitButton('Запчасти', ['name' => 'spare', 'class' => 'btn btn-primary', 'value' => '1']) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

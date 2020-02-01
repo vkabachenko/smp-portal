@@ -74,7 +74,7 @@ class BidController extends Controller
             $uploadForm->files = UploadedFile::getInstances($uploadForm, 'files');
             $commentForm->load(Yii::$app->request->post());
             if ($model->createBid(\Yii::$app->user->id, $uploadForm, $commentForm)) {
-                return $this->redirect(['index']);
+                return $this->afterChange($model);
             }
         }
 
@@ -98,7 +98,7 @@ class BidController extends Controller
             BidHistory::createUpdated($model->id, $model, \Yii::$app->user->id);
             $model->flag_export = false;
             $model->save(false);
-            return $this->redirect(['index']);
+            return $this->afterChange($model);
         }
 
         return $this->render('update', [
@@ -190,6 +190,21 @@ class BidController extends Controller
         $data = \Yii::$app->request->post();
 
         return ['compositions' => CompositionHelper::unionCompositions($data['brandId'], $data['term'])];
+    }
+
+    private function afterChange(Bid $model)
+    {
+        if (\Yii::$app->request->post('save')) {
+            return $this->redirect(['index']);
+        } elseif (\Yii::$app->request->post('send')) {
+            return $this->redirect(['send-act/index', 'bidId' => $model->id]);
+        } elseif (\Yii::$app->request->post('job')) {
+            return $this->redirect(['bid-job/index', 'bidId' => $model->id]);
+        } elseif (\Yii::$app->request->post('spare')) {
+            return $this->redirect(['spare/index', 'bidId' => $model->id]);
+        } else {
+            throw new \DomainException('Unknown action after bid change');
+        }
     }
 
 }
