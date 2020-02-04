@@ -17,8 +17,6 @@ $this->params['back'] = ['admin/index'];
         <?= Html::a('Соответствие брендов', ['brand-correspondence/index'], ['class' => 'list-group-item center-menu-item']) ?>
         <?= Html::a('Комплектность', ['composition/index'], ['class' => 'list-group-item center-menu-item']) ?>
         <?= Html::a('Состояния', ['condition/index'], ['class' => 'list-group-item center-menu-item']) ?>
-        <?= Html::a('Статусы ремонта', ['repair-status/index'], ['class' => 'list-group-item center-menu-item']) ?>
-        <?= Html::a('Статусы гарантии', ['warranty-status/index'], ['class' => 'list-group-item center-menu-item']) ?>
-        <?= Html::a('Статусы заявки', ['bid-status/index'], ['class' => 'list-group-item center-menu-item']) ?>
+        <?= Html::a('Статусы', ['admin/statuses'], ['class' => 'list-group-item center-menu-item']) ?>
     </div>
 </div>

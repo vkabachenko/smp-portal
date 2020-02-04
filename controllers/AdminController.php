@@ -37,4 +37,9 @@ class AdminController extends Controller
     {
         return $this->render('catalogs');
     }
+
+    public function actionStatuses()
+    {
+        return $this->render('statuses');
+    }
 }

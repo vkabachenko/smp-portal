@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Статусы гарантии';
+$this->title = 'Статусы решения представительства';
 $this->params['back'] = ['admin/statuses'];
 ?>
 <div>
@@ -14,7 +14,7 @@ $this->params['back'] = ['admin/statuses'];
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Новый статус гарантии', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Новый статус решения представительства', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
 
