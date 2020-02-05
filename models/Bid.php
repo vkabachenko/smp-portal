@@ -59,6 +59,8 @@ use yii\behaviors\TimestampBehavior;
  * @property bool $is_for_warranty
  * @property int $workshop_id
  * @property int $agency_id
+ * @property int $decision_workshop_status_id
+ * @property int $decision_agency_status_id
  *
  * @property Condition $condition
  * @property Brand $brand
@@ -106,7 +108,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'diagnostic' => 'Результат диагностики',
         'repair_status_id' => 'Статус ремонта',
         'warranty_status_id' => 'Статус гарантии',
-        'status_id' => 'Статус',
         'user_id' => 'Приемщик',
         'master_id' => 'Мастер',
         'comment' => 'Дополнительные отметки',
@@ -129,6 +130,9 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'client_type' => 'Тип клиента',
         'client_name' => 'Клиент',
         'equipment' => 'Оборудование',
+        'decision_workshop_status_id' => 'Решение мастерской',
+        'decision_agency_status_id' => 'Решение представительства',
+        'status_id' => 'Статус',
     ];
 
     /**
@@ -177,7 +181,9 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 'status_id',
                 'user_id',
                 'master_id',
-                'agency_id'
+                'agency_id',
+                'decision_workshop_status_id',
+                'decision_agency_status_id',
             ], 'integer'],
             [[
                 'composition_table',
@@ -227,6 +233,8 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
             [['manufacturer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manufacturer::className(), 'targetAttribute' => ['manufacturer_id' => 'id']],
             [['repair_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => RepairStatus::className(), 'targetAttribute' => ['repair_status_id' => 'id']],
             [['warranty_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => WarrantyStatus::className(), 'targetAttribute' => ['warranty_status_id' => 'id']],
+            [['decision_workshop_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => DecisionWorkshopStatus::className(), 'targetAttribute' => ['decision_workshop_status_id' => 'id']],
+            [['decision_agency_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => DecisionAgencyStatus::className(), 'targetAttribute' => ['decision_agency_status_id' => 'id']],
             ['treatment_type', 'default', 'value' => null],
             ['treatment_type', 'in', 'range' => array_keys(self::TREATMENT_TYPES)],
             ['client_type', 'default', 'value' => null],
@@ -349,6 +357,22 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     public function getWarrantyStatus()
     {
         return $this->hasOne(WarrantyStatus::className(), ['id' => 'warranty_status_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDecisionWorkshopStatus()
+    {
+        return $this->hasOne(DecisionWorkshopStatus::className(), ['id' => 'decision_workshop_status_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDecisionAgencyStatus()
+    {
+        return $this->hasOne(DecisionAgencyStatus::className(), ['id' => 'decision_agency_status_id']);
     }
 
     /**

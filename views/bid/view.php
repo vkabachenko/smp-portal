@@ -169,12 +169,21 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'warranty_status_
     ];
 }
 
-if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'status_id'])) {
-    $attributes[] =  [
-        'label' => 'Статус заявки',
-        'value' => $model->status_id ? $model->status->name : null,
-    ];
-}
+$attributes[] =  [
+    'label' => 'Статус заявки',
+    'value' => $model->status_id ? $model->status->name : null,
+];
+
+$attributes[] =  [
+    'label' => 'Решение мастерской',
+    'value' => $model->decision_workshop_status_id ? $model->decisionWorkshopStatus->name : null,
+];
+
+$attributes[] =  [
+    'label' => 'Решение представительства',
+    'value' => $model->decision_agency_status_id ? $model->decisionAgencyStatus->name : null,
+];
+
 
 if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'user_id'])) {
     $attributes[] =  [

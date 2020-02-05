@@ -387,12 +387,23 @@ QuaggaAsset::register($this);
             ->dropDownList(WarrantyStatus::warrantyStatusAsMap(),['prompt' => 'Выбор']); ?>
     <?php endif; ?>
 
-    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'status_id'])): ?>
-        <?= $form->field($model, 'status_id',
-                ['labelOptions' => HintHelper::getLabelOptions('status_id', $hints)]
-            )
-            ->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']); ?>
+    <?= $form->field($model, 'status_id',
+            ['labelOptions' => HintHelper::getLabelOptions('status_id', $hints)]
+        )
+        ->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']); ?>
+
+    <?= $form->field($model, 'decision_workshop_status_id',
+        ['labelOptions' => HintHelper::getLabelOptions('decision_workshop_status_id', $hints)]
+    )
+        ->dropDownList(\app\models\DecisionWorkshopStatus::decisionWorkshopStatusAsMap(),['prompt' => 'Выбор']); ?>
+
+    <?php if (\Yii::$app->user->can('admin')): ?>
+        <?= $form->field($model, 'decision_agency_status_id',
+            ['labelOptions' => HintHelper::getLabelOptions('decision_agency_status_id', $hints)]
+        )
+            ->dropDownList(\app\models\DecisionAgencyStatus::decisionAgencyStatusAsMap(),['prompt' => 'Выбор']); ?>
     <?php endif; ?>
+
 
     <?= $form->field($model, 'master_id',
             ['labelOptions' => HintHelper::getLabelOptions('master_id', $hints)]

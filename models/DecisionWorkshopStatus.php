@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "decision_workshop_status".
@@ -40,5 +41,16 @@ class DecisionWorkshopStatus extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Наименование',
         ];
+    }
+
+    /**
+     * return array
+     */
+    public static function decisionWorkshopStatusAsMap()
+    {
+        $models = self::find()->orderBy('name')->all();
+        $list = ArrayHelper::map($models, 'id', 'name');
+
+        return $list;
     }
 }

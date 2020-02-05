@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "decision_agency_status".
@@ -40,5 +41,16 @@ class DecisionAgencyStatus extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Наименование',
         ];
+    }
+
+    /**
+     * return array
+     */
+    public static function decisionAgencyStatusAsMap()
+    {
+        $models = self::find()->orderBy('name')->all();
+        $list = ArrayHelper::map($models, 'id', 'name');
+
+        return $list;
     }
 }
