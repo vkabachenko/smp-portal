@@ -26,6 +26,7 @@ class BidHistory extends \yii\db\ActiveRecord
     const BID_SENT_WORKSHOP = 'Отправка заявки мастерской';
     const BID_SENT_AGENCY = 'Отправка заявки представительством';
     const BID_VIEWED = 'Заявка просмотрена';
+    const BID_STATUS_DONE = 'Заявка выполнена';
 
     /**
      * {@inheritdoc}
@@ -152,6 +153,14 @@ class BidHistory extends \yii\db\ActiveRecord
         }
     }
 
+    public static function removeRecords($attributes) {
+        try {
+            self::deleteAll($attributes);
+        } catch (\Exception $e) {
+            \Yii::error($e->getMessage());
+        }
+    }
+
     public static function sendBid($bidId, $userId)
     {
         $attributes = ['bid_id' => $bidId, 'user_id' => $userId];
@@ -245,4 +254,11 @@ class BidHistory extends \yii\db\ActiveRecord
 
         return null;
     }
+
+    public static function isBidDone($bidId) {
+
+        return self::find()->where(['bid_id' => $bidId, 'action' => self::BID_STATUS_DONE])->exists();
+
+    }
+
 }

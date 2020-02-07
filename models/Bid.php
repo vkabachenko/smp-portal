@@ -443,6 +443,21 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         return parent::beforeValidate();
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if (isset($changedAttributes['status_id'])) {
+            $doneStatusId = BidStatus::getAdminStatusId(BidStatus::STATUS_DONE);
+            $attributes = ['bid_id' => $this->id, 'action' => BidHistory::BID_STATUS_DONE];
+            if ($this->status_id == $doneStatusId) {
+                BidHistory::createRecord($attributes);
+            } elseif ($changedAttributes['status_id'] == $doneStatusId) {
+                BidHistory::removeRecords($attributes);
+            }
+        }
+    }
+
     public function checkBrandCorrespondence()
     {
         if ($this->brand_id) {

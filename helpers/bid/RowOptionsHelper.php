@@ -11,6 +11,10 @@ class RowOptionsHelper
 {
     public static function getClass($bidId, $userRole)
     {
+        if (BidHistory::isBidDone($bidId)) {
+            return 'bid-done disabled enabled-events';
+        }
+
         $sentBidStatus = BidHistory::sentBidStatus($bidId);
 
         switch ($userRole) {

@@ -25,6 +25,10 @@ class ViewSpareRule extends Rule
             return false;
         }
 
+        if (BidHistory::isBidDone($params['bidId'])) {
+            return false;
+        }
+
         if ($userModel->role === 'admin') {
             return true;
         }

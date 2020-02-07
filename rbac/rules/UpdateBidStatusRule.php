@@ -13,6 +13,10 @@ class UpdateBidStatusRule extends Rule
 
     public function execute($user, $item, $params)
     {
+        if (BidHistory::isBidDone($params['bidId'])) {
+            return false;
+        }
+
         $sentBidStatus = BidHistory::sentBidStatus($params['bidId']);
 
         if (is_null($sentBidStatus)) {

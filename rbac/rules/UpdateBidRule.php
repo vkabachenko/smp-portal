@@ -16,6 +16,10 @@ class UpdateBidRule extends Rule
 
     public function execute($user, $item, $params)
     {
+        if (BidHistory::isBidDone($params['bidId'])) {
+            return false;
+        }
+
         $isSent = BidHistory::find()
             ->where(['bid_id' => $params['bidId'], 'action' => BidHistory::BID_SENT_WORKSHOP])
             ->exists();

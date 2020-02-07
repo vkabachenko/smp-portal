@@ -17,6 +17,7 @@ class SendActRule extends Rule
     public function execute($user, $item, $params)
     {
         $sentBidStatus = BidHistory::sentBidStatus($params['bidId']);
+        $bidDone = BidHistory::isBidDone($params['bidId']);
 
         /* @var $bid Bid */
         $bid = Bid::findOne($params['bidId']);
@@ -40,6 +41,9 @@ class SendActRule extends Rule
                 return false;
             }
         } else {
+            if (BidHistory::isBidDone($params['bidId'])) {
+                return false;
+            }
             /* @var $manager \app\models\Manager */
             $manager = $user->manager;
             if ($manager) {

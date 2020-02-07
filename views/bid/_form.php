@@ -387,10 +387,18 @@ QuaggaAsset::register($this);
             ->dropDownList(WarrantyStatus::warrantyStatusAsMap(),['prompt' => 'Выбор']); ?>
     <?php endif; ?>
 
+    <?php $bidStatuses = []; ?>
+    <?php if (\Yii::$app->user->can('admin')): ?>
+        <?php $bidStatuses = BidStatus::bidStatusAsMapForAdmin(); ?>
+    <?php endif; ?>
+    <?php if (\Yii::$app->user->can('master')): ?>
+        <?php $bidStatuses = BidStatus::bidStatusAsMapForWorkshop(); ?>
+    <?php endif; ?>
+
     <?= $form->field($model, 'status_id',
             ['labelOptions' => HintHelper::getLabelOptions('status_id', $hints)]
         )
-        ->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']); ?>
+        ->dropDownList($bidStatuses, ['prompt' => 'Выбор']); ?>
 
     <?= $form->field($model, 'decision_workshop_status_id',
         ['labelOptions' => HintHelper::getLabelOptions('decision_workshop_status_id', $hints)]

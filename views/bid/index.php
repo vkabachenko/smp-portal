@@ -70,7 +70,7 @@ $columns[] = [
     'filterOptions' => ['class' => 'grid-status'],
     'headerOptions' => ['class' => 'grid-status'],
     'contentOptions' => ['class' => 'grid-status'],
-    'filter' => \app\models\BidStatus::bidStatusAsMap()
+    'filter' => \app\models\BidStatus::bidStatusAsMapForAdmin()
 ];
 
 $columns[] =  [

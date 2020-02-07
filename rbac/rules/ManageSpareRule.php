@@ -4,6 +4,7 @@
 namespace app\rbac\rules;
 
 use app\models\Bid;
+use app\models\BidHistory;
 use app\models\User;
 use yii\rbac\Rule;
 
@@ -21,6 +22,10 @@ class ManageSpareRule extends Rule
 
         $userModel = User::findOne($user);
         if (is_null($userModel)) {
+            return false;
+        }
+
+        if (BidHistory::isBidDone($params['bidId'])) {
             return false;
         }
 
