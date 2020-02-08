@@ -65,7 +65,11 @@ class BidController extends Controller
     {
         $this->checkAccess('createBid');
 
-        $model = new Bid();
+        $model = new Bid([
+            'user_id' => \Yii::$app->user->id,
+            'master_id' => \Yii::$app->user->identity->master ? \Yii::$app->user->identity->master->id : null,
+            'application_date' => date('Y-m-d')
+        ]);
         $uploadForm = new MultipleUploadForm();
         $commentForm = new CommentForm();
         $hints = BidAttribute::getHints();

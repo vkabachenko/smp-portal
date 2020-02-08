@@ -456,6 +456,11 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 BidHistory::removeRecords($attributes);
             }
         }
+
+        if ($insert && empty($this->bid_number)) {
+            $this->bid_number = $this->id;
+            $this->save(false);
+        }
     }
 
     public function checkBrandCorrespondence()
