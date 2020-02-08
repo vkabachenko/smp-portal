@@ -2,9 +2,12 @@
 
 use app\models\Bid;
 use yii\bootstrap\Html;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
+/* @var $bidJobProvider \yii\data\ActiveDataProvider */
+/* @var $spareProvider \yii\data\ActiveDataProvider */
 
 $this->title = 'Просмотр заявки';
 $this->params['back'] = ['index'];
@@ -263,5 +266,49 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])) {
 <div class="form-group clearfix"></div>
 <div>
     <?= Html::a('Добавить фото', ['bid-image/create', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
+</div>
+
+<div class="form-group clearfix"></div>
+<div>
+    <?php if (\Yii::$app->user->can('manageJobs', ['bidId' => $model->id])): ?>
+        <?= Html::a('<h3>Работы</h3>', ['bid-job/index', 'bidId' => $model->id]) ?>
+    <?php else: ?>
+        <h3>Работы</h3>
+    <?php endif; ?>
+    <?= GridView::widget([
+        'dataProvider' => $bidJobProvider,
+        'summary' => '',
+        'columns' => [
+            [
+                'attribute' => 'jobs_catalog_id',
+                'value' => 'jobsCatalog.name',
+            ],
+            [
+                'attribute' => 'price',
+                'value' => function(\app\models\BidJob $model) {
+                    return $model->price ?: $model->jobsCatalog->price;
+                },
+            ],
+        ],
+    ]); ?>
+</div>
+
+<div class="form-group clearfix"></div>
+<div>
+    <?php if (\Yii::$app->user->can('viewSpare', ['bidId' => $model->id])): ?>
+        <?= Html::a('<h3>Запчасти</h3>', ['spare/index', 'bidId' => $model->id]) ?>
+    <?php else: ?>
+        <h3>Запчасти</h3>
+    <?php endif; ?>
+    <?= GridView::widget([
+        'dataProvider' => $spareProvider,
+        'summary' => '',
+        'columns' => [
+            'name',
+            'quantity',
+            'price',
+            'total_price',
+        ],
+    ]); ?>
 </div>
 

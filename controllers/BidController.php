@@ -5,6 +5,8 @@ namespace app\controllers;
 
 use app\helpers\bid\CompositionHelper;
 use app\models\BidAttribute;
+use app\models\BidJob;
+use app\models\Spare;
 use app\services\access\QueryRestrictionService;
 use app\helpers\bid\TitleHelper;
 use app\models\Bid;
@@ -17,6 +19,7 @@ use app\models\form\MultipleUploadForm;
 use app\models\search\BidSearch;
 use app\templates\excel\act\ExcelAct;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -139,10 +142,22 @@ class BidController extends Controller
             throw new NotFoundHttpException('Page not found');
         }
 
+        $bidJobProvider = new ActiveDataProvider([
+            'query' => BidJob::find()->where(['bid_id' => $id])->orderBy('updated_at'),
+            'pagination' => false
+        ]);
+
+        $spareProvider = new ActiveDataProvider([
+            'query' => Spare::find()->where(['bid_id' => $id])->orderBy('updated_at'),
+            'pagination' => false
+        ]);
+
         BidHistory::setViewStatus($id, \Yii::$app->user->identity);
 
         return $this->render('view', [
             'model' => $model,
+            'bidJobProvider' => $bidJobProvider,
+            'spareProvider' => $spareProvider
         ]);
     }
 
