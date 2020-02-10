@@ -194,19 +194,21 @@ $columns[] = [
     <h2> <?= $this->title ?></h2>
 
     <div class="bids-grid">
-        <?php if (\Yii::$app->user->can('createBid')): ?>
-            <div>
-                <?= Html::a('Новая заявка', ['create'], ['class' => 'btn btn-success']) ?>
-            </div>
-        <?php endif; ?>
+        <div>
+            <?php if (\Yii::$app->user->can('createBid')): ?>
+                <div class="col-xs-6">
+                    <?= Html::a('Новая заявка', ['create'], ['class' => 'btn btn-success']) ?>
+                </div>
+            <?php endif; ?>
 
-        <div class="bid-search-btn-wrap">
-            <?= Html::button('Расширенный поиск', [
-                'class' => 'btn btn-primary',
-                'onclick' => '$(".bid-search").show();$(".bid-search-text").hide();'
-            ])
-            ?>
-            <?= $this->render('_search-text', ['model' => $searchModel]); ?>
+            <div class="bid-search-btn-wrap col-xs-6">
+                <?= Html::button('Расширенный поиск', [
+                    'class' => 'btn btn-primary',
+                    'onclick' => '$(".bid-search").show();$(".bid-search-text").hide();'
+                ])
+                ?>
+                <?= $this->render('_search-text', ['model' => $searchModel]); ?>
+            </div>
         </div>
 
         <?= $this->render('_search', ['model' => $searchModel]); ?>

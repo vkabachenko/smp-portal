@@ -86,4 +86,14 @@ $(function() {
                 swal('Ошибка', error.message, 'error');
             });
     });
+
+    $('input')
+        .on('focus', function() {
+            if ($(window).width() < 768) {
+                $('.navbar-main').hide();
+            }
+        })
+        .on('blur', function() {
+            $('.navbar-main').show();
+        });
 });
