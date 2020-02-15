@@ -12,7 +12,7 @@ use yii\rbac\Rule;
 
 class UpdateDecisionManagerRule extends Rule
 {
-    public $name = 'isUpdateDecisionMaster';
+    public $name = 'isUpdateDecisionManager';
 
     public function execute($user, $item, $params)
     {

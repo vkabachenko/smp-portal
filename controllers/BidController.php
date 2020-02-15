@@ -241,10 +241,24 @@ class BidController extends Controller
                 \Yii::error($model->getErrors());
                 throw new \DomainException('Fail to save bid');
             }
-            return $this->redirect(['view', 'id' => $bidId]);
         }
+        return $this->redirect(['view', 'id' => $bidId]);
+    }
 
-        return $this->redirect(['send-act/index', 'bidId' => $bidId, 'forced' => true]);
+    public function actionUpdateDecisionMaster($bidId)
+    {
+        $this->checkAccess('updateDecisionMaster', ['bidId' => $bidId]);
+
+        $model = Bid::findOne($bidId);
+
+        if ($model->load(Yii::$app->request->post())) {
+            BidHistory::createUpdated($model->id, $model, \Yii::$app->user->id);
+            if (!$model->save()) {
+                \Yii::error($model->getErrors());
+                throw new \DomainException('Fail to save bid');
+            }
+        }
+        return $this->redirect(['view', 'id' => $bidId]);
     }
 
     private function afterChange(Bid $model)

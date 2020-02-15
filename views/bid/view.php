@@ -184,14 +184,28 @@ if (\Yii::$app->user->can('setBidDone', ['bidId' => $model->id])) {
     'value' => '<span>' . ($model->status_id ? $model->status->name : '') . '</span>' . '  ' . $doneLink
 ];
 
+if (\Yii::$app->user->can('updateDecisionMaster', ['bidId' => $model->id])) {
+    $decisionMaster = $this->render('modal/decision-master', ['model' => $model]);
+} else {
+    $decisionMaster = '';
+}
+
 $attributes[] =  [
     'label' => 'Решение мастерской',
-    'value' => $model->decision_workshop_status_id ? $model->decisionWorkshopStatus->name : null,
+    'format' => 'raw',
+    'value' => '<span>' . ($model->decision_workshop_status_id ? $model->decisionWorkshopStatus->name : '') . '</span>' . '  ' . $decisionMaster,
 ];
+
+if (\Yii::$app->user->can('updateDecisionManager', ['bidId' => $model->id])) {
+    $decisionManager = $this->render('modal/decision-manager', ['model' => $model]);
+} else {
+    $decisionManager = '';
+}
 
 $attributes[] =  [
     'label' => 'Решение представительства',
-    'value' => $model->decision_agency_status_id ? $model->decisionAgencyStatus->name : null,
+    'format' => 'raw',
+    'value' => '<span>' . ($model->decision_agency_status_id ? $model->decisionAgencyStatus->name : '') . '</span>' . '  ' . $decisionManager,
 ];
 
 
