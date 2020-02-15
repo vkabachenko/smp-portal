@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\helpers\bid\CompositionHelper;
 use app\models\BidAttribute;
 use app\models\BidJob;
+use app\models\BidStatus;
 use app\models\Spare;
 use app\services\access\QueryRestrictionService;
 use app\helpers\bid\TitleHelper;
@@ -17,6 +18,7 @@ use app\models\BrandModel;
 use app\models\form\CommentForm;
 use app\models\form\MultipleUploadForm;
 use app\models\search\BidSearch;
+use app\services\status\ReadStatusService;
 use app\templates\excel\act\ExcelAct;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -81,6 +83,8 @@ class BidController extends Controller
             $uploadForm->files = UploadedFile::getInstances($uploadForm, 'files');
             $commentForm->load(Yii::$app->request->post());
             if ($model->createBid(\Yii::$app->user->id, $uploadForm, $commentForm)) {
+                $model->bid_number = strval($model->id);
+                $model->setStatus(BidStatus::STATUS_FILLED);
                 return $this->afterChange($model);
             }
         }
@@ -152,7 +156,10 @@ class BidController extends Controller
             'pagination' => false
         ]);
 
-        BidHistory::setViewStatus($id, \Yii::$app->user->identity);
+        if (!$model->isViewed(\Yii::$app->user->identity)) {
+            $statusService = new ReadStatusService($model->id, \Yii::$app->user->identity);
+            $statusService->setStatus();
+        }
 
         return $this->render('view', [
             'model' => $model,

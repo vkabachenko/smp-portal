@@ -15,7 +15,6 @@ $this->params['back'] = ['admin/catalogs'];
     <div class="list-group center-menu">
         <?= Html::a('Ремонта', ['repair-status/index'], ['class' => 'list-group-item center-menu-item']) ?>
         <?= Html::a('Гарантии', ['warranty-status/index'], ['class' => 'list-group-item center-menu-item']) ?>
-        <?= Html::a('Заявки', ['bid-status/index'], ['class' => 'list-group-item center-menu-item']) ?>
         <?= Html::a('Решения мастерской', ['decision-workshop-status/index'], ['class' => 'list-group-item center-menu-item']) ?>
         <?= Html::a('Решения представительства', ['decision-agency-status/index'], ['class' => 'list-group-item center-menu-item']) ?>
     </div>

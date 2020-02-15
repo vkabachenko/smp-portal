@@ -3,7 +3,9 @@
 
 namespace app\rbac\rules;
 
-use app\models\BidHistory;
+
+use app\models\Bid;
+use app\models\BidStatus;
 use app\models\User;
 use yii\rbac\Rule;
 
@@ -13,13 +15,8 @@ class UpdateBidStatusRule extends Rule
 
     public function execute($user, $item, $params)
     {
-        if (BidHistory::isBidDone($params['bidId'])) {
-            return false;
-        }
-
-        $sentBidStatus = BidHistory::sentBidStatus($params['bidId']);
-
-        if (is_null($sentBidStatus)) {
+        $bid = Bid::findOne($params['bidId']);
+        if (is_null($bid)) {
             return false;
         }
 
@@ -29,8 +26,8 @@ class UpdateBidStatusRule extends Rule
         }
 
         if (
-            ($user->master && $sentBidStatus == BidHistory::BID_SENT_AGENCY) ||
-            ($user->manager && $sentBidStatus == BidHistory::BID_SENT_WORKSHOP)
+            ($user->master && $bid->status_id == BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP)) ||
+            ($user->manager && $bid->status_id == BidStatus::getId(BidStatus::STATUS_READ_AGENCY))
         ) {
             return true;
         } else {

@@ -6,7 +6,7 @@ namespace app\rbac\rules;
 
 use app\models\AgencyWorkshop;
 use app\models\Bid;
-use app\models\BidHistory;
+use app\models\BidStatus;
 use app\models\User;
 use yii\rbac\Rule;
 
@@ -16,9 +16,6 @@ class SendActRule extends Rule
 
     public function execute($user, $item, $params)
     {
-        $sentBidStatus = BidHistory::sentBidStatus($params['bidId']);
-        $bidDone = BidHistory::isBidDone($params['bidId']);
-
         /* @var $bid Bid */
         $bid = Bid::findOne($params['bidId']);
 
@@ -35,20 +32,21 @@ class SendActRule extends Rule
         $master = $user->master;
         if ($master) {
             if ($master->workshop_id == $bid->workshop_id
-                && (is_null($sentBidStatus) || $sentBidStatus == BidHistory::BID_SENT_AGENCY)) {
+                && ($bid->status_id === BidStatus::getId(BidStatus::STATUS_FILLED)
+                || $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP))) {
                 return true;
             } else {
                 return false;
             }
         } else {
-            if (BidHistory::isBidDone($params['bidId'])) {
+            if ($bid->status_id === BidStatus::getId(BidStatus::STATUS_DONE)) {
                 return false;
             }
             /* @var $manager \app\models\Manager */
             $manager = $user->manager;
             if ($manager) {
                 if (AgencyWorkshop::getActive($manager->agency, $bid->workshop)
-                    && $sentBidStatus == BidHistory::BID_SENT_WORKSHOP) {
+                    && $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_AGENCY)) {
                     return true;
                 } else {
                     return false;

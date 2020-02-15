@@ -103,7 +103,6 @@ class BidSearch extends Bid
     {
         $query = Bid::find()
             ->distinct()
-            ->joinWith('bidHistories', false)
             ->with([
                 'condition', 'brand', 'brandCorrespondence', 'brandModel', 'client', 'manufacturer', 'repairStatus',
                 'status', 'master', 'workshop', 'warrantyStatus'

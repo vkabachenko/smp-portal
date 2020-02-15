@@ -6,36 +6,35 @@ namespace app\helpers\bid;
 
 use app\models\Bid;
 use app\models\BidHistory;
+use app\models\BidStatus;
 
 class RowOptionsHelper
 {
-    public static function getClass($bidId, $userRole)
+    public static function getClass(Bid $bid, $userRole)
     {
-        if (BidHistory::isBidDone($bidId)) {
+        if ($bid->status_id == BidStatus::getId(BidStatus::STATUS_DONE)) {
             return 'bid-done disabled enabled-events';
         }
 
-        $sentBidStatus = BidHistory::sentBidStatus($bidId);
-
         switch ($userRole) {
             case 'manager':
-                if ($sentBidStatus == BidHistory::BID_SENT_AGENCY) {
+                if ($bid->status_id == BidStatus::getId(BidStatus::STATUS_SENT_AGENCY) ||
+                    $bid->status_id == BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP)) {
                     return 'disabled enabled-events';
                 } else {
-                    return BidHistory::isBidViewed($bidId, $userRole) === false ? 'not-viewed' : '';
+                    return $bid->status_id == BidStatus::getId(BidStatus::STATUS_SENT_WORKSHOP) ? 'not-viewed' : '';
                 }
-            case 'master': {
-                if ($sentBidStatus == BidHistory::BID_SENT_WORKSHOP) {
+            case 'master':
+                if ($bid->status_id == BidStatus::getId(BidStatus::STATUS_SENT_WORKSHOP) ||
+                    $bid->status_id == BidStatus::getId(BidStatus::STATUS_READ_AGENCY)) {
                     return 'disabled enabled-events';
                 } else {
-                    return BidHistory::isBidViewed($bidId, $userRole) === false ? 'not-viewed' : '';
+                    return $bid->status_id == BidStatus::getId(BidStatus::STATUS_SENT_AGENCY) ? 'not-viewed' : '';
                 }
-            }
             default: {
                 return '';
             }
         }
-
     }
 
 }

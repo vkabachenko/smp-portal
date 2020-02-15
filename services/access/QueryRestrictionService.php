@@ -5,6 +5,7 @@ namespace app\services\access;
 use app\models\Bid;
 use app\models\Agency;
 use app\models\BidHistory;
+use app\models\BidStatus;
 use app\models\User;
 use app\models\Workshop;
 
@@ -77,7 +78,7 @@ class QueryRestrictionService
                     ['manufacturer_id' => $agency->manufacturer_id],
                     ['workshop_id' => $workshops],
                     ['or', ['treatment_type' => Bid::TREATMENT_TYPE_WARRANTY], ['treatment_type' => null]],
-                    ['bid_history.action' => BidHistory::BID_SENT_WORKSHOP]
+                    ['or', ['<>', 'status_id', BidStatus::getId(BidStatus::STATUS_FILLED)]]
                 ];
 
     }

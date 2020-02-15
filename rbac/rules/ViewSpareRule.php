@@ -4,7 +4,7 @@
 namespace app\rbac\rules;
 
 use app\models\Bid;
-use app\models\BidHistory;
+use app\models\BidStatus;
 use app\models\User;
 use yii\rbac\Rule;
 
@@ -25,20 +25,16 @@ class ViewSpareRule extends Rule
             return false;
         }
 
-        if (BidHistory::isBidDone($params['bidId'])) {
-            return false;
-        }
-
         if ($userModel->role === 'admin') {
             return true;
         }
 
-        $sentBidStatus = BidHistory::sentBidStatus($params['bidId']);
-
         /* @var $master \app\models\Master */
         if ($master = $userModel->master) {
             return $master->workshop_id == $bid->workshop_id
-                && (is_null($sentBidStatus) || $sentBidStatus == BidHistory::BID_SENT_AGENCY);
+                && ($bid->status_id === BidStatus::getId(BidStatus::STATUS_FILLED)
+                    || $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP)
+                );
         }
 
         $agency = $bid->getAgency();
@@ -48,12 +44,12 @@ class ViewSpareRule extends Rule
 
         /* @var $manager \app\models\Manager */
         if ($manager = $userModel->manager) {
-            return $manager->agency_id == $agency->id && $sentBidStatus == BidHistory::BID_SENT_WORKSHOP;
+            return $manager->agency_id == $agency->id
+                && $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_AGENCY);
 
         }
 
         return false;
 
     }
-
 }

@@ -98,9 +98,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'client_address' => 'Адрес клиента',
         'treatment_type' => 'Тип обращения',
         'purchase_date' => 'Дата покупки',
-        'application_date' => 'Дата обращения',
         'warranty_number' => 'Номер гарантийного талона',
-        'bid_number' => 'Номер заявки',
         'bid_1C_number' => 'Номер заявки в 1С',
         'bid_manufacturer_number' => 'Номер заявки у представительства',
         'condition_id' => 'Состояние',
@@ -133,6 +131,8 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'decision_workshop_status_id' => 'Решение мастерской',
         'decision_agency_status_id' => 'Решение представительства',
         'status_id' => 'Статус',
+        'bid_number' => 'Номер заявки',
+        'application_date' => 'Дата обращения',
     ];
 
     /**
@@ -443,26 +443,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         return parent::beforeValidate();
     }
 
-    public function afterSave($insert, $changedAttributes)
-    {
-        parent::afterSave($insert, $changedAttributes);
-
-        if (isset($changedAttributes['status_id'])) {
-            $doneStatusId = BidStatus::getAdminStatusId(BidStatus::STATUS_DONE);
-            $attributes = ['bid_id' => $this->id, 'action' => BidHistory::BID_STATUS_DONE];
-            if ($this->status_id == $doneStatusId) {
-                BidHistory::createRecord($attributes);
-            } elseif ($changedAttributes['status_id'] == $doneStatusId) {
-                BidHistory::removeRecords($attributes);
-            }
-        }
-
-        if ($insert && empty($this->bid_number)) {
-            $this->bid_number = $this->id;
-            $this->save(false);
-        }
-    }
-
     public function checkBrandCorrespondence()
     {
         if ($this->brand_id) {
@@ -568,5 +548,34 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         }
         return $agency;
     }
+
+    public function setStatus($status)
+    {
+        $statusId = BidStatus::getId($status);
+
+        if (is_null($statusId)) {
+            throw new \DomainException('setting unknown status ' . $status);
+        }
+
+        $this->status_id = $statusId;
+
+        if (!$this->save()) {
+            \Yii::error($this->getErrors());
+            throw new \DomainException('fail to save bid');
+        }
+    }
+
+    public function isViewed(User $user)
+    {
+        return $user->role === 'admin'
+            || $this->status_id === BidStatus::getId(BidStatus::STATUS_FILLED)
+            || $this->status_id === BidStatus::getId(BidStatus::STATUS_DONE)
+            || $this->status_id === BidStatus::getId(BidStatus::STATUS_READ_AGENCY)
+            || $this->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP)
+            || ($user->role === 'manager' &&  $this->status_id === BidStatus::getId(BidStatus::STATUS_SENT_AGENCY))
+            || ($user->role === 'master' &&  $this->status_id === BidStatus::getId(BidStatus::STATUS_SENT_WORKSHOP));
+
+    }
+
 
 }

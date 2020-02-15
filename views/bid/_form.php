@@ -313,16 +313,6 @@ QuaggaAsset::register($this);
         ]) ?>
     <?php endif; ?>
 
-    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'application_date'])): ?>
-        <?= $form->field($model, 'application_date',
-                ['labelOptions' => HintHelper::getLabelOptions('application_date', $hints)]
-            )->widget(DatePicker::class, [
-            'language' => 'ru',
-            'dateFormat' => 'yyyy-MM-dd',
-            'options' => ['class' => 'form-control']
-        ]) ?>
-    <?php endif; ?>
-
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'date_manufacturer'])): ?>
         <?= $form->field($model, 'date_manufacturer',
                 ['labelOptions' => HintHelper::getLabelOptions('date_manufacturer', $hints)]
@@ -346,12 +336,6 @@ QuaggaAsset::register($this);
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'warranty_number'])): ?>
         <?= $form->field($model, 'warranty_number',
                 ['labelOptions' => HintHelper::getLabelOptions('warranty_number', $hints)]
-            )->textInput(['maxlength' => true]) ?>
-    <?php endif; ?>
-
-    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_number'])): ?>
-        <?= $form->field($model, 'bid_number',
-                ['labelOptions' => HintHelper::getLabelOptions('bid_number', $hints)]
             )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
@@ -387,18 +371,6 @@ QuaggaAsset::register($this);
             ->dropDownList(WarrantyStatus::warrantyStatusAsMap(),['prompt' => 'Выбор']); ?>
     <?php endif; ?>
 
-    <?php $bidStatuses = []; ?>
-    <?php if (\Yii::$app->user->can('admin')): ?>
-        <?php $bidStatuses = BidStatus::bidStatusAsMapForAdmin(); ?>
-    <?php endif; ?>
-    <?php if (\Yii::$app->user->can('master')): ?>
-        <?php $bidStatuses = BidStatus::bidStatusAsMapForWorkshop(); ?>
-    <?php endif; ?>
-
-    <?= $form->field($model, 'status_id',
-            ['labelOptions' => HintHelper::getLabelOptions('status_id', $hints)]
-        )
-        ->dropDownList($bidStatuses, ['prompt' => 'Выбор']); ?>
 
     <?= $form->field($model, 'decision_workshop_status_id',
         ['labelOptions' => HintHelper::getLabelOptions('decision_workshop_status_id', $hints)]

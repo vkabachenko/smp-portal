@@ -207,7 +207,7 @@ use kartik\date\DatePicker;
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'status_id'])): ?>
-        <?= $form->field($model, 'status_id')->dropDownList(BidStatus::bidStatusAsMapForAdmin(),['prompt' => 'Выбор']) ?>
+        <?= $form->field($model, 'status_id')->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])): ?>

@@ -7,6 +7,7 @@ namespace app\controllers;
 use app\models\BidHistory;
 use app\models\form\SendActForm;
 use app\models\form\UploadExcelTemplateForm;
+use app\services\status\SentStatusService;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 
@@ -45,7 +46,8 @@ class SendActController extends Controller
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             if ($model->send($uploadForm)) {
                 \Yii::$app->session->setFlash('success', 'Заявка успешно отправлена');
-                BidHistory::sendBid($bidId, \Yii::$app->user->id);
+                $statusService = new SentStatusService($bidId, \Yii::$app->user->identity);
+                $statusService->setStatus();
             } else {
                 \Yii::$app->session->setFlash('error', 'Ошибка при отправке заявки');
             }

@@ -222,12 +222,6 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])) {
             </div>
         <?php endif; ?>
 
-        <?php if (\Yii::$app->user->can('updateBidStatus', ['bidId' => $model->id])): ?>
-            <div class="col-md-2 col-sm-3  col-xs-6">
-                <?= Html::a('Статус', ['update-status', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-            </div>
-        <?php endif; ?>
-
         <?php if (\Yii::$app->user->can('sendAct', ['bidId' => $model->id])): ?>
             <div class="col-md-2 col-sm-3  col-xs-6 bid-view-send">
                 <?= Html::a('Отправить', ['send-act/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>

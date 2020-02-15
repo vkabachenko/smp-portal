@@ -70,7 +70,7 @@ $columns[] = [
     'filterOptions' => ['class' => 'grid-status'],
     'headerOptions' => ['class' => 'grid-status'],
     'contentOptions' => ['class' => 'grid-status'],
-    'filter' => \app\models\BidStatus::bidStatusAsMapForAdmin()
+    'filter' => \app\models\BidStatus::bidStatusAsMap()
 ];
 
 $columns[] =  [
@@ -218,7 +218,7 @@ $columns[] = [
             'filterModel' => $searchModel,
             'columns' => $columns,
             'rowOptions' => function(Bid $bid) {
-                return ['class' => RowOptionsHelper::getClass($bid->id, \Yii::$app->user->identity->role)];
+                return ['class' => RowOptionsHelper::getClass($bid, \Yii::$app->user->identity->role)];
             }
         ]); ?>
     </div>

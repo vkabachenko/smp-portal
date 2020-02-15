@@ -17,10 +17,12 @@ use yii\helpers\ArrayHelper;
 class BidStatus extends \yii\db\ActiveRecord
 {
     const STATUS_DONE = 'done';
-    const AGENCY_STATUSES = [];
-    const WORKSHOP_STATUSES = [
-      self::STATUS_DONE
-    ];
+    const STATUS_FILLED = 'filled';
+    const STATUS_SENT_AGENCY = 'sent by agency';
+    const STATUS_READ_AGENCY = 'read by agency';
+    const STATUS_SENT_WORKSHOP = 'sent by workshop';
+    const STATUS_READ_WORKSHOP = 'read by workshop';
+
     /**
      * {@inheritdoc}
      */
@@ -55,7 +57,7 @@ class BidStatus extends \yii\db\ActiveRecord
     /**
      * return array
      */
-    public static function bidStatusAsMapForAdmin()
+    public static function bidStatusAsMap()
     {
         $models = self::find()->orderBy('name')->all();
         $list = ArrayHelper::map($models, 'id', 'name');
@@ -63,40 +65,7 @@ class BidStatus extends \yii\db\ActiveRecord
         return $list;
     }
 
-    /**
-     * return array
-     */
-    private static function bidStatusAsMapCommon()
-    {
-        $models = self::find()->where(['admin_name' => null])->orderBy('name')->all();
-        $list = ArrayHelper::map($models, 'id', 'name');
-
-        return $list;
-    }
-
-    /**
-     * return array
-     */
-    public static function bidStatusAsMapForWorkshop()
-    {
-        $models = self::find()->where(['admin_name' => self::WORKSHOP_STATUSES])->orderBy('name')->all();
-        $list = ArrayHelper::map($models, 'id', 'name');
-
-        return $list + self::bidStatusAsMapCommon();
-    }
-
-    /**
-     * return array
-     */
-    public static function bidStatusAsMapForAgency()
-    {
-        $models = self::find()->where(['admin_name' => self::AGENCY_STATUSES])->orderBy('name')->all();
-        $list = ArrayHelper::map($models, 'id', 'name');
-
-        return $list + self::bidStatusAsMapCommon();
-    }
-
-    public static function getAdminStatusId($adminName)
+    public static function getId($adminName)
     {
         $model = self::find()->where(['admin_name' => $adminName])->one();
 

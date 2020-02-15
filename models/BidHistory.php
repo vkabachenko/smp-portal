@@ -23,11 +23,6 @@ use yii\db\ActiveRecord;
  */
 class BidHistory extends \yii\db\ActiveRecord
 {
-    const BID_SENT_WORKSHOP = 'Отправка заявки мастерской';
-    const BID_SENT_AGENCY = 'Отправка заявки представительством';
-    const BID_VIEWED = 'Заявка просмотрена';
-    const BID_STATUS_DONE = 'Заявка выполнена';
-
     /**
      * {@inheritdoc}
      */
@@ -151,114 +146,6 @@ class BidHistory extends \yii\db\ActiveRecord
         if (!$model->save()) {
             \Yii::error($attributes);
         }
-    }
-
-    public static function removeRecords($attributes) {
-        try {
-            self::deleteAll($attributes);
-        } catch (\Exception $e) {
-            \Yii::error($e->getMessage());
-        }
-    }
-
-    public static function sendBid($bidId, $userId)
-    {
-        $attributes = ['bid_id' => $bidId, 'user_id' => $userId];
-        $master = Master::findByUserId($userId);
-        if ($master) {
-            $attributes['action'] = self::BID_SENT_WORKSHOP;
-        } else {
-            /* @var $manager Manager */
-            $manager = Manager::findByUserId($userId);
-            if ($manager) {
-                $attributes['action'] = self::BID_SENT_AGENCY;
-            } else {
-                return;
-            }
-        }
-
-        self::createRecord($attributes);
-    }
-
-
-    private static function sentBid($bidId)
-    {
-        return self::find()
-            ->where(['bid_id' => $bidId])
-            ->andWhere(['or', ['action' => BidHistory::BID_SENT_WORKSHOP], ['action' => BidHistory::BID_SENT_AGENCY]])
-            ->orderBy('created_at DESC')
-            ->one();
-    }
-
-
-    public static function sentBidStatus($bidId)
-    {
-        /* @var $bidHistory BidHistory */
-        $bidHistory = self::sentBid($bidId);
-
-        return $bidHistory ? $bidHistory->action : null;
-    }
-
-    /**
-     * @param $bidId int
-     * @param $user User
-     */
-    public static function setViewStatus($bidId, $user)
-    {
-        $attributes = ['bid_id' => $bidId, 'user_id' => $user->id, 'action' => self::BID_VIEWED];
-
-        switch ($user->role) {
-            case 'manager':
-                if (self::sentBidStatus($bidId) == self::BID_SENT_WORKSHOP) {
-                    self::createRecord($attributes);
-                }
-                break;
-            case 'master':
-                if (self::sentBidStatus($bidId) == self::BID_SENT_AGENCY) {
-                    self::createRecord($attributes);
-                }
-                break;
-            default:
-        }
-    }
-
-    public static function isBidViewed($bidId, $userRole)
-    {
-        if (!in_array($userRole, ['manager', 'master'])) {
-            return null;
-        }
-
-        /* @var $sentBid \app\models\BidHistory */
-        $sentBid = self::sentBid($bidId);
-
-        if (is_null($sentBid)) {
-            return null;
-        }
-
-        $isViewed = self::find()
-            ->where(['>', 'created_at', $sentBid->created_at])
-            ->andWhere(['bid_id' => $bidId, 'action' => self::BID_VIEWED])
-            ->exists();
-
-        if ($userRole == 'manager') {
-            if ($sentBid->action == self::BID_SENT_WORKSHOP) {
-                return $isViewed;
-            }
-        }
-
-        if ($userRole == 'master') {
-            if ($sentBid->action == self::BID_SENT_AGENCY) {
-                return $isViewed;
-            }
-        }
-
-        return null;
-    }
-
-    public static function isBidDone($bidId) {
-
-        return self::find()->where(['bid_id' => $bidId, 'action' => self::BID_STATUS_DONE])->exists();
-
     }
 
 }
