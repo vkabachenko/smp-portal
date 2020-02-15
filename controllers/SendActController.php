@@ -33,9 +33,12 @@ class SendActController extends Controller
         ];
     }
 
-    public function actionIndex($bidId)
+    public function actionIndex($bidId, $forced = false)
     {
-        $this->checkAccess('sendAct', ['bidId' => $bidId]);
+        if (!$forced) {
+            $this->checkAccess('sendAct', ['bidId' => $bidId]);
+        }
+
         $model = new SendActForm(['bidId' => $bidId, 'userId' => \Yii::$app->user->id]);
         $uploadForm = new UploadExcelTemplateForm();
 
@@ -46,8 +49,10 @@ class SendActController extends Controller
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             if ($model->send($uploadForm)) {
                 \Yii::$app->session->setFlash('success', 'Заявка успешно отправлена');
-                $statusService = new SentStatusService($bidId, \Yii::$app->user->identity);
-                $statusService->setStatus();
+                if (!$forced) {
+                    $statusService = new SentStatusService($bidId, \Yii::$app->user->identity);
+                    $statusService->setStatus();
+                }
             } else {
                 \Yii::$app->session->setFlash('error', 'Ошибка при отправке заявки');
             }

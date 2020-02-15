@@ -172,9 +172,16 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'warranty_status_
     ];
 }
 
-$attributes[] =  [
+if (\Yii::$app->user->can('setBidDone', ['bidId' => $model->id])) {
+    $doneLink = Html::a('Выполнено', ['bid/set-status-done', 'bidId' => $model->id], ['class' => 'btn btn-danger']);
+} else {
+    $doneLink = '';
+}
+
+    $attributes[] =  [
     'label' => 'Статус заявки',
-    'value' => $model->status_id ? $model->status->name : null,
+    'format' => 'html',
+    'value' => '<span>' . ($model->status_id ? $model->status->name : '') . '</span>' . '  ' . $doneLink
 ];
 
 $attributes[] =  [

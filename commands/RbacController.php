@@ -18,6 +18,7 @@ use app\rbac\rules\UpdateBidStatusRule;
 use app\rbac\rules\ViewNewsRule;
 use app\rbac\rules\ManageSpareRule;
 use app\rbac\rules\ViewSpareRule;
+use app\rbac\rules\SetBidDoneRule;
 use yii\console\Controller;
 
 class RbacController extends Controller
@@ -179,6 +180,12 @@ class RbacController extends Controller
         $viewSpare->ruleName = $viewSpareRule->name;
         $auth->add($viewSpare);
 
+        $setBidDoneRule = new SetBidDoneRule();
+        $auth->add($setBidDoneRule);
+        $setBidDone = $auth->createPermission('setBidDone');
+        $setBidDone->ruleName = $setBidDoneRule->name;
+        $auth->add($setBidDone);
+
         $client = $auth->createRole('client');
         $auth->add($client);
 
@@ -199,6 +206,7 @@ class RbacController extends Controller
         $auth->addChild($master, $manageJobs);
         $auth->addChild($master, $manageSpare);
         $auth->addChild($master, $viewSpare);
+        $auth->addChild($master, $setBidDone);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);

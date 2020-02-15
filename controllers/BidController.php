@@ -18,6 +18,7 @@ use app\models\BrandModel;
 use app\models\form\CommentForm;
 use app\models\form\MultipleUploadForm;
 use app\models\search\BidSearch;
+use app\services\status\DoneStatusService;
 use app\services\status\ReadStatusService;
 use app\templates\excel\act\ExcelAct;
 use Yii;
@@ -216,6 +217,16 @@ class BidController extends Controller
         $data = \Yii::$app->request->post();
 
         return ['compositions' => CompositionHelper::unionCompositions($data['brandId'], $data['term'])];
+    }
+
+    public function actionSetStatusDone($bidId)
+    {
+        $this->checkAccess('setBidDone', ['bidId' => $bidId]);
+
+        $service = new DoneStatusService($bidId, \Yii::$app->user->identity);
+        $service->setStatus();
+
+        return $this->redirect(['send-act/index', 'bidId' => $bidId, 'forced' => true]);
     }
 
     private function afterChange(Bid $model)

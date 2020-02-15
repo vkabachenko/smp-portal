@@ -3,9 +3,7 @@
 
 namespace app\helpers\bid;
 
-
 use app\models\Bid;
-use app\models\BidHistory;
 use app\models\BidStatus;
 
 class RowOptionsHelper
