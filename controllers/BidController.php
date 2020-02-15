@@ -229,6 +229,24 @@ class BidController extends Controller
         return $this->redirect(['send-act/index', 'bidId' => $bidId, 'forced' => true]);
     }
 
+    public function actionUpdateDecisionManager($bidId)
+    {
+        $this->checkAccess('updateDecisionManager', ['bidId' => $bidId]);
+
+        $model = Bid::findOne($bidId);
+
+        if ($model->load(Yii::$app->request->post())) {
+            BidHistory::createUpdated($model->id, $model, \Yii::$app->user->id);
+            if (!$model->save()) {
+                \Yii::error($model->getErrors());
+                throw new \DomainException('Fail to save bid');
+            }
+            return $this->redirect(['view', 'id' => $bidId]);
+        }
+
+        return $this->redirect(['send-act/index', 'bidId' => $bidId, 'forced' => true]);
+    }
+
     private function afterChange(Bid $model)
     {
         if (\Yii::$app->request->post('save')) {

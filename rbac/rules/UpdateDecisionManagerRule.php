@@ -7,11 +7,12 @@ namespace app\rbac\rules;
 use app\models\Bid;
 use app\models\BidStatus;
 use app\models\User;
+use app\models\Workshop;
 use yii\rbac\Rule;
 
-class UpdateBidStatusRule extends Rule
+class UpdateDecisionManagerRule extends Rule
 {
-    public $name = 'isUpdateBidStatus';
+    public $name = 'isUpdateDecisionMaster';
 
     public function execute($user, $item, $params)
     {
@@ -25,14 +26,17 @@ class UpdateBidStatusRule extends Rule
             return false;
         }
 
-        if (
-            ($user->master && $bid->status_id == BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP)) ||
-            ($user->manager && $bid->status_id == BidStatus::getId(BidStatus::STATUS_READ_AGENCY))
-        ) {
-            return true;
-        } else {
+        $agency = $bid->getAgency();
+        if (is_null($agency)) {
             return false;
         }
+
+        if ($manager = $user->manager) {
+            return $manager->agency_id == $agency->id && $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_AGENCY);
+        }
+
+        return false;
+
     }
 
 }

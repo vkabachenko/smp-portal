@@ -14,7 +14,8 @@ use app\rbac\rules\MasterWorkshopRule;
 use app\rbac\rules\BidAttributeRule;
 use app\rbac\rules\SendActRule;
 use app\rbac\rules\UpdateBidRule;
-use app\rbac\rules\UpdateBidStatusRule;
+use app\rbac\rules\UpdateDecisionManagerRule;
+use app\rbac\rules\UpdateDecisionMasterRule;
 use app\rbac\rules\ViewNewsRule;
 use app\rbac\rules\ManageSpareRule;
 use app\rbac\rules\ViewSpareRule;
@@ -140,11 +141,17 @@ class RbacController extends Controller
         $sendAct->ruleName = $sendActRule->name;
         $auth->add($sendAct);
 
-        $updateBidStatusRule = new UpdateBidStatusRule();
-        $auth->add($updateBidStatusRule);
-        $updateBidStatus = $auth->createPermission('updateBidStatus');
-        $updateBidStatus->ruleName = $updateBidStatusRule->name;
-        $auth->add($updateBidStatus);
+        $updateDecisionMasterRule = new UpdateDecisionMasterRule();
+        $auth->add($updateDecisionMasterRule);
+        $updateDecisionMaster = $auth->createPermission('updateDecisionMaster');
+        $updateDecisionMaster->ruleName = $updateDecisionMasterRule->name;
+        $auth->add($updateDecisionMaster);
+
+        $updateDecisionManagerRule = new UpdateDecisionManagerRule();
+        $auth->add($updateDecisionManagerRule);
+        $updateDecisionManager = $auth->createPermission('updateDecisionManager');
+        $updateDecisionManager->ruleName = $updateDecisionManagerRule->name;
+        $auth->add($updateDecisionManager);
 
         $viewNewsRule = new ViewNewsRule();
         $auth->add($viewNewsRule);
@@ -201,7 +208,7 @@ class RbacController extends Controller
         $auth->addChild($master, $masterUpdateMaster);
         $auth->addChild($master, $manageBidAttribute);
         $auth->addChild($master, $sendAct);
-        $auth->addChild($master, $updateBidStatus);
+        $auth->addChild($master, $updateDecisionMaster);
         $auth->addChild($master, $viewNews);
         $auth->addChild($master, $manageJobs);
         $auth->addChild($master, $manageSpare);
@@ -220,7 +227,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $managerUpdateManager);
         $auth->addChild($manager, $manageBidAttribute);
         $auth->addChild($manager, $sendAct);
-        $auth->addChild($manager, $updateBidStatus);
+        $auth->addChild($manager, $updateDecisionManager);
         $auth->addChild($manager, $viewNews);
         $auth->addChild($manager, $updateJobsCatalog);
         $auth->addChild($manager, $manageJobs);
