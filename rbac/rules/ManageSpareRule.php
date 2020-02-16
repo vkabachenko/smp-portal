@@ -33,7 +33,7 @@ class ManageSpareRule extends Rule
         if ($master = $userModel->master) {
             return $master->workshop_id == $bid->workshop_id
                 && ($bid->status_id === BidStatus::getId(BidStatus::STATUS_FILLED)
-                    || $bid->status_id !== BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP));
+                    || $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP));
         }
         return false;
 

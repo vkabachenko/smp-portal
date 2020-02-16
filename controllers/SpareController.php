@@ -89,6 +89,18 @@ class SpareController extends Controller
         ]);
     }
 
+    public function actionCreateModal($bidId)
+    {
+        $this->checkAccess('manageSpare', compact('bidId'));
+        $model = new Spare(['bid_id' => $bidId]);
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            BidHistory::createUpdated($bidId, $model, \Yii::$app->user->id, 'Добавлена запчасть');
+            $model->save();
+        }
+        return $this->redirect(['bid/view', 'id' => $bidId]);
+    }
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);

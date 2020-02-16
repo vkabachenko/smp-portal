@@ -10,16 +10,20 @@ use yii\helpers\Url;
 /* @var $bid app\models\Bid */
 /* @var $jobsCatalog \app\models\JobsCatalog */
 /* @var $jobsCatalogService \app\services\job\JobsCatalogService */
+/* @var $action array */
 ?>
 
 <div>
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+            'id' => 'bid-job-form',
+            'action' => isset($action) ? $action : ''
+    ]); ?>
 
     <?= $form->field($model, 'jobs_catalog_id')
         ->dropDownList($jobsCatalogService->jobsCatalogAsMap(), [
             'id' => 'jobs-catalog-select',
-            'data-url' => Url::to(['change-jobs-catalog'])
+            'data-url' => Url::to(['bid-job/change-jobs-catalog'])
         ])
     ?>
 

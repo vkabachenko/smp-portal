@@ -7,11 +7,15 @@ use yii\jui\DatePicker;
 /* @var $this yii\web\View */
 /* @var $model app\models\Spare */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $action array */
 ?>
 
 <div>
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'id' => 'spare-form',
+        'action' => isset($action) ? $action : ''
+    ]); ?>
 
     <?= $form->field($model, 'vendor_code')->textInput(['maxlength' => true]) ?>
 

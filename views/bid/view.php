@@ -3,6 +3,10 @@
 use app\models\Bid;
 use yii\bootstrap\Html;
 use yii\grid\GridView;
+use app\models\BidJob;
+use app\services\job\JobsCatalogService;
+use app\models\JobsCatalog;
+use app\models\Spare;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
@@ -285,11 +289,31 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])) {
 
 <div class="form-group clearfix"></div>
 <div>
-    <?php if (\Yii::$app->user->can('manageJobs', ['bidId' => $model->id])): ?>
-        <?= Html::a('<h3>Работы</h3>', ['bid-job/index', 'bidId' => $model->id]) ?>
-    <?php else: ?>
-        <h3>Работы</h3>
-    <?php endif; ?>
+    <div>
+        <div class="col-xs-4">
+            <?php if (\Yii::$app->user->can('manageJobs', ['bidId' => $model->id])): ?>
+                <?= Html::a('<h3>Работы</h3>', ['bid-job/index', 'bidId' => $model->id]) ?>
+            <?php else: ?>
+                <h3>Работы</h3>
+            <?php endif; ?>
+        </div>
+        <div class="col-xs-8">
+            <?php if (\Yii::$app->user->can('manageJobs', ['bidId' => $model->id])): ?>
+                <div style="margin: 20px 0 10px 0;">
+                    <?php $jobModel = new BidJob(['bid_id' => $model->id]); ?>
+                    <?php $jobsCatalogService = new JobsCatalogService($model->agency_id, $model->created_at); ?>
+                    <?php $jobsCatalog = JobsCatalog::findOne(array_key_first($jobsCatalogService->jobsCatalogAsMap())); ?>
+                    <?= $this->render('modal/create-job', [
+                        'model' => $jobModel,
+                        'bid' => $model,
+                        'jobsCatalog' => $jobsCatalog,
+                        'jobsCatalogService' => $jobsCatalogService
+                    ]); ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
     <?= GridView::widget([
         'dataProvider' => $bidJobProvider,
         'summary' => '',
@@ -310,11 +334,27 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])) {
 
 <div class="form-group clearfix"></div>
 <div>
-    <?php if (\Yii::$app->user->can('viewSpare', ['bidId' => $model->id])): ?>
-        <?= Html::a('<h3>Запчасти</h3>', ['spare/index', 'bidId' => $model->id]) ?>
-    <?php else: ?>
-        <h3>Запчасти</h3>
-    <?php endif; ?>
+    <div>
+        <div class="col-xs-4">
+            <?php if (\Yii::$app->user->can('viewSpare', ['bidId' => $model->id])): ?>
+                <?= Html::a('<h3>Запчасти</h3>', ['spare/index', 'bidId' => $model->id]) ?>
+            <?php else: ?>
+                <h3>Запчасти</h3>
+            <?php endif; ?>
+        </div>
+        <div class="col-xs-8">
+            <?php if (\Yii::$app->user->can('manageSpare', ['bidId' => $model->id])): ?>
+                <div style="margin: 20px 0 10px 0;">
+                    <?php $spareModel = new Spare(['bid_id' => $model->id]); ?>
+                    <?= $this->render('modal/create-spare', [
+                        'model' => $spareModel,
+                    ]); ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+
     <?= GridView::widget([
         'dataProvider' => $spareProvider,
         'summary' => '',

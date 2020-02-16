@@ -82,6 +82,18 @@ class BidJobController extends Controller
         ]);
     }
 
+    public function actionCreateModal($bidId)
+    {
+        $this->checkAccess('manageJobs', compact('bidId'));
+        $model = new BidJob(['bid_id' => $bidId]);
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            BidHistory::createUpdated($bidId, $model, \Yii::$app->user->id, 'Создана запись о работе');
+            $model->save();
+        }
+        return $this->redirect(['bid/view', 'id' => $bidId]);
+    }
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
