@@ -38,7 +38,7 @@ class MultipleUploadForm extends Model
     {
         foreach ($this->files as $file) {
             $image = new BidImage($attributes);
-            $image->file_name = $file->name;
+            $image->file_name = $this->getNewFilename($attributes['bid_id']);
             $image->src_name = \Yii::$app->security->generateRandomString() . '.' . $file->extension;
             if ($image->save()) {
                 $file->saveAs($image->getPath());
@@ -46,5 +46,15 @@ class MultipleUploadForm extends Model
                 \Yii::error($image->getErrors());
             }
         }
+    }
+
+    private function getNewFilename($bidId)
+    {
+        $lastImageNumber = BidImage::find()
+            ->where(['bid_id' => $bidId])
+            ->max('CAST(SUBSTRING([[file_name]], LOCATE("-", [[file_name]]) +1) AS UNSIGNED)');
+        $newImageNumber = is_null($lastImageNumber) ? 1 : $lastImageNumber + 1;
+
+        return sprintf('%s-%s', strval($bidId), strval($newImageNumber));
     }
 }

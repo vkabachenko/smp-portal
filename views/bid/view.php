@@ -301,7 +301,8 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])) {
             <?php if (\Yii::$app->user->can('manageJobs', ['bidId' => $model->id])): ?>
                 <div style="margin: 20px 0 10px 0;">
                     <?php $jobModel = new BidJob(['bid_id' => $model->id]); ?>
-                    <?php $jobsCatalogService = new JobsCatalogService($model->agency_id, $model->created_at); ?>
+                    <?php $agency = $model->getAgency(); ?>
+                    <?php $jobsCatalogService = new JobsCatalogService($agency ? $agency->id : null, $model->created_at); ?>
                     <?php $jobsCatalog = JobsCatalog::findOne(array_key_first($jobsCatalogService->jobsCatalogAsMap())); ?>
                     <?= $this->render('modal/create-job', [
                         'model' => $jobModel,
