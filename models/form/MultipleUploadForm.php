@@ -38,7 +38,7 @@ class MultipleUploadForm extends Model
     {
         foreach ($this->files as $file) {
             $image = new BidImage($attributes);
-            $image->file_name = $this->getNewFilename($attributes['bid_id']);
+            $image->file_name = $this->getNewFilename($attributes['bid_id']) . '.' . $file->extension;
             $image->src_name = \Yii::$app->security->generateRandomString() . '.' . $file->extension;
             if ($image->save()) {
                 $file->saveAs($image->getPath());
