@@ -8,6 +8,8 @@ $this->params['back'] = ['bid-history/index', 'bidId' => $model->bid_id];
 ?>
 <h3><?= $this->title ?></h3>
 
+<?php $modelClass = $model->model_class ?>
+
 <?= \yii\widgets\DetailView::widget([
     'model' => $model,
     'attributes' => [
@@ -18,7 +20,7 @@ $this->params['back'] = ['bid-history/index', 'bidId' => $model->bid_id];
         ],
         [
             'label' => 'Объект',
-            'value' => $model->model_class ? ($model->model_class)::translateName() : 'Заявка',
+            'value' => $modelClass ? $modelClass::translateName() : 'Заявка',
         ],
         'action'
     ]
