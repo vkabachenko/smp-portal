@@ -176,16 +176,9 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'warranty_status_
     ];
 }
 
-if (\Yii::$app->user->can('setBidDone', ['bidId' => $model->id])) {
-    $doneLink = Html::a('Выполнено', ['bid/set-status-done', 'bidId' => $model->id], ['class' => 'btn btn-danger']);
-} else {
-    $doneLink = '';
-}
-
     $attributes[] =  [
     'label' => 'Статус заявки',
-    'format' => 'html',
-    'value' => '<span>' . ($model->status_id ? $model->status->name : '') . '</span>' . '  ' . $doneLink
+    'value' => $model->status_id ? $model->status->name : null,
 ];
 
 if (\Yii::$app->user->can('updateDecisionMaster', ['bidId' => $model->id])) {
@@ -247,12 +240,6 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])) {
             </div>
         <?php endif; ?>
 
-        <?php if (\Yii::$app->user->can('sendAct', ['bidId' => $model->id])): ?>
-            <div class="col-md-2 col-sm-3  col-xs-6 bid-view-send">
-                <?= Html::a('Отправить', ['send-act/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
-            </div>
-        <?php endif; ?>
-
         <?php if (\Yii::$app->user->can('manageJobs', ['bidId' => $model->id])): ?>
             <div class="col-md-2 col-sm-3  col-xs-6">
                 <?= Html::a('Работы', ['bid-job/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -264,6 +251,20 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])) {
                 <?= Html::a('Запчасти', ['spare/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
             </div>
         <?php endif; ?>
+
+        <?php if (\Yii::$app->user->can('sendAct', ['bidId' => $model->id])): ?>
+            <div class="col-md-2 col-sm-3  col-xs-6 bid-view-send">
+                <?= Html::a('Отправить', ['send-act/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (\Yii::$app->user->can('setBidDone', ['bidId' => $model->id])): ?>
+            <div class="col-md-2 col-sm-3  col-xs-6 bid-view-send">
+                <?= Html::a('Выполнено', ['bid/set-status-done', 'bidId' => $model->id], ['class' => 'btn btn-danger']) ?>
+            </div>
+        <?php endif; ?>
+
+
     </div>
 
 </div>

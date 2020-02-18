@@ -16,7 +16,7 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
 
     <?php $form = ActiveForm::begin(); ?>
 
-        <div class="form-group">
+        <div class="form-group hidden">
             <?= Html::a('', '#', ['class' => 'btn btn-primary toggle-extended hidden-extended']) ?>
         </div>
 
