@@ -77,7 +77,6 @@ class QueryRestrictionService
                     'and',
                     ['manufacturer_id' => $agency->manufacturer_id],
                     ['workshop_id' => $workshops],
-                    ['or', ['treatment_type' => Bid::TREATMENT_TYPE_WARRANTY], ['treatment_type' => null]],
                     ['or', ['<>', 'status_id', BidStatus::getId(BidStatus::STATUS_FILLED)]]
                 ];
 

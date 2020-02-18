@@ -41,7 +41,7 @@ class ManagerBidRule extends Rule
 
         if (in_array($bid->workshop_id, $workshops)
             && $bid->manufacturer_id == $agency->manufacturer_id
-            && $bid->isWarranty()) {
+            ) {
             return true;
         } else {
             return false;
