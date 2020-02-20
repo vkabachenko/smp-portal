@@ -132,10 +132,7 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'application_date
 }
 
 if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'date_manufacturer'])) {
-    $attributes[] = [
-        'label' => \Yii::$app->user->can('manager') ? 'Дата принятия в ремонт' : 'Дата принятия в ремонт для представительства',
-        'value' => $model->date_manufacturer,
-    ];
+    $attributes[] = 'date_manufacturer';
 }
 
 
@@ -152,10 +149,7 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_number'])) {
 }
 
 if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_manufacturer_number'])) {
-    $attributes[] = [
-        'label' => \Yii::$app->user->can('manager') ? 'Номер заявки' : 'Номер заявки у представительства',
-        'value' => $model->bid_manufacturer_number,
-    ];
+    $attributes[] = 'bid_manufacturer_number';
 }
 
 if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_1C_number'])) {
