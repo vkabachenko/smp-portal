@@ -31,7 +31,7 @@ use yii\jui\DatePicker;
 
     <?= $form->field($model, 'invoice_date')->widget(DatePicker::class, [
         'language' => 'ru',
-        'dateFormat' => 'yyyy-MM-dd',
+        'dateFormat' => 'dd.MM.yyyy',
         'options' => ['class' => 'form-control']
     ]) ?>
 

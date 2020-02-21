@@ -13,7 +13,7 @@ $this->params['back'] = ['bid-history/index', 'bidId' => $model->bid_id];
 <?= \yii\widgets\DetailView::widget([
     'model' => $model,
     'attributes' => [
-        'created_at',
+        'created_at:date',
         [
             'label' => 'Создатель',
             'value' => $model->user_id ? $model->user->username : null,

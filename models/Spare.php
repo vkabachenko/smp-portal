@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\common\DateHelper;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -94,5 +95,11 @@ class Spare extends \yii\db\ActiveRecord implements TranslatableInterface
     public function getBid()
     {
         return $this->hasOne(Bid::className(), ['id' => 'bid_id']);
+    }
+
+    public function beforeValidate()
+    {
+        $this->invoice_date = DateHelper::convert($this->invoice_date);
+        return parent::beforeValidate();
     }
 }

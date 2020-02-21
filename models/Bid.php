@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\common\DateHelper;
 use app\models\form\CommentForm;
 use app\models\form\MultipleUploadForm;
 use Yii;
@@ -439,6 +440,10 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         if (empty($this->equipment)) {
             $this->equipment = 'Оборудование не задано';
         }
+
+        $this->date_completion = DateHelper::convert($this->date_completion);
+        $this->purchase_date = DateHelper::convert($this->purchase_date);
+        $this->date_manufacturer = DateHelper::convert($this->date_manufacturer);
 
         return parent::beforeValidate();
     }

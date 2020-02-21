@@ -308,7 +308,7 @@ QuaggaAsset::register($this);
                 ['labelOptions' => HintHelper::getLabelOptions('purchase_date', $hints)]
             )->widget(DatePicker::class, [
             'language' => 'ru',
-            'dateFormat' => 'yyyy-MM-dd',
+            'dateFormat' => 'dd.MM.yyyy',
             'options' => ['class' => 'form-control']
         ]) ?>
     <?php endif; ?>
@@ -318,7 +318,7 @@ QuaggaAsset::register($this);
                 ['labelOptions' => HintHelper::getLabelOptions('date_manufacturer', $hints)]
             )->widget(DatePicker::class, [
             'language' => 'ru',
-            'dateFormat' => 'yyyy-MM-dd',
+            'dateFormat' => 'dd.MM.yyyy',
             'options' => ['class' => 'form-control']
         ]) ?>
     <?php endif; ?>
@@ -328,7 +328,7 @@ QuaggaAsset::register($this);
                 ['labelOptions' => HintHelper::getLabelOptions('date_completion', $hints)]
             )->widget(DatePicker::class, [
             'language' => 'ru',
-            'dateFormat' => 'yyyy-MM-dd',
+            'dateFormat' => 'dd.MM.yyyy',
             'options' => ['class' => 'form-control']
         ]) ?>
     <?php endif; ?>

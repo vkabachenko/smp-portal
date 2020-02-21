@@ -36,7 +36,7 @@ $this->params['back'] = ['index', 'bidId' => $model->bid_id];
             'price',
             'total_price',
             'invoice_number',
-            'invoice_date',
+            'invoice_date:date',
             'description:ntext',
         ],
     ]) ?>

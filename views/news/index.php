@@ -28,7 +28,7 @@ $this->params['back'] = ['admin/index'];
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            'created_at',
+            'created_at:date',
             'title',
             [
                 'attribute' => 'target',

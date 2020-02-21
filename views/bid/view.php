@@ -17,8 +17,8 @@ $this->title = 'Просмотр заявки';
 $this->params['back'] = ['index'];
 
 $attributes = [
-    'created_at',
-    'updated_at',
+    'created_at:date',
+    'updated_at:date',
     'brand_name',
     [
         'label' => 'Производитель',
@@ -132,7 +132,7 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'application_date
 }
 
 if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'date_manufacturer'])) {
-    $attributes[] = 'date_manufacturer';
+    $attributes[] = 'date_manufacturer:date';
 }
 
 

@@ -96,7 +96,7 @@ class News extends \yii\db\ActiveRecord
     public function getNewsInfo()
     {
         $section = $this->news_section_id ? $this->newsSection->name : '';
-        return News::TARGETS[$this->target] . ' ' . $section . ' ' . $this->updated_at;
+        return News::TARGETS[$this->target] . ' ' . $section . ' ' . \Yii::$app->formatter->asDate($this->updated_at);
     }
 
     public static function getPublishedNews($target, $limit = null)
