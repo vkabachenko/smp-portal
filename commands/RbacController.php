@@ -210,6 +210,7 @@ class RbacController extends Controller
         $auth->addChild($master, $sendAct);
         $auth->addChild($master, $updateDecisionMaster);
         $auth->addChild($master, $viewNews);
+        $auth->addChild($master, $updateJobsCatalog);
         $auth->addChild($master, $manageJobs);
         $auth->addChild($master, $manageSpare);
         $auth->addChild($master, $viewSpare);
