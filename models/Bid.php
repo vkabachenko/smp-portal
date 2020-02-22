@@ -205,7 +205,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 'is_for_warranty',
             ], 'boolean'],
             [[
-                'purchase_date',
                 'application_date',
                 'created_at',
                 'updated_at',
@@ -228,6 +227,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 'defect',
                 'diagnostic'
             ], 'string', 'max' => 255],
+            ['purchase_date', 'BeforeApplicationDateValidate'],
             [['condition_id'], 'exist', 'skipOnError' => true, 'targetClass' => Condition::className(), 'targetAttribute' => ['condition_id' => 'id']],
             [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => Brand::className(), 'targetAttribute' => ['brand_id' => 'id']],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['client_id' => 'id']],
@@ -448,6 +448,16 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         return parent::beforeValidate();
     }
 
+    public function BeforeApplicationDateValidate($attribute, $params, $validator)
+    {
+        if (!empty($this->$attribute)) {
+            $checkDate = $this->application_date ?: date('Y-m-d');
+            if ($this->$attribute < $checkDate) {
+                $this->addError($attribute, 'Дата не может быть раньше даты обращения');
+            }
+        }
+    }
+
     public function checkBrandCorrespondence()
     {
         if ($this->brand_id) {
@@ -579,7 +589,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
             || $this->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP)
             || ($user->role === 'manager' &&  $this->status_id === BidStatus::getId(BidStatus::STATUS_SENT_AGENCY))
             || ($user->role === 'master' &&  $this->status_id === BidStatus::getId(BidStatus::STATUS_SENT_WORKSHOP));
-
     }
 
 
