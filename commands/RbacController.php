@@ -4,6 +4,7 @@
 namespace app\commands;
 
 use app\rbac\rules\JobsCatalogRule;
+use app\rbac\rules\JobsCatalogViewRule;
 use app\rbac\rules\ManageJobsRule;
 use app\rbac\rules\ManageRestrictedBidRule;
 use app\rbac\rules\ManagerBidRule;
@@ -169,6 +170,16 @@ class RbacController extends Controller
         $auth->add($updateJobsCatalog);
         $auth->addChild($updateJobsCatalog, $manageJobsCatalog);
 
+        $listJobsCatalog = $auth->createPermission('listJobsCatalog');
+        $auth->add($listJobsCatalog);
+
+        $jobsCatalogViewRule = new JobsCatalogViewRule();
+        $auth->add($jobsCatalogViewRule);
+        $viewJobsCatalog = $auth->createPermission('viewJobsCatalog');
+        $viewJobsCatalog->ruleName = $jobsCatalogViewRule->name;
+        $auth->add($viewJobsCatalog);
+        $auth->addChild($viewJobsCatalog, $listJobsCatalog);
+
         $manageJobsRule = new ManageJobsRule();
         $auth->add($manageJobsRule);
         $manageJobs = $auth->createPermission('manageJobs');
@@ -210,7 +221,7 @@ class RbacController extends Controller
         $auth->addChild($master, $sendAct);
         $auth->addChild($master, $updateDecisionMaster);
         $auth->addChild($master, $viewNews);
-        $auth->addChild($master, $updateJobsCatalog);
+        $auth->addChild($master, $viewJobsCatalog);
         $auth->addChild($master, $manageJobs);
         $auth->addChild($master, $manageSpare);
         $auth->addChild($master, $viewSpare);
@@ -231,6 +242,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $updateDecisionManager);
         $auth->addChild($manager, $viewNews);
         $auth->addChild($manager, $updateJobsCatalog);
+        $auth->addChild($manager, $viewJobsCatalog);
         $auth->addChild($manager, $manageJobs);
         $auth->addChild($manager, $viewSpare);
 
@@ -252,6 +264,7 @@ class RbacController extends Controller
         $auth->addChild($admin, $manageManagers);
         $auth->addChild($admin, $adminBidAttribute);
         $auth->addChild($admin, $manageJobsCatalog);
+        $auth->addChild($admin, $listJobsCatalog);
         $auth->addChild($admin, $manageJobs);
         $auth->addChild($admin, $manageSpare);
         $auth->addChild($admin, $viewSpare);

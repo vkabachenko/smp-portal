@@ -149,7 +149,7 @@ class BidJobController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $this->checkAccess('manageJobsCatalog', ['agencyId' => $model->agency_id]);
+        $this->checkAccess('listJobsCatalog', ['agencyId' => $model->agency_id]);
 
         return [
             'vendor_code' => $model->vendor_code,
