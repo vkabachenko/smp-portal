@@ -19,6 +19,7 @@ class SendActForm extends Model
     public $userId;
     public $bidId;
     public $images = [];
+    public $sent = [];
     public $email;
 
     /* @var ExcelAct */
@@ -30,9 +31,11 @@ class SendActForm extends Model
     public function init()
     {
         $models = BidImage::find()->where(['bid_id' => $this->bidId])->all();
+        $this->sent = [];
         foreach ($models as $model) {
             /* @var $model BidImage */
             $this->images[$model->id] = EasyThumbnailImage::thumbnailImg($model->getPath(), 50, 50);
+            $this->sent[] = $model->sent;
         }
         $this->act = new ExcelAct(['id' => $this->bidId]);
         $this->email = $this->getStoredEmail();
@@ -86,8 +89,18 @@ class SendActForm extends Model
                 $message->attach($model->getPath());
             }
         }
+
+        $result = $message->send();
+
+        if ($result && $this->images) {
+            foreach ($this->images as $imageId) {
+                $model = BidImage::findOne($imageId);
+                $model->sent = true;
+                $model->save();
+            }
+        }
         
-        return $message->send();
+        return $result;
     }
 
     private function getStoredEmail() {

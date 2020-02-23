@@ -25,7 +25,10 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
                 ->checkboxList($model->images,[
                     'encode' => false,
                     'separator'=>'<br/>',
-                    'itemOptions' => ['checked' => true]
+                    'item' => function ($index, $label, $name, $checked, $value) use ($model) {
+                        $checked = $model->sent[$index] ? '' : 'checked';
+                        return "<label><input type='checkbox' {$checked} name='{$name}' value='{$value}'>{$label}</label>";
+                    }
                 ])
             ?>
         <?php endif; ?>

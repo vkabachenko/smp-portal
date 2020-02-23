@@ -16,6 +16,7 @@ use yii\helpers\Url;
  * @property string $created_at
  * @property string $updated_at
  * @property string $user_id
+ * @property bool $sent
  *
  * @property Bid $bid
  */
