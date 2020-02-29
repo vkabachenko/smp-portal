@@ -452,8 +452,8 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     {
         if (!empty($this->$attribute)) {
             $checkDate = $this->application_date ?: date('Y-m-d');
-            if ($this->$attribute < $checkDate) {
-                $this->addError($attribute, 'Дата не может быть раньше даты обращения');
+            if ($this->$attribute > $checkDate) {
+                $this->addError($attribute, 'Дата не может быть позже даты обращения');
             }
         }
     }
