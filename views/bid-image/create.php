@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\file\FileInput;
+use vkabachenko\filepond\widget\FilepondWidget;
 
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
@@ -12,11 +12,13 @@ use kartik\file\FileInput;
 <div>
 
     <?php $form = ActiveForm::begin(); ?>
-    <div>
-        <?= $form->field($uploadForm, 'files[]')->widget(FileInput::class, [
-                'options' => ['multiple' => true, 'accept' => 'image/*'],
-                'pluginOptions'=>['allowedFileExtensions'=>['jpg','jpeg','png'],'showUpload' => false,]
-                ])
+    <div class="form-group">
+        <?= Html::label('Загрузить фотографии', null, ['class' => 'control-label']) ?>
+        <?= FilepondWidget::widget([
+            'model' => $uploadForm,
+            'attribute' => 'files[]',
+            'multiple' => true,
+        ]);
         ?>
     </div>
 

@@ -1,6 +1,6 @@
 <?php
 
-use kartik\file\FileInput;
+use vkabachenko\filepond\widget\FilepondWidget;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Manufacturer;
@@ -12,7 +12,6 @@ use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 use app\models\RepairStatus;
 use app\models\WarrantyStatus;
-use app\models\BidStatus;
 use app\assets\QuaggaAsset;
 use app\models\Master;
 use app\helpers\bid\HintHelper;
@@ -401,10 +400,12 @@ QuaggaAsset::register($this);
             <?= $form->field($commentForm, 'comment')->textarea() ?>
         </div>
         <div class="form-group">
-            <?= $form->field($uploadForm, 'files[]')->widget(FileInput::class, [
-                'options' => ['multiple' => true, 'accept' => 'image/*'],
-                'pluginOptions'=>['allowedFileExtensions'=>['jpg','jpeg','png'],'showUpload' => false,]
-            ])
+            <?= Html::label('Загрузить фотографии', null, ['class' => 'control-label']) ?>
+            <?= FilepondWidget::widget([
+                'model' => $uploadForm,
+                'attribute' => 'files[]',
+                'multiple' => true,
+            ]);
             ?>
         </div>
     <?php endif; ?>

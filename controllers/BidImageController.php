@@ -42,7 +42,7 @@ class BidImageController  extends Controller
         $uploadForm = new MultipleUploadForm();
 
         if (\Yii::$app->request->isPost) {
-            $uploadForm->files = UploadedFile::getInstances($uploadForm, 'files');
+            $uploadForm->load(\Yii::$app->request->post());
             $uploadForm->upload($attributes);
             BidHistory::createRecord(['bid_id' => $bidId, 'user_id' => \Yii::$app->user->id, 'action' => 'Новые фото']);
             Bid::setFlagExport($bidId, false);

@@ -81,7 +81,7 @@ class BidController extends Controller
         $hints = BidAttribute::getHints();
 
         if ($model->load(Yii::$app->request->post())) {
-            $uploadForm->files = UploadedFile::getInstances($uploadForm, 'files');
+            $uploadForm->load(\Yii::$app->request->post());
             $commentForm->load(Yii::$app->request->post());
             if ($model->createBid(\Yii::$app->user->id, $uploadForm, $commentForm)) {
                 $model->bid_number = strval($model->id);

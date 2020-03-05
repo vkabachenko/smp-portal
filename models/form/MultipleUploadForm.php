@@ -10,7 +10,7 @@ use yii\web\UploadedFile;
 class MultipleUploadForm extends Model
 {
     /**
-     * @var UploadedFile[] files uploaded
+     * @var array
      */
     public $files = [];
 
@@ -20,30 +20,27 @@ class MultipleUploadForm extends Model
     public function rules()
     {
         return [
-            [['files'], 'file', 'extensions' => ['png', 'jpg', 'jpeg'], 'skipOnEmpty' => true, 'maxFiles' => 0]
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'files' => 'Прикрепить фото',
+            ['files', 'each', 'rule' => ['string']]
         ];
     }
 
     public function upload($attributes)
     {
-        foreach ($this->files as $file) {
-            $image = new BidImage($attributes);
-            $image->file_name = $this->getNewFilename($attributes['bid_id']) . '.' . $file->extension;
-            $image->src_name = \Yii::$app->security->generateRandomString() . '.' . $file->extension;
-            if ($image->save()) {
-                $file->saveAs($image->getPath());
-            } else {
-                \Yii::error($image->getErrors());
+        foreach ($this->files as $fileDir) {
+            if (!empty($fileDir)) {
+                $path = \Yii::$app->getModule('filepond')->basePath . $fileDir;
+                $files = array_diff(scandir($path), ['..', '.']);
+                $origFileName = reset($files);
+                if (!empty($origFileName)) {
+                    $extension = pathinfo($origFileName, PATHINFO_EXTENSION);
+                    $image = new BidImage($attributes);
+                    $image->file_name = $this->getNewFilename($attributes['bid_id']) . '.' . $extension;
+                    $image->src_name = \Yii::$app->security->generateRandomString() . '.' . $extension;
+                    copy($path . '/' . $origFileName, $image->getPath());
+                    if (!$image->save()) {
+                        \Yii::error($image->getErrors());
+                    }
+                }
             }
         }
     }
