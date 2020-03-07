@@ -77,13 +77,11 @@ class BidController extends Controller
             'application_date' => date('Y-m-d')
         ]);
         $uploadForm = new MultipleUploadForm();
-        $commentForm = new CommentForm();
         $hints = BidAttribute::getHints();
 
         if ($model->load(Yii::$app->request->post())) {
             $uploadForm->load(\Yii::$app->request->post());
-            $commentForm->load(Yii::$app->request->post());
-            if ($model->createBid(\Yii::$app->user->id, $uploadForm, $commentForm)) {
+            if ($model->createBid(\Yii::$app->user->id, $uploadForm)) {
                 $model->bid_number = strval($model->id);
                 $model->setStatus(BidStatus::STATUS_FILLED);
                 return $this->afterChange($model);
@@ -93,7 +91,6 @@ class BidController extends Controller
         return $this->render('create', [
             'model' => $model,
             'uploadForm' => $uploadForm,
-            'commentForm' => $commentForm,
             'hints' => $hints
         ]);
     }

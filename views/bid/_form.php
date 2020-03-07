@@ -20,7 +20,6 @@ use app\helpers\bid\HintHelper;
 /* @var $model app\models\Bid */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $uploadForm \app\models\form\MultipleUploadForm */
-/* @var $commentForm \app\models\form\CommentForm */
 /* @var $hints array */
 
 QuaggaAsset::register($this);
@@ -396,9 +395,6 @@ QuaggaAsset::register($this);
     <?php endif; ?>
 
     <?php if ($model->isNewRecord): ?>
-        <div class="form-group">
-            <?= $form->field($commentForm, 'comment')->textarea() ?>
-        </div>
         <div class="form-group">
             <?= Html::label('Загрузить фотографии', null, ['class' => 'control-label']) ?>
             <?= FilepondWidget::widget([

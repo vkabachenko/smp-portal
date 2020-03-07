@@ -3,9 +3,7 @@
 namespace app\models;
 
 use app\helpers\common\DateHelper;
-use app\models\form\CommentForm;
 use app\models\form\MultipleUploadForm;
-use Yii;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -474,7 +472,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         $this->brand_correspondence_id = $brandCorrespondence->id;
     }
 
-    public function createBid($userId, MultipleUploadForm $uploadForm, CommentForm $commentForm)
+    public function createBid($userId, MultipleUploadForm $uploadForm)
     {
         $transaction = \Yii::$app->db->beginTransaction();
 
@@ -492,7 +490,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                     \Yii::error($bidHistory->getErrors());
                     $transaction->rollBack();
                 } else {
-                    BidComment::createFromForm($commentForm, $this->id, $userId);
                     $uploadForm->upload(['bid_id' => $this->id, 'user_id' => $userId,]);
                     $transaction->commit();
                 }
