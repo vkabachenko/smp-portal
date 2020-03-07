@@ -15,9 +15,14 @@ use vkabachenko\filepond\widget\FilepondWidget;
     <div class="form-group">
         <?= Html::label('Загрузить фотографии', null, ['class' => 'control-label']) ?>
         <?= FilepondWidget::widget([
+            'filepondClass' => 'load-bid-images',
             'model' => $uploadForm,
             'attribute' => 'files[]',
             'multiple' => true,
+            'instanceOptions' => [
+                'allowFileTypeValidation' => true,
+                'acceptedFileTypes' => ['image/*']
+            ]
         ]);
         ?>
     </div>
