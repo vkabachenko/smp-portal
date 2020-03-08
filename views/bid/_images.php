@@ -6,12 +6,14 @@ use yii\bootstrap\Modal;
     <div>
         <?php foreach ($model->bidImages as $image): ?>
 
-            <div
-                class= "view-img-wrap"
-                data-url="<?= \Yii::getAlias('@web/uploads/') . $image->src_name ?>"
-            >
-                <?= \himiklab\thumbnail\EasyThumbnailImage::thumbnailImg($image->getPath(), 50, 50) ?>
-            </div>
+            <?php if(\Yii::$app->user->can('viewImage', ['imageId' => $image->id])): ?>
+                <div
+                    class= "view-img-wrap"
+                    data-url="<?= \Yii::getAlias('@web/uploads/') . $image->src_name ?>"
+                >
+                    <?= \himiklab\thumbnail\EasyThumbnailImage::thumbnailImg($image->getPath(), 50, 50) ?>
+                </div>
+            <?php endif; ?>
 
         <?php endforeach; ?>
     </div>

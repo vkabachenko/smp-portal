@@ -3,8 +3,6 @@
 
 namespace app\controllers;
 
-
-use app\models\BidHistory;
 use app\models\form\SendActForm;
 use app\models\form\UploadExcelTemplateForm;
 use app\services\status\SentStatusService;
@@ -39,7 +37,7 @@ class SendActController extends Controller
             $this->checkAccess('sendAct', ['bidId' => $bidId]);
         }
 
-        $model = new SendActForm(['bidId' => $bidId, 'userId' => \Yii::$app->user->id]);
+        $model = new SendActForm(['bidId' => $bidId, 'user' => \Yii::$app->user]);
         $uploadForm = new UploadExcelTemplateForm();
 
         if (!\Yii::$app->request->isPost && !$model->act->isGenerated()) {

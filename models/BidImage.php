@@ -97,4 +97,19 @@ class BidImage extends \yii\db\ActiveRecord
     {
         return Url::to('@web/uploads/' . $this->src_name, true);
     }
+
+    /**
+     * @param $bidId int
+     * @param $user  \yii\web\User
+     * @return array
+     */
+    public static function getAllowedImages($bidId, \yii\web\User $user)
+    {
+        $images = self::find()->where(['bid_id' => $bidId])->all();
+        $images = array_filter($images, function(BidImage $image) use ($user) {
+            return $user->can('viewImage', ['imageId' => $image->id]);
+        });
+
+        return $images;
+    }
 }

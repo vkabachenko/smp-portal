@@ -13,10 +13,12 @@ use app\templates\excel\act\ExcelAct;
 use himiklab\thumbnail\EasyThumbnailImage;
 use yii\base\Model;
 use yii\web\UploadedFile;
+use yii\web\User;
 
 class SendActForm extends Model
 {
-    public $userId;
+    /* @var User */
+    public $user;
     public $bidId;
     public $images = [];
     public $sent = [];
@@ -30,7 +32,7 @@ class SendActForm extends Model
      */
     public function init()
     {
-        $models = BidImage::find()->where(['bid_id' => $this->bidId])->all();
+        $models = BidImage::getAllowedImages($this->bidId, $this->user);
         $this->sent = [];
         foreach ($models as $model) {
             /* @var $model BidImage */
@@ -108,12 +110,12 @@ class SendActForm extends Model
         $workshop = $bid->workshop;
         $agency = $bid->getAgency();
         /* @var $master Master */
-        $master = Master::findByUserId($this->userId);
+        $master = Master::findByUserId($this->user->id);
         if ($master) {
             return $agency ? $this->getEmailsList($workshop->email2, $agency->email2, $agency->email4) : '';
         } else {
             /* @var $manager Manager */
-            $manager = Manager::findByUserId($this->userId);
+            $manager = Manager::findByUserId($this->user->id);
             if ($manager) {
                 return $this->getEmailsList($agency->email2, $workshop->email2);
             } else {
