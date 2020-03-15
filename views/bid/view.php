@@ -234,6 +234,12 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])) {
             </div>
         <?php endif; ?>
 
+        <?php if (\Yii::$app->user->can('viewBid', ['bidId' => $model->id])): ?>
+            <div class="col-md-2 col-sm-3  col-xs-6">
+                <?= Html::a('Скачать', ['download', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            </div>
+        <?php endif; ?>
+
         <?php if (\Yii::$app->user->can('manageJobs', ['bidId' => $model->id])): ?>
             <div class="col-md-2 col-sm-3  col-xs-6">
                 <?= Html::a('Работы', ['bid-job/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>

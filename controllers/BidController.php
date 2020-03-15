@@ -7,6 +7,7 @@ use app\helpers\bid\CompositionHelper;
 use app\models\BidAttribute;
 use app\models\BidJob;
 use app\models\BidStatus;
+use app\models\form\SendActForm;
 use app\models\Spare;
 use app\services\access\QueryRestrictionService;
 use app\helpers\bid\TitleHelper;
@@ -164,6 +165,17 @@ class BidController extends Controller
             'bidJobProvider' => $bidJobProvider,
             'spareProvider' => $spareProvider
         ]);
+    }
+
+    public function actionDownload($id)
+    {
+        $this->checkAccess('viewBid', ['bidId' => $id]);
+
+        $model = new SendActForm(['bidId' => $id, 'user' => \Yii::$app->user]);
+        $model->act->generate();
+
+
+        return $this->render('download', compact('model'));
     }
 
     public function actionBrand()
