@@ -7,6 +7,7 @@ use Yii;
 /**
  * This is the model class for table "agency_workshop".
  *
+ * @property int $id
  * @property int $agency_id
  * @property int $workshop_id
  * @property int $active
@@ -74,6 +75,17 @@ class AgencyWorkshop extends \yii\db\ActiveRecord
             return (bool)$model->active;
         } else {
             return null;
+        }
+    }
+
+    public static function getOfficialDoc(Agency $agency, Workshop $workshop)
+    {
+        $model = self::find()->where(['agency_id' => $agency->id, 'workshop_id' => $workshop->id])->one();
+        if ($model) {
+            $officialDoc = OfficialDocs::find()->where(['model' => 'AgencyWorkshop', 'model_id' => $model->id])->one();
+            return $officialDoc;
+        } else {
+            throw new \DomainException('AgencyWorkshop model not found');
         }
     }
 }

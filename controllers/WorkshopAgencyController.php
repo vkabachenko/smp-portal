@@ -6,14 +6,17 @@ namespace app\controllers;
 
 use app\models\Agency;
 use app\models\AgencyWorkshop;
+use app\models\form\UploadImageForm;
 use app\models\Manager;
 use app\models\Master;
+use app\models\OfficialDocs;
 use app\models\Workshop;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\UploadedFile;
 
 class WorkshopAgencyController extends Controller
 {
@@ -80,4 +83,36 @@ class WorkshopAgencyController extends Controller
         }
         return $this->redirect($returnUrl);
     }
+
+    public function actionUpdate($workshopId, $agencyId)
+    {
+        /* @var $agencyWorkshop \app\models\AgencyWorkshop */
+        $agencyWorkshop = AgencyWorkshop::find()->where(['agency_id' => $agencyId, 'workshop_id' => $workshopId])->one();
+        if (is_null($agencyWorkshop)) {
+            throw new \DomainException('AgencyWorkshop not found');
+        }
+
+        $uploadImageForm = new UploadImageForm();
+
+        if ($uploadImageForm->load(\Yii::$app->request->post())) {
+            $officialDoc = AgencyWorkshop::getOfficialDoc($agencyWorkshop->agency, $this->workshop);
+            if (is_null($officialDoc)) {
+                $officialDoc = new OfficialDocs(['model' => 'AgencyWorkshop', 'model_id' => $agencyWorkshop->id]);
+            }
+
+            $uploadImageForm->file = UploadedFile::getInstance($uploadImageForm, 'file');
+            $officialDoc->file_name = $uploadImageForm->file->name;
+            $officialDoc->src_name = \Yii::$app->security->generateRandomString() . '.' . $uploadImageForm->file->extension;
+            if ($officialDoc->save()) {
+                $uploadImageForm->file->saveAs($officialDoc->getPath());
+            } else {
+                \Yii::error($officialDoc->getErrors());
+                throw new \DomainException('Fail to save image');
+            }
+            return $this->redirect(['agencies', 'workshopId' => $workshopId]);
+        }
+
+        return $this->render('update', compact('workshopId', 'agencyId', 'uploadImageForm'));
+    }
+
 }

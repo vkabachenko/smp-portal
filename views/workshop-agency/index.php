@@ -1,8 +1,9 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
+use app\models\AgencyWorkshop;
 
 /* @var $this yii\web\View */
 /* @var $agencyDataProvider yii\data\ActiveDataProvider */
@@ -31,9 +32,32 @@ $this->params['back'] = ['master/index'];
                 },
             ],
             [
+                'header' => 'Договор с агентством',
+                'format' => 'raw',
+                'value' => function ($model)  use ($workshop) {
+                    /* @var $officialDoc \app\models\OfficialDocs */
+                    $officialDoc = AgencyWorkshop::getOfficialDoc($model, $workshop);
+                    if (is_null($officialDoc)) {
+                        return null;
+                    } else {
+                        $html = Html::a($officialDoc->file_name,
+                            ['download/default', 'path' => $officialDoc->getPath(), 'filename' => $officialDoc->file_name]
+                        );
+                        return $html;
+                    }
+                }
+            ],
+            [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{toggle}',
+                'template' => '{update}{toggle}',
                 'buttons' => [
+                    'update' => function ($url, $model, $key) use ($workshop) {
+                        return Html::a('', ['update',
+                            'agencyId' => $model->id,
+                            'workshopId' => $workshop->id
+                        ],
+                            ['class' => 'glyphicon glyphicon-pencil']);
+                    },
                     'toggle' => function ($url, $model, $key) use ($workshop) {
                         return Html::a('', ['toggle-active',
                             'agencyId' => $model->id,

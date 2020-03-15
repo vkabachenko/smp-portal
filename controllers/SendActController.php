@@ -40,7 +40,7 @@ class SendActController extends Controller
         $model = new SendActForm(['bidId' => $bidId, 'user' => \Yii::$app->user]);
         $uploadForm = new UploadExcelTemplateForm();
 
-        if (!\Yii::$app->request->isPost && !$model->act->isGenerated()) {
+        if (!\Yii::$app->request->isPost) {
             $model->act->generate();
         }
 

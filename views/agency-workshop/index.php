@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\Workshop;
 use yii\helpers\Url;
+use app\models\AgencyWorkshop;
 
 /* @var $this yii\web\View */
 /* @var $workshopDataProvider yii\data\ActiveDataProvider */
@@ -23,6 +24,22 @@ $this->params['back'] = \Yii::$app->user->can('admin') ? ['agency/index'] : ['ma
             {if (!\app\models\AgencyWorkshop::getActive($agency, $workshop)) {return ['class'=>'disabled enabled-events'];} },
         'columns' => [
             'name',
+            [
+                'header' => 'Договор с агентством',
+                'format' => 'raw',
+                'value' => function ($model)  use ($agency) {
+                    /* @var $officialDoc \app\models\OfficialDocs */
+                    $officialDoc = AgencyWorkshop::getOfficialDoc($agency, $model);
+                    if (is_null($officialDoc)) {
+                        return null;
+                    } else {
+                        $html = Html::a($officialDoc->file_name,
+                            ['download/default', 'path' => $officialDoc->getPath(), 'filename' => $officialDoc->file_name]
+                        );
+                        return $html;
+                    }
+                }
+            ],
             \Yii::$app->user->can('admin')
                 ?
                 [

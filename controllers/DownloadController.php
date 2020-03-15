@@ -30,6 +30,11 @@ class DownloadController extends Controller
         ];
     }
 
+    public function actionDefault($filename, $path)
+    {
+        return \Yii::$app->response->sendFile($path, $filename);
+    }
+
     public function actionActExcel($filename, $directory = null)
     {
         /* @todo access restrict */
