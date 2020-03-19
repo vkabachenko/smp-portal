@@ -6,6 +6,7 @@ use app\models\Manufacturer;
 use app\models\Master;
 use app\models\RepairStatus;
 use app\models\WarrantyStatus;
+use app\models\BidCommentsRead;
 use kartik\date\DatePicker;
 use yii\grid\GridView;
 use yii\bootstrap\Html;
@@ -19,6 +20,18 @@ $this->title = 'Заявки';
 $this->params['back'] = \yii\helpers\Url::previous();
 
 $columns = [
+    [
+        'format' => 'raw',
+        'value' => function ($model) {
+            return BidCommentsRead::isExistUnread($model->id)
+                ? Html::a('<span class="glyphicon glyphicon-asterisk" aria-hidden="true" title="Имеются непрочитанные комментарии"></span>',
+                ['bid-comment/index', 'bidId' => $model->id])
+                : '';
+        },
+        'filterOptions' => ['class' => 'grid-comment-read'],
+        'headerOptions' => ['class' => 'grid-comment-read'],
+        'contentOptions' => ['class' => 'grid-comment-read'],
+    ],
     [
         'attribute' => 'created_at',
         'format' => 'raw',
