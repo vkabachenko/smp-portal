@@ -20,6 +20,9 @@ use yii\db\ActiveQuery;
  * @property string $email4
  * @property int $manufacturer_id
  * @property array $bid_attributes
+ * @property array $bid_attributes_section1
+ * @property array $bid_attributes_section2
+ * @property array $bid_attributes_section3
  *
  * @property Manufacturer $manufacturer
  * @property Manager[] $managers
