@@ -88,6 +88,13 @@ class AgencyController extends Controller
         return $this->render('bid-attributes', compact('agency', 'ownAttributes', 'availableAttributes'));
     }
 
+    public function actionBidAttributesSections($agencyId)
+    {
+        $agency = $this->findModel($agencyId);
+
+        return $this->render('bid-attributes-sections', compact('agency'));
+    }
+
     public function actionBidAttributeMove($agencyId)
     {
         $agency = $this->findModel($agencyId);

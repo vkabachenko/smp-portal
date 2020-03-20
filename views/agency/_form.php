@@ -20,10 +20,27 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="col-xs-6 col-sm-3">
-                <?= Html::a('Поля заявки',
-                    ['agency/bid-attributes', 'agencyId' => $model->id],
-                    ['class' => 'btn btn-primary'])
-                ?>
+
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Настройка полей заявки
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li>
+                        <?= Html::a('Скрыть/показать',
+                            ['agency/bid-attributes', 'agencyId' => $model->id],
+                            ['class' => 'btn btn-default'])
+                        ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Порядок расположения полей',
+                            ['agency/bid-attributes-sections', 'agencyId' => $model->id],
+                            ['class' => 'btn btn-default'])
+                        ?>
+                    </li>
+                </ul>
+            </div>
         </div>
 
     </div>
