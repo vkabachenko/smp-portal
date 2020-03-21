@@ -101,7 +101,7 @@ class WorkshopController extends Controller
     public function actionBidAttributes($workshopId)
     {
         $workshop = $this->findModel($workshopId);
-        $ownAttributes = $workshop->getBidAttributes();
+        $ownAttributes = $workshop->getBidAttributes('bid_attributes');
         $availableAttributes = array_diff(
             BidAttribute::getAvailableAttributes('is_disabled_workshops'), $ownAttributes);
 
@@ -111,7 +111,7 @@ class WorkshopController extends Controller
     public function actionBidAttributeMove($workshopId)
     {
         $workshop = $this->findModel($workshopId);
-        $ownAttributes = $workshop->getBidAttributes();
+        $ownAttributes = $workshop->getBidAttributes('bid_attributes');
 
         $attribute = [\Yii::$app->request->post('attribute')];
         $action = \Yii::$app->request->post('action');

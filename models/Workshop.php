@@ -26,12 +26,17 @@ use yii\helpers\ArrayHelper;
  */
 class Workshop extends \yii\db\ActiveRecord
 {
+    use BidAttributesTrait;
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
         return 'workshop';
+    }
+
+    protected function getModel() {
+        return $this;
     }
 
     /**
@@ -121,8 +126,4 @@ class Workshop extends \yii\db\ActiveRecord
         });
     }
 
-    public function getBidAttributes()
-    {
-        return is_null($this->bid_attributes) ? [] : $this->bid_attributes;
-    }
 }

@@ -29,12 +29,18 @@ use yii\db\ActiveQuery;
  */
 class Agency extends \yii\db\ActiveRecord
 {
+    use BidAttributesTrait;
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
         return 'agency';
+    }
+
+    protected function getModel() {
+        return $this;
     }
 
     /**
@@ -116,11 +122,6 @@ class Agency extends \yii\db\ActiveRecord
         return array_filter($this->workshops, function ($item) use ($workshopId) {
             return $item->id == $workshopId;
         });
-    }
-
-    public function getBidAttributes()
-    {
-        return is_null($this->bid_attributes) ? [] : $this->bid_attributes;
     }
 
 }

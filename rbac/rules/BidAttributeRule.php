@@ -23,13 +23,13 @@ class BidAttributeRule extends Rule
             $master = Master::findByUserId($user);
             if ($master) {
                 $commonAttributes = BidAttribute::getHiddenAttributes('is_disabled_workshops');
-                $ownAttributes = $master->workshop->getBidAttributes();
+                $ownAttributes = $master->workshop->getBidAttributes('bid_attributes');
             } else {
                 /* @var $manager Manager */
                 $manager = Manager::findByUserId($user);
                 if ($manager) {
                     $commonAttributes = BidAttribute::getHiddenAttributes('is_disabled_agencies');
-                    $ownAttributes = $manager->agency->getBidAttributes();
+                    $ownAttributes = $manager->agency->getBidAttributes('bid_attributes');
                 } else {
                     return false;
                 }

@@ -81,7 +81,7 @@ class AgencyController extends Controller
     public function actionBidAttributes($agencyId)
     {
         $agency = $this->findModel($agencyId);
-        $ownAttributes = $agency->getBidAttributes();
+        $ownAttributes = $agency->getBidAttributes('bid_attributes');
         $availableAttributes = array_diff(
             BidAttribute::getAvailableAttributes('is_disabled_agencies'), $ownAttributes);
 
@@ -92,13 +92,15 @@ class AgencyController extends Controller
     {
         $agency = $this->findModel($agencyId);
 
+        //$bidSectionService = new BidSectonService($agency);
+
         return $this->render('bid-attributes-sections', compact('agency'));
     }
 
     public function actionBidAttributeMove($agencyId)
     {
         $agency = $this->findModel($agencyId);
-        $ownAttributes = $agency->getBidAttributes();
+        $ownAttributes = $agency->getBidAttributes('bid_attributes');
 
         $attribute = [\Yii::$app->request->post('attribute')];
         $action = \Yii::$app->request->post('action');
