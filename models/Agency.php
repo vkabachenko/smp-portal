@@ -124,4 +124,9 @@ class Agency extends \yii\db\ActiveRecord
         });
     }
 
+    public function getCommonHiddenAttributeName()
+    {
+        return 'is_disabled_agencies';
+    }
+
 }

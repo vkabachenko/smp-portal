@@ -126,4 +126,9 @@ class Workshop extends \yii\db\ActiveRecord
         });
     }
 
+    public function getCommonHiddenAttributeName()
+    {
+        return 'is_disabled_workshops';
+    }
+
 }

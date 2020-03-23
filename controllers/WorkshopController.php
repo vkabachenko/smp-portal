@@ -102,8 +102,7 @@ class WorkshopController extends Controller
     {
         $workshop = $this->findModel($workshopId);
         $ownAttributes = $workshop->getBidAttributes('bid_attributes');
-        $availableAttributes = array_diff(
-            BidAttribute::getAvailableAttributes('is_disabled_workshops'), $ownAttributes);
+        $availableAttributes = $workshop->getAvailableAttributes();
 
         return $this->render('bid-attributes', compact('workshop', 'ownAttributes', 'availableAttributes'));
     }

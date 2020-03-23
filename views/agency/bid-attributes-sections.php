@@ -2,56 +2,56 @@
 
 use yii\bootstrap\Html;
 use kartik\sortable\Sortable;
+use app\models\additional\BidSection;
 
 
 /* @var $this yii\web\View */
 /* @var $agency \app\models\Agency */
+/* @var $bidSection \app\models\additional\BidSection */
 
 
 $this->title = 'Настроить расположение полей заявки для представительства ' . $agency->name;
 $this->params['back'] = ['agency/update', 'id' => $agency->id];
 
+$items1 = array_map([BidSection::class, 'callbackSortable'], $bidSection->section1);
+$items2 = array_map([BidSection::class, 'callbackSortable'], $bidSection->section2);
+$items3 = array_map([BidSection::class, 'callbackSortable'], $bidSection->section3);
 ?>
 <div>
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h2><?= Html::encode($this->title) ?></h2>
 
+    <div>
+        Расположите атрибуты в желаемом порядке путем их перетаскивания между разделами или внутри разделов
+    </div>
     <div class="row">
         <div class="col-xs-4">
+            <h3>Раздел 1</h3>
             <?= Sortable::widget([
                 'connected'=>true,
-                'items'=>[
-                    ['content'=>'From Item 1'],
-                    ['content'=>'From Item 2'],
-                    ['content'=>'From Item 3'],
-                    ['content'=>'From Item 4'],
-                ]
+                'items'=> $items1
             ]); ?>
         </div>
 
         <div class="col-xs-4">
+            <h3>Раздел 2</h3>
             <?= Sortable::widget([
                 'connected'=>true,
-                'items'=>[
-                    ['content'=>'Item 4'],
-                    ['content'=>'Item 5'],
-                    ['content'=>'Item 6'],
-                    ['content'=>'Item 7'],
-                ]
+                'items'=> $items2
             ]); ?>
         </div>
 
         <div class="col-xs-4">
+            <h3>Раздел 3</h3>
             <?= Sortable::widget([
                 'connected'=>true,
-                'items'=>[
-                    ['content'=>'From 1'],
-                    ['content'=>'From 2'],
-                    ['content'=>'From 3'],
-                ]
+                'items'=> $items3
             ]); ?>
         </div>
+    </div>
 
+    <div>
+        <button class="save-attribute-sections btn btn-success">Сохранить</button>
     </div>
 
 

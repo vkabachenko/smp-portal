@@ -241,10 +241,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
+    public static function getAllAttributes()
     {
         $keyCache = 'bid-custom-labels';
         $customLabels = \Yii::$app->cache->get($keyCache);
@@ -260,6 +257,14 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         }
 
         return  array_merge(self::EDITABLE_ATTRIBUTES, self::ALWAYS_VISIBLE_ATTRIBUTES, $customLabels);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return $this->getAllAttributes();
     }
 
     /**

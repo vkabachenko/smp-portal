@@ -82,8 +82,7 @@ class AgencyController extends Controller
     {
         $agency = $this->findModel($agencyId);
         $ownAttributes = $agency->getBidAttributes('bid_attributes');
-        $availableAttributes = array_diff(
-            BidAttribute::getAvailableAttributes('is_disabled_agencies'), $ownAttributes);
+        $availableAttributes = $agency->getAvailableAttributes();
 
         return $this->render('bid-attributes', compact('agency', 'ownAttributes', 'availableAttributes'));
     }
@@ -91,10 +90,9 @@ class AgencyController extends Controller
     public function actionBidAttributesSections($agencyId)
     {
         $agency = $this->findModel($agencyId);
+        $bidSection = $agency->getSectionsAttributes();
 
-        //$bidSectionService = new BidSectonService($agency);
-
-        return $this->render('bid-attributes-sections', compact('agency'));
+        return $this->render('bid-attributes-sections', compact('agency', 'bidSection'));
     }
 
     public function actionBidAttributeMove($agencyId)
