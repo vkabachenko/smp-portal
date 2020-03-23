@@ -10,6 +10,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 
 class AgencyController extends Controller
@@ -93,6 +94,30 @@ class AgencyController extends Controller
         $bidSection = $agency->getSectionsAttributes();
 
         return $this->render('bid-attributes-sections', compact('agency', 'bidSection'));
+    }
+
+    public function actionSaveAttributesSections($agencyId)
+    {
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $agency = $this->findModel($agencyId);
+
+        $section1 = \Yii::$app->request->post('section1');
+        $section2 = \Yii::$app->request->post('section2');
+        $section3 = \Yii::$app->request->post('section3');
+
+        $agency->bid_attributes_section1 = $section1;
+        $agency->bid_attributes_section2 = $section2;
+        $agency->bid_attributes_section3 = $section3;
+
+        if ($agency->save()) {
+            $result = 'ok';
+        } else {
+            $result = 'fail';
+            \Yii::error($agency->getErrors());
+        }
+
+        return ['result' => $result];
     }
 
     public function actionBidAttributeMove($agencyId)
