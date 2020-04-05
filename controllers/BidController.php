@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 use app\helpers\bid\CompositionHelper;
+use app\helpers\bid\ViewHelper;
 use app\models\BidAttribute;
 use app\models\BidJob;
 use app\models\BidStatus;
@@ -160,10 +161,20 @@ class BidController extends Controller
             $statusService->setStatus();
         }
 
+        $attributes = ViewHelper::getAttributesView($model, \Yii::$app->user);
+        $section1 = ViewHelper::getViewSection1($model, \Yii::$app->user);
+        $section2 = ViewHelper::getViewSection2($model, \Yii::$app->user);
+        $section3 = ViewHelper::getViewSection3($model, \Yii::$app->user);
+
+
         return $this->render('view', [
             'model' => $model,
             'bidJobProvider' => $bidJobProvider,
-            'spareProvider' => $spareProvider
+            'spareProvider' => $spareProvider,
+            'attributes' => $attributes,
+            'section1' => $section1,
+            'section2' => $section2,
+            'section3' => $section3
         ]);
     }
 
