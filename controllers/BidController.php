@@ -162,10 +162,9 @@ class BidController extends Controller
         }
 
         $attributes = ViewHelper::getAttributesView($model, \Yii::$app->user);
-        $section1 = ViewHelper::getViewSection1($model, \Yii::$app->user);
-        $section2 = ViewHelper::getViewSection2($model, \Yii::$app->user);
-        $section3 = ViewHelper::getViewSection3($model, \Yii::$app->user);
-
+        $section1 = ViewHelper::getViewSection($model, \Yii::$app->user, 'section1');
+        $section2 = ViewHelper::getViewSection($model, \Yii::$app->user, 'section2');
+        $section3 = ViewHelper::getViewSection($model, \Yii::$app->user, 'section3');
 
         return $this->render('view', [
             'model' => $model,

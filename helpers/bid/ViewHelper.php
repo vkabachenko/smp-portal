@@ -80,39 +80,15 @@ class ViewHelper
         return $attributes;
     }
 
-    public static function getViewSection1(Bid $bid, User $user)
+    public static function getViewSection(Bid $bid, User $user, $sectionName)
     {
         if ($user->can('manager')) {
             $agency = $bid->getAgency();
-            return $agency ? $agency->getSectionsAttributes()->section1 : [];
+            return $agency ? $agency->getSectionsAttributes()->$sectionName : [];
         } elseif ($user->can('master')) {
-            return $bid->workshop->getSectionsAttributes()->section1;
+            return $bid->workshop->getSectionsAttributes()->$sectionName;
         } else {
             return array_keys($bid->attributeLabels());
-        }
-    }
-
-    public static function getViewSection2(Bid $bid, User $user)
-    {
-        if ($user->can('manager')) {
-            $agency = $bid->getAgency();
-            return $agency ? $agency->getSectionsAttributes()->section2 : [];
-        } elseif ($user->can('master')) {
-            return $bid->workshop->getSectionsAttributes()->section2;
-        } else {
-            return [];
-        }
-    }
-
-    public static function getViewSection3(Bid $bid, User $user)
-    {
-        if ($user->can('manager')) {
-            $agency = $bid->getAgency();
-            return $agency ? $agency->getSectionsAttributes()->section3 : [];
-        } elseif ($user->can('master')) {
-            return $bid->workshop->getSectionsAttributes()->section3;
-        } else {
-            return [];
         }
     }
 
