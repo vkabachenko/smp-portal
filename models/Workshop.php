@@ -21,6 +21,9 @@ use yii\helpers\ArrayHelper;
  * @property string $phone4
  * @property string $email2
  * @property string $email3
+ * @property array $bid_attributes_section1
+ * @property array $bid_attributes_section2
+ * @property array $bid_attributes_section3
  *
  * @property Master[] $masters
  */

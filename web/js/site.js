@@ -87,6 +87,44 @@ $(function() {
             });
     });
 
+    $('.save-attribute-sections').click(function(evt) {
+        evt.preventDefault();
+
+        section1 = [];
+        $('.attribute-section1 li').each(function() {
+            section1.push($(this).data('attribute'));
+        });
+
+        section2 = [];
+        $('.attribute-section2 li').each(function() {
+            section2.push($(this).data('attribute'));
+        });
+
+        section3 = [];
+        $('.attribute-section3 li').each(function() {
+            section3.push($(this).data('attribute'));
+        });
+
+        $.ajax({
+            url: $(this).attr('href'),
+            method: 'POST',
+            data: {
+                'section1': section1,
+                'section2': section2,
+                'section3': section3,
+            }
+        })
+            .then(function() {
+                swal('Успех', 'Успешно сохранено', 'success')
+                .then(function() {
+                    location = $('.back-section a').attr('href');
+                });
+            })
+            .catch(function(error) {
+                swal('Ошибка', error.message, 'error');
+            });
+    });
+
     $('input')
         .on('focus', function() {
             if ($(window).width() < 768) {

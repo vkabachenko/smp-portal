@@ -11,6 +11,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * WorkshopController implements the CRUD actions for Workshop model.
@@ -134,6 +135,37 @@ class WorkshopController extends Controller
         return $this->redirect(['bid-attributes', 'workshopId' => $workshop->id]);
     }
 
+    public function actionBidAttributesSections($workshopId)
+    {
+        $workshop = $this->findModel($workshopId);
+        $bidSection = $workshop->getSectionsAttributes();
+
+        return $this->render('bid-attributes-sections', compact('workshop', 'bidSection'));
+    }
+
+    public function actionSaveAttributesSections($workshopId)
+    {
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $workshop = $this->findModel($workshopId);
+
+        $section1 = \Yii::$app->request->post('section1');
+        $section2 = \Yii::$app->request->post('section2');
+        $section3 = \Yii::$app->request->post('section3');
+
+        $workshop->bid_attributes_section1 = $section1;
+        $workshop->bid_attributes_section2 = $section2;
+        $workshop->bid_attributes_section3 = $section3;
+
+        if ($workshop->save()) {
+            $result = 'ok';
+        } else {
+            $result = 'fail';
+            \Yii::error($workshop->getErrors());
+        }
+
+        return ['result' => $result];
+    }
 
     protected function findModel($id)
     {

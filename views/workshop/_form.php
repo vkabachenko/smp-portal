@@ -26,19 +26,41 @@ use yii\widgets\ActiveForm;
     <div class="clearfix"></div>
 -->
     <?= $this->render('partial/_form', ['form' => $form, 'model' => $model]) ?>
+
     <div>
-        <div class="col-xs-6">
+        <div class="col-xs-6 col-sm-3">
             <?= $form->field($rules, 'paidBid')->checkbox() ?>
         </div>
-        <div class="col-xs-6 form-group">
-            <?php if (!$model->isNewRecord): ?>
-                <?= Html::a('Поля заявки',
-                    ['workshop/bid-attributes', 'workshopId' => $model->id],
-                    ['class' => 'btn btn-primary'])
-                 ?>
-            <?php endif; ?>
+
+<?php if (!$model->isNewRecord): ?>
+        <div class="col-xs-6 col-sm-3">
+
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Настройка полей заявки
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li>
+                        <?= Html::a('Скрыть/показать',
+                            ['workshop/bid-attributes', 'workshopId' => $model->id],
+                            ['class' => 'btn btn-default'])
+                        ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Порядок расположения полей',
+                            ['workshop/bid-attributes-sections', 'workshopId' => $model->id],
+                            ['class' => 'btn btn-default'])
+                        ?>
+                    </li>
+                </ul>
+            </div>
         </div>
+<?php endif; ?>
+
     </div>
+
+    <div class="clearfix "></div>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

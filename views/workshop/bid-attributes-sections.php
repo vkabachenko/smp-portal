@@ -6,12 +6,12 @@ use app\models\additional\BidSection;
 
 
 /* @var $this yii\web\View */
-/* @var $agency \app\models\Agency */
+/* @var $workshop \app\models\Workshop */
 /* @var $bidSection \app\models\additional\BidSection */
 
 
-$this->title = 'Настроить расположение полей заявки для представительства ' . $agency->name;
-$this->params['back'] = ['agency/update', 'id' => $agency->id];
+$this->title = 'Настроить расположение полей заявки для мастерской ' . $workshop->name;
+$this->params['back'] = ['workshop/update', 'id' => $workshop->id];
 
 $items1 = array_map([BidSection::class, 'callbackSortable'], $bidSection->section1);
 $items2 = array_map([BidSection::class, 'callbackSortable'], $bidSection->section2);
@@ -52,7 +52,7 @@ $items3 = array_map([BidSection::class, 'callbackSortable'], $bidSection->sectio
 
     <div>
         <?= Html::a('Сохранить',
-            ['save-attributes-sections', 'agencyId' =>$agency->id],
+            ['save-attributes-sections', 'workshopId' =>$workshop->id],
             ['class' => 'save-attribute-sections btn btn-success'])
         ?>
     </div>
