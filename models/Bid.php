@@ -144,6 +144,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'client_phone' => 'Телефон клиента',
         'client_address' => 'Адрес клиента',
         'created_at' => 'Дата создания заявки',
+        'status_id' => 'Статус',
         'repair_status_id' => 'Статус ремонта',
         'equipment' => 'Оборудование',
         'brand_name' => 'Бренд',

@@ -32,5 +32,5 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "./data/db/mysql:/var/lib/mysql"
+      - "./data1/db/mysql:/var/lib/mysql"
       - "./etc/mysql/dev.cnf:/etc/mysql/mysql.conf.d/dev.cnf"

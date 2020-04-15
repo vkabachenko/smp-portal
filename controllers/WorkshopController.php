@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\BidAttribute;
+use app\models\form\Exchange1CForm;
 use app\models\form\WorkshopRulesForm;
 use Yii;
 use app\models\Workshop;
@@ -141,6 +142,24 @@ class WorkshopController extends Controller
         $bidSection = $workshop->getSectionsAttributes();
 
         return $this->render('bid-attributes-sections', compact('workshop', 'bidSection'));
+    }
+
+    public function actionBidAttributesExchange($workshopId)
+    {
+        $workshop = $this->findModel($workshopId);
+        $exchangeForm = new Exchange1CForm(['attributes' => $workshop->getBidAttributes('bid_attributes_1c')]);
+
+        if ($exchangeForm->load(\Yii::$app->request->post())) {
+            $nonEmptyAttributes = array_filter($exchangeForm->attributes, function($v) {return !empty($v);});
+            $workshop->bid_attributes_1c = empty($nonEmptyAttributes) ? null : $nonEmptyAttributes;
+            if (!$workshop->save()) {
+                \Yii::error($workshop->getErrors());
+                throw new \DomainException('Fail to save workshop');
+            }
+            return $this->redirect(['update', 'id' => $workshop->id]);
+        }
+
+        return $this->render('bid-attributes-exchange1c', compact('workshop', 'exchangeForm'));
     }
 
     public function actionSaveAttributesSections($workshopId)

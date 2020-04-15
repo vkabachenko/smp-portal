@@ -9,11 +9,12 @@ use yii\base\Model;
 class WorkshopRulesForm extends Model
 {
     public $paidBid;
+    public $exchange1C;
 
     public function rules()
     {
         return [
-            [['paidBid'], 'boolean']
+            [['paidBid', 'exchange1C'], 'boolean']
         ];
     }
 
@@ -24,6 +25,7 @@ class WorkshopRulesForm extends Model
     {
         return [
             'paidBid' => 'Доступ к платным заявкам',
+            'exchange1C' => 'Обмен с 1С'
         ];
     }
 

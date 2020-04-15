@@ -13,7 +13,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-<!--    <div>
+    <div>
         <div class="col-md-9 col-sm-6 col-xs-12" style="padding-left: 0;">
             <?= $form->field($model, 'token')->textInput(['maxlength' => true, 'id' => 'workshop-token']) ?>
         </div>
@@ -24,12 +24,15 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
     <div class="clearfix"></div>
--->
+
     <?= $this->render('partial/_form', ['form' => $form, 'model' => $model]) ?>
 
     <div>
         <div class="col-xs-6 col-sm-3">
             <?= $form->field($rules, 'paidBid')->checkbox() ?>
+        </div>
+        <div class="col-xs-6 col-sm-3">
+            <?= $form->field($rules, 'exchange1C')->checkbox() ?>
         </div>
 
 <?php if (!$model->isNewRecord): ?>
@@ -50,6 +53,12 @@ use yii\widgets\ActiveForm;
                     <li>
                         <?= Html::a('Порядок расположения полей',
                             ['workshop/bid-attributes-sections', 'workshopId' => $model->id],
+                            ['class' => 'btn btn-default'])
+                        ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Настройка обмена с 1С',
+                            ['workshop/bid-attributes-exchange', 'workshopId' => $model->id],
                             ['class' => 'btn btn-default'])
                         ?>
                     </li>
