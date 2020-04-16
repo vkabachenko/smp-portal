@@ -52,7 +52,7 @@ class ExchangeController extends Controller
         return \Yii::$app->response->sendFile($service->filename, $filename );
     }
 
-    public function actionImport()
+    public function actionImport($token)
     {
         if (!\Yii::$app->request->isPost) {
             throw new \Exception('Incorrect request type');
@@ -72,7 +72,7 @@ class ExchangeController extends Controller
         return $xml;
     }
 
-    public function actionExport()
+    public function actionExport($token)
     {
         if (\Yii::$app->request->isPost) {
             \Yii::$app->response->format = Response::FORMAT_JSON;

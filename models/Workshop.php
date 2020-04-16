@@ -24,6 +24,7 @@ use yii\helpers\ArrayHelper;
  * @property array $bid_attributes_section1
  * @property array $bid_attributes_section2
  * @property array $bid_attributes_section3
+ * @property array $bid_attributes_1c
  *
  * @property Master[] $masters
  */
