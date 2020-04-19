@@ -5,6 +5,7 @@ namespace app\controllers;
 
 use app\models\Bid;
 use app\models\form\UploadXmlForm;
+use app\models\Workshop;
 use app\services\xml\BaseService;
 use app\services\xml\ReadService;
 use app\services\xml\WriteService;
@@ -58,9 +59,11 @@ class ExchangeController extends Controller
             throw new \Exception('Incorrect request type');
         }
 
-        $responseArray = $this->importFile('ReadService', $this->setFileName('import'));
+        $workshop = $this->getWorkshop($token);
 
-        $service = new WriteService($this->setFileName('import-response'), $responseArray);
+        $responseArray = $this->importFile('ReadService', $workshop, $this->setFileName('import'));
+
+        $service = new WriteService($this->setFileName('import-response'), $workshop, $responseArray);
         $service->createXmlfile();
 
         $xml = file_get_contents($service->filename);
@@ -74,13 +77,19 @@ class ExchangeController extends Controller
 
     public function actionExport($token)
     {
+        $workshop = $this->getWorkshop($token);
+
         if (\Yii::$app->request->isPost) {
             \Yii::$app->response->format = Response::FORMAT_JSON;
-            $responseArray = $this->importFile('ExportResponseService', $this->setFileName('export-response'));
+            $responseArray = $this->importFile(
+                'ExportResponseService',
+                $workshop,
+                $this->setFileName('export-response')
+            );
             return $responseArray;
         }
 
-        $service = new WriteService($this->setFileName('export'));
+        $service = new WriteService($this->setFileName('export'), $workshop);
         $service->createXmlfile();
 
         $xml = file_get_contents($service->filename);
@@ -99,7 +108,7 @@ class ExchangeController extends Controller
      * @fixme Use DI to apply service
      * @return array
      */
-    private function importFile($servicename, $filename)
+    private function importFile($servicename, $workshop, $filename)
     {
         $serviceNamespace = 'app\services\xml';
 
@@ -117,7 +126,7 @@ class ExchangeController extends Controller
         $upload->saveAs($path);
 
         $serviceFullName = $serviceNamespace . '\\' . $servicename;
-        $service = new $serviceFullName($filename);
+        $service = new $serviceFullName($filename, $workshop);
         $responseArray = $service->setBids();
 
         return $responseArray;
@@ -128,6 +137,26 @@ class ExchangeController extends Controller
         $datePart = date("dmYHis");
 
         return $template . $datePart . '.xml';
+    }
+
+    private function getWorkshop($token)
+    {
+        /* @var $workshop \app\models\Workshop */
+        $workshop = Workshop::find()->where(['token' => $token])->one();
+
+        if (is_null($workshop)) {
+            throw new \DomainException('Workshop not found');
+        }
+
+        if (!isset($workshop->rules['exchange1C']) || !$workshop->rules['exchange1C']) {
+            throw new \DomainException('Exchange with 1C is not set');
+        }
+
+        if (is_null($workshop->bid_attributes_1c)) {
+            throw new \DomainException('Exchange rules with 1C is not set');
+        }
+
+        return $workshop;
     }
 
 }

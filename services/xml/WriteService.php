@@ -15,9 +15,9 @@ class WriteService extends BaseService
     /* @var array */
     private $xmlArray = [];
 
-   public function __construct($filename, $bids = null)
+   public function __construct($filename, $workshop, $bids = null)
     {
-        parent::__construct($filename);
+        parent::__construct($filename, $workshop);
         $this->createXmlArray($bids);
     }
 
@@ -58,50 +58,60 @@ class WriteService extends BaseService
     private function getBidAsArray(Bid $model)
     {
         $attributes = [
-            'ПорталID' => $model->id,
-            'GUID' => $model->guid,
-            'Номер' => $model->bid_1C_number,
-            'Дата' => $this->setXmlDate($model->updated_at),
-            'КлиентТип' => $this->setXmlClientType($model->client_type),
-            'КлиентНаименование' => $model->client_name,
-            'КлиентТелефон1' => $model->client_phone,
-            //'КлиентТелефон2' => '',
-            //'КлиентЭлПочта' => '',
-            'ДатаПринятияВРемонт' => $this->setXmlDate($model->created_at),
-            'СтатусРемонта' => $model->repair_status_id ? $model->repairStatus->name : '',
-            'Оборудование' => $model->equipment,
-            'Бренд' => $model->brand_correspondence_id ? $model->brandCorrespondence->name : $model->brand_name,
-            'СерийныйНомер' => $model->serial_number,
-            'ВнешнийВид' => $model->condition_id ? $model->condition->name : '',
-            'Комплектность' => $model->composition_name,
-            'Неисправность' => $model->defect,
-            'ДополнительныеОтметки' => $model->comment,
-            'ТоварНаГарантии' => $this->setXmlBoolean($model->isWarranty()),
-            'ДокументГарантииНомер' => $model->warranty_number,
-            'ДокументГарантииДата' => $this->setXmlDate($model->purchase_date),
-            'Мастер' => $model->master_id ? $model->master->user->name : '',
-            'Приемщик' => $model->user_id ? $model->user->name : '',
-            'РезультатДиагностики' => $model->diagnostic,
-            'РекомендацииПоРемонту' => $model->repair_recommendations,
-            'Представительство' => $model->manufacturer_id ? $model->manufacturer->name : '',
-            'Артикул' => $model->vendor_code,
-            'Продавец' => $model->saler_name,
-            'РезультатДиагностикиДляПредставительства' => $model->diagnostic_manufacturer,
-            'ЗаявленнаяНеисправностьДляПредставительства' => $model->defect_manufacturer,
-            'НомерЗаявкиУПредставительства' => $model->bid_manufacturer_number,
-            'СтатусГарантии' => $model->warranty_status_id ? $model->warrantyStatus->name : '',
-            'ДатаПринятияВРемонтДляПредставительства' => $this->setXmlDate($model->date_manufacturer),
-            'ДатаГотовности' => $this->setXmlDate($model->date_completion),
-            'ДефектГарантийный' => $this->setXmlBoolean($model->is_warranty_defect),
-            'ПроведениеРемонтаВозможно' => $this->setXmlBoolean($model->is_repair_possible),
-            'ПоданоНаГарантию' => $this->setXmlBoolean($model->is_for_warranty)
+            'id' => $model->id,
+            'guid' => $model->guid,
+            'bid_1C_number' => $model->bid_1C_number,
+            'updated_at' => $this->setXmlDate($model->updated_at),
+            'client_type' => $this->setXmlClientType($model->client_type),
+            'client_name' => $model->client_name,
+            'client_phone' => $model->client_phone,
+            'client_address' => $model->client_address,
+            'created_at' => $this->setXmlDate($model->created_at),
+            'status_id' => $model->status_id ? $model->status->name : '',
+            'repair_status_id' => $model->repair_status_id ? $model->repairStatus->name : '',
+            'equipment' => $model->equipment,
+            'brand_name' => $model->brand_correspondence_id ? $model->brandCorrespondence->name : $model->brand_name,
+            'brand_model_name' => $model->brand_model_name,
+            'serial_number'  => $model->serial_number,
+            'condition_id' => $model->condition_id ? $model->condition->name : '',
+            'composition_name' => $model->composition_name,
+            'defect' => $model->defect,
+            'comment' => $model->comment,
+            'treatment_type' => $this->setXmlBoolean($model->isWarranty()),
+            'warranty_number' => $model->warranty_number,
+            'purchase_date'  => $this->setXmlDate($model->purchase_date),
+            'application_date' => $this->setXmlDate($model->application_date),
+            'master_id' => $model->master_id ? $model->master->user->name : '',
+            'user_id' => $model->user_id ? $model->user->name : '',
+            'diagnostic' => $model->diagnostic,
+            'repair_recommendations'  => $model->repair_recommendations,
+            'manufacturer_id' => $model->manufacturer_id ? $model->manufacturer->name : '',
+            'vendor_code' => $model->vendor_code,
+            'saler_name' => $model->saler_name,
+            'diagnostic_manufacturer'  => $model->diagnostic_manufacturer,
+            'defect_manufacturer'  => $model->defect_manufacturer,
+            'bid_manufacturer_number' => $model->bid_manufacturer_number,
+            'warranty_status_id' => $model->warranty_status_id ? $model->warrantyStatus->name : '',
+            'date_manufacturer' => $this->setXmlDate($model->date_manufacturer),
+            'date_completion' => $this->setXmlDate($model->date_completion),
+            'is_warranty_defect' => $this->setXmlBoolean($model->is_warranty_defect),
+            'is_repair_possible' => $this->setXmlBoolean($model->is_repair_possible),
+            'is_for_warranty' => $this->setXmlBoolean($model->is_for_warranty),
+            'decision_workshop_status_id' => $model->decision_workshop_status_id ? $model->decisionWorkshopStatus->name : '',
+            'decision_agency_status_id' => $model->decision_agency_status_id ? $model->decisionAgencyStatus->name : '',
         ];
+
+        $changedAttributes = [];
+        foreach ($this->workshop->bid_attributes_1c as $bidAttribute => $bidAttribute1C) {
+            $changedAttributes[$bidAttribute1C] = $attributes[$bidAttribute];
+        }
+
         $comments = $this->getCommentsAsArray($model->bidComments);
         $images = $this->getImagesAsArray($model->bidImages);
         $elements = array_merge($comments, $images);
         $bid = [
             'tag' => 'ДС',
-            'attributes' => $attributes
+            'attributes' => $changedAttributes
         ];
         if (count($elements) > 0) {
             $bid['elements'] = $elements;
@@ -161,6 +171,7 @@ class WriteService extends BaseService
         $models = Bid::find()
             ->with(['bidComments', 'warrantyStatus', 'status', 'repairStatus', 'brand', 'condition', 'bidImages'])
             ->where(['flag_export' => false])
+            ->andWhere(['workshop_id' => $this->workshop->id])
             ->all();
         return $models;
     }

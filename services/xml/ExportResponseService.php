@@ -10,7 +10,7 @@ class ExportResponseService extends ReadService
     protected function setBid($bidArray)
     {
         $attributes = $bidArray['@attributes'];
-        $id = $attributes['ПорталID'];
+        $id = $this->get1Cattribute($attributes, 'id');
         $exportResult = $attributes['Успешно'];
 
         if ($exportResult === 'Истина') {
@@ -18,7 +18,7 @@ class ExportResponseService extends ReadService
         }
 
         return [
-            'GUID' => $attributes['GUID'],
+            'GUID' => $this->get1Cattribute($attributes, 'guid'),
             'ПорталID' => $id,
             'Экспортирован' => $exportResult
         ];

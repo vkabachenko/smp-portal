@@ -71,4 +71,15 @@ class BidStatus extends \yii\db\ActiveRecord
 
         return $model ? $model->id : null;
     }
+
+    public static function findByName($name)
+    {
+        return static::findOne(['name' => $name]);
+    }
+
+    public static function findIdByName($name)
+    {
+        $model = static::findByName($name);
+        return $model ? $model->id : null;
+    }
 }
