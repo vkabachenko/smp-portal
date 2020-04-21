@@ -2,9 +2,9 @@
 namespace app\templates\excel\act;
 
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
-use app\templates\excel\ExcelTemplate;
+use app\templates\excel\ExcelActTemplate;
 
-class ExcelAct extends ExcelTemplate
+class ExcelAct extends ExcelActTemplate
 {
 
     public function getFilename()
