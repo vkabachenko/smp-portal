@@ -154,7 +154,8 @@ class Agency extends \yii\db\ActiveRecord
      */
     public function getTemplatePath($type)
     {
-        return $this->getTemplateDirectory($type) . self::TEMPLATES[$type];
+        $attribute = self::TEMPLATES[$type];
+        return $this->getTemplateDirectory($type) . $this->$attribute;
     }
 
     /**

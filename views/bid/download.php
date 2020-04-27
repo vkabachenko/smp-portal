@@ -16,9 +16,9 @@ $this->params['back'] = ['view', 'id' => $model->bidId];
     <div class="form-group">
         <?php if ($model->act->isGenerated()): ?>
             <?= Html::a('Акт технического состояния', [
-                'download/act-excel',
+                'download/default',
                 'filename' => $model->act->getFilename(),
-                'directory' => $model->act->getDirectory()
+                'path' => $model->act->getPath()
             ]) ?>
         <?php else: ?>
             <h4>Нет шаблона акта технического состояния</h4>

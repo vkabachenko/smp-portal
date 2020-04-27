@@ -37,7 +37,7 @@ $this->params['back'] = ['index'];
 
         <?php if (\Yii::$app->user->can('viewBid', ['bidId' => $model->id])): ?>
             <div class="col-md-2 col-sm-3  col-xs-6">
-                <?= Html::a('Скачать', ['download', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Скачать акт и фото', ['download', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             </div>
         <?php endif; ?>
 
