@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 
+use app\models\Agency;
 use app\models\BidImage;
 use app\models\Manufacturer;
 use yii\filters\AccessControl;
@@ -11,7 +12,6 @@ use yii\web\Controller;
 
 class DownloadController extends Controller
 {
-
     /**
      * {@inheritdoc}
      */
@@ -35,11 +35,12 @@ class DownloadController extends Controller
         return \Yii::$app->response->sendFile($path, $filename);
     }
 
-    public function actionActExcel($filename, $directory = null)
+    public function actionAgencyTemplate($agencyId, $type)
     {
         /* @todo access restrict */
-        $directory = is_null($directory) ? Manufacturer::getActTemplateDirectory() : $directory;
-        return \Yii::$app->response->sendFile($directory . $filename, $filename);
+        $agency = Agency::findOne($agencyId);
+        $attribute = Agency::TEMPLATES[$type];
+        return \Yii::$app->response->sendFile($agency->getTemplatePath($type), $agency->$attribute);
     }
 
     public function actionBidImage($id)

@@ -25,7 +25,10 @@ $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);
                 ['jobs-catalog/index', 'agencyId' => \Yii::$app->user->identity->manager->agency->id],
                 ['class' => 'list-group-item center-menu-item'])
             ?>
-            <?= Html::a('Шаблоны - excel', ['manufacturer/index-template'], ['class' => 'list-group-item center-menu-item']) ?>
+            <?= Html::a('Шаблоны - excel',
+                ['agency-template/index', 'agencyId' => \Yii::$app->user->identity->manager->agency->id],
+                ['class' => 'list-group-item center-menu-item'])
+            ?>
             <?= Html::a('Шаблоны - письмо', ['email-template/update'], ['class' => 'list-group-item center-menu-item']) ?>
             <?= Html::a('Мастерcкие', ['agency-workshop/workshops'], ['class' => 'list-group-item center-menu-item']) ?>
             <?= Html::a('Менеджеры', ['agency-manager/managers'], ['class' => 'list-group-item center-menu-item']) ?>

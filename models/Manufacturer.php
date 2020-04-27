@@ -12,7 +12,6 @@ use yii\web\UploadedFile;
  *
  * @property int $id
  * @property string $name
- * @property string $act_template
 
  *
  * @property Bid[] $bs
@@ -35,7 +34,7 @@ class Manufacturer extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['name', 'act_template'], 'string', 'max' => 255],
+            [['name'], 'string', 'max' => 255],
         ];
     }
 
@@ -47,7 +46,6 @@ class Manufacturer extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Наименование',
-            'act_template' => 'Файл шаблона акта'
         ];
     }
 
@@ -78,55 +76,4 @@ class Manufacturer extends \yii\db\ActiveRecord
         return $list;
     }
 
-    public static function getActTemplateDirectory()
-    {
-        return \Yii::getAlias('@app/templates/excel/act/');
-    }
-
-    /**
-     * @return string
-     */
-    public function getActTemplatePath()
-    {
-        return self::getActTemplateDirectory() . $this->act_template;
-    }
-
-    /**
-     * @param UploadExcelTemplateForm $uploadForm
-     * @return bool
-     */
-    public function saveWithUpload(UploadExcelTemplateForm $uploadForm)
-    {
-        $this->deleteActTemplate();
-        $uploadForm->file = UploadedFile::getInstance($uploadForm, 'file');
-        $this->act_template = $uploadForm->file ? $uploadForm->file->name : null;
-        if ($this->save()) {
-            if ($uploadForm->file) {
-                $uploadForm->file->saveAs($this->getActTemplatePath());
-            }
-            return true;
-        }
-        return false;
-    }
-
-    private function deleteActTemplate()
-    {
-        if (is_file($this->getActTemplatePath())) {
-            @unlink($this->getActTemplatePath());
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    public function beforeDelete()
-    {
-        $this->deleteActTemplate();
-        return parent::beforeDelete();
-    }
-
-    public function isActTemplate()
-    {
-        return !is_null($this->act_template);
-    }
 }

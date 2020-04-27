@@ -15,8 +15,6 @@ use yii\filters\VerbFilter;
 
 class ManufacturerController extends Controller
 {
-    use AccessTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -28,7 +26,7 @@ class ManufacturerController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['admin'],
                     ],
                 ],
             ],
@@ -43,8 +41,6 @@ class ManufacturerController extends Controller
 
     public function actionIndex()
     {
-        $this->checkAccess('manageBrand');
-
         $dataProvider = new ActiveDataProvider([
             'query' => Manufacturer::find()->orderBy('name'),
         ]);
@@ -54,80 +50,34 @@ class ManufacturerController extends Controller
         ]);
     }
 
-    public function actionIndexTemplate()
-    {
-        $this->checkAccess('manageBrand');
-
-        $query = Manufacturer::find()->orderBy('name');
-
-        $manager = Manager::findByUserId(\Yii::$app->user->id);
-        if ($manager) {
-            $query->where(['id' => $manager->agency->manufacturer_id]);
-        }
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
-        return $this->render('index-template', [
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
     public function actionCreate()
     {
-        $this->checkAccess('manageCatalogs');
-
         $model = new Manufacturer();
 
-        $uploadForm = new UploadExcelTemplateForm();
-        if ($model->load(Yii::$app->request->post()) && $model->saveWithUpload($uploadForm)) {
+        if ($model->load(Yii::$app->request->post())) {
             return $this->redirect(['index']);
         }
 
         return $this->render('create', [
             'model' => $model,
-            'uploadForm' => $uploadForm
         ]);
     }
 
     public function actionUpdate($id)
     {
-        $this->checkAccess('manageCatalogs');
-
         $model = $this->findModel($id);
 
-        $uploadForm = new UploadExcelTemplateForm();
-        if ($model->load(Yii::$app->request->post()) && $model->saveWithUpload($uploadForm)) {
+        if ($model->load(Yii::$app->request->post())) {
             return $this->redirect(['index']);
         }
 
         return $this->render('update', [
             'model' => $model,
-            'uploadForm' => $uploadForm
-        ]);
-    }
-
-    public function actionUpdateTemplate($id)
-    {
-        $this->checkAccess('manageBrand');
-
-        $model = $this->findModel($id);
-
-        $uploadForm = new UploadExcelTemplateForm();
-        if (\Yii::$app->request->isPost && $model->saveWithUpload($uploadForm)) {
-            return $this->redirect(['index-template']);
-        }
-
-        return $this->render('update-template', [
-            'model' => $model,
-            'uploadForm' => $uploadForm
         ]);
     }
 
     public function actionDelete($id)
     {
-        $this->checkAccess('manageCatalogs');
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
