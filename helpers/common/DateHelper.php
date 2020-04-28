@@ -16,4 +16,13 @@ class DateHelper
         }
     }
 
+    public static function getReadableDate($date)
+    {
+        if (empty($date)) {
+            return '';
+        } else {
+            return \Yii::$app->formatter->asDate($date);
+        }
+    }
+
 }

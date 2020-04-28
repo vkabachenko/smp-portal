@@ -3,6 +3,7 @@ namespace app\templates\excel\act;
 
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
 use app\templates\excel\ExcelActTemplate;
+use app\helpers\common\DateHelper;
 
 class ExcelAct extends ExcelActTemplate
 {
@@ -31,11 +32,11 @@ class ExcelAct extends ExcelActTemplate
     {
         return [
             '{bid_number}' => $this->bid->bid_number,
-            '{created_at}' => \Yii::$app->formatter->asDate($this->bid->created_at),
+            '{created_at}' => DateHelper::getReadableDate($this->bid->created_at),
             '{equipment}' => $this->bid->equipment,
             '{brand_model_name}' => $this->bid->brand_model_name,
             '{serial_number}' => $this->bid->serial_number,
-            '{purchase_date}' => \Yii::$app->formatter->asDate($this->bid->purchase_date),
+            '{purchase_date}' => DateHelper::getReadableDate($this->bid->purchase_date),
             '{client_name}' => $this->bid->client_name,
             '{client_phone}' => $this->bid->client_phone,
             '{condition}' => $this->bid->condition_id ? $this->bid->condition->name : '',

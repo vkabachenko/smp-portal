@@ -207,14 +207,14 @@ $columns[] = [
     <h2> <?= $this->title ?></h2>
 
     <div class="bids-grid">
-        <div>
+        <div class="row row-no-padding">
             <?php if (\Yii::$app->user->can('createBid')): ?>
-                <div class="col-xs-6">
+                <div class="col-xs-4">
                     <?= Html::a('Новая заявка', ['create'], ['class' => 'btn btn-success']) ?>
                 </div>
             <?php endif; ?>
 
-            <div class="bid-search-btn-wrap col-xs-6">
+            <div class="bid-search-btn-wrap col-xs-4">
                 <?= Html::button('Расширенный поиск', [
                     'class' => 'btn btn-primary',
                     'onclick' => '$(".bid-search").show();$(".bid-search-text").hide();'
@@ -222,6 +222,15 @@ $columns[] = [
                 ?>
                 <?= $this->render('_search-text', ['model' => $searchModel]); ?>
             </div>
+
+            <?php if (\Yii::$app->user->can('manager')): ?>
+                <div class="col-xs-4">
+                    <?= Html::a('Отчет',
+                        ['agency-report/index', 'agencyId' => \Yii::$app->user->identity->manager->agency_id],
+                        ['class' => 'btn btn-success'])
+                    ?>
+                </div>
+            <?php endif; ?>
         </div>
 
         <?= $this->render('_search', ['model' => $searchModel]); ?>

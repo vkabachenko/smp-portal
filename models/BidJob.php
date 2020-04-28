@@ -93,4 +93,15 @@ class BidJob extends \yii\db\ActiveRecord implements TranslatableInterface
     {
         return $this->hasOne(JobsCatalog::className(), ['id' => 'jobs_catalog_id']);
     }
+
+    public function getPriceConformed()
+    {
+        $priceConformed = null;
+        if (!is_null($this->price)) {
+            $priceConformed = $this->price;
+        } else {
+            $priceConformed = $this->jobs_catalog_id ? $this->jobsCatalog->price : null;
+        }
+        return $priceConformed;
+    }
 }
