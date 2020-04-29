@@ -80,7 +80,7 @@ class ViewHelper
         return $attributes;
     }
 
-    public static function getViewSection(Bid $bid, User $user, $sectionName)
+    public static function getViewSection(Bid $bid, User $user, $sectionName, $isFilledByDefault = true)
     {
         if ($user->can('manager')) {
             $agency = $bid->getAgency();
@@ -88,7 +88,7 @@ class ViewHelper
         } elseif ($user->can('master')) {
             return $bid->workshop->getSectionsAttributes()->$sectionName;
         } else {
-            return array_keys($bid->attributeLabels());
+            return $isFilledByDefault ? array_keys($bid->attributeLabels()) : [];
         }
     }
 

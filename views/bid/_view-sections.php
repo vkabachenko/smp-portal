@@ -13,15 +13,15 @@ use yii\jui\Accordion;
     [
         'items' => [
             [
-                'header' => 'Раздел 1',
+                'header' => false,
                 'content' => $this->render('_view-section-table', ['attributes' => $attributes, 'section' => $section1])
             ],
             [
-                'header' => 'Раздел 2',
+                'header' => false,
                 'content' => $this->render('_view-section-table', ['attributes' => $attributes, 'section' => $section2])
             ],
             [
-                'header' => 'Раздел 3',
+                'header' => false,
                 'content' => $this->render('_view-section-table', ['attributes' => $attributes, 'section' => $section3])
             ]
         ]
