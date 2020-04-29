@@ -35,16 +35,27 @@ $this->params['back'] = ['master/index'];
                 'header' => 'Договор с агентством',
                 'format' => 'raw',
                 'value' => function ($model)  use ($workshop) {
+                    $html = '';
+                    $agencyWorkshop = AgencyWorkshop::find()->where(
+                            [
+                                'agency_id' => $model->id,
+                                'workshop_id' => $workshop->id
+                            ])->one();
+                    $html .= $agencyWorkshop->contract_nom
+                        ? '<span>' . '№ ' . $agencyWorkshop->contract_nom . '</span>'
+                        : '';
+                    $html .= $agencyWorkshop->contract_date
+                        ? '<span>' . ' от ' . \Yii::$app->formatter->asDate($agencyWorkshop->contract_date) . '</span>'
+                        : '';
+
                     /* @var $officialDoc \app\models\OfficialDocs */
                     $officialDoc = AgencyWorkshop::getOfficialDoc($model, $workshop);
-                    if (is_null($officialDoc)) {
-                        return null;
-                    } else {
-                        $html = Html::a($officialDoc->file_name,
+                    if (!is_null($officialDoc)) {
+                        $html .= ' ' . Html::a($officialDoc->file_name,
                             ['download/default', 'path' => $officialDoc->getPath(), 'filename' => $officialDoc->file_name]
                         );
-                        return $html;
                     }
+                    return $html;
                 }
             ],
             [

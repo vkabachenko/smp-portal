@@ -94,25 +94,27 @@ class WorkshopAgencyController extends Controller
 
         $uploadImageForm = new UploadImageForm();
 
-        if ($uploadImageForm->load(\Yii::$app->request->post())) {
-            $officialDoc = AgencyWorkshop::getOfficialDoc($agencyWorkshop->agency, $this->workshop);
-            if (is_null($officialDoc)) {
-                $officialDoc = new OfficialDocs(['model' => 'AgencyWorkshop', 'model_id' => $agencyWorkshop->id]);
-            }
+        if ($agencyWorkshop->load(\Yii::$app->request->post()) && $agencyWorkshop->save()) {
+            if ($uploadImageForm->load(\Yii::$app->request->post())) {
+                $officialDoc = AgencyWorkshop::getOfficialDoc($agencyWorkshop->agency, $this->workshop);
+                if (is_null($officialDoc)) {
+                    $officialDoc = new OfficialDocs(['model' => 'AgencyWorkshop', 'model_id' => $agencyWorkshop->id]);
+                }
 
-            $uploadImageForm->file = UploadedFile::getInstance($uploadImageForm, 'file');
-            $officialDoc->file_name = $uploadImageForm->file->name;
-            $officialDoc->src_name = \Yii::$app->security->generateRandomString() . '.' . $uploadImageForm->file->extension;
-            if ($officialDoc->save()) {
-                $uploadImageForm->file->saveAs($officialDoc->getPath());
-            } else {
-                \Yii::error($officialDoc->getErrors());
-                throw new \DomainException('Fail to save image');
+                $uploadImageForm->file = UploadedFile::getInstance($uploadImageForm, 'file');
+                $officialDoc->file_name = $uploadImageForm->file->name;
+                $officialDoc->src_name = \Yii::$app->security->generateRandomString() . '.' . $uploadImageForm->file->extension;
+                if ($officialDoc->save()) {
+                    $uploadImageForm->file->saveAs($officialDoc->getPath());
+                } else {
+                    \Yii::error($officialDoc->getErrors());
+                    throw new \DomainException('Fail to save image');
+                }
+                return $this->redirect(['agencies', 'workshopId' => $workshopId]);
             }
-            return $this->redirect(['agencies', 'workshopId' => $workshopId]);
         }
 
-        return $this->render('update', compact('workshopId', 'agencyId', 'uploadImageForm'));
+        return $this->render('update', compact('agencyWorkshop', 'uploadImageForm'));
     }
 
 }

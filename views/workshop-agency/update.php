@@ -1,27 +1,36 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $workshopId int */
-/* @var $agencyId int */
+/* @var $agencyWorkshop \app\models\AgencyWorkshop */
 /* @var $uploadImageForm \app\models\form\UploadImageForm */
 
 use kartik\file\FileInput;
 use yii\bootstrap\Html;
 use kartik\form\ActiveForm;
+use yii\jui\DatePicker;
 
-$this->title = 'Прикрепить скан документа';
-$this->params['back'] = ['agencies', 'workshopId' => $workshopId];
+$this->title = 'Реквизиты договора';
+$this->params['back'] = ['agencies', 'workshopId' => $agencyWorkshop->workshop_id];
 
 ?>
 
 <div>
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($agencyWorkshop, 'contract_nom'); ?>
+
+    <?= $form->field($agencyWorkshop, 'contract_date')
+        ->widget(DatePicker::class, [
+            'language' => 'ru',
+            'dateFormat' => 'dd.MM.yyyy',
+            'options' => ['class' => 'form-control']
+        ]) ?>
+
     <div class="form-group">
         <?= $form->field($uploadImageForm, 'file')->widget(FileInput::class, [
             'options' => ['accept' => 'image/*'],
             'pluginOptions'=>['showUpload' => false,]
-        ]);
+        ])->label('Скан договора');
         ?>
     </div>
 

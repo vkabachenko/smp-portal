@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\common\DateHelper;
 use Yii;
 
 /**
@@ -11,6 +12,8 @@ use Yii;
  * @property int $agency_id
  * @property int $workshop_id
  * @property int $active
+ * @property string $contract_nom
+ * @property string $contract_date
  *
  * @property Agency $agency
  * @property Workshop $workshop
@@ -33,6 +36,7 @@ class AgencyWorkshop extends \yii\db\ActiveRecord
         return [
             [['agency_id', 'workshop_id'], 'required'],
             [['agency_id', 'workshop_id'], 'integer'],
+            [['contract_nom', 'contract_date'], 'string'],
             ['active', 'boolean'],
             [['agency_id', 'workshop_id'], 'unique', 'targetAttribute' => ['agency_id', 'workshop_id']],
             [['agency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Agency::className(), 'targetAttribute' => ['agency_id' => 'id']],
@@ -49,6 +53,8 @@ class AgencyWorkshop extends \yii\db\ActiveRecord
             'agency_id' => 'Agency ID',
             'workshop_id' => 'Workshop ID',
             'active' => 'Активен',
+            'contract_nom' => 'Номер договора',
+            'contract_date' => 'Дата договора'
         ];
     }
 
@@ -87,5 +93,11 @@ class AgencyWorkshop extends \yii\db\ActiveRecord
         } else {
             throw new \DomainException('AgencyWorkshop model not found');
         }
+    }
+
+    public function beforeValidate()
+    {
+        $this->contract_date = DateHelper::convert($this->contract_date);
+        return parent::beforeValidate();
     }
 }

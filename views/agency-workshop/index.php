@@ -28,16 +28,27 @@ $this->params['back'] = \Yii::$app->user->can('admin') ? ['agency/index'] : ['ma
                 'header' => 'Договор с агентством',
                 'format' => 'raw',
                 'value' => function ($model)  use ($agency) {
+                    $html = '';
+                    $agencyWorkshop = AgencyWorkshop::find()->where(
+                        [
+                            'agency_id' => $agency->id,
+                            'workshop_id' => $model->id
+                        ])->one();
+                    $html .= $agencyWorkshop->contract_nom
+                        ? '<span>' . '№ ' . $agencyWorkshop->contract_nom . '</span>'
+                        : '';
+                    $html .= $agencyWorkshop->contract_date
+                        ? '<span>' . ' от ' . \Yii::$app->formatter->asDate($agencyWorkshop->contract_date) . '</span>'
+                        : '';
+
                     /* @var $officialDoc \app\models\OfficialDocs */
                     $officialDoc = AgencyWorkshop::getOfficialDoc($agency, $model);
-                    if (is_null($officialDoc)) {
-                        return null;
-                    } else {
-                        $html = Html::a($officialDoc->file_name,
-                            ['download/default', 'path' => $officialDoc->getPath(), 'filename' => $officialDoc->file_name]
-                        );
-                        return $html;
+                    if (!is_null($officialDoc)) {
+                        $html .= ' ' . Html::a($officialDoc->file_name,
+                                ['download/default', 'path' => $officialDoc->getPath(), 'filename' => $officialDoc->file_name]
+                            );
                     }
+                    return $html;
                 }
             ],
             \Yii::$app->user->can('admin')
