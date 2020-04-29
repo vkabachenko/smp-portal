@@ -167,7 +167,7 @@ QuaggaAsset::register($this);
         <?= $form->field($model, 'vendor_code',
                 ['labelOptions' => HintHelper::getLabelOptions('vendor_code', $hints)]
             )->textInput(['maxlength' => true]) ?>
-    <?php endif; ?>
+        <?php endif; ?>
 
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'composition_name'])): ?>
@@ -231,10 +231,12 @@ QuaggaAsset::register($this);
             )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
+    <?php if (!\Yii::$app->user->can('master')): ?>
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'defect_manufacturer'])): ?>
         <?= $form->field($model, 'defect_manufacturer',
                 ['labelOptions' => HintHelper::getLabelOptions('defect_manufacturer', $hints)]
             )->textInput(['maxlength' => true]) ?>
+    <?php endif; ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_warranty_defect'])): ?>
@@ -258,10 +260,12 @@ QuaggaAsset::register($this);
             )->textarea() ?>
     <?php endif; ?>
 
+    <?php if (!\Yii::$app->user->can('master')): ?>
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'diagnostic_manufacturer'])): ?>
         <?= $form->field($model, 'diagnostic_manufacturer',
                 ['labelOptions' => HintHelper::getLabelOptions('diagnostic_manufacturer', $hints)]
             )->textInput(['maxlength' => true]) ?>
+    <?php endif; ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_id'])): ?>
@@ -311,6 +315,7 @@ QuaggaAsset::register($this);
         ]) ?>
     <?php endif; ?>
 
+    <?php if (!\Yii::$app->user->can('master')): ?>
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'date_manufacturer'])): ?>
         <?= $form->field($model, 'date_manufacturer',
                 ['labelOptions' => HintHelper::getLabelOptions('date_manufacturer', $hints)]
@@ -319,6 +324,7 @@ QuaggaAsset::register($this);
             'dateFormat' => 'dd.MM.yyyy',
             'options' => ['class' => 'form-control']
         ]) ?>
+    <?php endif; ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'date_completion'])): ?>
@@ -343,10 +349,12 @@ QuaggaAsset::register($this);
             )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
+    <?php if (!\Yii::$app->user->can('master')): ?>
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_manufacturer_number'])): ?>
         <?= $form->field($model, 'bid_manufacturer_number',
                 ['labelOptions' => HintHelper::getLabelOptions('bid_manufacturer_number', $hints)]
             )->textInput(['maxlength' => true]) ?>
+    <?php endif; ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'repair_status_id'])): ?>
