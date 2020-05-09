@@ -162,6 +162,22 @@ class ReadService extends BaseService
         $model->status_id = $this->getAttribute($model, $attributes, 'status_id', '\app\models\BidStatus::findIdByName');
         $model->decision_workshop_status_id = $this->getAttribute($model, $attributes, 'decision_workshop_status_id', '\app\models\DecisionWorkshopStatus::findIdByName');
         $model->decision_agency_status_id = $this->getAttribute($model, $attributes, 'decision_agency_status_id', '\app\models\DecisionAgencyStatus::findIdByName');
+        $model->comment_1 = $this->getAttribute($model, $attributes, 'comment_1', [$this, 'same']);
+        $model->comment_2 = $this->getAttribute($model, $attributes, 'comment_2', [$this, 'same']);
+        $model->manager = $this->getAttribute($model, $attributes, 'manager', [$this, 'same']);
+        $model->manager_contact = $this->getAttribute($model, $attributes, 'manager_contact', [$this, 'same']);
+        $model->manager_presale = $this->getAttribute($model, $attributes, 'manager_presale', [$this, 'same']);
+        $model->is_reappeal = $this->getAttribute($model, $attributes, 'is_reappeal', [$this, 'setBoolean']);
+        $model->document_reappeal = $this->getAttribute($model, $attributes, 'document_reappeal', [$this, 'same']);
+        $model->subdivision = $this->getAttribute($model, $attributes, 'subdivision', [$this, 'same']);
+        $model->author = $this->getAttribute($model, $attributes, 'author', [$this, 'same']);
+        $model->sum_manufacturer = $this->getAttribute($model, $attributes, 'sum_manufacturer', [$this, 'same']);
+        $model->is_control = $this->getAttribute($model, $attributes, 'is_control', [$this, 'setBoolean']);
+        $model->is_report = $this->getAttribute($model, $attributes, 'is_report', [$this, 'setBoolean']);
+        $model->is_warranty = $this->getAttribute($model, $attributes, 'is_warranty', [$this, 'setBoolean']);
+        $model->warranty_comment = $this->getAttribute($model, $attributes, 'warranty_comment', [$this, 'same']);
+        $model->repair_status_date = $this->getAttribute($model, $attributes, 'repair_status_date', [$this, 'setDate']);
+        $model->repair_status_author_id = $this->getAttribute($model, $attributes, 'repair_status_author_id', '\app\models\User::findIdByName');
 
         $model->workshop_id = $this->workshop->id;
         $model->flag_export = true;

@@ -5,6 +5,7 @@ namespace app\services\xml;
 
 use app\models\BidComment;
 use app\models\BidImage;
+use app\models\User;
 use bupy7\xml\constructor\XmlConstructor;
 use app\models\Bid;
 use function GuzzleHttp\Psr7\str;
@@ -99,6 +100,22 @@ class WriteService extends BaseService
             'is_for_warranty' => $this->setXmlBoolean($model->is_for_warranty),
             'decision_workshop_status_id' => $model->decision_workshop_status_id ? $model->decisionWorkshopStatus->name : '',
             'decision_agency_status_id' => $model->decision_agency_status_id ? $model->decisionAgencyStatus->name : '',
+            'comment_1' => $model->comment_1,
+            'comment_2' => $model->comment_2,
+            'manager' => $model->manager,
+            'manager_contact' => $model->manager_contact,
+            'manager_presale' => $model->manager_presale,
+            'is_reappeal' => $this->setXmlBoolean($model->is_reappeal),
+            'document_reappeal' => $model->document_reappeal,
+            'subdivision' => $model->subdivision,
+            'repair_status_date' => $this->setXmlDate($model->repair_status_date),
+            'repair_status_author_id' => $model->repair_status_author_id ? User::findOne($model->repair_status_author_id)->name : null,
+            'author' => $model->author,
+            'sum_manufacturer' => $model->sum_manufacturer,
+            'is_control' => $this->setXmlBoolean($model->is_control),
+            'is_report' => $this->setXmlBoolean($model->is_report),
+            'is_warranty' => $this->setXmlBoolean($model->is_warranty),
+            'warranty_comment' => $model->warranty_comment,
         ];
 
         $changedAttributes = [];

@@ -60,6 +60,23 @@ use yii\behaviors\TimestampBehavior;
  * @property int $agency_id
  * @property int $decision_workshop_status_id
  * @property int $decision_agency_status_id
+ * @property string $comment_1
+ * @property string $comment_2
+ * @property string $manager
+ * @property string $manager_contact
+ * @property string $manager_presale
+ * @property bool $is_reappeal
+ * @property string $document_reappeal
+ * @property string $subdivision
+ * @property string $repair_status_date
+ * @property int $repair_status_author_id
+ * @property string $author
+ * @property float $sum_manufacturer
+ * @property bool $is_control
+ * @property bool $is_report
+ * @property bool $is_warranty
+ * @property string $warranty_comment
+ *
  *
  * @property Condition $condition
  * @property Brand $brand
@@ -116,7 +133,23 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'date_completion' => 'Дата готовности',
         'is_warranty_defect' => 'Дефект гарантийный',
         'is_repair_possible' => 'Проведение ремонта возможно',
-        'is_for_warranty' => 'Подано на гарантию'
+        'is_for_warranty' => 'Подано на гарантию',
+        'comment_1' => 'Комментарий',
+        'comment_2' => 'Пояснения',
+        'manager' => 'Менеджер',
+        'manager_contact' => 'Менеджер контакт',
+        'manager_presale' => 'Менеджер предпродажи',
+        'is_reappeal' => 'Повторное обращение',
+        'document_reappeal' => 'Документ повторного обращения',
+        'subdivision' => 'Подразделение',
+        'repair_status_date' => 'Дата изменения статуса ремонта',
+        'repair_status_author_id' => 'Автор изменения статуса ремонта',
+        'author' => 'Автор',
+        'sum_manufacturer' => 'Сумма для представительства',
+        'is_control' => 'Контроль',
+        'is_report' => 'Отчет',
+        'is_warranty' => 'Гарантийный ремонт',
+        'warranty_comment' => 'Комментарий гарантии',
     ];
 
     const ALWAYS_VISIBLE_ATTRIBUTES = [
@@ -176,6 +209,22 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'is_for_warranty' => 'Подано на гарантию',
         'decision_workshop_status_id' => 'Решение мастерской',
         'decision_agency_status_id' => 'Решение представительства',
+        'comment_1' => 'Комментарий',
+        'comment_2' => 'Пояснения',
+        'manager' => 'Менеджер',
+        'manager_contact' => 'Менеджер контакт',
+        'manager_presale' => 'Менеджер предпродажи',
+        'is_reappeal' => 'Повторное обращение',
+        'document_reappeal' => 'Документ повторного обращения',
+        'subdivision' => 'Подразделение',
+        'repair_status_date' => 'Дата изменения статуса ремонта',
+        'repair_status_author_id' => 'Автор изменения статуса ремонта',
+        'author' => 'Автор',
+        'sum_manufacturer' => 'Сумма для представительства',
+        'is_control' => 'Контроль',
+        'is_report' => 'Отчет',
+        'is_warranty' => 'Гарантийный ремонт',
+        'warranty_comment' => 'Комментарий гарантии',
     ];
 
     /**
@@ -227,7 +276,9 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 'agency_id',
                 'decision_workshop_status_id',
                 'decision_agency_status_id',
+                'repair_status_author_id',
             ], 'integer'],
+            [['sum_manufacturer'], 'number'],
             [[
                 'composition_table',
                 'treatment_type',
@@ -239,19 +290,26 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 'repair_recommendations',
                 'saler_name',
                 'diagnostic_manufacturer',
-                'defect_manufacturer'
+                'defect_manufacturer',
+                'comment_1',
+                'comment_2',
             ], 'string'],
             [[
                 'is_warranty_defect',
                 'is_repair_possible',
                 'is_for_warranty',
+                'is_reappeal',
+                'is_control',
+                'is_report',
+                'is_warranty'
             ], 'boolean'],
             [[
                 'application_date',
                 'created_at',
                 'updated_at',
                 'date_manufacturer',
-                'date_completion'
+                'date_completion',
+                'repair_status_date',
             ], 'safe'],
             [[
                 'brand_model_name',
@@ -267,7 +325,14 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 'bid_manufacturer_number',
                 'equipment',
                 'defect',
-                'diagnostic'
+                'diagnostic',
+                'manager',
+                'manager_contact',
+                'manager_presale',
+                'document_reappeal',
+                'subdivision',
+                'author',
+                'warranty_comment',
             ], 'string', 'max' => 255],
             ['purchase_date', 'BeforeApplicationDateValidate'],
             [['condition_id'], 'exist', 'skipOnError' => true, 'targetClass' => Condition::className(), 'targetAttribute' => ['condition_id' => 'id']],
@@ -509,6 +574,17 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         $this->date_manufacturer = DateHelper::convert($this->date_manufacturer);
 
         return parent::beforeValidate();
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if (isset($changedAttributes['repair_status_id'])) {
+            $this->repair_status_author_id = \Yii::$app instanceof \yii\console\Application ? null : \Yii::$app->user->id;
+            $this->repair_status_date = date('Y-m-d');
+            $this->save(false);
+        }
     }
 
     public function BeforeApplicationDateValidate($attribute, $params, $validator)

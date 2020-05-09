@@ -6,6 +6,7 @@ namespace app\helpers\bid;
 
 use app\models\Bid;
 use yii\web\User;
+use app\models\User as UserModel;
 
 class ViewHelper
 {
@@ -48,6 +49,22 @@ class ViewHelper
         $attributes['repair_status_id'] = $bid->repair_status_id ? $bid->repairStatus->name : null;
         $attributes['warranty_status_id'] = $bid->warranty_status_id ? $bid->warrantyStatus->name : null;
         $attributes['status_id'] = $bid->status_id ? $bid->status->name : null;
+        $attributes['comment_1'] = $bid->comment_1;
+        $attributes['comment_2'] = $bid->comment_2;
+        $attributes['manager'] = $bid->manager;
+        $attributes['manager_contact'] = $bid->manager_contact;
+        $attributes['manager_presale'] = $bid->manager_presale;
+        $attributes['is_reappeal'] = $bid->is_reappeal ? 'Истина' : 'Ложь';
+        $attributes['document_reappeal'] = $bid->document_reappeal;
+        $attributes['subdivision'] = $bid->subdivision;
+        $attributes['repair_status_date'] = \Yii::$app->formatter->asDate($bid->repair_status_date);
+        $attributes['repair_status_author_id'] = $bid->repair_status_author_id ? UserModel::findOne($bid->repair_status_author_id)->name : null;
+        $attributes['author'] = $bid->author;
+        $attributes['sum_manufacturer'] = $bid->sum_manufacturer;
+        $attributes['is_control'] = $bid->is_control ? 'Истина' : 'Ложь';;
+        $attributes['is_report'] = $bid->is_report ? 'Истина' : 'Ложь';;
+        $attributes['is_warranty'] = $bid->is_warranty ? 'Истина' : 'Ложь';;
+        $attributes['warranty_comment'] = $bid->warranty_comment;
 
         if ($user->can('updateDecisionMaster', ['bidId' => $bid->id])) {
             $decisionMaster = \Yii::$app->view->render('//bid/modal/decision-master', ['model' => $bid]);

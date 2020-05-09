@@ -225,6 +225,26 @@ QuaggaAsset::register($this);
         ]) ?>
     <?php endif; ?>
 
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'author'])): ?>
+        <?= $form->field($model, 'author',
+            ['labelOptions' => HintHelper::getLabelOptions('author', $hints)]
+        )->textInput(['maxlength' => true]) ?>
+    <?php endif; ?>
+
+    <?php if (!\Yii::$app->user->can('master')): ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'sum_manufacturer'])): ?>
+        <?= $form->field($model, 'sum_manufacturer',
+            ['labelOptions' => HintHelper::getLabelOptions('sum_manufacturer', $hints)]
+        )->textInput(['maxlength' => true]) ?>
+    <?php endif; ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'subdivision'])): ?>
+        <?= $form->field($model, 'subdivision',
+            ['labelOptions' => HintHelper::getLabelOptions('subdivision', $hints)]
+        )->textInput(['maxlength' => true]) ?>
+    <?php endif; ?>
+
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'defect'])): ?>
         <?= $form->field($model, 'defect',
                 ['labelOptions' => HintHelper::getLabelOptions('defect', $hints)]
@@ -239,9 +259,41 @@ QuaggaAsset::register($this);
     <?php endif; ?>
     <?php endif; ?>
 
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_control'])): ?>
+        <?= $form->field($model, 'is_control')
+            ->checkbox(['labelOptions' => HintHelper::getLabelOptions('is_control', $hints)]) ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_report'])): ?>
+        <?= $form->field($model, 'is_report')
+            ->checkbox(['labelOptions' => HintHelper::getLabelOptions('is_report', $hints)]) ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_reappeal'])): ?>
+        <?= $form->field($model, 'is_reappeal')
+            ->checkbox(['labelOptions' => HintHelper::getLabelOptions('is_reappeal', $hints)]) ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'document_reappeal'])): ?>
+        <?= $form->field($model, 'document_reappeal',
+            ['labelOptions' => HintHelper::getLabelOptions('document_reappeal', $hints)]
+        )->textInput(['maxlength' => true]) ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_warranty'])): ?>
+        <?= $form->field($model, 'is_warranty')
+            ->checkbox(['labelOptions' => HintHelper::getLabelOptions('is_warranty', $hints)]) ?>
+    <?php endif; ?>
+
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_warranty_defect'])): ?>
         <?= $form->field($model, 'is_warranty_defect')
             ->checkbox(['labelOptions' => HintHelper::getLabelOptions('is_warranty_defect', $hints)]) ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'warranty_comment'])): ?>
+        <?= $form->field($model, 'warranty_comment',
+            ['labelOptions' => HintHelper::getLabelOptions('warranty_comment', $hints)]
+        )->textInput(['maxlength' => true]) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'is_repair_possible'])): ?>
@@ -390,7 +442,6 @@ QuaggaAsset::register($this);
             ->dropDownList(\app\models\DecisionAgencyStatus::decisionAgencyStatusAsMap(),['prompt' => 'Выбор']); ?>
     <?php endif; ?>
 
-
     <?= $form->field($model, 'master_id',
             ['labelOptions' => HintHelper::getLabelOptions('master_id', $hints)]
         )
@@ -400,6 +451,18 @@ QuaggaAsset::register($this);
         <?= $form->field($model, 'comment',
                 ['labelOptions' => HintHelper::getLabelOptions('comment', $hints)]
             )->textarea(); ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment_1'])): ?>
+        <?= $form->field($model, 'comment_1',
+            ['labelOptions' => HintHelper::getLabelOptions('comment_1', $hints)]
+        )->textarea(); ?>
+    <?php endif; ?>
+
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment_2'])): ?>
+        <?= $form->field($model, 'comment_2',
+            ['labelOptions' => HintHelper::getLabelOptions('comment_2', $hints)]
+        )->textarea(); ?>
     <?php endif; ?>
 
     <?php if ($model->isNewRecord): ?>
