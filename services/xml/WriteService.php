@@ -5,6 +5,7 @@ namespace app\services\xml;
 
 use app\models\BidComment;
 use app\models\BidImage;
+use app\models\Spare;
 use app\models\User;
 use bupy7\xml\constructor\XmlConstructor;
 use app\models\Bid;
@@ -124,6 +125,7 @@ class WriteService extends BaseService
         }
 
         $comments = $this->getCommentsAsArray($model->bidComments);
+        $spares = $this->getSparesAsArray($model->spares);
         $images = $this->getImagesAsArray($model->bidImages);
         $elements = array_merge($comments, $images);
         $bid = [
@@ -159,6 +161,31 @@ class WriteService extends BaseService
             'attributes' => $attributes
         ];
         return $comment;
+    }
+
+    private function getSparesAsArray($spares)
+    {
+        $spares = [];
+        foreach ($spares as $spare) {
+            $spares[] = $this->getSpareAsArray($spare);
+        }
+        return $spares;
+    }
+
+    private function getSpareAsArray(Spare $spare)
+    {
+        $attributes = [
+            'Артикул' => $spare->vendor_code,
+            'Наименование' => $spare->name,
+            'Количество' => $spare->quantity,
+            'Цена' => $spare->price,
+            'Сумма' => $spare->total_price,
+        ];
+        $element = [
+            'tag' => 'ЗапчастиДляПредставительстваСтрока',
+            'attributes' => $attributes
+        ];
+        return $element;
     }
 
     private function getImagesAsArray($bidImages)

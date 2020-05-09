@@ -7,6 +7,7 @@ use app\models\Bid;
 use app\models\BidComment;
 use app\models\BidHistory;
 use app\models\BrandCorrespondence;
+use app\models\Spare;
 use app\models\User;
 use app\services\brand\BrandService;
 
@@ -47,14 +48,18 @@ class ReadService extends BaseService
         $attributes = $bidArray['@attributes'];
 
         $bidComments = isset($bidArray['ТаблицаКомментариевСтрока']) ? $bidArray['ТаблицаКомментариевСтрока'] : [];
+        $bidSpares = isset($bidArray['ЗапчастиДляПредставительстваСтрока']) ? $bidArray['ЗапчастиДляПредставительстваСтрока'] : [];
 
         if ($this->isDuplicate($attributes)) {
             $bid = $this->updateBid($attributes);
-            $this->createComments($bid, $bidComments);
         } else {
             $bid = $this->createBid($attributes);
-            $this->createComments($bid, $bidComments);
         }
+
+        $this->createComments($bid, $bidComments);
+        $this->createSpares($bid, $bidSpares);
+
+
         if (is_null($bid)) {
             $responseAttributes = [
                 'ПорталID' => $this->get1Cattribute($attributes, 'id'),
@@ -236,6 +241,37 @@ class ReadService extends BaseService
         $model->user_id = $user ? $user->id : null;
         $model->created_at = $createdAt;
         $model->comment = $this->getCommentAttribute($attributes, 'ТекстКомментария');
+
+        if (!$model->save()) {
+            \Yii::error($attributes);
+            \Yii::error($model->getErrors());
+        }
+    }
+
+    private function createSpares($bid, $bidSpares)
+    {
+        if (!$bid) {
+            return;
+        }
+
+        if (isset($bidSpares['@attributes'])) {
+            $this->createSpare($bid, $bidSpares['@attributes']);
+        } else {
+            foreach ($bidSpares as $bidSpare) {
+                $this->createSpare($bid, $bidSpare['@attributes']);
+            }
+        }
+    }
+
+    private function createSpare($bid, $attributes)
+    {
+        /* @todo check if exists */
+        $model = new Spare();
+        $model->bid_id = $bid->id;
+        $model->name = $this->getCommentAttribute($attributes, 'Наименование');
+        $model->quantity = $this->getCommentAttribute($attributes, 'Количество');
+        $model->price = $this->getCommentAttribute($attributes, 'Артикул');
+        $model->total_price = $this->getCommentAttribute($attributes, 'Сумма');
 
         if (!$model->save()) {
             \Yii::error($attributes);
