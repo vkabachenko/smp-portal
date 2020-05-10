@@ -225,6 +225,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'is_report' => 'Отчет',
         'is_warranty' => 'Гарантийный ремонт',
         'warranty_comment' => 'Комментарий гарантии',
+        'agency_id' => 'Представительство'
     ];
 
     /**

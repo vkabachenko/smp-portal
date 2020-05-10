@@ -5,6 +5,7 @@ namespace app\services\xml;
 
 use app\models\BidComment;
 use app\models\BidImage;
+use app\models\BidJob;
 use app\models\ClientProposition;
 use app\models\ReplacementPart;
 use app\models\Spare;
@@ -119,6 +120,7 @@ class WriteService extends BaseService
             'is_report' => $this->setXmlBoolean($model->is_report),
             'is_warranty' => $this->setXmlBoolean($model->is_warranty),
             'warranty_comment' => $model->warranty_comment,
+            'agency_id' => $model->agency_id ? $model->getAgency()->manufacturer->name : ''
         ];
 
         $changedAttributes = [];
@@ -128,10 +130,11 @@ class WriteService extends BaseService
 
         $comments = $this->getCommentsAsArray($model->bidComments);
         $spares = $this->getSparesAsArray($model->spares);
+        $jobs = $this->getJobsAsArray($model->jobs);
         $replacementParts = $this->getReplacementPartsAsArray($model->replacementParts);
         $clientPropositions = $this->getClientPropositionsAsArray($model->clientPropositions);
         $images = $this->getImagesAsArray($model->bidImages);
-        $elements = array_merge($comments, $spares, $replacementParts, $clientPropositions, $images);
+        $elements = array_merge($comments, $spares, $jobs, $replacementParts, $clientPropositions, $images);
         $bid = [
             'tag' => 'ДС',
             'attributes' => $changedAttributes
@@ -187,6 +190,28 @@ class WriteService extends BaseService
         ];
         $element = [
             'tag' => 'ЗапчастиДляПредставительстваСтрока',
+            'attributes' => $attributes
+        ];
+        return $element;
+    }
+
+    private function getJobsAsArray($jobs)
+    {
+        $elements = [];
+        foreach ($jobs as $job) {
+            $elements[] = $this->getJobAsArray($job);
+        }
+        return $elements;
+    }
+
+    private function getJobAsArray(BidJob $job)
+    {
+        $attributes = [
+            'Наименование' => $job->jobsCatalog->name,
+            'Сумма' => $job->getPriceConformed(),
+        ];
+        $element = [
+            'tag' => 'УслугиДляПредставительстваСтрока',
             'attributes' => $attributes
         ];
         return $element;

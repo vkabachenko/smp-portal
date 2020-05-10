@@ -3,11 +3,14 @@
 namespace app\services\xml;
 
 use app\helpers\common\XmlHelper;
+use app\models\Agency;
 use app\models\Bid;
 use app\models\BidComment;
 use app\models\BidHistory;
+use app\models\BidJob;
 use app\models\BrandCorrespondence;
 use app\models\ClientProposition;
+use app\models\JobsCatalog;
 use app\models\ReplacementPart;
 use app\models\Spare;
 use app\models\User;
@@ -52,6 +55,7 @@ class ReadService extends BaseService
 
         $bidComments = isset($bidArray['ТаблицаКомментариевСтрока']) ? $bidArray['ТаблицаКомментариевСтрока'] : [];
         $bidSpares = isset($bidArray['ЗапчастиДляПредставительстваСтрока']) ? $bidArray['ЗапчастиДляПредставительстваСтрока'] : [];
+        $bidJobs = isset($bidArray['УслугиДляПредставительстваСтрока']) ? $bidArray['УслугиДляПредставительстваСтрока'] : [];
         $bidReplacementParts = isset($bidArray['АртикулыДляСервисаСтрока']) ? $bidArray['АртикулыДляСервисаСтрока'] : [];
         $bidClientPropositions = isset($bidArray['ПредложениеДляКлиентаСтрока']) ? $bidArray['ПредложениеДляКлиентаСтрока'] : [];
 
@@ -63,6 +67,7 @@ class ReadService extends BaseService
 
         $this->createComments($bid, $bidComments);
         $this->createSpares($bid, $bidSpares);
+        $this->createJobs($bid, $bidJobs);
         $this->createReplacementParts($bid, $bidReplacementParts);
         $this->createClientPropositions($bid, $bidClientPropositions);
 
@@ -190,6 +195,7 @@ class ReadService extends BaseService
         $model->warranty_comment = $this->getAttribute($model, $attributes, 'warranty_comment', [$this, 'same']);
         $model->repair_status_date = $this->getAttribute($model, $attributes, 'repair_status_date', [$this, 'setDate']);
         $model->repair_status_author_id = $this->getAttribute($model, $attributes, 'repair_status_author_id', '\app\models\User::findIdByName');
+        $model->agency_id = $model->agency_id ?: $this->getAttribute($model, $attributes, 'agency_id', [$this, 'setAgency']);
 
         $model->workshop_id = $this->workshop->id;
         $model->flag_export = true;
@@ -277,8 +283,49 @@ class ReadService extends BaseService
         $model->bid_id = $bid->id;
         $model->name = $this->getCommentAttribute($attributes, 'Наименование');
         $model->quantity = $this->getCommentAttribute($attributes, 'Количество');
-        $model->price = $this->getCommentAttribute($attributes, 'Артикул');
+        $model->vendor_code = $this->getCommentAttribute($attributes, 'Артикул');
+        $model->price = $this->getCommentAttribute($attributes, 'Цена');
         $model->total_price = $this->getCommentAttribute($attributes, 'Сумма');
+
+        if (!$model->save()) {
+            \Yii::error($attributes);
+            \Yii::error($model->getErrors());
+        }
+    }
+
+    private function createJobs($bid, $bidJobs)
+    {
+        if (!$bid || !$bid->agency_id) {
+            return;
+        }
+
+        if (isset($bidJobs['@attributes'])) {
+            $this->createJob($bid, $bidJobs['@attributes']);
+        } else {
+            foreach ($bidJobs as $bidJob) {
+                $this->createJob($bid, $bidJob['@attributes']);
+            }
+        }
+    }
+
+    private function createJob($bid, $attributes)
+    {
+        /* @todo check if exists */
+
+        $catalog = JobsCatalog::find()
+            ->where([
+                'agency_id' => $bid->agency_id,
+                'name' => $this->getCommentAttribute($attributes, 'Наименование')
+            ])
+            ->one();
+        if (is_null($catalog)) {
+            return;
+        }
+
+        $model = new BidJob();
+        $model->bid_id = $bid->id;
+        $model->jobs_catalog_id = $catalog->id;
+        $model->price = $this->getCommentAttribute($attributes, 'Сумма');
 
         if (!$model->save()) {
             \Yii::error($attributes);
@@ -408,6 +455,20 @@ class ReadService extends BaseService
         }
 
         return $default;
+    }
+
+    private function setAgency($name)
+    {
+        if (is_null($name) || is_numeric($name)) {
+            return $name;
+        }
+
+        $agency = Agency::find()
+            ->joinWith('manufacturer', false)
+            ->where(['manufacturer.name' => $name])
+            ->one();
+
+        return $agency ? $agency->id : null;
     }
 
     private function getAttribute(Bid $bid, $attributes, $key, callable $f)
