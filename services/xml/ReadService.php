@@ -350,7 +350,7 @@ class ReadService extends BaseService
 
     private function createReplacementPart($bid, $attributes)
     {
-        $link1C = $this->setDate($this->getCommentAttribute($attributes, 'СсылкаВ1С'));
+        $link1C = $this->getCommentAttribute($attributes, 'СсылкаВ1С');
         $exists = ReplacementPart::find()->where(['bid_id' => $bid->id, 'link1C' => $link1C])->exists();
 
         if ($exists) {

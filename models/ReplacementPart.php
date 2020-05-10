@@ -11,7 +11,7 @@ use Yii;
  * @property int $bid_id
  * @property string $vendor_code
  * @property string $vendor_code_replacement
- * @property int $is_agree
+ * @property bool $is_agree
  * @property string $name
  * @property double $price
  * @property int $quantity
@@ -20,7 +20,7 @@ use Yii;
  * @property string $link1C
  * @property string $comment
  * @property string $status
- * @property int $is_to_buy
+ * @property bool $is_to_buy
  *
  * @property Bid $bid
  */
@@ -41,7 +41,8 @@ class ReplacementPart extends \yii\db\ActiveRecord
     {
         return [
             [['bid_id'], 'required'],
-            [['bid_id', 'is_agree', 'quantity', 'is_to_buy'], 'integer'],
+            [['is_to_buy', 'is_agree'], 'boolean'],
+            [['quantity', 'bid_id'], 'integer'],
             [['price', 'total_price'], 'number'],
             [['vendor_code', 'vendor_code_replacement', 'name', 'manufacturer', 'link1C', 'comment', 'status'], 'string', 'max' => 255],
             [['bid_id'], 'exist', 'skipOnError' => true, 'targetClass' => Bid::className(), 'targetAttribute' => ['bid_id' => 'id']],
