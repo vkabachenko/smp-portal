@@ -7,6 +7,7 @@ use app\models\Bid;
 use app\models\BidComment;
 use app\models\BidHistory;
 use app\models\BrandCorrespondence;
+use app\models\ReplacementPart;
 use app\models\Spare;
 use app\models\User;
 use app\services\brand\BrandService;
@@ -49,6 +50,7 @@ class ReadService extends BaseService
 
         $bidComments = isset($bidArray['ТаблицаКомментариевСтрока']) ? $bidArray['ТаблицаКомментариевСтрока'] : [];
         $bidSpares = isset($bidArray['ЗапчастиДляПредставительстваСтрока']) ? $bidArray['ЗапчастиДляПредставительстваСтрока'] : [];
+        $bidReplacementParts = isset($bidArray['АртикулыДляСервисаСтрока']) ? $bidArray['АртикулыДляСервисаСтрока'] : [];
 
         if ($this->isDuplicate($attributes)) {
             $bid = $this->updateBid($attributes);
@@ -58,6 +60,7 @@ class ReadService extends BaseService
 
         $this->createComments($bid, $bidComments);
         $this->createSpares($bid, $bidSpares);
+        $this->createReplacementParts($bid, $bidReplacementParts);
 
 
         if (is_null($bid)) {
@@ -272,6 +275,51 @@ class ReadService extends BaseService
         $model->quantity = $this->getCommentAttribute($attributes, 'Количество');
         $model->price = $this->getCommentAttribute($attributes, 'Артикул');
         $model->total_price = $this->getCommentAttribute($attributes, 'Сумма');
+
+        if (!$model->save()) {
+            \Yii::error($attributes);
+            \Yii::error($model->getErrors());
+        }
+    }
+
+    private function createReplacementParts($bid, $bidReplacementParts)
+    {
+        if (!$bid) {
+            return;
+        }
+
+        if (isset($bidReplacementParts['@attributes'])) {
+            $this->createReplacementPart($bid, $bidReplacementParts['@attributes']);
+        } else {
+            foreach ($bidReplacementParts as $bidReplacementPart) {
+                $this->createReplacementPart($bid, $bidReplacementPart['@attributes']);
+            }
+        }
+    }
+
+    private function createReplacementPart($bid, $attributes)
+    {
+        $link1C = $this->setDate($this->getCommentAttribute($attributes, 'СсылкаВ1С'));
+        $exists = ReplacementPart::find()->where(['bid_id' => $bid->id, 'link1C' => $link1C])->exists();
+
+        if ($exists) {
+            return;
+        }
+
+        $model = new ReplacementPart();
+        $model->bid_id = $bid->id;
+        $model->vendor_code = $this->getCommentAttribute($attributes, 'Артикул');
+        $model->vendor_code_replacement = $this->getCommentAttribute($attributes, 'АртикулЗамена');
+        $model->is_agree = $this->setBoolean($this->getCommentAttribute($attributes, 'ПризнакСогласия'));
+        $model->name = $this->getCommentAttribute($attributes, 'Наименование');
+        $model->price = $this->getCommentAttribute($attributes, 'Цена');
+        $model->quantity = $this->getCommentAttribute($attributes, 'Количество');
+        $model->total_price = $this->getCommentAttribute($attributes, 'Сумма');
+        $model->manufacturer = $this->getCommentAttribute($attributes, 'Производитель');
+        $model->link1C = $this->getCommentAttribute($attributes, 'СсылкаВ1С');
+        $model->comment = $this->getCommentAttribute($attributes, 'Комментарий');
+        $model->status = $this->getCommentAttribute($attributes, 'Статус');
+        $model->is_to_buy = $this->setBoolean($this->getCommentAttribute($attributes, 'Купить'));
 
         if (!$model->save()) {
             \Yii::error($attributes);

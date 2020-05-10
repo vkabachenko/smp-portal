@@ -5,6 +5,7 @@ namespace app\services\xml;
 
 use app\models\BidComment;
 use app\models\BidImage;
+use app\models\ReplacementPart;
 use app\models\Spare;
 use app\models\User;
 use bupy7\xml\constructor\XmlConstructor;
@@ -126,8 +127,9 @@ class WriteService extends BaseService
 
         $comments = $this->getCommentsAsArray($model->bidComments);
         $spares = $this->getSparesAsArray($model->spares);
+        $replacemrntParts = $this->getReplacementPartsAsArray($model->replacemrntParts);
         $images = $this->getImagesAsArray($model->bidImages);
-        $elements = array_merge($comments, $images);
+        $elements = array_merge($comments, $spares, $replacemrntParts, $images);
         $bid = [
             'tag' => 'ДС',
             'attributes' => $changedAttributes
@@ -165,11 +167,11 @@ class WriteService extends BaseService
 
     private function getSparesAsArray($spares)
     {
-        $spares = [];
+        $elements = [];
         foreach ($spares as $spare) {
-            $spares[] = $this->getSpareAsArray($spare);
+            $elements[] = $this->getSpareAsArray($spare);
         }
-        return $spares;
+        return $elements;
     }
 
     private function getSpareAsArray(Spare $spare)
@@ -183,6 +185,38 @@ class WriteService extends BaseService
         ];
         $element = [
             'tag' => 'ЗапчастиДляПредставительстваСтрока',
+            'attributes' => $attributes
+        ];
+        return $element;
+    }
+
+    private function getReplacementPartsAsArray($replacementParts)
+    {
+        $elements = [];
+        foreach ($replacementParts as $replacementPart) {
+            $elements[] = $this->getReplacementPartAsArray($replacementPart);
+        }
+        return $elements;
+    }
+
+    private function getReplacementPartAsArray(ReplacementPart $replacementPart)
+    {
+        $attributes = [
+            'Артикул' => $replacementPart->vendor_code,
+            'АртикулЗамена' => $replacementPart->vendor_code_replacement,
+            'ПризнакСогласия' => $this->setXmlBoolean($replacementPart->is_agree),
+            'Наименование' => $replacementPart->name,
+            'Цена' => $replacementPart->price,
+            'Количество' => $replacementPart->quantity,
+            'Сумма' => $replacementPart->total_price,
+            'Производитель' => $replacementPart->manufacturer,
+            'СсылкаВ1С' => $replacementPart->link1C,
+            'Комментарий' => $replacementPart->comment,
+            'Статус' => $replacementPart->status,
+            'Купить' => $this->setXmlBoolean($replacementPart->is_to_buy),
+        ];
+        $element = [
+            'tag' => 'АртикулыДляСервисаСтрока',
             'attributes' => $attributes
         ];
         return $element;

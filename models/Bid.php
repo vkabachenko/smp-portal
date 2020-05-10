@@ -507,6 +507,14 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getReplacemrntParts()
+    {
+        return $this->hasMany(ReplacementPart::className(), ['bid_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getJobs()
     {
         return $this->hasMany(BidJob::className(), ['bid_id' => 'id']);
