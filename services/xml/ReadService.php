@@ -7,10 +7,12 @@ use app\models\Bid;
 use app\models\BidComment;
 use app\models\BidHistory;
 use app\models\BrandCorrespondence;
+use app\models\ClientProposition;
 use app\models\ReplacementPart;
 use app\models\Spare;
 use app\models\User;
 use app\services\brand\BrandService;
+use Codeception\Module\Cli;
 
 class ReadService extends BaseService
 {
@@ -51,6 +53,7 @@ class ReadService extends BaseService
         $bidComments = isset($bidArray['ТаблицаКомментариевСтрока']) ? $bidArray['ТаблицаКомментариевСтрока'] : [];
         $bidSpares = isset($bidArray['ЗапчастиДляПредставительстваСтрока']) ? $bidArray['ЗапчастиДляПредставительстваСтрока'] : [];
         $bidReplacementParts = isset($bidArray['АртикулыДляСервисаСтрока']) ? $bidArray['АртикулыДляСервисаСтрока'] : [];
+        $bidClientPropositions = isset($bidArray['ПредложениеДляКлиентаСтрока']) ? $bidArray['ПредложениеДляКлиентаСтрока'] : [];
 
         if ($this->isDuplicate($attributes)) {
             $bid = $this->updateBid($attributes);
@@ -61,6 +64,7 @@ class ReadService extends BaseService
         $this->createComments($bid, $bidComments);
         $this->createSpares($bid, $bidSpares);
         $this->createReplacementParts($bid, $bidReplacementParts);
+        $this->createClientPropositions($bid, $bidClientPropositions);
 
 
         if (is_null($bid)) {
@@ -320,6 +324,37 @@ class ReadService extends BaseService
         $model->comment = $this->getCommentAttribute($attributes, 'Комментарий');
         $model->status = $this->getCommentAttribute($attributes, 'Статус');
         $model->is_to_buy = $this->setBoolean($this->getCommentAttribute($attributes, 'Купить'));
+
+        if (!$model->save()) {
+            \Yii::error($attributes);
+            \Yii::error($model->getErrors());
+        }
+    }
+
+    private function createClientPropositions($bid, $bidClientPropositions)
+    {
+        if (!$bid) {
+            return;
+        }
+
+        if (isset($bidClientPropositions['@attributes'])) {
+            $this->createClientProposition($bid, $bidClientPropositions['@attributes']);
+        } else {
+            foreach ($bidClientPropositions as $bidClientProposition) {
+                $this->createClientProposition($bid, $bidClientProposition['@attributes']);
+            }
+        }
+    }
+
+    private function createClientProposition($bid, $attributes)
+    {
+        /* @todo check if exists */
+        $model = new ClientProposition();
+        $model->bid_id = $bid->id;
+        $model->name = $this->getCommentAttribute($attributes, 'Наименование');
+        $model->price = $this->getCommentAttribute($attributes, 'Цена');
+        $model->quantity = $this->getCommentAttribute($attributes, 'Количество');
+        $model->total_price = $this->getCommentAttribute($attributes, 'Сумма');
 
         if (!$model->save()) {
             \Yii::error($attributes);

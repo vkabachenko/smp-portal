@@ -5,6 +5,7 @@ namespace app\services\xml;
 
 use app\models\BidComment;
 use app\models\BidImage;
+use app\models\ClientProposition;
 use app\models\ReplacementPart;
 use app\models\Spare;
 use app\models\User;
@@ -127,9 +128,10 @@ class WriteService extends BaseService
 
         $comments = $this->getCommentsAsArray($model->bidComments);
         $spares = $this->getSparesAsArray($model->spares);
-        $replacemrntParts = $this->getReplacementPartsAsArray($model->replacemrntParts);
+        $replacementParts = $this->getReplacementPartsAsArray($model->replacementParts);
+        $clientPropositions = $this->getClientPropositionsAsArray($model->clientPropositions);
         $images = $this->getImagesAsArray($model->bidImages);
-        $elements = array_merge($comments, $spares, $replacemrntParts, $images);
+        $elements = array_merge($comments, $spares, $replacementParts, $clientPropositions, $images);
         $bid = [
             'tag' => 'ДС',
             'attributes' => $changedAttributes
@@ -217,6 +219,30 @@ class WriteService extends BaseService
         ];
         $element = [
             'tag' => 'АртикулыДляСервисаСтрока',
+            'attributes' => $attributes
+        ];
+        return $element;
+    }
+
+    private function getClientPropositionsAsArray($clientPropositions)
+    {
+        $elements = [];
+        foreach ($clientPropositions as $clientProposition) {
+            $elements[] = $this->getClientPropositionAsArray($clientProposition);
+        }
+        return $elements;
+    }
+
+    private function getClientPropositionAsArray(ClientProposition $clientProposition)
+    {
+        $attributes = [
+            'Наименование' => $clientProposition->name,
+            'Цена' => $clientProposition->price,
+            'Количество' => $clientProposition->quantity,
+            'Сумма' => $clientProposition->total_price,
+        ];
+        $element = [
+            'tag' => 'ПредложениеДляКлиентаСтрока',
             'attributes' => $attributes
         ];
         return $element;
