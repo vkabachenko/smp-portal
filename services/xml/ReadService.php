@@ -8,6 +8,7 @@ use app\models\Bid;
 use app\models\BidComment;
 use app\models\BidHistory;
 use app\models\BidJob;
+use app\models\BidJob1c;
 use app\models\BrandCorrespondence;
 use app\models\ClientProposition;
 use app\models\JobsCatalog;
@@ -263,9 +264,11 @@ class ReadService extends BaseService
 
     private function createSpares($bid, $bidSpares)
     {
-        if (!$bid) {
+        if (!$bid || empty($bidSpares)) {
             return;
         }
+
+        Spare::deleteAll(['bid_id' => $bid->id]);
 
         if (isset($bidSpares['@attributes'])) {
             $this->createSpare($bid, $bidSpares['@attributes']);
@@ -278,7 +281,6 @@ class ReadService extends BaseService
 
     private function createSpare($bid, $attributes)
     {
-        /* @todo check if exists */
         $model = new Spare();
         $model->bid_id = $bid->id;
         $model->name = $this->getCommentAttribute($attributes, 'Наименование');
@@ -295,9 +297,11 @@ class ReadService extends BaseService
 
     private function createJobs($bid, $bidJobs)
     {
-        if (!$bid || !$bid->agency_id) {
+        if (!$bid || empty($bidJobs)) {
             return;
         }
+
+        BidJob1c::deleteAll(['bid_id' => $bid->id]);
 
         if (isset($bidJobs['@attributes'])) {
             $this->createJob($bid, $bidJobs['@attributes']);
@@ -310,22 +314,12 @@ class ReadService extends BaseService
 
     private function createJob($bid, $attributes)
     {
-        /* @todo check if exists */
-
-        $catalog = JobsCatalog::find()
-            ->where([
-                'agency_id' => $bid->agency_id,
-                'name' => $this->getCommentAttribute($attributes, 'Наименование')
-            ])
-            ->one();
-        if (is_null($catalog)) {
-            return;
-        }
-
-        $model = new BidJob();
+        $model = new BidJob1c();
         $model->bid_id = $bid->id;
-        $model->jobs_catalog_id = $catalog->id;
-        $model->price = $this->getCommentAttribute($attributes, 'Сумма');
+        $model->name = $this->getCommentAttribute($attributes, 'Наименование');
+        $model->quantity = $this->getCommentAttribute($attributes, 'Количество');
+        $model->price = $this->getCommentAttribute($attributes, 'Цена');
+        $model->total_price = $this->getCommentAttribute($attributes, 'Сумма');
 
         if (!$model->save()) {
             \Yii::error($attributes);
@@ -335,9 +329,11 @@ class ReadService extends BaseService
 
     private function createReplacementParts($bid, $bidReplacementParts)
     {
-        if (!$bid) {
+        if (!$bid || empty($bidReplacementParts)) {
             return;
         }
+
+        ReplacementPart::deleteAll(['bid_id' => $bid->id]);
 
         if (isset($bidReplacementParts['@attributes'])) {
             $this->createReplacementPart($bid, $bidReplacementParts['@attributes']);
@@ -350,13 +346,6 @@ class ReadService extends BaseService
 
     private function createReplacementPart($bid, $attributes)
     {
-        $link1C = $this->getCommentAttribute($attributes, 'СсылкаВ1С');
-        $exists = ReplacementPart::find()->where(['bid_id' => $bid->id, 'link1C' => $link1C])->exists();
-
-        if ($exists) {
-            return;
-        }
-
         $model = new ReplacementPart();
         $model->bid_id = $bid->id;
         $model->vendor_code = $this->getCommentAttribute($attributes, 'Артикул');
@@ -380,9 +369,11 @@ class ReadService extends BaseService
 
     private function createClientPropositions($bid, $bidClientPropositions)
     {
-        if (!$bid) {
+        if (!$bid || empty($bidClientPropositions)) {
             return;
         }
+
+        ClientProposition::deleteAll(['bid_id' => $bid->id]);
 
         if (isset($bidClientPropositions['@attributes'])) {
             $this->createClientProposition($bid, $bidClientPropositions['@attributes']);
@@ -395,7 +386,6 @@ class ReadService extends BaseService
 
     private function createClientProposition($bid, $attributes)
     {
-        /* @todo check if exists */
         $model = new ClientProposition();
         $model->bid_id = $bid->id;
         $model->name = $this->getCommentAttribute($attributes, 'Наименование');

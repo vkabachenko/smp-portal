@@ -6,6 +6,7 @@ namespace app\services\xml;
 use app\models\BidComment;
 use app\models\BidImage;
 use app\models\BidJob;
+use app\models\BidJob1c;
 use app\models\ClientProposition;
 use app\models\ReplacementPart;
 use app\models\Spare;
@@ -130,7 +131,7 @@ class WriteService extends BaseService
 
         $comments = $this->getCommentsAsArray($model->bidComments);
         $spares = $this->getSparesAsArray($model->spares);
-        $jobs = $this->getJobsAsArray($model->jobs);
+        $jobs = $this->getJobsAsArray($model->jobs1c);
         $replacementParts = $this->getReplacementPartsAsArray($model->replacementParts);
         $clientPropositions = $this->getClientPropositionsAsArray($model->clientPropositions);
         $images = $this->getImagesAsArray($model->bidImages);
@@ -204,11 +205,13 @@ class WriteService extends BaseService
         return $elements;
     }
 
-    private function getJobAsArray(BidJob $job)
+    private function getJobAsArray(BidJob1c $job)
     {
         $attributes = [
-            'Наименование' => $job->jobsCatalog->name,
-            'Сумма' => $job->getPriceConformed(),
+            'Наименование' => $job->name,
+            'Количество' => $job->quantity,
+            'Цена' => $job->price,
+            'Сумма' => $job->total_price,
         ];
         $element = [
             'tag' => 'УслугиДляПредставительстваСтрока',

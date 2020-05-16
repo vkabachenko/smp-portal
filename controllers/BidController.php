@@ -7,6 +7,7 @@ use app\helpers\bid\CompositionHelper;
 use app\helpers\bid\ViewHelper;
 use app\models\BidAttribute;
 use app\models\BidJob;
+use app\models\BidJob1c;
 use app\models\BidStatus;
 use app\models\form\SendActForm;
 use app\models\Spare;
@@ -151,6 +152,11 @@ class BidController extends Controller
             'pagination' => false
         ]);
 
+        $bidJob1cProvider = new ActiveDataProvider([
+            'query' => BidJob1c::find()->where(['bid_id' => $id]),
+            'pagination' => false
+        ]);
+
         $spareProvider = new ActiveDataProvider([
             'query' => Spare::find()->where(['bid_id' => $id])->orderBy('updated_at'),
             'pagination' => false
@@ -169,6 +175,7 @@ class BidController extends Controller
         return $this->render('view', [
             'model' => $model,
             'bidJobProvider' => $bidJobProvider,
+            'bidJob1cProvider' => $bidJob1cProvider,
             'spareProvider' => $spareProvider,
             'attributes' => $attributes,
             'section1' => $section1,

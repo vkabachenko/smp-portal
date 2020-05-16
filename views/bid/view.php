@@ -10,6 +10,7 @@ use app\models\Spare;
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
 /* @var $bidJobProvider \yii\data\ActiveDataProvider */
+/* @var $bidJob1cProvider \yii\data\ActiveDataProvider */
 /* @var $spareProvider \yii\data\ActiveDataProvider */
 /* @var $attributes array */
 /* @var $section1 array */
@@ -132,6 +133,26 @@ $this->params['back'] = ['index'];
         ],
     ]); ?>
 </div>
+
+<?php if (\Yii::$app->user->can('master')): ?>
+
+<div class="form-group clearfix"></div>
+<div>
+    <h3>Работы (импорт из 1С)</h3>
+    <?= GridView::widget([
+        'dataProvider' => $bidJob1cProvider,
+        'summary' => '',
+        'columns' => [
+            'name',
+            'quantity',
+            'price',
+            'total_price'
+        ],
+    ]); ?>
+</div>
+
+
+<?php endif; ?>
 
 <div class="form-group clearfix"></div>
 <div>
