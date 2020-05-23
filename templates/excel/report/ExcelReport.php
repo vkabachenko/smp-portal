@@ -2,29 +2,27 @@
 namespace app\templates\excel\report;
 
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
-use app\models\Agency;
-use app\models\form\ReportForm;
+use app\models\Bid;
+use app\models\Report;
 use app\templates\excel\ExcelReportTemplate;
-use app\helpers\common\DateHelper;
+
 
 class ExcelReport extends ExcelReportTemplate
 {
     /**
-     * @var ReportForm
+     * @var Report
      */
-    private $reportForm;
+    private $report;
 
-    public function __construct($agencyId, ReportForm $reportForm)
+    public function __construct(Report $report)
     {
-        parent::__construct($agencyId);
-
-        $this->reportForm = $reportForm;
-        $this->getBids(DateHelper::convert($reportForm->dateFrom), DateHelper::convert($reportForm->dateTo));
+        $this->report = $report;
+        $this->getBids();
     }
 
     public function getFilename()
     {
-        return 'report_' . $this->agencyId . '_' . $this->reportForm->dateFrom . '_' . $this->reportForm->dateTo . '.xlsx';
+        return 'report_' . $this->report->agency_id . '_' . $this->report->report_date . '_' . $this->report->report_nom . '.xlsx';
     }
 
     public function getDirectory()
@@ -34,19 +32,24 @@ class ExcelReport extends ExcelReportTemplate
 
     public function generate()
     {
-        $agency = Agency::findOne($this->agencyId);
+        $agency = $this->report->agency;
         if (!is_null($agency->report_template)) {
             PhpExcelTemplator::saveToFile($agency->getTemplatePath('report'), $this->getPath(), $this->getParams());
         }
     }
 
+    protected function getBids()
+    {
+        $this->bids = Bid::find()->where(['bid_number' => $this->report->selectedBids])->all();
+    }
+
     protected function getParams()
     {
         return [
-            '{report_no}' => $this->reportForm->reportNom,
-            '{report_date}' => $this->reportForm->reportDate,
-            '{report_date_from}' => $this->reportForm->dateFrom,
-            '{report_date_to}' => $this->reportForm->dateTo,
+            '{report_no}' => $this->report->report_nom,
+            '{report_date}' => $this->report->report_date,
+            '{report_date_from}' => '',
+            '{report_date_to}' => '',
             '{spare_nom_row}' => array_map(
                 function($el) { return $el + 1; },
                 array_keys($this->getAttributeParams('bid_number', 'spares', true))

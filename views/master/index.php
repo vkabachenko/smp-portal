@@ -20,6 +20,7 @@ $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);
 
         <?php if (\Yii::$app->user->can('manageWorkshops')): ?>
 
+            <?= Html::a('Отчеты', ['workshop-report/index'], ['class' => 'list-group-item center-menu-item']) ?>
             <?= Html::a('Представительства', ['workshop-agency/agencies'], ['class' => 'list-group-item center-menu-item']) ?>
             <?= Html::a('Мастера', ['workshop-master/masters'], ['class' => 'list-group-item center-menu-item']) ?>
 

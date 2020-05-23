@@ -18,7 +18,8 @@ class m200521_153221_create_report_table extends Migration
             'agency_id' => $this->integer()->notNull(),
             'report_nom' => $this->string(),
             'report_date' => $this->date(),
-            'report_filename' => $this->string()->notNull()
+            'report_filename' => $this->string()->notNull(),
+            'is_transferred' => $this->boolean()->notNull()->defaultValue(false)
         ]);
 
         $this->addForeignKey(
