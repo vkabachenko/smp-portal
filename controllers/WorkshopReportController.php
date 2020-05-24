@@ -11,8 +11,10 @@ use app\models\form\UploadExcelTemplateForm;
 use app\models\Master;
 use app\models\Report;
 use app\models\Workshop;
+use app\services\report\SendReportService;
 use app\templates\excel\report\ExcelReport;
 use yii\data\ActiveDataProvider;
+use yii\di\ServiceLocator;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\UploadedFile;
@@ -178,7 +180,8 @@ class WorkshopReportController extends Controller
 
     public function actionView($id)
     {
-
+        $report = Report::findOne($id);
+        return $this->render('view', compact('report'));
     }
 
     public function actionDelete($id)
@@ -188,5 +191,16 @@ class WorkshopReportController extends Controller
             $report->delete();
         }
         return $this->redirect(['index']);
+    }
+
+    public function actionSendReport($id)
+    {
+        $service = new SendReportService($id);
+        if ($service->send()) {
+            \Yii::$app->session->setFlash('success', 'Отчет успешно отправлен');
+        } else {
+            \Yii::$app->session->setFlash('error', 'Не удалось отправить отчет');
+        }
+        return $this->redirect(['view', 'id' => $id]);
     }
 }

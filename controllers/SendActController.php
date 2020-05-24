@@ -68,7 +68,7 @@ class SendActController extends Controller
         $this->checkAccess('sendAct', ['bidId' => $bidId]);
         $model = new SendActForm(['bidId' => $bidId]);
 
-        if ($model->act->bid->manufacturer->isActTemplate()) {
+        if ($model->act->bid->agency->isActTemplate()) {
             $model->act->generate();
         } else {
             \Yii::$app->session->setFlash('error', 'Отсутствует шаблон акта, генерация невозможна');

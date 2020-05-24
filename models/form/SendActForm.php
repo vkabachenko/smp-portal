@@ -4,6 +4,7 @@
 namespace app\models\form;
 
 
+use app\helpers\common\MailHelper;
 use app\models\Bid;
 use app\models\BidImage;
 use app\models\Manager;
@@ -145,11 +146,9 @@ class SendActForm extends Model
         }
     }
 
-    private function getEmailsList(...$emails) {
-        $emails = array_filter(array_unique($emails), function($email) {
-            return !empty($email);
-        });
-        return implode(', ', $emails);
+    private function getEmailsList(...$emails)
+    {
+        return MailHelper::getEmailsList(...$emails);
     }
 
     private function getSubject()
