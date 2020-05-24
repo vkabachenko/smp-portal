@@ -96,4 +96,23 @@ class Report extends \yii\db\ActiveRecord
 
         return parent::beforeValidate();
     }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if ($insert) {
+            foreach ($this->selectedBids as $selectedBid) {
+                $bid = Bid::find()->where(['bid_number' => $selectedBid])->one();
+                if (!$bid) {
+                    \Yii::error('bid_number ' . $selectedBid . ' not found');
+                } else {
+                    $bid->report_id = $this->id;
+                    if (!$bid->save()) {
+                        \Yii::error($bid->getErrors());
+                    }
+                }
+            }
+        }
+
+    }
 }

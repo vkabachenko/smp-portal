@@ -7,6 +7,7 @@ namespace app\controllers;
 use app\models\AgencyWorkshop;
 use app\models\Bid;
 use app\models\BidStatus;
+use app\models\form\UploadExcelTemplateForm;
 use app\models\Master;
 use app\models\Report;
 use app\models\Workshop;
@@ -14,6 +15,7 @@ use app\templates\excel\report\ExcelReport;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\UploadedFile;
 
 class WorkshopReportController extends Controller
 {
@@ -147,6 +149,30 @@ class WorkshopReportController extends Controller
 
     public function actionUpdate($id)
     {
+        $report = Report::findOne($id);
+        $uploadForm = new UploadExcelTemplateForm();
+
+        if ($report->load(\Yii::$app->request->post())) {
+            $excelReport = new ExcelReport($report);
+            $fileMode = (int)\Yii::$app->request->post('fileMode');
+            if ($fileMode === 1) {
+                $excelReport->generate();
+                $report->report_filename = $excelReport->getPath();
+            } elseif ($fileMode === 2) {
+                $uploadForm->file = UploadedFile::getInstance($uploadForm, 'file');
+                $uploadForm->file->saveAs($excelReport->getPath());
+                $report->report_filename = $excelReport->getPath();
+            }
+            if($report->save()) {
+                \Yii::$app->session->setFlash('success', 'Отчет успешно сохранен');
+            } else {
+                \Yii::error($report->getErrors());
+                \Yii::$app->session->setFlash('error', 'Не удалось сохранить отчет');
+            }
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('update', compact('report', 'uploadForm'));
 
     }
 
@@ -157,6 +183,10 @@ class WorkshopReportController extends Controller
 
     public function actionDelete($id)
     {
-
+        $report = Report::findOne($id);
+        if ($report) {
+            $report->delete();
+        }
+        return $this->redirect(['index']);
     }
 }

@@ -40,7 +40,9 @@ class ExcelReport extends ExcelReportTemplate
 
     protected function getBids()
     {
-        $this->bids = Bid::find()->where(['bid_number' => $this->report->selectedBids])->all();
+        $this->bids = $this->report->isNewRecord
+            ? Bid::find()->where(['bid_number' => $this->report->selectedBids])->all()
+            : $this->report->bids;
     }
 
     protected function getParams()
