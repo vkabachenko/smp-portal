@@ -5,7 +5,9 @@ namespace app\controllers;
 
 use app\models\Agency;
 use app\models\form\ReportForm;
+use app\models\Report;
 use app\templates\excel\report\ExcelReport;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 
@@ -19,31 +21,28 @@ class AgencyReportController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['manager'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return \Yii::$app->user->can('updateAgency');
+                        }
                     ],
                 ],
             ]
         ];
     }
 
-    public function actionIndex($agencyId)
+    public function actionIndex()
     {
-        $agency = Agency::findOne($agencyId);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Report::find()
+                ->where(['agency_id' => \Yii::$app->user->identity->manager->agency_id])
+                ->andWhere(['is_transferred' => true])
+                ->orderBy('workshop_id, report_date DESC'),
+        ]);
 
-        if (empty($agency->report_template)) {
-            \Yii::$app->session->setFlash('error', 'Не найден шаблон отчета');
-            return $this->redirect(['bid/index']);
-        }
-
-        $reportForm = new ReportForm();
-
-        if ($reportForm->load(\Yii::$app->request->post())) {
-            $excelReport = new ExcelReport($agencyId, $reportForm);
-            $excelReport->generate();
-            return $this->render('download', compact('excelReport'));
-        }
-
-        return $this->render('index', compact('agency', 'reportForm'));
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
 }

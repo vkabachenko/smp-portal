@@ -1,51 +1,45 @@
 <?php
 
-use yii\bootstrap\Html;
-use yii\widgets\ActiveForm;
-use kartik\date\DatePicker;
-use yii\jui\DatePicker as JuiDatePicker;
+use yii\helpers\Html;
+use yii\grid\GridView;
+use app\models\Report;
 
 /* @var $this yii\web\View */
-/* @var $reportForm \app\models\form\ReportForm*/
-/* @var $form yii\widgets\ActiveForm */
+/* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Отчет по выполненным заявкам';
-$this->params['back'] = ['bid/index'];
+$this->title = 'Отчеты';
+$this->params['back'] = ['manager/index'];
 ?>
-
-<h2><?= Html::encode($this->title) ?></h2>
-
 <div>
-    <?php $form = ActiveForm::begin(); ?>
 
-    <div class="form-group">
-        <label class="control-label">Диапазон дат заявок</label>
-        <?= DatePicker::widget([
-            'model' => $reportForm,
-            'attribute' => 'dateFrom',
-            'attribute2' => 'dateTo',
-            'type' => DatePicker::TYPE_RANGE,
-            'separator' => '-',
-            'pluginOptions' => ['autoclose' => true, 'format' => 'dd.mm.yyyy']
-        ]) ?>
-    </div>
+    <h2><?= Html::encode($this->title) ?></h2>
 
-    <?= $form->field($reportForm, 'reportNom'); ?>
 
-    <?= $form->field($reportForm, 'reportDate')
-        ->widget(JuiDatePicker::class, [
-        'language' => 'ru',
-        'dateFormat' => 'dd.MM.yyyy',
-        'options' => ['class' => 'form-control']
-    ]) ?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            [
+                'attribute' => 'workshop_id',
+                'value' => function(Report $report) {
+                    return $report->workshop->name;
+                }
+            ],
+            'report_nom',
+            [
+                'attribute' => 'report_date',
+                'value' => function(Report $report) {
+                    return \Yii::$app->formatter->asDate($report->report_date);
+                }
+            ],
+            [
+                'header' => 'Отчет',
+                'format' => 'raw',
+                'value' => function(Report $report) {
+                    return Html::a('Скачать', ['download/default', 'filename' => 'report.xlsx', 'path' => $report->report_filename]);
+                }
+            ],
+        ],
+    ]); ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
-    </div>
 
-    <?php ActiveForm::end(); ?>
 </div>
-
-
-
-

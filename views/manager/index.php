@@ -21,6 +21,10 @@ $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);
 
         <?php if (\Yii::$app->user->can('updateAgency')): ?>
 
+            <?= Html::a('Отчеты',
+                ['agency-report/index'],
+                ['class' => 'list-group-item center-menu-item'])
+            ?>
             <?= Html::a('Виды работ',
                 ['jobs-catalog/index', 'agencyId' => \Yii::$app->user->identity->manager->agency->id],
                 ['class' => 'list-group-item center-menu-item'])

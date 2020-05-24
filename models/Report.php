@@ -56,7 +56,7 @@ class Report extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'workshop_id' => 'Workshop ID',
+            'workshop_id' => 'Мастерская',
             'agency_id' => 'Представительство',
             'report_nom' => 'Номер отчета',
             'report_date' => 'Дата отчета',
