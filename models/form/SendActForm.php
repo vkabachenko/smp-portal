@@ -87,9 +87,10 @@ class SendActForm extends Model
         $message->attach($this->act->getPath());
 
         if ($this->images) {
-            foreach ($this->images as $imageId) {
+            foreach ($this->images as $index=>$imageId) {
                 $model = BidImage::findOne($imageId);
-                $message->attach($model->getPath());
+                $imageName = sprintf('photo_%s_%s', $model->bid_id, $index + 1);
+                $message->attach($model->getPath(), ['fileName' => $imageName]);
             }
         }
 
