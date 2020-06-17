@@ -84,7 +84,11 @@ class SendActForm extends Model
             ->setTextBody($this->getMailContent());
 
 
-        $message->attach($this->act->getPath());
+        if (file_exists($this->act->getPath())) {
+            $message->attach($this->act->getPath());
+        } else {
+            return false;
+        }
 
         if ($this->images) {
             foreach ($this->images as $index=>$imageId) {

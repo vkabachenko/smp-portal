@@ -26,7 +26,7 @@ $this->params['back'] = ['manager/index'];
     <?= $form->field($manager, 'phone')->textInput(['maxlength' => true]) ?>
 
     <?php if (\Yii::$app->user->can('updateAgency')): ?>
-        <?= $this->render('//agency/partial/_form', ['form' => $form, 'model' => $agency]) ?>
+        <?= $this->render('//agency/partial/_form', ['form' => $form, 'model' => $agency, 'manufacturer' => false]) ?>
     <?php endif ?>
 
     <div class="form-group">

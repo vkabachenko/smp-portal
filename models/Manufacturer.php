@@ -52,7 +52,7 @@ class Manufacturer extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBs()
+    public function getBids()
     {
         return $this->hasMany(Bid::className(), ['manufacturer_id' => 'id']);
     }

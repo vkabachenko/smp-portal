@@ -21,6 +21,13 @@ class UpdateBidRule extends Rule
         }
 
         if ($bid->status_id !== BidStatus::getId(BidStatus::STATUS_FILLED)) {
+            $agency = $bid->getAgency();
+            if (is_null($agency) || !$agency->is_independent) {
+                return false;
+            }
+        }
+
+        if ($bid->status_id === BidStatus::getId(BidStatus::STATUS_DONE)) {
             return false;
         }
 

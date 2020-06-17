@@ -20,6 +20,16 @@ class SetBidDoneRule extends Rule
             return false;
         }
 
+        $agency = $bid->getAgency();
+
+        if (is_null($agency)) {
+            return false;
+        } else {
+            if ($agency->is_independent) {
+                return true;
+            }
+        }
+
         if ($bid->status_id !== BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP)) {
             return false;
         }

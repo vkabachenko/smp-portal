@@ -52,7 +52,7 @@ class SendActController extends Controller
                     $statusService->setStatus();
                 }
             } else {
-                \Yii::$app->session->setFlash('error', 'Ошибка при отправке заявки');
+                \Yii::$app->session->setFlash('error', 'Ошибка при отправке заявки. Проверьте наличие шаблона акта');
             }
             return $this->redirect(['bid/view', 'id' => $bidId]);
         }

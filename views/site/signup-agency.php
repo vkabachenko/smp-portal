@@ -23,6 +23,7 @@ $this->params['back'] = ['site/index'];
 
         <?= $form->field($model, 'userName') ?>
         <?= $form->field($model, 'email') ?>
+        <?= $form->field($model, 'is_independent')->checkbox() ?>
 
         <?= $form->field($model, 'password')->passwordInput() ?>
 

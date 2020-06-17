@@ -4,8 +4,12 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 /* @var \app\models\Manager $manager */
+/* @var bool $is_independent */
 
-$url = Url::to(['agency-signup/index', 'token' => $manager->user->verification_token], true);
+$url = Url::to([
+    $is_independent ? 'agency-signup/index-admin' : 'agency-signup/index',
+    'token' => $manager->user->verification_token
+], true);
 ?>
 
 

@@ -23,7 +23,7 @@ class RowOptionsHelper
                     return $bid->status_id == BidStatus::getId(BidStatus::STATUS_SENT_WORKSHOP) ? 'not-viewed' : '';
                 }
             case 'master':
-                if ($bid->status_id == BidStatus::getId(BidStatus::STATUS_SENT_WORKSHOP) ||
+                if (($bid->status_id == BidStatus::getId(BidStatus::STATUS_SENT_WORKSHOP)  && !$bid->getAgency()->is_independent) ||
                     $bid->status_id == BidStatus::getId(BidStatus::STATUS_READ_AGENCY)) {
                     return 'disabled enabled-events';
                 } else {

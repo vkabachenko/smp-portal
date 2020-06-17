@@ -55,6 +55,7 @@ class ManufacturerController extends Controller
         $model = new Manufacturer();
 
         if ($model->load(Yii::$app->request->post())) {
+            $model->save();
             return $this->redirect(['index']);
         }
 
@@ -68,6 +69,7 @@ class ManufacturerController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
+            $model->save();
             return $this->redirect(['index']);
         }
 

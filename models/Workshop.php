@@ -130,6 +130,20 @@ class Workshop extends \yii\db\ActiveRecord
         });
     }
 
+    public function addIndependentAgencies()
+    {
+        $existingAgencies = ArrayHelper::getColumn($this->allAgencies, 'id');
+        $independentAgencies = Agency::find()->where(['is_independent' => true])->all();
+
+        foreach ($independentAgencies as $agency) {
+            /* @var $agency Agency */
+            if (!in_array($agency->id, $existingAgencies)) {
+                $model = new AgencyWorkshop(['workshop_id' => $this->id, 'agency_id' => $agency->id]);
+                $model->save();
+            }
+        }
+    }
+
     public function getCommonHiddenAttributeName()
     {
         return 'is_disabled_workshops';

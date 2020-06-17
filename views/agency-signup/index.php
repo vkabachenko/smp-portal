@@ -18,7 +18,7 @@ $this->title = 'Заполните данные представительств
 
     <?php $form = ActiveForm::begin(); ?>
 
-        <?= $this->render('//agency/partial/_form', ['form' => $form, 'model' => $agency]) ?>
+        <?= $this->render('//agency/partial/_form', ['form' => $form, 'model' => $agency, 'manufacturer' => true]) ?>
 
         <div class="form-group">
             <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

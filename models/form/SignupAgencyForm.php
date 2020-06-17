@@ -17,6 +17,7 @@ class SignupAgencyForm extends Model
     public $agencyName;
     public $email;
     public $password;
+    public $is_independent;
     public $verifyCode;
 
     /**
@@ -34,6 +35,7 @@ class SignupAgencyForm extends Model
             ['password', 'string', 'min' => 6],
             [['agencyName', 'userName'], 'string', 'max' => 255],
             ['verifyCode', 'captcha'],
+            ['is_independent', 'boolean'],
         ];
     }
 
@@ -47,7 +49,8 @@ class SignupAgencyForm extends Model
             'userName' => 'ФИО главного менеджера',
             'email' => 'E-mail',
             'password' => 'Пароль',
-            'verifyCode' => 'Проверочный код с картинки'
+            'verifyCode' => 'Проверочный код с картинки',
+            'is_independent' => 'Работать автономно (подтверждение админом)'
         ];
     }
     

@@ -2,6 +2,7 @@
 
 /* @var $model app\models\Agency */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $manufacturer bool */
 
 use app\models\Manufacturer;
 
@@ -11,7 +12,7 @@ use app\models\Manufacturer;
 <?= $form->field($model, 'manufacturer_id')
     ->dropDownList(Manufacturer::manufacturersAsMap(),[
         'prompt' => 'Выбор',
-        'disabled' => !$model->isNewRecord
+        'disabled' => !$manufacturer
     ]); ?>
 <?= $form->field($model, 'phone1',
     ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['phone1']]])
@@ -19,6 +20,7 @@ use app\models\Manufacturer;
 <?= $form->field($model, 'phone2',
     ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['phone2']]])
     ->textInput(['maxlength' => true]) ?>
+<?= $form->field($model, 'is_independent')->checkbox() ?>
 <?= $form->field($model, 'phone3',
     ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['phone3']]])
     ->textInput(['maxlength' => true]) ?>

@@ -10,9 +10,13 @@ class InviteAgency implements SendMail
      */
     private $manager;
 
-    public function __construct(Manager $manager)
+    /* @var bool */
+    private $is_independent;
+
+    public function __construct(Manager $manager, $is_independent)
     {
         $this->manager = $manager;
+        $this->is_independent = $is_independent;
     }
 
     public function send()
@@ -25,11 +29,12 @@ class InviteAgency implements SendMail
                     ],
                     [
                         'manager' => $this->manager,
+                        'is_independent' => $this->is_independent
                     ]
                 )
                 ->setFrom(\Yii::$app->params['adminEmail'])
                 ->setTo(
-                    $this->manager->user->email
+                    $this->is_independent ? \Yii::$app->params['adminEmail'] : $this->manager->user->email
                 )
                 ->setSubject('Подтвердите регистрацию представительства ' . $this->manager->agency->name)
                 ->send();

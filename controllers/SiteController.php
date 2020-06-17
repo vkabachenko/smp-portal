@@ -109,7 +109,7 @@ class SiteController extends Controller
     {
         $model = new SignupAgencyForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            $mailService = new InviteAgency($model->manager);
+            $mailService = new InviteAgency($model->manager, $model->is_independent);
             if ($mailService->send()) {
                 \Yii::$app->session->setFlash('success', 'Направлено письмо с кодом верификации. Перейдите по ссылке в письме для завершения регистрации');
             } else {

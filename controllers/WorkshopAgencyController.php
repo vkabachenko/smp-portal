@@ -61,6 +61,7 @@ class WorkshopAgencyController extends Controller
     public function actionAgencies()
     {
         $workshop = $this->workshop;
+        $workshop->addIndependentAgencies();
         $agencyDataProvider = new ActiveDataProvider([
             'query' => $workshop->getAllAgencies(),
         ]);

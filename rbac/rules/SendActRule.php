@@ -23,6 +23,10 @@ class SendActRule extends Rule
             return false;
         }
 
+        if (is_null($bid->getAgency())) {
+            return false;
+        }
+
         $user = User::findOne($user);
         if (!$user) {
             return false;
@@ -40,6 +44,9 @@ class SendActRule extends Rule
             }
         } else {
             if ($bid->status_id === BidStatus::getId(BidStatus::STATUS_DONE)) {
+                return false;
+            }
+            if ($bid->getAgency()->is_independent) {
                 return false;
             }
             /* @var $manager \app\models\Manager */

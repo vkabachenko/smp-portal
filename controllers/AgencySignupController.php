@@ -59,4 +59,35 @@ class AgencySignupController extends Controller
         ]);
     }
 
+    public function actionIndexAdmin($token)
+    {
+        /* @var $user \app\models\User */
+        $user = User::find()->where(['verification_token' => $token])->one();
+
+        if (is_null($user)) {
+            throw new \DomainException('Token not found');
+        }
+
+        $agency = Agency::find()
+            ->joinWith('managers', false)
+            ->where(['manager.user_id' => $user->id])
+            ->one();
+        if (is_null($agency)) {
+            throw new \DomainException('Agency not found');
+        }
+        /* @var $agency \app\models\Agency */
+        $agency->is_independent = true;
+
+        if ($agency->load(\Yii::$app->request->post()) && $agency->save())   {
+            $user->verification_token = null;
+            $user->status = User::STATUS_ACTIVE;
+            $user->save();
+            \Yii::$app->session->setFlash('success', 'Представительство зарегистрировано');
+            return $this->goHome();
+        }
+        return $this->render('index', [
+            'agency' => $agency
+        ]);
+    }
+
 }

@@ -53,7 +53,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $this->render('partial/_form', compact('form','model')) ?>
+    <?= $this->render('partial/_form', ['form' => $form, 'model' => $model, 'manufacturer' => $model->isNewRecord]) ?>
 
     <div>
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

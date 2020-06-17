@@ -27,6 +27,7 @@ use yii\web\UploadedFile;
  * @property array $bid_attributes_section3
  * @property string $act_template
  * @property string $report_template
+ * @property bool $is_independent
  *
  * @property Manufacturer $manufacturer
  * @property Manager[] $managers
@@ -61,6 +62,7 @@ class Agency extends \yii\db\ActiveRecord
             [['name', 'manufacturer_id'], 'required'],
             [['bid_attributes'], 'safe'],
             [['description'], 'string'],
+            [['is_independent'], 'boolean'],
             [['phone1', 'phone2', 'phone3', 'phone4'], 'string'],
             [['email2', 'email3', 'email4'], 'string'],
             [['email2', 'email3', 'email4'], 'email'],
@@ -87,6 +89,7 @@ class Agency extends \yii\db\ActiveRecord
             'email2' => 'Email 2',
             'email3' => 'Email 3',
             'email4' => 'Email 4',
+            'is_independent' => 'Работать автономно'
         ];
     }
 
