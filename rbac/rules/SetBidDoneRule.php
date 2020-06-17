@@ -20,6 +20,10 @@ class SetBidDoneRule extends Rule
             return false;
         }
 
+        if ($bid->status_id === BidStatus::getId(BidStatus::STATUS_DONE)) {
+            return false;
+        }
+
         $agency = $bid->getAgency();
 
         if (is_null($agency)) {
