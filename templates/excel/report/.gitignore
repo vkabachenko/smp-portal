@@ -1,4 +1,6 @@
+*.*
 !.gitignore
 !*.php
 !/generated
-*.*
+!sample.xlsx
+

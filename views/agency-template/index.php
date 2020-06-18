@@ -12,9 +12,18 @@ $this->params['back'] = ['manager/index'];
 <div>
     <div class="form-group">
         <h3>Шаблон акта</h3>
+        <div class="form-group">
+            <?= Html::a('Образец шаблона',
+                [
+                    'download/default',
+                    'filename' => 'template_act_sample.xlsx',
+                    'path' => \Yii::getAlias('@app/templates/excel/act/sample.xlsx')
+                ]);
+            ?>
+        </div>
         <?php if ($agency->act_template): ?>
             <div class="form-group">
-                <?= Html::a($agency->act_template,
+                <?= Html::a('Загруженный шаблон',
                      ['download/agency-template', 'agencyId' => $agency->id, 'type' => 'act']);
                 ?>
             </div>
@@ -28,9 +37,18 @@ $this->params['back'] = ['manager/index'];
     </div>
     <div class="form-group">
         <h3>Шаблон отчета</h3>
+        <div class="form-group">
+            <?= Html::a('Образец шаблона',
+                [
+                    'download/default',
+                    'filename' => 'template_report_sample.xlsx',
+                    'path' => \Yii::getAlias('@app/templates/excel/report/sample.xlsx')
+                ]);
+            ?>
+        </div>
         <?php if ($agency->report_template): ?>
             <div class="form-group">
-                <?= Html::a($agency->report_template,
+                <?= Html::a('Загруженный шаблон',
                     ['download/agency-template', 'agencyId' => $agency->id, 'type' => 'report']);
                 ?>
             </div>
