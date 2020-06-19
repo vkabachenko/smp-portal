@@ -11,10 +11,9 @@ use app\models\form\UploadExcelTemplateForm;
 use app\models\Master;
 use app\models\Report;
 use app\models\Workshop;
-use app\services\report\SendReportService;
+use app\models\form\SendReportForm;
 use app\templates\excel\report\ExcelReport;
 use yii\data\ActiveDataProvider;
-use yii\di\ServiceLocator;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\UploadedFile;
@@ -195,12 +194,18 @@ class WorkshopReportController extends Controller
 
     public function actionSendReport($id)
     {
-        $service = new SendReportService($id);
-        if ($service->send()) {
-            \Yii::$app->session->setFlash('success', 'Отчет успешно отправлен');
-        } else {
-            \Yii::$app->session->setFlash('error', 'Не удалось отправить отчет');
+        $model = new SendReportForm($id);
+
+        if ($model->load(\Yii::$app->request->post())) {
+            if ($model->send()) {
+                \Yii::$app->session->setFlash('success', 'Отчет успешно отправлен');
+            } else {
+                \Yii::$app->session->setFlash('error', 'Не удалось отправить отчет');
+            }
+            return $this->redirect(['view', 'id' => $id]);
         }
-        return $this->redirect(['view', 'id' => $id]);
+
+        return $this->render('send-report', compact('model'));
+
     }
 }
