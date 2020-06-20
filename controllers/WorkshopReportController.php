@@ -9,6 +9,7 @@ use app\models\Bid;
 use app\models\BidStatus;
 use app\models\form\UploadExcelTemplateForm;
 use app\models\Master;
+use app\models\RepairStatus;
 use app\models\Report;
 use app\models\Workshop;
 use app\models\form\SendReportForm;
@@ -207,5 +208,16 @@ class WorkshopReportController extends Controller
 
         return $this->render('send-report', compact('model'));
 
+    }
+
+    public function actionBids($reportId)
+    {
+        $query = Bid::find()->where(['report_id' => $reportId])->orderBy('id');
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false
+        ]);
+
+        return $this->render('bids', compact('reportId', 'dataProvider'));
     }
 }

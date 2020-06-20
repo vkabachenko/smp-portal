@@ -32,6 +32,11 @@ $this->params['back'] = ['index'];
                 'label' => 'Отправлен в представительство',
                 'value' => $report->is_transferred ? 'Да' : 'Нет'
             ],
+            [
+                'label' => 'Заявки, попавшие в отчет',
+                'format' => 'raw',
+                'value' => Html::a('Просмотреть', ['workshop-report/bids', 'reportId' => $report->id])
+            ],
         ],
     ]) ?>
 

@@ -137,7 +137,7 @@ class BidController extends Controller
         ]);
     }
 
-    public function actionView($id)
+    public function actionView($id, $returnUrl = null)
     {
         $this->checkAccess('viewBid', ['bidId' => $id]);
 
@@ -173,6 +173,7 @@ class BidController extends Controller
         $section3 = ViewHelper::getViewSection($model, \Yii::$app->user, 'section3', false);
 
         return $this->render('view', [
+            'returnUrl' => $returnUrl,
             'model' => $model,
             'bidJobProvider' => $bidJobProvider,
             'bidJob1cProvider' => $bidJob1cProvider,

@@ -16,9 +16,10 @@ use app\models\Spare;
 /* @var $section1 array */
 /* @var $section2 array */
 /* @var $section3 array */
+/* @var $returnUrl string|null */
 
 $this->title = 'Просмотр заявки';
-$this->params['back'] = ['index'];
+$this->params['back'] = $returnUrl ?: ['bid/index'];
 
 ?>
 <div>
