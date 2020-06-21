@@ -13,6 +13,7 @@ use Yii;
  * @property double $price
  * @property int $quantity
  * @property double $total_price
+ * @property int $num_order
  *
  * @property Bid $bid
  */
@@ -33,7 +34,7 @@ class ClientProposition extends \yii\db\ActiveRecord
     {
         return [
             [['bid_id'], 'required'],
-            [['bid_id', 'quantity'], 'integer'],
+            [['bid_id', 'quantity', 'num_order'], 'integer'],
             [['price', 'total_price'], 'number'],
             [['name'], 'string', 'max' => 255],
             [['bid_id'], 'exist', 'skipOnError' => true, 'targetClass' => Bid::className(), 'targetAttribute' => ['bid_id' => 'id']],

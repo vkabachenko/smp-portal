@@ -188,6 +188,7 @@ class WriteService extends BaseService
             'Количество' => $spare->quantity,
             'Цена' => $spare->price,
             'Сумма' => $spare->total_price,
+            'НомерСтроки' => $spare->num_order,
         ];
         $element = [
             'tag' => 'ЗапчастиДляПредставительстваСтрока',
@@ -212,6 +213,7 @@ class WriteService extends BaseService
             'Количество' => $job->quantity,
             'Цена' => $job->price,
             'Сумма' => $job->total_price,
+            'НомерСтроки' => $job->num_order,
         ];
         $element = [
             'tag' => 'УслугиДляПредставительстваСтрока',
@@ -244,6 +246,7 @@ class WriteService extends BaseService
             'Комментарий' => $replacementPart->comment,
             'Статус' => $replacementPart->status,
             'Купить' => $this->setXmlBoolean($replacementPart->is_to_buy),
+            'НомерСтроки' => $replacementPart->num_order,
         ];
         $element = [
             'tag' => 'АртикулыДляСервисаСтрока',
@@ -268,6 +271,7 @@ class WriteService extends BaseService
             'Цена' => $clientProposition->price,
             'Количество' => $clientProposition->quantity,
             'Сумма' => $clientProposition->total_price,
+            'НомерСтроки' => $clientProposition->num_order,
         ];
         $element = [
             'tag' => 'ПредложениеДляКлиентаСтрока',

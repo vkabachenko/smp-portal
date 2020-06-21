@@ -13,6 +13,7 @@ use Yii;
  * @property string $name
  * @property double $price
  * @property double $total_price
+ * @property int $num_order
  *
  * @property Bid $bid
  */
@@ -33,7 +34,7 @@ class BidJob1c extends \yii\db\ActiveRecord
     {
         return [
             [['bid_id'], 'required'],
-            [['bid_id', 'quantity'], 'integer'],
+            [['bid_id', 'quantity', 'num_order'], 'integer'],
             [['name'], 'string'],
             [['price', 'total_price'], 'number'],
             [['bid_id'], 'exist', 'skipOnError' => true, 'targetClass' => Bid::className(), 'targetAttribute' => ['bid_id' => 'id']],

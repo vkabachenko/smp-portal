@@ -288,6 +288,7 @@ class ReadService extends BaseService
         $model->vendor_code = $this->getCommentAttribute($attributes, 'Артикул');
         $model->price = $this->getCommentAttribute($attributes, 'Цена');
         $model->total_price = $this->getCommentAttribute($attributes, 'Сумма');
+        $model->num_order = intval($this->getCommentAttribute($attributes, 'НомерСтроки'));
 
         if (!$model->save()) {
             \Yii::error($attributes);
@@ -320,6 +321,7 @@ class ReadService extends BaseService
         $model->quantity = $this->getCommentAttribute($attributes, 'Количество');
         $model->price = $this->getCommentAttribute($attributes, 'Цена');
         $model->total_price = $this->getCommentAttribute($attributes, 'Сумма');
+        $model->num_order = intval($this->getCommentAttribute($attributes, 'НомерСтроки'));
 
         if (!$model->save()) {
             \Yii::error($attributes);
@@ -360,6 +362,7 @@ class ReadService extends BaseService
         $model->comment = $this->getCommentAttribute($attributes, 'Комментарий');
         $model->status = $this->getCommentAttribute($attributes, 'Статус');
         $model->is_to_buy = $this->setBoolean($this->getCommentAttribute($attributes, 'Купить'));
+        $model->num_order = intval($this->getCommentAttribute($attributes, 'НомерСтроки'));
 
         if (!$model->save()) {
             \Yii::error($attributes);
@@ -392,6 +395,7 @@ class ReadService extends BaseService
         $model->price = $this->getCommentAttribute($attributes, 'Цена');
         $model->quantity = $this->getCommentAttribute($attributes, 'Количество');
         $model->total_price = $this->getCommentAttribute($attributes, 'Сумма');
+        $model->num_order = intval($this->getCommentAttribute($attributes, 'НомерСтроки'));
 
         if (!$model->save()) {
             \Yii::error($attributes);

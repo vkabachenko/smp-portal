@@ -21,6 +21,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $description
  * @property string $created_at
  * @property string $updated_at
+ * @property int $num_order
  *
  * @property Bid $bid
  */
@@ -58,7 +59,7 @@ class Spare extends \yii\db\ActiveRecord implements TranslatableInterface
     {
         return [
             [['bid_id', 'name'], 'required'],
-            [['bid_id', 'quantity'], 'integer'],
+            [['bid_id', 'quantity', 'num_order'], 'integer'],
             [['price', 'total_price'], 'number'],
             [['invoice_date'], 'safe'],
             [['description'], 'string'],
