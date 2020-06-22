@@ -24,8 +24,6 @@ class DbController extends Controller
             foreach ($bid->spares as $spare) {
                 /* @var $spare Spare */
                 if ($spare->num_order === 0) {
-                    $maxNumOrder++;
-                    $spare->num_order = $maxNumOrder;
                     $spare->save();
                 }
             }

@@ -101,8 +101,12 @@ class Spare extends \yii\db\ActiveRecord implements TranslatableInterface
     public function beforeValidate()
     {
         $this->invoice_date = DateHelper::convert($this->invoice_date);
-        $maxNumOrder = self::find()->where(['bid_id' => $this->bid_id])->max('num_order');
-        $this->num_order = $maxNumOrder + 1;
+
+        if ($this->num_order === 0) {
+            $maxNumOrder = self::find()->where(['bid_id' => $this->bid_id])->max('num_order');
+            $this->num_order = $maxNumOrder + 1;
+        }
+
         return parent::beforeValidate();
     }
 }
