@@ -193,7 +193,7 @@ $columns[] = [
         'format' => 'raw',
         'value' => function ($model) {
             /* @var $model app\models\Bid */
-            $html = Html::tag('div', $model->client_name);
+            $html = Html::tag('div', $model->client_id ? $model->client->name : '');
             return $html;
         },
         'filterOptions' => ['class' => 'grid-client'],

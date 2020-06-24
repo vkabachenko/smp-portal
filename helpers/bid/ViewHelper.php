@@ -29,10 +29,7 @@ class ViewHelper
         $attributes['diagnostic'] = $bid->diagnostic;
         $attributes['diagnostic_manufacturer'] = $bid->diagnostic_manufacturer;
         $attributes['repair_recommendations'] = $bid->repair_recommendations;
-        $attributes['client_type'] = $bid->client_type ? Bid::CLIENT_TYPES[$bid->client_type] : '';
-        $attributes['client_name'] = $bid->client_name;
-        $attributes['client_phone'] = $bid->client_phone;
-        $attributes['client_address'] = $bid->client_address;
+        $attributes['client_id'] = $bid->client_id;
         $attributes['is_warranty_defect'] = $bid->is_warranty_defect ? 'Истина' : 'Ложь';
         $attributes['is_repair_possible'] = $bid->is_repair_possible ? 'Истина' : 'Ложь';
         $attributes['is_for_warranty'] = $bid->is_for_warranty ? 'Истина' : 'Ложь';

@@ -22,6 +22,10 @@ class BidSearch extends Bid
     public $date_completion_from;
     public $date_completion_to;
     public $restrictions;
+    public $client_name;
+    public $client_phone;
+    public $client_address;
+
 
     /**
      * {@inheritdoc}
@@ -101,6 +105,8 @@ class BidSearch extends Bid
      */
     public function search($params)
     {
+        /* @todo search by client */
+
         $query = Bid::find()
             ->distinct()
             ->with([
@@ -153,9 +159,6 @@ class BidSearch extends Bid
             ->andFilterWhere(['like', 'composition_name', $this->composition_name])
             ->andFilterWhere(['like', 'serial_number', $this->serial_number])
             ->andFilterWhere(['like', 'vendor_code', $this->vendor_code])
-            ->andFilterWhere(['like', 'client_name', $this->client_name])
-            ->andFilterWhere(['like', 'client_phone', $this->client_phone])
-            ->andFilterWhere(['like', 'client_address', $this->client_address])
             ->andFilterWhere(['like', 'treatment_type', $this->treatment_type])
             ->andFilterWhere(['like', 'warranty_number', $this->warranty_number])
             ->andFilterWhere(['like', 'bid_number', $this->bid_number])
@@ -163,7 +166,6 @@ class BidSearch extends Bid
             ->andFilterWhere(['like', 'bid_manufacturer_number', $this->bid_manufacturer_number])
             ->andFilterWhere(['like', 'defect', $this->defect])
             ->andFilterWhere(['like', 'diagnostic', $this->diagnostic])
-            ->andFilterWhere(['like', 'client_type', $this->client_type])
             ->andFilterWhere(['like', 'comment', $this->comment])
             ->andFilterWhere(['like', 'repair_recommendations', $this->repair_recommendations])
             ->andFilterWhere(['like', 'saler_name', $this->saler_name])

@@ -26,9 +26,6 @@ use yii\behaviors\TimestampBehavior;
  * @property string $serial_number
  * @property string $vendor_code
  * @property int $client_id
- * @property string $client_name
- * @property string $client_phone
- * @property string $client_address
  * @property string $treatment_type
  * @property string $purchase_date
  * @property string $application_date
@@ -45,7 +42,6 @@ use yii\behaviors\TimestampBehavior;
  * @property string $guid
  * @property bool $flag_export
  * @property int $master_id
- * @property string $client_type
  * @property string $comment
  * @property string $repair_recommendations
  * @property string $saler_name
@@ -81,14 +77,13 @@ use yii\behaviors\TimestampBehavior;
  * @property Condition $condition
  * @property Brand $brand
  * @property BrandCorrespondence $brandCorrespondence
- * @property User $client
+ * @property Client $client
  * @property Manufacturer $manufacturer
  * @property BrandModel $brandModel
  * @property BidHistory[] $bidHistories
  */
 class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
 {
-
     const TREATMENT_TYPE_WARRANTY = 'warranty';
     const TREATMENT_TYPE_PRESALE = 'pre-sale';
 
@@ -97,21 +92,11 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         self::TREATMENT_TYPE_PRESALE => 'Предпродажа',
     ];
 
-    const CLIENT_TYPE_PERSON = 'person';
-    const CLIENT_TYPE_LEGAL_ENTITY = 'legal_entity';
-
-    const CLIENT_TYPES = [
-      self::CLIENT_TYPE_PERSON => 'Физическое лицо',
-      self::CLIENT_TYPE_LEGAL_ENTITY => 'Юридическое лицо'
-    ];
-
     const EDITABLE_ATTRIBUTES = [
         'brand_model_name' => 'Модель',
         'composition_name' => 'Комплектность',
         'serial_number' => 'Серийный номер',
         'vendor_code' => 'Артикул',
-        'client_phone' => 'Телефон клиента',
-        'client_address' => 'Адрес клиента',
         'treatment_type' => 'Тип обращения',
         'purchase_date' => 'Дата покупки',
         'warranty_number' => 'Номер гарантийного талона',
@@ -157,8 +142,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'updated_at' => 'Изменена',
         'manufacturer_id' => 'Производитель',
         'brand_name' => 'Бренд',
-        'client_type' => 'Тип клиента',
-        'client_name' => 'Клиент',
+        'client_id' => 'Клиент',
         'equipment' => 'Оборудование',
         'decision_workshop_status_id' => 'Решение мастерской',
         'decision_agency_status_id' => 'Решение представительства',
@@ -172,10 +156,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'guid' => 'GUID',
         'bid_1C_number' => 'Номер заявки в 1С',
         'updated_at' => 'Дата изменения заявки',
-        'client_type' => 'Тип клиента',
-        'client_name' => 'Клиент',
-        'client_phone' => 'Телефон клиента',
-        'client_address' => 'Адрес клиента',
+        'client_id' => 'Клиент',
         'created_at' => 'Дата создания заявки',
         'status_id' => 'Статус',
         'repair_status_id' => 'Статус ремонта',
@@ -260,7 +241,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     public function rules()
     {
         return [
-            [['brand_name', 'client_type'], 'required'],
+            [['brand_name'], 'required'],
             [[
                 'manufacturer_id',
                 'brand_id',
@@ -286,7 +267,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 'compositionCombined',
                 'brand_name',
                 'guid',
-                'client_type',
                 'comment',
                 'repair_recommendations',
                 'saler_name',
@@ -317,9 +297,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 'composition_name',
                 'serial_number',
                 'vendor_code',
-                'client_name',
-                'client_phone',
-                'client_address',
                 'warranty_number',
                 'bid_number',
                 'bid_1C_number',
@@ -338,7 +315,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
             ['purchase_date', 'BeforeApplicationDateValidate'],
             [['condition_id'], 'exist', 'skipOnError' => true, 'targetClass' => Condition::className(), 'targetAttribute' => ['condition_id' => 'id']],
             [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => Brand::className(), 'targetAttribute' => ['brand_id' => 'id']],
-            [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['client_id' => 'id']],
+            [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::className(), 'targetAttribute' => ['client_id' => 'id']],
             [['manufacturer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manufacturer::className(), 'targetAttribute' => ['manufacturer_id' => 'id']],
             [['repair_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => RepairStatus::className(), 'targetAttribute' => ['repair_status_id' => 'id']],
             [['warranty_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => WarrantyStatus::className(), 'targetAttribute' => ['warranty_status_id' => 'id']],
@@ -346,8 +323,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
             [['decision_agency_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => DecisionAgencyStatus::className(), 'targetAttribute' => ['decision_agency_status_id' => 'id']],
             ['treatment_type', 'default', 'value' => null],
             ['treatment_type', 'in', 'range' => array_keys(self::TREATMENT_TYPES)],
-            ['client_type', 'default', 'value' => null],
-            ['client_type', 'in', 'range' => array_keys(self::CLIENT_TYPES)],
         ];
     }
 
@@ -414,7 +389,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
      */
     public function getClient()
     {
-        return $this->hasOne(User::className(), ['id' => 'client_id']);
+        return $this->hasOne(Client::className(), ['id' => 'client_id']);
     }
 
     /**
