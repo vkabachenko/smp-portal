@@ -140,7 +140,7 @@ use kartik\date\DatePicker;
             Тип клиента
         </span>
         <span class="bid-search-content">
-            <?= Bid::CLIENT_TYPES[$model->client_type] ?>
+            <?= \app\models\Client::CLIENT_TYPES[$model->client_type] ?>
         </span>
     <?php endif; ?>
 

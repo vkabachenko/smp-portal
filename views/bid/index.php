@@ -189,7 +189,7 @@ if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'master_id'])) {
 }
 
 $columns[] = [
-        'attribute' => 'client_name',
+        'attribute' => 'client_id',
         'format' => 'raw',
         'value' => function ($model) {
             /* @var $model app\models\Bid */

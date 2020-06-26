@@ -327,23 +327,7 @@ QuaggaAsset::register($this);
             ->dropDownList(Condition::conditionsAsMap(),['prompt' => 'Выбор', 'class' => 'form-control bid-condition']); ?>
     <?php endif; ?>
 
-    <?= $form->field($model, 'client_type')->dropDownList(Bid::CLIENT_TYPES, ['prompt' => 'Выбор']) ?>
-
-    <?= $form->field($model, 'client_id')->hiddenInput()->label(false) ?>
-
-    <?= $form->field($model, 'client_name')->textInput(['maxlength' => true]) ?>
-
-    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_phone'])): ?>
-        <?= $form->field($model, 'client_phone',
-                ['labelOptions' => HintHelper::getLabelOptions('client_phone', $hints)]
-            )->textInput(['maxlength' => true]) ?>
-    <?php endif; ?>
-
-    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_address'])): ?>
-        <?= $form->field($model, 'client_address',
-                ['labelOptions' => HintHelper::getLabelOptions('client_address', $hints)]
-            )->textInput(['maxlength' => true]) ?>
-    <?php endif; ?>
+    <?= $form->field($model, 'client_id')->textInput() ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'treatment_type'])): ?>
         <?= $form->field($model, 'treatment_type',

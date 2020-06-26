@@ -7,6 +7,7 @@ use app\models\BidComment;
 use app\models\BidImage;
 use app\models\BidJob;
 use app\models\BidJob1c;
+use app\models\Client;
 use app\models\ClientProposition;
 use app\models\ReplacementPart;
 use app\models\Spare;
@@ -68,10 +69,8 @@ class WriteService extends BaseService
             'guid' => $model->guid,
             'bid_1C_number' => $model->bid_1C_number,
             'updated_at' => $this->setXmlDate($model->updated_at),
-            'client_type' => $this->setXmlClientType($model->client_type),
-            'client_name' => $model->client_name,
-            'client_phone' => $model->client_phone,
-            'client_address' => $model->client_address,
+            'client_id' => $model->client_id,
+            'client_guid' => $model->client_id ? $model->client->guid : '',
             'created_at' => $this->setXmlDate($model->created_at),
             'status_id' => $model->status_id ? $model->status->name : '',
             'repair_status_id' => $model->repair_status_id ? $model->repairStatus->name : '',
@@ -129,13 +128,14 @@ class WriteService extends BaseService
             $changedAttributes[$bidAttribute1C] = $attributes[$bidAttribute];
         }
 
+        $client = $model->client_id ? $this->getClientAsArray($model->client_id, $model->client) : [];
         $comments = $this->getCommentsAsArray($model->bidComments);
         $spares = $this->getSparesAsArray($model->spares);
         $jobs = $this->getJobsAsArray($model->jobs1c);
         $replacementParts = $this->getReplacementPartsAsArray($model->replacementParts);
         $clientPropositions = $this->getClientPropositionsAsArray($model->clientPropositions);
         $images = $this->getImagesAsArray($model->bidImages);
-        $elements = array_merge($comments, $spares, $jobs, $replacementParts, $clientPropositions, $images);
+        $elements = array_merge($client, $comments, $spares, $jobs, $replacementParts, $clientPropositions, $images);
         $bid = [
             'tag' => 'ДС',
             'attributes' => $changedAttributes
@@ -302,6 +302,36 @@ class WriteService extends BaseService
         return $image;
     }
 
+    private function getClientAsArray($id, Client $client)
+    {
+        $phones = $client->clientPhones;
+
+        $attributes = [
+            'GUID' => $client->guid,
+            'ПорталID' => $id,
+            'Наименование' => $client->name,
+            'КлиентТип' => $this->setXmlClientType($client->client_type),
+            'ДатаРегистрации' => $this->setXmlDate($client->date_register),
+            'Комментарий' => $client->comment,
+            'НаименованиеПолное' => $client->full_name,
+            'ОсновнойМенеджер' => $client->manager,
+            'ДополнительнаяИнформация' => $client->description,
+            'ИНН' => $client->inn,
+            'КПП' => $client->kpp,
+            'ЭлПочта' => $client->email,
+            'ЮридическийАдрес' => $client->address_legal,
+            'ФактическийАдрес' => $client->address_actual,
+            'Телефон1' => isset($phones[0]) ? $phones[0] : '',
+            'Телефон2' => isset($phones[1]) ? $phones[0] : '',
+            'Телефон3' => isset($phones[2]) ? $phones[0] : '',
+        ];
+        $clientArray = [
+            'tag' => 'Контрагент',
+            'attributes' => $attributes
+        ];
+        return $clientArray;
+    }
+
     private function getRecentBids()
     {
         $models = Bid::find()
@@ -324,6 +354,6 @@ class WriteService extends BaseService
 
     private function setXmlClientType($attribute)
     {
-        return $attribute === Bid::CLIENT_TYPE_LEGAL_ENTITY ? 'Юрлицо' : 'Физлицо';
+        return $attribute === Client::CLIENT_TYPE_LEGAL_ENTITY ? 'Юрлицо' : 'Физлицо';
     }
 }

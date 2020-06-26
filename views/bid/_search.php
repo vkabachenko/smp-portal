@@ -62,7 +62,7 @@ use kartik\date\DatePicker;
         <?= $form->field($model, 'master_id')->dropDownList(Master::mastersAsMap(\Yii::$app->user->identity),['prompt' => 'Выбор']) ?>
     <?php endif; ?>
 
-    <?= $form->field($model, 'client_type')->dropDownList(Bid::CLIENT_TYPES, ['prompt' => 'Выбор']) ?>
+    <?= $form->field($model, 'client_type')->dropDownList(\app\models\Client::CLIENT_TYPES, ['prompt' => 'Выбор']) ?>
 
     <?= $form->field($model, 'client_name') ?>
 
