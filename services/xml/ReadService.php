@@ -54,7 +54,7 @@ class ReadService extends BaseService
 
     protected function setBid($bidArray)
     {
-        $bidClient = isset($bidArray['Контрагент']) ? $bidArray['Контрагент'] : [];
+        $bidClient = isset($bidArray['Контрагент']) ? $bidArray['Контрагент']['@attributes'] : [];
         $attributes = $bidArray['@attributes'];
 
         $bidComments = isset($bidArray['ТаблицаКомментариевСтрока']) ? $bidArray['ТаблицаКомментариевСтрока'] : [];
