@@ -25,6 +25,7 @@ class BidSearch extends Bid
     public $client_name;
     public $client_phone;
     public $client_address;
+    public $client_type;
 
 
     /**

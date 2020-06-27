@@ -128,7 +128,8 @@ class WriteService extends BaseService
             $changedAttributes[$bidAttribute1C] = $attributes[$bidAttribute];
         }
 
-        $client = $model->client_id ? $this->getClientAsArray($model->client_id, $model->client) : [];
+        $client = $model->client_id ? [$this->getClientAsArray($model->client_id, $model->client)] : [];
+
         $comments = $this->getCommentsAsArray($model->bidComments);
         $spares = $this->getSparesAsArray($model->spares);
         $jobs = $this->getJobsAsArray($model->jobs1c);
@@ -136,6 +137,7 @@ class WriteService extends BaseService
         $clientPropositions = $this->getClientPropositionsAsArray($model->clientPropositions);
         $images = $this->getImagesAsArray($model->bidImages);
         $elements = array_merge($client, $comments, $spares, $jobs, $replacementParts, $clientPropositions, $images);
+        //print_r($elements); die();
         $bid = [
             'tag' => 'ДС',
             'attributes' => $changedAttributes
@@ -321,9 +323,9 @@ class WriteService extends BaseService
             'ЭлПочта' => $client->email,
             'ЮридическийАдрес' => $client->address_legal,
             'ФактическийАдрес' => $client->address_actual,
-            'Телефон1' => isset($phones[0]) ? $phones[0] : '',
-            'Телефон2' => isset($phones[1]) ? $phones[0] : '',
-            'Телефон3' => isset($phones[2]) ? $phones[0] : '',
+            'Телефон1' => isset($phones[0]) ? $phones[0]->phone : '',
+            'Телефон2' => isset($phones[1]) ? $phones[0]->phone : '',
+            'Телефон3' => isset($phones[2]) ? $phones[0]->phone : '',
         ];
         $clientArray = [
             'tag' => 'Контрагент',
