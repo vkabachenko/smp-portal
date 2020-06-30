@@ -117,12 +117,12 @@ use kartik\date\DatePicker;
         </span>
     <?php endif; ?>
 
-    <?php if($model->client_address): ?>
+    <?php if($model->client_email): ?>
         <span class="bid-search-head">
-            Адрес клиента
+            Email клиента
         </span>
         <span class="bid-search-content">
-            <?= $model->client_address ?>
+            <?= $model->client_email ?>
         </span>
     <?php endif; ?>
 

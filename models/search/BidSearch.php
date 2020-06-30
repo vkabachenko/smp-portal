@@ -24,7 +24,7 @@ class BidSearch extends Bid
     public $restrictions;
     public $client_name;
     public $client_phone;
-    public $client_address;
+    public $client_email;
     public $client_type;
 
 
@@ -33,8 +33,6 @@ class BidSearch extends Bid
      */
     public function rules()
     {
-
-
         return [
             [[
                 'manufacturer_id',
@@ -59,9 +57,10 @@ class BidSearch extends Bid
                 'composition_name',
                 'serial_number',
                 'vendor_code',
+                'client_id',
                 'client_name',
                 'client_phone',
-                'client_address',
+                'client_email',
                 'treatment_type',
                 'purchase_date_from',
                 'purchase_date_to',
@@ -89,6 +88,19 @@ class BidSearch extends Bid
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'client_name' => 'Клиент',
+            'client_phone' => 'Телефон клиента',
+            'client_email' => 'Email клиента',
+            'client_type' => 'Тип клиента',
+        ];
+    }
+
     public function beforeValidate()
     {
         $this->normalizeDateRange($this->created_at_from, $this->created_at_to);
@@ -110,8 +122,9 @@ class BidSearch extends Bid
 
         $query = Bid::find()
             ->distinct()
+            ->joinWith(['client', 'client.clientPhones'], false)
             ->with([
-                'condition', 'brand', 'brandCorrespondence', 'brandModel', 'client', 'manufacturer', 'repairStatus',
+                'condition', 'brand', 'brandCorrespondence', 'brandModel', 'manufacturer', 'repairStatus',
                 'status', 'master', 'workshop', 'warrantyStatus'
                 ])
             ->where($this->restrictions)
@@ -143,7 +156,9 @@ class BidSearch extends Bid
             'repair_status_id' => $this->repair_status_id,
             'warranty_status_id' => $this->warranty_status_id,
             'status_id' => $this->status_id,
-            'master_id' => $this->master_id
+            'master_id' => $this->master_id,
+            'client_id' => $this->client_id,
+            'client.client_type' => $this->client_type
         ]);
 
         $query
@@ -171,8 +186,10 @@ class BidSearch extends Bid
             ->andFilterWhere(['like', 'repair_recommendations', $this->repair_recommendations])
             ->andFilterWhere(['like', 'saler_name', $this->saler_name])
             ->andFilterWhere(['like', 'diagnostic_manufacturer', $this->diagnostic_manufacturer])
-            ->andFilterWhere(['like', 'defect_manufacturer', $this->defect_manufacturer]);
-
+            ->andFilterWhere(['like', 'defect_manufacturer', $this->defect_manufacturer])
+            ->andFilterWhere(['like', 'client.name', $this->client_name])
+            ->andFilterWhere(['like', 'client.email', $this->client_email])
+            ->andFilterWhere(['like', 'client_phone.phone', $this->client_phone]);
 
         return $dataProvider;
     }

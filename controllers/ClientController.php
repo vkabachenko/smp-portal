@@ -13,8 +13,6 @@ use function foo\func;
 
 class ClientController extends Controller
 {
-    use AccessTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -27,6 +25,9 @@ class ClientController extends Controller
                     [
                         'allow' => true,
                         'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return \Yii::$app->user->can('updateClient');
+                        }
                     ],
                 ],
             ],
@@ -35,7 +36,6 @@ class ClientController extends Controller
 
     public function actionSave()
     {
-        $this->checkAccess('updateClient');
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $id = \Yii::$app->request->post('id');

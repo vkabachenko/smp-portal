@@ -21,12 +21,13 @@ $script = <<<JS
         $('#client-modal').modal('show');
     });
 
-    $('#client-form').submit(function(evt) {
+    $('.btn-submit').click(function(evt) {
       evt.preventDefault();
+      var form = $('#client-form');
       $.ajax({
         type: 'POST',
-        data: $(this).serialize(),
-        url: $(this).attr('action')
+        data: form.serialize(),
+        url: form.attr('action')
       }).then(function(result) {
           $('#client-modal').modal('hide');
           $('#client_id').val(result.id);

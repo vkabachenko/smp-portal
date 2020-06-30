@@ -22,7 +22,7 @@ use yii\bootstrap\Html;
     ]); ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success btn-submit']) ?>
     </div>
 
     <?= Html::hiddenInput('id', $client->isNewRecord ? '' : $client->id); ?>
