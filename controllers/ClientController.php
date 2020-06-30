@@ -6,8 +6,10 @@ namespace app\controllers;
 
 use app\models\Client;
 use app\models\ClientPhone;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\Controller;
 use function foo\func;
 
@@ -33,6 +35,21 @@ class ClientController extends Controller
             ],
         ];
     }
+
+    public function actionIndex()
+    {
+        $query = Client::find()->orderBy('name');
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query
+        ]);
+
+        Url::remember();
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
 
     public function actionSave()
     {

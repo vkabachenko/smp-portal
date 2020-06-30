@@ -102,7 +102,7 @@ class Client extends \yii\db\ActiveRecord
     {
         $phones = $this->clientPhones;
 
-        return empty($phones) ? '' : reset($phones);
+        return empty($phones) ? '' : reset($phones)->phone;
     }
 
     public function beforeValidate()

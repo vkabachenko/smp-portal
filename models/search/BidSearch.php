@@ -98,6 +98,21 @@ class BidSearch extends Bid
             'client_phone' => 'Телефон клиента',
             'client_email' => 'Email клиента',
             'client_type' => 'Тип клиента',
+            'manufacturer_id' => 'Производитель',
+            'brand_name' => 'Бренд',
+            'equipment' => 'Оборудование',
+            'brand_model_name' => 'Модель',
+            'serial_number' => 'Серийный номер',
+            'vendor_code' => 'Артикул',
+            'master_id' => 'Мастер',
+            'treatment_type' => 'Товар на гарантии',
+            'saler_name' => 'Продавец',
+            'warranty_number' => 'Номер гарантийного талона',
+            'bid_number' => 'Номер заявки',
+            'condition_id' => 'Состояние',
+            'repair_status_id' => 'Статус ремонта',
+            'status_id' => 'Статус',
+            'comment' => 'Комментарий'
         ];
     }
 
@@ -157,7 +172,7 @@ class BidSearch extends Bid
             'warranty_status_id' => $this->warranty_status_id,
             'status_id' => $this->status_id,
             'master_id' => $this->master_id,
-            'client_id' => $this->client_id,
+            'bid.client_id' => $this->client_id,
             'client.client_type' => $this->client_type
         ]);
 
