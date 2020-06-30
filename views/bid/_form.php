@@ -327,7 +327,13 @@ QuaggaAsset::register($this);
             ->dropDownList(Condition::conditionsAsMap(),['prompt' => 'Выбор', 'class' => 'form-control bid-condition']); ?>
     <?php endif; ?>
 
-    <?= $form->field($model, 'client_id')->textInput() ?>
+    <?php if (\Yii::$app->user->can('updateClient')): ?>
+        <div class="form-group">
+            <?= Html::a('Клиент', '#', ['class' => 'btn btn-success client-modal-btn']) ?>
+        </div>
+    <?php endif; ?>
+
+    <?= $form->field($model, 'client_id')->hiddenInput(['id' => 'client_id'])->label(false) ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'treatment_type'])): ?>
         <?= $form->field($model, 'treatment_type',
@@ -485,6 +491,8 @@ QuaggaAsset::register($this);
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?= $this->render('modal/client', ['client' => $model->client_id ? $model->client : new \app\models\Client()]) ?>
 
 <?php
 $script = <<<JS

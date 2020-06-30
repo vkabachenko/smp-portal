@@ -46,6 +46,9 @@ class RbacController extends Controller
         $updateAgency = $auth->createPermission('updateAgency');
         $auth->add($updateAgency);
 
+        $updateClient = $auth->createPermission('updateClient');
+        $auth->add($updateClient);
+
         $managerAgencyRule = new ManagerAgencyRule();
         $auth->add($managerAgencyRule);
 
@@ -237,6 +240,7 @@ class RbacController extends Controller
         $auth->addChild($master, $viewSpare);
         $auth->addChild($master, $setBidDone);
         $auth->addChild($master, $viewImageRestricted);
+        $auth->addChild($master, $updateClient);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
@@ -264,7 +268,6 @@ class RbacController extends Controller
         $admin = $auth->createRole('admin');
         $auth->add($admin);
         $auth->addChild($admin, $listBids);
-        $auth->addChild($admin, $createBid);
         $auth->addChild($admin, $updateBid);
         $auth->addChild($admin, $viewBid);
         $auth->addChild($admin, $updateAgency);
@@ -281,6 +284,7 @@ class RbacController extends Controller
         $auth->addChild($admin, $manageSpare);
         $auth->addChild($admin, $viewSpare);
         $auth->addChild($admin, $viewImage);
+        $auth->addChild($admin, $updateClient);
 
         echo 'done' . "\n";
     }

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\common\DateHelper;
 use Yii;
 
 /**
@@ -51,6 +52,7 @@ class Client extends \yii\db\ActiveRecord
         return [
             [['client_type'], 'required'],
             [['date_register'], 'safe'],
+            [['email'], 'email'],
             [['comment', 'description'], 'string'],
             [['guid', 'name', 'full_name', 'client_type', 'manager', 'inn', 'kpp', 'email', 'address_actual', 'address_legal'], 'string', 'max' => 255],
             ['client_type', 'in', 'range' => array_keys(self::CLIENT_TYPES)],
@@ -101,5 +103,11 @@ class Client extends \yii\db\ActiveRecord
         $phones = $this->clientPhones;
 
         return empty($phones) ? '' : reset($phones);
+    }
+
+    public function beforeValidate()
+    {
+        $this->date_register = DateHelper::convert($this->date_register);
+        return parent::beforeValidate();
     }
 }
