@@ -50,6 +50,26 @@ class ClientController extends Controller
         ]);
     }
 
+    public function actionCreate()
+    {
+        $model = new Client();
+
+        return $this->render('create', compact('model'));
+    }
+
+    public function actionUpdate($id)
+    {
+        $model = Client::findOne($id);
+
+        return $this->render('update', compact('model'));
+    }
+
+    public function actionDelete($id)
+    {
+        Client::findOne($id)->delete();
+
+        return $this->redirect(['index']);
+    }
 
     public function actionSave()
     {
