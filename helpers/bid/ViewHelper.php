@@ -29,7 +29,9 @@ class ViewHelper
         $attributes['diagnostic'] = $bid->diagnostic;
         $attributes['diagnostic_manufacturer'] = $bid->diagnostic_manufacturer;
         $attributes['repair_recommendations'] = $bid->repair_recommendations;
-        $attributes['client_id'] = $bid->client_id;
+        $attributes['client_id'] = $bid->client_id
+            ? \Yii::$app->view->render('//client/view', ['model' => $bid->client])
+            : '';
         $attributes['is_warranty_defect'] = $bid->is_warranty_defect ? 'Истина' : 'Ложь';
         $attributes['is_repair_possible'] = $bid->is_repair_possible ? 'Истина' : 'Ложь';
         $attributes['is_for_warranty'] = $bid->is_for_warranty ? 'Истина' : 'Ложь';
