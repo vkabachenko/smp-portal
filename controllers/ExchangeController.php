@@ -32,6 +32,7 @@ class ExchangeController extends Controller
             $uploadForm->file = UploadedFile::getInstance($uploadForm, 'file');
             $uploadForm->upload($filename);
             $service = new ReadService($filename);
+            $service->setClients();
             $service->setBids();
             return $this->redirect(['admin/index']);
         }
@@ -127,7 +128,7 @@ class ExchangeController extends Controller
 
         $serviceFullName = $serviceNamespace . '\\' . $servicename;
         $service = new $serviceFullName($filename, $workshop);
-        $responseArray = $service->setBids();
+        $responseArray = array_merge($service->setClients(), $service->setBids());
 
         return $responseArray;
     }

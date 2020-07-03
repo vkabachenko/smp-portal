@@ -37,6 +37,21 @@ class ReadService extends BaseService
         $this->xmlArray = XmlHelper::getArrayFromXml($xml);
     }
 
+    public function setClients()
+    {
+        $responseClients = [];
+        $clientsArray = $this->xmlArray['Клиент'];
+        if (isset($clientsArray['@attributes'])) {
+            $responseClients[] = $this->setClient($clientsArray);
+        } else {
+            foreach ($clientsArray as $clientArray) {
+                $responseClients[] = $this->setClient($clientArray);
+            }
+        }
+
+        return $responseClients;
+    }
+
     public function setBids()
     {
         $responseBids = [];
@@ -52,9 +67,37 @@ class ReadService extends BaseService
         return $responseBids;
     }
 
+    protected function setClient($clientArray)
+    {
+        $attributes = $clientArray['@attributes'];
+
+        if ($this->isClientDuplicate($attributes)) {
+            $client = $this->updateClient($attributes);
+        } else {
+            $client = $this->createClient($attributes);
+        }
+
+        if (is_null($client)) {
+            $responseAttributes = [
+                'ПорталID' => $this->getCommentAttribute($attributes, 'ПорталID'),
+                'GUID' => $this->getCommentAttribute($attributes, 'GUID'),
+                'Успешно' => 'Ложь'
+            ];
+        } else {
+            $responseAttributes = [
+                'ПорталID' => $client->id,
+                'GUID' => $client->guid,
+                'Успешно' => 'Истина'
+            ];
+        }
+        return [
+            'tag' => 'Клиент',
+            'attributes' => $responseAttributes
+        ];
+    }
+
     protected function setBid($bidArray)
     {
-        $bidClient = isset($bidArray['Контрагент']) ? $bidArray['Контрагент']['@attributes'] : [];
         $attributes = $bidArray['@attributes'];
 
         $bidComments = isset($bidArray['ТаблицаКомментариевСтрока']) ? $bidArray['ТаблицаКомментариевСтрока'] : [];
@@ -62,12 +105,6 @@ class ReadService extends BaseService
         $bidJobs = isset($bidArray['УслугиДляПредставительстваСтрока']) ? $bidArray['УслугиДляПредставительстваСтрока'] : [];
         $bidReplacementParts = isset($bidArray['АртикулыДляСервисаСтрока']) ? $bidArray['АртикулыДляСервисаСтрока'] : [];
         $bidClientPropositions = isset($bidArray['ПредложениеДляКлиентаСтрока']) ? $bidArray['ПредложениеДляКлиентаСтрока'] : [];
-
-        if ($this->isBidClientDuplicate($bidClient)) {
-            $this->updateBidClient($bidClient);
-        } else {
-            $this->createBidClient($bidClient);
-        }
 
         if ($this->isDuplicate($attributes)) {
             $bid = $this->updateBid($attributes);
@@ -231,70 +268,75 @@ class ReadService extends BaseService
         return $model;
     }
 
-    public function isBidClientDuplicate($bidClient)
+    public function isClientDuplicate($attributes)
     {
-        $guid = $this->getCommentAttribute($bidClient, 'GUID');
+        $guid = $this->getCommentAttribute($attributes, 'GUID');
         $isExists = empty($guid) ? false : Client::find()->where(['guid' => $guid])->exists();
 
         return $isExists;
     }
 
-    public function createBidClient($bidClient)
+    public function createClient($attributes)
     {
         $client = new Client();
-        $client->guid = $this->getCommentAttribute($bidClient, 'GUID');
-        $client->name = $this->getCommentAttribute($bidClient, 'Наименование');
-        $client->full_name = $this->getCommentAttribute($bidClient, 'НаименованиеПолное');
-        $client->client_type = $this->setClientType($this->getCommentAttribute($bidClient, 'КлиентТип'));
-        $client->date_register = $this->setDate($this->getCommentAttribute($bidClient, 'ДатаРегистрации'));
-        $client->comment = $this->getCommentAttribute($bidClient, 'Комментарий');
-        $client->manager = $this->getCommentAttribute($bidClient, 'ОсновнойМенеджер');
-        $client->description = $this->getCommentAttribute($bidClient, 'ДополнительнаяИнформация');
-        $client->inn = $this->getCommentAttribute($bidClient, 'ИНН');
-        $client->kpp = $this->getCommentAttribute($bidClient, 'КПП');
-        $client->email = $this->getCommentAttribute($bidClient, 'ЭлПочта');
-        $client->address_legal = $this->getCommentAttribute($bidClient, 'ЮридическийАдрес');
-        $client->address_actual = $this->getCommentAttribute($bidClient, 'ФактическийАдрес');
+        $client->guid = $this->getCommentAttribute($attributes, 'GUID');
+        $client->name = $this->getCommentAttribute($attributes, 'Наименование');
+        $client->full_name = $this->getCommentAttribute($attributes, 'НаименованиеПолное');
+        $client->client_type = $this->setClientType($this->getCommentAttribute($attributes, 'КлиентТип'));
+        $client->date_register = $this->setDate($this->getCommentAttribute($attributes, 'ДатаРегистрации'));
+        $client->comment = $this->getCommentAttribute($attributes, 'Комментарий');
+        $client->manager = $this->getCommentAttribute($attributes, 'ОсновнойМенеджер');
+        $client->description = $this->getCommentAttribute($attributes, 'ДополнительнаяИнформация');
+        $client->inn = $this->getCommentAttribute($attributes, 'ИНН');
+        $client->kpp = $this->getCommentAttribute($attributes, 'КПП');
+        $client->email = $this->getCommentAttribute($attributes, 'ЭлПочта');
+        $client->address_legal = $this->getCommentAttribute($attributes, 'ЮридическийАдрес');
+        $client->address_actual = $this->getCommentAttribute($attributes, 'ФактическийАдрес');
+        $client->flag_export = true;
 
         if (!$client->save()) {
-            \Yii::error($bidClient);
+            \Yii::error($attributes);
             \Yii::error($client->getErrors());
         } else {
-            $this->addClientPhone($client, $this->getCommentAttribute($bidClient, 'Телефон1'));
-            $this->addClientPhone($client, $this->getCommentAttribute($bidClient, 'Телефон2'));
-            $this->addClientPhone($client, $this->getCommentAttribute($bidClient, 'Телефон3'));
+            $this->addClientPhone($client, $this->getCommentAttribute($attributes, 'Телефон1'));
+            $this->addClientPhone($client, $this->getCommentAttribute($attributes, 'Телефон2'));
+            $this->addClientPhone($client, $this->getCommentAttribute($attributes, 'Телефон3'));
         }
+
+        return $client;
     }
 
-    public function updateBidClient($bidClient)
+    public function updateClient($attributes)
     {
-        $client = Client::find()->where(['guid' => $this->getCommentAttribute($bidClient, 'GUID')])->one();
+        $client = Client::find()->where(['guid' => $this->getCommentAttribute($attributes, 'GUID')])->one();
 
-        $client->name = $this->getCommentAttribute($bidClient, 'Наименование');
-        $client->full_name = $this->getCommentAttribute($bidClient, 'НаименованиеПолное');
-        $client->client_type = $this->setClientType($this->getCommentAttribute($bidClient, 'КлиентТип'));
-        $client->date_register = $this->setDate($this->getCommentAttribute($bidClient, 'ДатаРегистрации'));
-        $client->comment = $this->getCommentAttribute($bidClient, 'Комментарий');
-        $client->manager = $this->getCommentAttribute($bidClient, 'ОсновнойМенеджер');
-        $client->description = $this->getCommentAttribute($bidClient, 'ДополнительнаяИнформация');
-        $client->inn = $this->getCommentAttribute($bidClient, 'ИНН');
-        $client->kpp = $this->getCommentAttribute($bidClient, 'КПП');
-        $client->email = $this->getCommentAttribute($bidClient, 'ЭлПочта');
-        $client->address_legal = $this->getCommentAttribute($bidClient, 'ЮридическийАдрес');
-        $client->address_actual = $this->getCommentAttribute($bidClient, 'ФактическийАдрес');
+        $client->name = $this->getCommentAttribute($attributes, 'Наименование');
+        $client->full_name = $this->getCommentAttribute($attributes, 'НаименованиеПолное');
+        $client->client_type = $this->setClientType($this->getCommentAttribute($attributes, 'КлиентТип'));
+        $client->date_register = $this->setDate($this->getCommentAttribute($attributes, 'ДатаРегистрации'));
+        $client->comment = $this->getCommentAttribute($attributes, 'Комментарий');
+        $client->manager = $this->getCommentAttribute($attributes, 'ОсновнойМенеджер');
+        $client->description = $this->getCommentAttribute($attributes, 'ДополнительнаяИнформация');
+        $client->inn = $this->getCommentAttribute($attributes, 'ИНН');
+        $client->kpp = $this->getCommentAttribute($attributes, 'КПП');
+        $client->email = $this->getCommentAttribute($attributes, 'ЭлПочта');
+        $client->address_legal = $this->getCommentAttribute($attributes, 'ЮридическийАдрес');
+        $client->address_actual = $this->getCommentAttribute($attributes, 'ФактическийАдрес');
+        $client->flag_export = true;
 
         if (!$client->save()) {
-            \Yii::error($bidClient);
+            \Yii::error($attributes);
             \Yii::error($client->getErrors());
         } else {
             ClientPhone::deleteAll(['client_id' => $client->id]);
 
-            $this->addClientPhone($client, $this->getCommentAttribute($bidClient, 'Телефон1'));
-            $this->addClientPhone($client, $this->getCommentAttribute($bidClient, 'Телефон2'));
-            $this->addClientPhone($client, $this->getCommentAttribute($bidClient, 'Телефон3'));
+            $this->addClientPhone($client, $this->getCommentAttribute($attributes, 'Телефон1'));
+            $this->addClientPhone($client, $this->getCommentAttribute($attributes, 'Телефон2'));
+            $this->addClientPhone($client, $this->getCommentAttribute($attributes, 'Телефон3'));
         }
-    }
 
+        return $client;
+    }
 
     private function addClientPhone(Client $client, $phone)
     {

@@ -82,6 +82,7 @@ class ClientController extends Controller
         } else {
             $model = new Client();
         }
+        $model->flag_export = false;
 
         $model->load(\Yii::$app->request->post());
 

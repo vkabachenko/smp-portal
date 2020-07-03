@@ -22,6 +22,7 @@ use Yii;
  * @property string $email
  * @property string $address_actual
  * @property string $address_legal
+ * @property boolean $flag_export
  *
  * @property Bid[] $bids
  * @property ClientPhone[] $clientPhones
@@ -51,6 +52,7 @@ class Client extends \yii\db\ActiveRecord
     {
         return [
             [['client_type'], 'required'],
+            [['flag_export'], 'boolean'],
             [['date_register'], 'safe'],
             [['email'], 'email'],
             [['comment', 'description'], 'string'],

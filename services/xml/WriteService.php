@@ -37,6 +37,8 @@ class WriteService extends BaseService
 
     private function createXmlArray($bids)
     {
+        $clients = $this->getClientsAsArray();
+
         if (is_null($bids)) {
             $bids =$this->getBidsAsArray();
         }
@@ -47,9 +49,49 @@ class WriteService extends BaseService
                 'attributes' => [
                     'ДатаВыгрузки' => date("dmYHis")
                 ],
-                'elements' => $bids
+                'elements' => array_merge($clients, $bids)
             ]
         ];
+    }
+
+    private function getClientsAsArray()
+    {
+        $bids = [];
+        $models = $this->getRecentClients();
+        foreach ($models as $model) {
+            $bids[] = $this->getClientAsArray($model);
+        }
+        return $bids;
+    }
+
+    private function getClientAsArray(Client $client)
+    {
+        $phones = $client->clientPhones;
+
+        $attributes = [
+            'GUID' => $client->guid,
+            'ПорталID' => $client->id,
+            'Наименование' => $client->name,
+            'КлиентТип' => $this->setXmlClientType($client->client_type),
+            'ДатаРегистрации' => $this->setXmlDate($client->date_register),
+            'Комментарий' => $client->comment,
+            'НаименованиеПолное' => $client->full_name,
+            'ОсновнойМенеджер' => $client->manager,
+            'ДополнительнаяИнформация' => $client->description,
+            'ИНН' => $client->inn,
+            'КПП' => $client->kpp,
+            'ЭлПочта' => $client->email,
+            'ЮридическийАдрес' => $client->address_legal,
+            'ФактическийАдрес' => $client->address_actual,
+            'Телефон1' => isset($phones[0]) ? $phones[0]->phone : '',
+            'Телефон2' => isset($phones[1]) ? $phones[0]->phone : '',
+            'Телефон3' => isset($phones[2]) ? $phones[0]->phone : '',
+        ];
+        $clientArray = [
+            'tag' => 'Клиент',
+            'attributes' => $attributes
+        ];
+        return $clientArray;
     }
 
     private function getBidsAsArray()
@@ -128,16 +170,13 @@ class WriteService extends BaseService
             $changedAttributes[$bidAttribute1C] = $attributes[$bidAttribute];
         }
 
-        $client = $model->client_id ? [$this->getClientAsArray($model->client_id, $model->client)] : [];
-
         $comments = $this->getCommentsAsArray($model->bidComments);
         $spares = $this->getSparesAsArray($model->spares);
         $jobs = $this->getJobsAsArray($model->jobs1c);
         $replacementParts = $this->getReplacementPartsAsArray($model->replacementParts);
         $clientPropositions = $this->getClientPropositionsAsArray($model->clientPropositions);
         $images = $this->getImagesAsArray($model->bidImages);
-        $elements = array_merge($client, $comments, $spares, $jobs, $replacementParts, $clientPropositions, $images);
-        //print_r($elements); die();
+        $elements = array_merge($comments, $spares, $jobs, $replacementParts, $clientPropositions, $images);
         $bid = [
             'tag' => 'ДС',
             'attributes' => $changedAttributes
@@ -304,34 +343,14 @@ class WriteService extends BaseService
         return $image;
     }
 
-    private function getClientAsArray($id, Client $client)
-    {
-        $phones = $client->clientPhones;
 
-        $attributes = [
-            'GUID' => $client->guid,
-            'ПорталID' => $id,
-            'Наименование' => $client->name,
-            'КлиентТип' => $this->setXmlClientType($client->client_type),
-            'ДатаРегистрации' => $this->setXmlDate($client->date_register),
-            'Комментарий' => $client->comment,
-            'НаименованиеПолное' => $client->full_name,
-            'ОсновнойМенеджер' => $client->manager,
-            'ДополнительнаяИнформация' => $client->description,
-            'ИНН' => $client->inn,
-            'КПП' => $client->kpp,
-            'ЭлПочта' => $client->email,
-            'ЮридическийАдрес' => $client->address_legal,
-            'ФактическийАдрес' => $client->address_actual,
-            'Телефон1' => isset($phones[0]) ? $phones[0]->phone : '',
-            'Телефон2' => isset($phones[1]) ? $phones[0]->phone : '',
-            'Телефон3' => isset($phones[2]) ? $phones[0]->phone : '',
-        ];
-        $clientArray = [
-            'tag' => 'Контрагент',
-            'attributes' => $attributes
-        ];
-        return $clientArray;
+
+    private function getRecentClients()
+    {
+        $models = Client::find()
+            ->where(['flag_export' => false])
+            ->all();
+        return $models;
     }
 
     private function getRecentBids()
