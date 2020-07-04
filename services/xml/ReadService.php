@@ -293,6 +293,7 @@ class ReadService extends BaseService
         $client->address_legal = $this->getCommentAttribute($attributes, 'ЮридическийАдрес');
         $client->address_actual = $this->getCommentAttribute($attributes, 'ФактическийАдрес');
         $client->flag_export = true;
+        $client->workshop_id = $this->workshop->id;
 
         if (!$client->save()) {
             \Yii::error($attributes);
@@ -323,6 +324,7 @@ class ReadService extends BaseService
         $client->address_legal = $this->getCommentAttribute($attributes, 'ЮридическийАдрес');
         $client->address_actual = $this->getCommentAttribute($attributes, 'ФактическийАдрес');
         $client->flag_export = true;
+        $client->workshop_id = $this->workshop->id;
 
         if (!$client->save()) {
             \Yii::error($attributes);

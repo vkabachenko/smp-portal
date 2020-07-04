@@ -492,7 +492,12 @@ QuaggaAsset::register($this);
 
 </div>
 
-<?= $this->render('modal/client', ['client' => $model->client_id ? $model->client : new \app\models\Client()]) ?>
+<?= $this->render('modal/client', ['client' => $model->client_id
+    ? $model->client
+    : new \app\models\Client([
+        'workshop_id' => \Yii::$app->user->identity->master ? \Yii::$app->user->identity->master->workshop_id : null
+    ])])
+?>
 
 <?php
 $script = <<<JS

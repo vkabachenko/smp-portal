@@ -349,6 +349,7 @@ class WriteService extends BaseService
     {
         $models = Client::find()
             ->where(['flag_export' => false])
+            ->andWhere(['workshop_id' => $this->workshop->id])
             ->all();
         return $models;
     }

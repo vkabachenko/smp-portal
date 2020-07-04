@@ -23,6 +23,7 @@ use Yii;
  * @property string $address_actual
  * @property string $address_legal
  * @property boolean $flag_export
+ * @property int $workshop_id
  *
  * @property Bid[] $bids
  * @property ClientPhone[] $clientPhones
@@ -53,11 +54,13 @@ class Client extends \yii\db\ActiveRecord
         return [
             [['client_type'], 'required'],
             [['flag_export'], 'boolean'],
+            [['workshop_id'], 'integer'],
             [['date_register'], 'safe'],
             [['email'], 'email'],
             [['comment', 'description'], 'string'],
             [['guid', 'name', 'full_name', 'client_type', 'manager', 'inn', 'kpp', 'email', 'address_actual', 'address_legal'], 'string', 'max' => 255],
             ['client_type', 'in', 'range' => array_keys(self::CLIENT_TYPES)],
+            [['workshop_id'], 'exist', 'skipOnError' => true, 'targetClass' => Workshop::className(), 'targetAttribute' => ['workshop_id' => 'id']],
         ];
     }
 
@@ -81,6 +84,7 @@ class Client extends \yii\db\ActiveRecord
             'email' => 'Email',
             'address_actual' => 'Фактический адрес',
             'address_legal' => 'Юридический адрес',
+            'workshop_id' => 'Мастерская',
         ];
     }
 
@@ -105,6 +109,14 @@ class Client extends \yii\db\ActiveRecord
         $phones = $this->clientPhones;
 
         return empty($phones) ? '' : reset($phones)->phone;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWorkshop()
+    {
+        return $this->hasOne(Workshop::className(), ['id' => 'workshop_id']);
     }
 
     public function beforeValidate()

@@ -27,6 +27,12 @@ use yii\bootstrap\Html;
 
     <?= Html::hiddenInput('id', $client->isNewRecord ? '' : $client->id); ?>
 
+    <?= $form->field($client, 'workshop_id')
+        ->dropDownList(\app\models\Workshop::workshopsAsMap(), [
+            'prompt' => 'Выбор',
+            'readonly' => !\Yii::$app->user->can('admin')
+            ])
+    ?>
     <?= $form->field($client, 'name') ?>
     <?= $form->field($client, 'full_name') ?>
     <?= $form->field($client, 'client_type')->dropDownList(\app\models\Client::CLIENT_TYPES) ?>

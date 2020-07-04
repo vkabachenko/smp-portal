@@ -40,7 +40,7 @@ class QueryRestrictionService
             return ['id' => null];
         }
 
-        $restrictionWorkshop = ['workshop_id' => $workshop->id];
+        $restrictionWorkshop = ['bid.workshop_id' => $workshop->id];
 
         $rules = $workshop->rules;
 
@@ -76,7 +76,7 @@ class QueryRestrictionService
         return [
                     'and',
                     ['manufacturer_id' => $agency->manufacturer_id],
-                    ['workshop_id' => $workshops],
+                    ['bid.workshop_id' => $workshops],
                     ['or', ['<>', 'status_id', BidStatus::getId(BidStatus::STATUS_FILLED)]]
                 ];
 
