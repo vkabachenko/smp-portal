@@ -124,4 +124,15 @@ class Client extends \yii\db\ActiveRecord
         $this->date_register = DateHelper::convert($this->date_register);
         return parent::beforeValidate();
     }
+
+    public static function setFlagExport($id, $flagValue)
+    {
+        $model = self::findOne($id);
+        if ($model) {
+            $model->flag_export = $flagValue;
+            if (!$model->save(false)) {
+                \Yii::error($model->getErrors());
+            }
+        }
+    }
 }
