@@ -21,6 +21,7 @@ $this->params['back'] = ['workshop/index'];
         {if (!$master->isActive()) {return ['class'=>'disabled enabled-events'];} },
         'columns' => [
             'user.name',
+            'user.email',
             [
                 'attribute' => 'main',
                 'format' => 'raw',

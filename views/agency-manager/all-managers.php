@@ -21,6 +21,7 @@ $this->params['back'] = \Yii::$app->user->can('admin') ? ['agency/index'] : \yii
         {if (!$manager->isActive()) {return ['class'=>'disabled enabled-events'];} },
         'columns' => [
             'user.name',
+            'user.email',
             [
                 'attribute' => 'main',
                 'format' => 'raw',
