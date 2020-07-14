@@ -30,7 +30,8 @@ $script = <<<JS
         url: form.attr('action')
       }).then(function(result) {
           $('#client-modal').modal('hide');
-          $('#client_id').val(result.id);
+          var option = $('<option>').val(result.id).text(result.name);
+          $('#client_id').append(option).val(result.id);
       });
     });
 JS;

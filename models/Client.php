@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\helpers\common\DateHelper;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "client".
@@ -134,5 +135,20 @@ class Client extends \yii\db\ActiveRecord
                 \Yii::error($model->getErrors());
             }
         }
+    }
+
+    /**
+     * return array
+     */
+    public static function clientsAsMap($workshopId)
+    {
+        $query = self::find()->orderBy('name');
+        if ($workshopId) {
+            $query->where(['workshop_id' => $workshopId]);
+        }
+        $models = $query->all();
+        $list = ArrayHelper::map($models, 'id', 'name');
+
+        return $list;
     }
 }

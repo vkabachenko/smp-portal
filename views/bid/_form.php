@@ -15,6 +15,7 @@ use app\models\WarrantyStatus;
 use app\assets\QuaggaAsset;
 use app\models\Master;
 use app\helpers\bid\HintHelper;
+use app\models\Client;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
@@ -333,7 +334,12 @@ QuaggaAsset::register($this);
         </div>
     <?php endif; ?>
 
-    <?= $form->field($model, 'client_id')->hiddenInput(['id' => 'client_id'])->label(false) ?>
+    <?= $form->field($model, 'client_id')->dropDownList(
+            Client::clientsAsMap(\Yii::$app->user->identity->master ? \Yii::$app->user->identity->master->workshop_id : null),
+     [
+        'id' => 'client_id',
+        'prompt' => 'Выбор'
+    ])->label('Выбор клиента') ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'treatment_type'])): ?>
         <?= $form->field($model, 'treatment_type',

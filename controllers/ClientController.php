@@ -101,7 +101,7 @@ class ClientController extends Controller
             ->batchInsert('client_phone', ['client_id', 'phone'], $phones)
             ->execute();
 
-        return ['id' => $model->id];
+        return ['id' => $model->id, 'name' => $model->name];
     }
 
 }
