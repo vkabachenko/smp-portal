@@ -84,8 +84,8 @@ class WriteService extends BaseService
             'ЮридическийАдрес' => $client->address_legal,
             'ФактическийАдрес' => $client->address_actual,
             'Телефон1' => isset($phones[0]) ? $phones[0]->phone : '',
-            'Телефон2' => isset($phones[1]) ? $phones[0]->phone : '',
-            'Телефон3' => isset($phones[2]) ? $phones[0]->phone : '',
+            'Телефон2' => isset($phones[1]) ? $phones[1]->phone : '',
+            'Телефон3' => isset($phones[2]) ? $phones[2]->phone : '',
         ];
         $clientArray = [
             'tag' => 'Клиент',
