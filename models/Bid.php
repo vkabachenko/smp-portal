@@ -581,10 +581,15 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     {
         parent::afterSave($insert, $changedAttributes);
 
-        if (isset($changedAttributes['repair_status_id'])) {
-            $this->repair_status_author_id = \Yii::$app instanceof \yii\console\Application ? null : \Yii::$app->user->id;
-            $this->repair_status_date = date('Y-m-d');
-            $this->save(false);
+        $oldRepairStatusId = isset($changedAttributes['repair_status_id']) ? $changedAttributes['repair_status_id'] : null;
+        if ($this->repair_status_id != $oldRepairStatusId) {
+            $repairStatusAuthorId = \Yii::$app instanceof \yii\console\Application ? null : \Yii::$app->user->id;
+            $repairStatusDate = date('Y-m-d');
+            if ($this->repair_status_author_id != $repairStatusAuthorId || $this->repair_status_date != $repairStatusDate) {
+                $this->repair_status_author_id = $repairStatusAuthorId;
+                $this->repair_status_date = $repairStatusDate;
+                $this->save(false);
+            }
         }
     }
 
