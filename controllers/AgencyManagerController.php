@@ -127,7 +127,7 @@ class AgencyManagerController extends Controller
     {
         $manager = Manager::findOne($id);
         $this->checkAccess('manageManagers', ['agencyId' => $manager->agency_id]);
-        $manager->delete();
+        $manager->user->delete();
 
         return \Yii::$app->user->can('admin')
             ? $this->redirect(['all-managers', 'agencyId' => $manager->agency_id])

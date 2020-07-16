@@ -124,7 +124,7 @@ class WorkshopMasterController extends Controller
     {
         $master = Master::findOne($id);
         $this->checkAccess('manageMasters', ['workshopId' => $master->workshop_id]);
-        $master->delete();
+        $master->user->delete();
 
         return \Yii::$app->user->can('admin')
             ? $this->redirect(['all-masters', 'workshopId' => $master->workshop_id])
