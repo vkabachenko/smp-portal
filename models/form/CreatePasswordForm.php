@@ -15,7 +15,7 @@ class CreatePasswordForm extends Model
         return [
             [['password', 'passwordAgain'], 'required'],
             [['password', 'passwordAgain'], 'string', 'length' => [6, 255]],
-            ['password', 'compare', 'compareAttribute' => 'passwordAgain'],
+            ['passwordAgain', 'compare', 'compareAttribute' => 'password'],
         ];
     }
 
