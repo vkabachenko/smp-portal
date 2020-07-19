@@ -6,15 +6,17 @@ namespace app\controllers;
 
 use app\models\Client;
 use app\models\ClientPhone;
+use app\models\Master;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\Controller;
-use function foo\func;
 
 class ClientController extends Controller
 {
+    use AccessTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -26,10 +28,7 @@ class ClientController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
-                            return \Yii::$app->user->can('updateClient');
-                        }
+                        'roles' => ['@']
                     ],
                 ],
             ],
@@ -38,7 +37,16 @@ class ClientController extends Controller
 
     public function actionIndex()
     {
+        $this->checkAccess('updateClient');
         $query = Client::find()->orderBy('name');
+
+        /* @var $master Master */
+        $master = Master::findByUserId(\Yii::$app->user->id);
+
+        if ($master) {
+            $query->where(['workshop_id' => $master->workshop_id]);
+        }
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query
         ]);
@@ -52,13 +60,22 @@ class ClientController extends Controller
 
     public function actionCreate()
     {
+        $this->checkAccess('updateClient');
         $model = new Client();
+
+        /* @var $master Master */
+        $master = Master::findByUserId(\Yii::$app->user->id);
+
+        if ($master) {
+            $model->workshop_id = $master->workshop_id;
+        }
 
         return $this->render('create', compact('model'));
     }
 
     public function actionUpdate($id)
     {
+        $this->checkAccess('updateClient', ['clientId' => $id]);
         $model = Client::findOne($id);
 
         return $this->render('update', compact('model'));
@@ -66,6 +83,7 @@ class ClientController extends Controller
 
     public function actionDelete($id)
     {
+        $this->checkAccess('updateClient', ['clientId' => $id]);
         Client::findOne($id)->delete();
 
         return $this->redirect(['index']);
@@ -76,6 +94,7 @@ class ClientController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $id = \Yii::$app->request->post('id');
+        $this->checkAccess('updateClient', $id ? ['clientId' => $id] : []);
 
         if ($id) {
             $model = Client::findOne($id);
@@ -85,6 +104,13 @@ class ClientController extends Controller
         $model->flag_export = false;
 
         $model->load(\Yii::$app->request->post());
+
+        /* @var $master Master */
+        $master = Master::findByUserId(\Yii::$app->user->id);
+
+        if ($master) {
+            $model->workshop_id = $master->workshop_id;
+        }
 
         if (!$model->save()) {
             throw new \DomainException(Json::encode($model->errors));

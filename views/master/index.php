@@ -17,6 +17,7 @@ $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);
     <div class="list-group center-menu">
         <?= Html::a('Заявки', ['bid/index'], ['class' => 'list-group-item center-menu-item']) ?>
         <?= Html::a('Профиль', ['master/profile'], ['class' => 'list-group-item center-menu-item']) ?>
+        <?= Html::a('Клиенты', ['client/index'], ['class' => 'list-group-item center-menu-item']) ?>
 
         <?php if (\Yii::$app->user->can('manageWorkshops')): ?>
 

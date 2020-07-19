@@ -15,6 +15,7 @@ use app\rbac\rules\MasterWorkshopRule;
 use app\rbac\rules\BidAttributeRule;
 use app\rbac\rules\SendActRule;
 use app\rbac\rules\UpdateBidRule;
+use app\rbac\rules\UpdateClientRule;
 use app\rbac\rules\UpdateDecisionManagerRule;
 use app\rbac\rules\UpdateDecisionMasterRule;
 use app\rbac\rules\ViewImageRule;
@@ -70,6 +71,14 @@ class RbacController extends Controller
         $restrictUpdateBid->ruleName = $updateBidRule->name;
         $auth->add($restrictUpdateBid);
         $auth->addChild($restrictUpdateBid, $updateBid);
+
+        $updateClientRule = new UpdateClientRule();
+        $auth->add($updateClientRule);
+
+        $restrictUpdateClient = $auth->createPermission('restrictUpdateClient');
+        $restrictUpdateClient->ruleName = $updateClientRule->name;
+        $auth->add($restrictUpdateClient);
+        $auth->addChild($restrictUpdateClient, $updateClient);
 
         $restrictViewBid = $auth->createPermission('restrictViewBid');
         $restrictViewBid->ruleName = $restrictBidRule->name;
@@ -240,7 +249,7 @@ class RbacController extends Controller
         $auth->addChild($master, $viewSpare);
         $auth->addChild($master, $setBidDone);
         $auth->addChild($master, $viewImageRestricted);
-        $auth->addChild($master, $updateClient);
+        $auth->addChild($master, $restrictUpdateClient);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
