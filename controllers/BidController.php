@@ -77,6 +77,7 @@ class BidController extends Controller
         $model = new Bid([
             'user_id' => \Yii::$app->user->id,
             'master_id' => \Yii::$app->user->identity->master ? \Yii::$app->user->identity->master->id : null,
+            'workshop_id' => \Yii::$app->user->identity->master ? \Yii::$app->user->identity->master->workshop_id : null,
             'application_date' => date('Y-m-d')
         ]);
         $uploadForm = new MultipleUploadForm();

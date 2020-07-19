@@ -328,18 +328,81 @@ QuaggaAsset::register($this);
             ->dropDownList(Condition::conditionsAsMap(),['prompt' => 'Выбор', 'class' => 'form-control bid-condition']); ?>
     <?php endif; ?>
 
-    <?php if (\Yii::$app->user->can('updateClient')): ?>
-        <div class="form-group">
-            <?= Html::a('Клиент', '#', ['class' => 'btn btn-success client-modal-btn']) ?>
-        </div>
-    <?php endif; ?>
+    <?= $form
+        ->field($model,
+            'client_id',
+            [
+                'options' => ['class' => ''],
+                'inputOptions' => [
+                        'id' => 'client_id',
+                        'data-url' => Url::to(['client/auto-complete']),
+                        'data-select' => Url::to(['client/update-modal'])
+                        ]
+            ]
+        )
+        ->hiddenInput()
+    ?>
+    <div class="form-group">
+        <?= AutoComplete::widget([
+            'value' => $model->client_id ? $model->client->name : '',
+            'options' => ['id' => 'client_name'],
+            'clientOptions' => [
+                'minLength'=>'3',
+                'source' => new JsExpression('
+                        function (request, response) {
+                            $.ajax({
+                                url: $("#client_id").data("url"),
+                                method: "POST",
+                                data: {
+                                    workshopId: $("#workshop_id").val(),
+                                    term: request.term
+                                },
+                                dataType: "json",
+                                success: function(data) {
+                                    response($.map(data.clients, function (rt) {
+                                        return {
+                                            label: rt.name,
+                                            value: rt.id,
+                                        };
+                                    }));
+                                },
+                                error: function (jqXHR, status) {
+                                    console.log(status);
+                                    response([]);
+                                }
+                            });
+                        }
+                    '),
+                'select' => new JsExpression('
+                        function (event, ui) {
+                            event.preventDefault();
+                            this.value = ui.item.label;       
+                            $("#client_id").val(ui.item.value);
+                            
+                            $.ajax({
+                                url: $("#client_id").data("select"),
+                                method: "GET",
+                                data: {
+                                    id: ui.item.value
+                                },
+                                success: function(html) {
+                                    $("#client-modal .modal-body").html(html);
+                                },
+                                error: function (jqXHR, status) {
+                                    console.log(status);
+                                    response([]);
+                                }
+                            });
+                        }
+                    '),
+            ]
+        ]) ?>
 
-    <?= $form->field($model, 'client_id')->dropDownList(
-            Client::clientsAsMap(\Yii::$app->user->identity->master ? \Yii::$app->user->identity->master->workshop_id : null),
-     [
-        'id' => 'client_id',
-        'prompt' => 'Выбор'
-    ])->label('Выбор клиента') ?>
+        <?php if (\Yii::$app->user->can('updateClient')): ?>
+                <?= Html::a('Создать/редактировать клиента', '#', ['class' => 'btn btn-success client-modal-btn']) ?>
+        <?php endif; ?>
+
+    </div>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'treatment_type'])): ?>
         <?= $form->field($model, 'treatment_type',
@@ -461,6 +524,8 @@ QuaggaAsset::register($this);
         )->textarea(); ?>
     <?php endif; ?>
 
+    <?= $form->field($model, 'workshop_id', ['inputOptions' => ['id' => 'workshop_id']])->hiddenInput()->label(false) ?>
+
     <?php if ($model->isNewRecord): ?>
         <div class="form-group">
             <?= Html::label('Загрузить фотографии', null, ['class' => 'control-label']) ?>
@@ -498,12 +563,13 @@ QuaggaAsset::register($this);
 
 </div>
 
-<?= $this->render('modal/client', ['client' => $model->client_id
-    ? $model->client
-    : new \app\models\Client([
-        'workshop_id' => \Yii::$app->user->identity->master ? \Yii::$app->user->identity->master->workshop_id : null
-    ])])
-?>
+
+    <?= $this->render('modal/client', ['client' => $model->client_id
+        ? $model->client
+        : new \app\models\Client([
+            'workshop_id' => \Yii::$app->user->identity->master ? \Yii::$app->user->identity->master->workshop_id : null
+        ])])
+    ?>
 
 <?php
 $script = <<<JS

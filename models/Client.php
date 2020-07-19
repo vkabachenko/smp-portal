@@ -151,4 +151,24 @@ class Client extends \yii\db\ActiveRecord
 
         return $list;
     }
+
+    public static function getClientsByTerm($workshopId, $term)
+    {
+        $query = self::find()
+            ->joinWith('clientPhones', false)
+            ->select(['name', 'client.id'])
+            ->orderBy('name');
+
+        if ($workshopId) {
+            $query->where(['workshop_id' => $workshopId]);
+        }
+
+        if (preg_match("/^\d+$/", $term)) {
+            $query->where(['like', 'client_phone.phone', $term]);
+        } else {
+            $query->where(['like', 'name', $term]);
+        }
+
+        return $query->asArray()->all();
+    }
 }

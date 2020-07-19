@@ -81,6 +81,20 @@ class ClientController extends Controller
         return $this->render('update', compact('model'));
     }
 
+    public function actionUpdateModal($id)
+    {
+        $this->checkAccess('updateClient', $id ? ['clientId' => $id] : []);
+
+        if ($id) {
+            $client = Client::findOne($id);
+        } else {
+            $workshopId = \Yii::$app->user->identity->master ? \Yii::$app->user->identity->master->workshop_id : null;
+            $client = new Client(['workshop_id' => $workshopId]);
+        }
+
+        return $this->renderPartial('_form', compact('client'));
+    }
+
     public function actionDelete($id)
     {
         $this->checkAccess('updateClient', ['clientId' => $id]);
@@ -128,6 +142,16 @@ class ClientController extends Controller
             ->execute();
 
         return ['id' => $model->id, 'name' => $model->name];
+    }
+
+    public function actionAutoComplete()
+    {
+        $this->checkAccess('updateClient');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $data = \Yii::$app->request->post();
+
+        return ['clients' => Client::getClientsByTerm($data['workshopId'], $data['term'])];
     }
 
 }

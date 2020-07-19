@@ -88,7 +88,7 @@ use yii\bootstrap\Html;
 <?php
 $script = <<<JS
 $(function() {
-    $('.add-phone-btn').click(function(evt) {
+     $('body').on('click', '.add-phone-btn', function(evt) {
         evt.preventDefault();
         $('.client-phone-template').clone().removeClass('client-phone-template').appendTo('.phones-section');
     });

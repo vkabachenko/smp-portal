@@ -21,7 +21,7 @@ $script = <<<JS
         $('#client-modal').modal('show');
     });
 
-    $('.btn-submit').click(function(evt) {
+    $('body').on('click', '.btn-submit', function(evt) {
       evt.preventDefault();
       var form = $('#client-form');
       $.ajax({
@@ -30,8 +30,6 @@ $script = <<<JS
         url: form.attr('action')
       }).then(function(result) {
           $('#client-modal').modal('hide');
-          var option = $('<option>').val(result.id).text(result.name);
-          $('#client_id').append(option).val(result.id);
       });
     });
 JS;
