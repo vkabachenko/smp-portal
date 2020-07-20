@@ -399,7 +399,8 @@ QuaggaAsset::register($this);
         ]) ?>
 
         <?php if (\Yii::$app->user->can('updateClient')): ?>
-                <?= Html::a('Создать/редактировать клиента', '#', ['class' => 'btn btn-success client-modal-btn']) ?>
+            <?= Html::a('Редактировать', '#', ['class' => 'btn btn-success client-modal-btn']) ?>
+            <?= Html::a('Новый клиент', '#', ['class' => 'btn btn-success new-client-modal-btn']) ?>
         <?php endif; ?>
 
     </div>

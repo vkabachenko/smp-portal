@@ -33,7 +33,7 @@ use yii\bootstrap\Html;
             'readonly' => !\Yii::$app->user->can('admin')
             ])
     ?>
-    <?= $form->field($client, 'name') ?>
+    <?= $form->field($client, 'name', ['inputOptions' => ['id' => 'form_client_name']]) ?>
     <?= $form->field($client, 'full_name') ?>
     <?= $form->field($client, 'client_type')->dropDownList(\app\models\Client::CLIENT_TYPES) ?>
     <?= $form->field($client, 'email') ?>
