@@ -8,7 +8,7 @@ use app\models\Client;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Клиенты';
-$this->params['back'] = ['admin/index'];
+$this->params['back'] = \Yii::$app->user->can('admin') ? ['admin/index'] : ['master/index'];
 ?>
 <div>
 
