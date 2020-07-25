@@ -140,7 +140,7 @@ class ReadService extends BaseService
 
     private function isDuplicate($attributes)
     {
-        $bid1Cnumber = $this->get1Cattribute($attributes, 'bid1Cnumber');
+        $bid1Cnumber = $this->get1Cattribute($attributes, 'bid_1C_number');
         $isExists = is_null($bid1Cnumber) ? false : Bid::find()->where(['bid_1C_number' => $bid1Cnumber])->exists();
 
         return $isExists;
