@@ -54,6 +54,25 @@ $(function() {
         })
     });
 
+    $('#page-helper-form').submit(function(evt) {
+        evt.preventDefault();
+        var form = $(this);
+        $.ajax({
+            url: form.attr('action'),
+            method: form.attr('method'),
+            data: form.serialize()
+        }).then(function(result) {
+            $('#page-helper-modal').modal('hide');
+            if (result) {
+                swal('Успех', 'Текст успешно сохранен', 'success');
+            } else {
+                swal('Ошибка', 'Ошибка при сохранении текста', 'error');
+            }
+        }).catch(function(error) {
+            swal('Ошибка', error.message, 'error');
+        })
+    });
+
     $('.news-like').click(function() {
         var self = $(this);
         var status = self.hasClass('news-like-up') ? 'like' : 'dislike';

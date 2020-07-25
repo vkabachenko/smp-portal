@@ -10,6 +10,7 @@ use app\widgets\Alert;
 
         <?= BackWidget::widget([
             'backLink' => isset($this->params['back']) ? $this->params['back'] : null,
+            'controller' => $this->context
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
