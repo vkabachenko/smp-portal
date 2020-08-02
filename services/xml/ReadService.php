@@ -155,6 +155,8 @@ class ReadService extends BaseService
         }
 
         $model->save(false);
+        $model->bid_number = $model->id;
+        $model->save(false);
 
         $bidHistory = new BidHistory([
             'bid_id' => $model->id,
