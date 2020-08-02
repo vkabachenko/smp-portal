@@ -138,6 +138,10 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     ];
 
     const ALWAYS_VISIBLE_ATTRIBUTES = [
+        'brand_id' => 'brand_id',
+        'brand_model_id' => 'brand_model_id',
+        'compositionCombined' => 'compositionCombined',
+        'workshop_id' => 'workshop_id',
         'created_at' => 'Создана',
         'updated_at' => 'Изменена',
         'manufacturer_id' => 'Производитель',
@@ -150,6 +154,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'bid_number' => 'Номер заявки',
         'application_date' => 'Дата обращения',
     ];
+
 
     const EXCHANGE_1C_ATTRIBUTES = [
         'id' => 'Идентификатор на портале',

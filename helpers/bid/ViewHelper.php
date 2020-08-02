@@ -14,6 +14,10 @@ class ViewHelper
     {
         $attributes = [];
 
+        $attributes['brand_id'] = false;
+        $attributes['brand_model_id'] = false;
+        $attributes['compositionCombined'] = false;
+        $attributes['workshop_id'] = false;
         $attributes['created_at'] = \Yii::$app->formatter->asDate($bid->created_at);
         $attributes['updated_at'] = \Yii::$app->formatter->asDate($bid->updated_at);
         $attributes['brand_name'] = $bid->brand_name;
