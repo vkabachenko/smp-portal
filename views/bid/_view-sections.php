@@ -11,27 +11,27 @@
 use yii\jui\Accordion;
 ?>
 
-<?= Accordion::widget(
+<?= \yii\bootstrap\Tabs::widget(
     [
         'items' => [
             [
-                'header' => false,
+                'label' => 'Раздел 1',
                 'content' => $this->render('_view-section-table', ['attributes' => $attributes, 'section' => $section1])
             ],
             [
-                'header' => false,
+                'label' => 'Раздел 2',
                 'content' => $this->render('_view-section-table', ['attributes' => $attributes, 'section' => $section2])
             ],
             [
-                'header' => false,
+                'label' => 'Раздел 3',
                 'content' => $this->render('_view-section-table', ['attributes' => $attributes, 'section' => $section3])
             ],
             [
-                'header' => false,
+                'label' => 'Раздел 4',
                 'content' => $this->render('_view-section-table', ['attributes' => $attributes, 'section' => $section4])
             ],
             [
-                'header' => false,
+                'label' => 'Раздел 5',
                 'content' => $this->render('_view-section-table', ['attributes' => $attributes, 'section' => $section5])
             ],
         ]
