@@ -5,6 +5,8 @@
 /* @var $section1 array */
 /* @var $section2 array */
 /* @var $section3 array */
+/* @var $section4 array */
+/* @var $section5 array */
 
 use yii\jui\Accordion;
 ?>
@@ -23,7 +25,15 @@ use yii\jui\Accordion;
             [
                 'header' => false,
                 'content' => $this->render('_view-section-table', ['attributes' => $attributes, 'section' => $section3])
-            ]
+            ],
+            [
+                'header' => false,
+                'content' => $this->render('_view-section-table', ['attributes' => $attributes, 'section' => $section4])
+            ],
+            [
+                'header' => false,
+                'content' => $this->render('_view-section-table', ['attributes' => $attributes, 'section' => $section5])
+            ],
         ]
     ]
 ) ?>

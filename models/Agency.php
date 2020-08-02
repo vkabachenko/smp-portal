@@ -25,6 +25,8 @@ use yii\web\UploadedFile;
  * @property array $bid_attributes_section1
  * @property array $bid_attributes_section2
  * @property array $bid_attributes_section3
+ * @property array $bid_attributes_section4
+ * @property array $bid_attributes_section5
  * @property string $act_template
  * @property string $report_template
  * @property bool $is_independent

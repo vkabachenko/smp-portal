@@ -172,6 +172,8 @@ class BidController extends Controller
         $section1 = ViewHelper::getViewSection($model, \Yii::$app->user, 'section1');
         $section2 = ViewHelper::getViewSection($model, \Yii::$app->user, 'section2', false);
         $section3 = ViewHelper::getViewSection($model, \Yii::$app->user, 'section3', false);
+        $section4 = ViewHelper::getViewSection($model, \Yii::$app->user, 'section4', false);
+        $section5 = ViewHelper::getViewSection($model, \Yii::$app->user, 'section5', false);
 
         return $this->render('view', [
             'returnUrl' => $returnUrl,
@@ -182,7 +184,9 @@ class BidController extends Controller
             'attributes' => $attributes,
             'section1' => $section1,
             'section2' => $section2,
-            'section3' => $section3
+            'section3' => $section3,
+            'section4' => $section4,
+            'section5' => $section5
         ]);
     }
 

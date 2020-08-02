@@ -124,6 +124,16 @@ $(function() {
             section3.push($(this).data('attribute'));
         });
 
+        section4 = [];
+        $('.attribute-section4 li').each(function() {
+            section4.push($(this).data('attribute'));
+        });
+
+        section5 = [];
+        $('.attribute-section5 li').each(function() {
+            section5.push($(this).data('attribute'));
+        });
+
         $.ajax({
             url: $(this).attr('href'),
             method: 'POST',
@@ -131,6 +141,8 @@ $(function() {
                 'section1': section1,
                 'section2': section2,
                 'section3': section3,
+                'section4': section4,
+                'section5': section5,
             }
         })
             .then(function() {

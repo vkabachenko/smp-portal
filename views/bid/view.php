@@ -16,6 +16,8 @@ use app\models\Spare;
 /* @var $section1 array */
 /* @var $section2 array */
 /* @var $section3 array */
+/* @var $section4 array */
+/* @var $section5 array */
 /* @var $returnUrl string|null */
 
 $this->title = 'Просмотр заявки';
@@ -73,7 +75,9 @@ $this->params['back'] = $returnUrl ?: ['bid/index'];
 </div>
 
 <div class="form-group">
-    <?= $this->render('_view-sections', compact('attributes', 'section1', 'section2', 'section3')); ?>
+    <?= $this->render('_view-sections',
+        compact('attributes', 'section1', 'section2', 'section3', 'section4', 'section5'));
+    ?>
 </div>
 
 <div class="form-group">

@@ -105,10 +105,14 @@ class AgencyController extends Controller
         $section1 = \Yii::$app->request->post('section1');
         $section2 = \Yii::$app->request->post('section2');
         $section3 = \Yii::$app->request->post('section3');
+        $section4 = \Yii::$app->request->post('section4');
+        $section5 = \Yii::$app->request->post('section5');
 
         $agency->bid_attributes_section1 = $section1;
         $agency->bid_attributes_section2 = $section2;
         $agency->bid_attributes_section3 = $section3;
+        $agency->bid_attributes_section4 = $section4;
+        $agency->bid_attributes_section5 = $section5;
 
         if ($agency->save()) {
             $result = 'ok';
