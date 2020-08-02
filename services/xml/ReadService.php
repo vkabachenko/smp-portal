@@ -9,6 +9,7 @@ use app\models\BidComment;
 use app\models\BidHistory;
 use app\models\BidJob;
 use app\models\BidJob1c;
+use app\models\BidStatus;
 use app\models\BrandCorrespondence;
 use app\models\Client;
 use app\models\ClientPhone;
@@ -222,7 +223,7 @@ class ReadService extends BaseService
         $model->is_warranty_defect = $this->getAttribute($model, $attributes, 'is_warranty_defect', [$this, 'setBoolean']);
         $model->is_repair_possible = $this->getAttribute($model, $attributes, 'is_repair_possible', [$this, 'setBoolean']);
         $model->is_for_warranty = $this->getAttribute($model, $attributes, 'is_for_warranty', [$this, 'setBoolean']);
-        $model->status_id = $this->getAttribute($model, $attributes, 'status_id', '\app\models\BidStatus::findIdByName');
+        $model->status_id = $this->getAttribute($model, $attributes, 'status_id', [$this, 'setStatus']);
         $model->decision_workshop_status_id = $this->getAttribute($model, $attributes, 'decision_workshop_status_id', '\app\models\DecisionWorkshopStatus::findIdByName');
         $model->decision_agency_status_id = $this->getAttribute($model, $attributes, 'decision_agency_status_id', '\app\models\DecisionAgencyStatus::findIdByName');
         $model->comment_1 = $this->getAttribute($model, $attributes, 'comment_1', [$this, 'same']);
@@ -601,6 +602,14 @@ class ReadService extends BaseService
         } else {
             return $client->id;
         }
+    }
+
+    private function setStatus($status)
+    {
+        if (empty($status)) {
+            return BidStatus::getId(BidStatus::STATUS_FILLED);
+        }
+        return BidStatus::findByName($status);
     }
 
     private function getAttribute(Bid $bid, $attributes, $key, callable $f)

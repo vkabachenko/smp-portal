@@ -55,13 +55,13 @@ $columns = [
     ],
 ];
 
-if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_number'])) {
+if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'bid_1C_number'])) {
     $columns[] = [
-        'attribute' => 'bid_number',
+        'attribute' => 'bid_1C_number',
         'format' => 'raw',
         'value' => function ($model) {
             /* @var $model app\models\Bid */
-            $html = Html::tag('div', $model->bid_number);
+            $html = Html::tag('div', $model->bid_1C_number);
             return $html;
         },
         'filterOptions' => ['class' => 'grid-bid-number'],
