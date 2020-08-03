@@ -154,6 +154,7 @@ class ReadService extends BaseService
         if (!$this->fillAndValidateBid($model, $attributes)) {
             return null;
         }
+        $model->status_id = $model->status_id ?: BidStatus::getId(BidStatus::STATUS_FILLED);
 
         $model->save(false);
         $model->bid_number = $model->id;
@@ -223,7 +224,7 @@ class ReadService extends BaseService
         $model->is_warranty_defect = $this->getAttribute($model, $attributes, 'is_warranty_defect', [$this, 'setBoolean']);
         $model->is_repair_possible = $this->getAttribute($model, $attributes, 'is_repair_possible', [$this, 'setBoolean']);
         $model->is_for_warranty = $this->getAttribute($model, $attributes, 'is_for_warranty', [$this, 'setBoolean']);
-        $model->status_id = $this->getAttribute($model, $attributes, 'status_id', [$this, 'setStatus']);
+        $model->status_id = $this->getAttribute($model, $attributes, 'status_id', '\app\models\BidStatus::findIdByName');
         $model->decision_workshop_status_id = $this->getAttribute($model, $attributes, 'decision_workshop_status_id', '\app\models\DecisionWorkshopStatus::findIdByName');
         $model->decision_agency_status_id = $this->getAttribute($model, $attributes, 'decision_agency_status_id', '\app\models\DecisionAgencyStatus::findIdByName');
         $model->comment_1 = $this->getAttribute($model, $attributes, 'comment_1', [$this, 'same']);
@@ -602,14 +603,6 @@ class ReadService extends BaseService
         } else {
             return $client->id;
         }
-    }
-
-    private function setStatus($status)
-    {
-        if (empty($status)) {
-            return BidStatus::getId(BidStatus::STATUS_FILLED);
-        }
-        return BidStatus::findByName($status);
     }
 
     private function getAttribute(Bid $bid, $attributes, $key, callable $f)
