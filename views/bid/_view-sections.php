@@ -13,6 +13,8 @@ use yii\jui\Accordion;
 
 <?= \yii\bootstrap\Tabs::widget(
     [
+        'linkOptions' => ['class' => 'btn btn-primary'],
+        'itemOptions' => ['style' => 'margin-top: 10px;'],
         'items' => [
             [
                 'label' => 'Раздел 1',

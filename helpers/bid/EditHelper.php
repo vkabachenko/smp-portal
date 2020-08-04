@@ -16,10 +16,11 @@ use yii\jui\DatePicker;
 use app\models\RepairStatus;
 use app\models\WarrantyStatus;
 use app\models\Master;
+use yii\bootstrap\Html;
 
 class EditHelper
 {
-    public static function getAttributesEdit(Bid $model, User $user, ActiveForm $form)
+    public static function getAttributesEdit(Bid $model, User $user, ActiveForm $form, $hints)
     {
         $attributes = [];
 
@@ -149,12 +150,10 @@ class EditHelper
                 'id' => 'bid-serial-number',
                 'maxlength' => true
             ]);
-            $attributes['serial_number'] .= <<<HTML
-        <div class="form-group">
-            <span style="font-weight: bold;">Файл со штрих-кодом серийного номера</span>
-            <?= Html::fileInput('', null, ['id' => 'bid-serial-number-file']) ?>
-        </div>
-HTML;
+            $attributes['serial_number'] .= sprintf(
+                '<div class="form-group"><span style="font-weight: bold;">Файл со штрих-кодом серийного номера</span>)%s</div>',
+                Html::fileInput('', null, ['id' => 'bid-serial-number-file'])
+            );
         }
 
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'vendor_code'])) {
@@ -330,10 +329,17 @@ HTML;
             )
             ->hiddenInput();
 
-        $attributes['client_id'] .= <<<HTML
-    <div class="form-group">
-        <?= AutoComplete::widget([
-            'value' => $model->client_id ? $model->client->name : '',
+        $clientValue = $model->client_id ? $model->client->name : '';
+        if (\Yii::$app->user->can('updateClient')) {
+            $btnSaveClient = Html::a('Редактировать', '#', ['class' => 'btn btn-success client-modal-btn']) .
+                             ' ' .
+                             Html::a('Новый клиент', '#', ['class' => 'btn btn-success new-client-modal-btn']);
+        } else {
+            $btnSaveClient = '';
+        }
+
+        $autocompleteClient = AutoComplete::widget([
+            'value' => $clientValue,
             'options' => ['id' => 'client_name'],
             'clientOptions' => [
                 'minLength'=>'3',
@@ -385,15 +391,9 @@ HTML;
                         }
                     '),
             ]
-        ]) ?>
+        ]);
 
-        <?php if (\Yii::$app->user->can('updateClient')): ?>
-            <?= Html::a('Редактировать', '#', ['class' => 'btn btn-success client-modal-btn']) ?>
-            <?= Html::a('Новый клиент', '#', ['class' => 'btn btn-success new-client-modal-btn']) ?>
-        <?php endif; ?>
-
-    </div>
-HTML;
+        $attributes['client_id'] .= sprintf('<div class="form-group">%s%s</div>', $autocompleteClient, $btnSaveClient);
 
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'treatment_type'])) {
             $attributes['treatment_type'] = $form->field($model, 'treatment_type',
@@ -465,8 +465,20 @@ HTML;
         }
 
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'repair_recommendations'])) {
-            $attributes['repair_recommendations'] = $$form->field($model, 'repair_recommendations',
+            $attributes['repair_recommendations'] = $form->field($model, 'repair_recommendations',
                 ['labelOptions' => HintHelper::getLabelOptions('repair_recommendations', $hints)]
+            )->textInput(['maxlength' => true]);
+        }
+
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'manager_contact'])) {
+            $attributes['manager_contact'] = $form->field($model, 'manager_contact',
+                ['labelOptions' => HintHelper::getLabelOptions('manager_contact', $hints)]
+            )->textInput(['maxlength' => true]);
+        }
+
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'manager_presale'])) {
+            $attributes['manager_presale'] = $form->field($model, 'manager_presale',
+                ['labelOptions' => HintHelper::getLabelOptions('manager_presale', $hints)]
             )->textInput(['maxlength' => true]);
         }
 
@@ -514,5 +526,16 @@ HTML;
 
         $attributes['workshop_id'] =  $form->field($model, 'workshop_id',
             ['inputOptions' => ['id' => 'workshop_id']])->hiddenInput()->label(false);
+
+        return $attributes;
+    }
+
+    public static function getEditSection(Bid $bid, User $user, $sectionName, $isFilledByDefault = true)
+    {
+        if ($user->can('master')) {
+            return $bid->workshop->getSectionsAttributes()->$sectionName;
+        } else {
+            return $isFilledByDefault ? array_keys($bid->attributeLabels()) : [];
+        }
     }
 }
