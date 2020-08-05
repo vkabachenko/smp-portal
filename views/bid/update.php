@@ -11,7 +11,7 @@ $this->params['back'] = ['view', 'id' => $model->id];
 ?>
 <div>
 
-    <h2><?= Html::encode($this->title) ?></h2>
+    <h2><?= sprintf('%s (%s %s)', Html::encode($this->title), $model->bid_number, $model->bid_1C_number) ?></h2>
 
     <?= $this->render('_form', [
         'model' => $model,

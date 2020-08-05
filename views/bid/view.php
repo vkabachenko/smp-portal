@@ -26,7 +26,7 @@ $this->params['back'] = $returnUrl ?: ['bid/index'];
 ?>
 <div>
 
-    <h3><?= Html::encode($this->title) ?></h3>
+    <h3><?= sprintf('%s (%s %s)', Html::encode($this->title), $model->bid_number, $model->bid_1C_number) ?></h3>
 
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-md-2 col-sm-3 col-xs-6">
