@@ -49,10 +49,10 @@ class ClientProposition extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'bid_id' => 'Bid ID',
-            'name' => 'Name',
-            'price' => 'Price',
-            'quantity' => 'Quantity',
-            'total_price' => 'Total Price',
+            'name' => 'Название',
+            'price' => 'Цена',
+            'quantity' => 'Количество',
+            'total_price' => 'Всего',
         ];
     }
 

@@ -12,6 +12,8 @@ use app\models\Spare;
 /* @var $bidJobProvider \yii\data\ActiveDataProvider */
 /* @var $bidJob1cProvider \yii\data\ActiveDataProvider */
 /* @var $spareProvider \yii\data\ActiveDataProvider */
+/* @var $replacementPartProvider \yii\data\ActiveDataProvider */
+/* @var $clientPropositionProvider \yii\data\ActiveDataProvider */
 /* @var $attributes array */
 /* @var $section1 array */
 /* @var $section2 array */
@@ -139,7 +141,7 @@ $this->params['back'] = $returnUrl ?: ['bid/index'];
     ]); ?>
 </div>
 
-<?php if (\Yii::$app->user->can('master')): ?>
+<?php if (\Yii::$app->user->can('manageBidJob1c') && $bidJob1cProvider->totalCount): ?>
 
 <div class="form-group clearfix"></div>
 <div>
@@ -155,7 +157,6 @@ $this->params['back'] = $returnUrl ?: ['bid/index'];
         ],
     ]); ?>
 </div>
-
 
 <?php endif; ?>
 
@@ -194,3 +195,49 @@ $this->params['back'] = $returnUrl ?: ['bid/index'];
     ]); ?>
 </div>
 
+<?php if (\Yii::$app->user->can('manageReplacementParts') && $replacementPartProvider->totalCount): ?>
+
+<div class="form-group clearfix"></div>
+<div>
+    <h3>Артикулы для сервиса (импорт из 1С)</h3>
+    <?= GridView::widget([
+        'dataProvider' => $replacementPartProvider,
+        'summary' => '',
+        'columns' => [
+            'name',
+            'price',
+            'quantity',
+            'total_price',
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{more}',
+                'buttons' => [
+                    'more' => function ($url, $model, $key) {
+                        return Html::a('Подробнее...',['replacement-part/view', 'id' => $model->id]);
+                    }
+                ],
+            ],
+        ],
+    ]); ?>
+</div>
+
+<?php endif; ?>
+
+<?php if (\Yii::$app->user->can('manageClientPropositions') && $clientPropositionProvider->totalCount): ?>
+
+    <div class="form-group clearfix"></div>
+    <div>
+        <h3>Предложения для клиента (импорт из 1С)</h3>
+        <?= GridView::widget([
+            'dataProvider' => $clientPropositionProvider,
+            'summary' => '',
+            'columns' => [
+                'name',
+                'price',
+                'quantity',
+                'total_price'
+            ],
+        ]); ?>
+    </div>
+
+<?php endif; ?>

@@ -9,7 +9,9 @@ use app\models\BidAttribute;
 use app\models\BidJob;
 use app\models\BidJob1c;
 use app\models\BidStatus;
+use app\models\ClientProposition;
 use app\models\form\SendActForm;
+use app\models\ReplacementPart;
 use app\models\Spare;
 use app\services\access\QueryRestrictionService;
 use app\helpers\bid\TitleHelper;
@@ -158,6 +160,16 @@ class BidController extends Controller
             'pagination' => false
         ]);
 
+        $replacementPartProvider = new ActiveDataProvider([
+            'query' => ReplacementPart::find()->where(['bid_id' => $id])->orderBy('num_order'),
+            'pagination' => false
+        ]);
+
+        $clientPropositionProvider = new ActiveDataProvider([
+            'query' => ClientProposition::find()->where(['bid_id' => $id])->orderBy('num_order'),
+            'pagination' => false
+        ]);
+
         $spareProvider = new ActiveDataProvider([
             'query' => Spare::find()->where(['bid_id' => $id])->orderBy('updated_at'),
             'pagination' => false
@@ -181,6 +193,8 @@ class BidController extends Controller
             'bidJobProvider' => $bidJobProvider,
             'bidJob1cProvider' => $bidJob1cProvider,
             'spareProvider' => $spareProvider,
+            'replacementPartProvider' => $replacementPartProvider,
+            'clientPropositionProvider' => $clientPropositionProvider,
             'attributes' => $attributes,
             'section1' => $section1,
             'section2' => $section2,

@@ -226,6 +226,15 @@ class RbacController extends Controller
         $auth->add($viewImageRestricted);
         $auth->addChild($viewImageRestricted , $viewImage);
 
+        $manageReplacementParts = $auth->createPermission('manageReplacementParts');
+        $auth->add($manageReplacementParts);
+
+        $manageClientPropositions = $auth->createPermission('manageClientPropositions');
+        $auth->add($manageClientPropositions);
+
+        $manageBidJob1c = $auth->createPermission('manageBidJob1c');
+        $auth->add($manageBidJob1c);
+
         $client = $auth->createRole('client');
         $auth->add($client);
 
@@ -250,6 +259,9 @@ class RbacController extends Controller
         $auth->addChild($master, $setBidDone);
         $auth->addChild($master, $viewImageRestricted);
         $auth->addChild($master, $restrictUpdateClient);
+        $auth->addChild($master, $manageReplacementParts);
+        $auth->addChild($master, $manageClientPropositions);
+        $auth->addChild($master, $manageBidJob1c);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
@@ -294,6 +306,9 @@ class RbacController extends Controller
         $auth->addChild($admin, $viewSpare);
         $auth->addChild($admin, $viewImage);
         $auth->addChild($admin, $updateClient);
+        $auth->addChild($admin, $manageReplacementParts);
+        $auth->addChild($admin, $manageClientPropositions);
+        $auth->addChild($admin, $manageBidJob1c);
 
         echo 'done' . "\n";
     }
