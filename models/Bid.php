@@ -215,6 +215,24 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'agency_id' => 'Представительство'
     ];
 
+    const GRID_ATTRIBUTES = [
+        'equipment' => ['desktop' => true, 'tablet' => true, 'phone' => true],
+        'bid_1C_number'  => ['desktop' => true, 'tablet' => true, 'phone' => true],
+        'bid_number'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
+        'client_id'  => ['desktop' => true, 'tablet' => true, 'phone' => true],
+        'master_id'  => ['desktop' => true, 'tablet' => false, 'phone' => false],
+        'condition_id'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
+        'brand_name'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
+        'brand_model_name'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
+        'composition_name'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
+        'created_at'  => ['desktop' => true, 'tablet' => true, 'phone' => false],
+        'status_id'  => ['desktop' => true, 'tablet' => true, 'phone' => true],
+        'repair_status_id'  => ['desktop' => true, 'tablet' => false, 'phone' => false],
+        'treatment_type'  => ['desktop' => true, 'tablet' => false, 'phone' => false],
+        'warranty_status_id'  => ['desktop' => true, 'tablet' => false, 'phone' => false],
+        'manufacturer_id'  => ['desktop' => true, 'tablet' => true, 'phone' => false]
+    ];
+
     /**
      * {@inheritdoc}
      */

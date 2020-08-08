@@ -4,6 +4,7 @@
 namespace app\controllers;
 
 use app\helpers\bid\CompositionHelper;
+use app\helpers\bid\GridHelper;
 use app\helpers\bid\ViewHelper;
 use app\models\BidAttribute;
 use app\models\BidJob;
@@ -13,6 +14,7 @@ use app\models\ClientProposition;
 use app\models\form\SendActForm;
 use app\models\ReplacementPart;
 use app\models\Spare;
+use app\models\User;
 use app\services\access\QueryRestrictionService;
 use app\helpers\bid\TitleHelper;
 use app\models\Bid;
@@ -29,6 +31,7 @@ use app\templates\excel\act\ExcelAct;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
@@ -66,10 +69,35 @@ class BidController extends Controller
         $searchModel = new BidSearch(['restrictions' => $restrictions]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $gridAttributes = \Yii::$app->user->identity->grid_attributes ?
+            Json::decode(\Yii::$app->user->identity->grid_attributes)
+            : Bid::GRID_ATTRIBUTES;
+        $gridHelper = new GridHelper($gridAttributes, $searchModel);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider
+            'dataProvider' => $dataProvider,
+            'gridHelper' => $gridHelper
         ]);
+    }
+
+    public function actionSetGridAttributes()
+    {
+        $gridAttributes = \Yii::$app->user->identity->grid_attributes ?
+            Json::decode(\Yii::$app->user->identity->grid_attributes)
+            : Bid::GRID_ATTRIBUTES;
+
+        return $this->render('set-grid-attributes', compact('gridAttributes'));
+    }
+
+    public function actionSaveGridAttributes()
+    {
+        $user = User::findOne(\Yii::$app->user->id);
+        $gridAttributes = \Yii::$app->request->post('grid_attributes');
+        $user->grid_attributes = Json::encode($gridAttributes);
+        $user->save();
+
+        return $this->redirect(['index']);
     }
 
     public function actionCreate()

@@ -138,30 +138,6 @@ a.desc:after {
     word-break: break-all;
 }
 
-@media(max-width:767px) {
-    .bids-grid .grid-treatment-type {
-        display: none;
-    }
-}
-
-@media(max-width:450px) {
-    .bids-grid .grid-bid-1C-number {
-        display: none;
-    }
-    .bids-grid .grid-manufacturer {
-        display: none;
-    }
-    .bids-grid .grid-warranty-status {
-        display: none;
-    }
-    .bids-grid .grid-master {
-        display: none;
-    }
-    .bids-grid .grid-created-at {
-        display: none;
-    }
-}
-
 .bid-menu {
     list-style: none;
 }
@@ -326,5 +302,10 @@ a.btn-feedback {
 
 .bid-done {
     color: #a5d0ae;
+}
+
+.grid-attributes-header {
+    text-align: center;
+    font-weight: bold;
 }
 
