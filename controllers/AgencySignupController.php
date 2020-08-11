@@ -50,9 +50,27 @@ class AgencySignupController extends Controller
             $user->verification_token = null;
             $user->status = User::STATUS_ACTIVE;
             $user->save();
-            \Yii::$app->user->login($user, 0);
-            LoginForm::assignRole();
-            return $this->goHome();
+            try {
+                \Yii::$app->mailer
+                    ->compose(
+                        [
+                            'html' => 'invite-agency-success/html'
+                        ],
+                        [
+                            'manager' => $user->manager,
+                        ]
+                    )
+                    ->setFrom(\Yii::$app->params['adminEmail'])
+                    ->setTo(
+                        $user->email
+                    )
+                    ->setSubject('Успешная регистрация представительства ' . $user->manager->agency->name)
+                    ->send();
+                \Yii::$app->session->setFlash('success', 'Представительство успешно зарегистрировано');
+            } catch (\Exception $exc) {
+                \Yii::error($exc->getMessage());
+                \Yii::$app->session->setFlash('error', 'Ошибка при отправке письма менеджеру');
+            }
         }
         return $this->render('index', [
             'agency' => $agency

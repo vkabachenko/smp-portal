@@ -50,10 +50,30 @@ class WorkshopSignupController extends Controller
         $user->verification_token = null;
         $user->status = User::STATUS_ACTIVE;
         $user->save();
-        \Yii::$app->user->login($user, 0);
-        LoginForm::assignRole();
 
-        \Yii::$app->session->setFlash('success', 'Мастерская успешно зарегистрирована');
+        try {
+            \Yii::$app->mailer
+                ->compose(
+                    [
+                        'html' => 'invite-workshop-success/html'
+                    ],
+                    [
+                        'master' => $user->master,
+                    ]
+                )
+                ->setFrom(\Yii::$app->params['adminEmail'])
+                ->setTo(
+                    $user->email
+                )
+                ->setSubject('Успешная регистрация мастерской ' . $user->master->workshop->name)
+                ->send();
+            \Yii::$app->session->setFlash('success', 'Мастерская успешно зарегистрирована');
+        } catch (\Exception $exc) {
+            \Yii::error($exc->getMessage());
+            \Yii::$app->session->setFlash('error', 'Ошибка при отправке письма мастеру');
+        }
+
+
 
         return $this->goHome();
     }

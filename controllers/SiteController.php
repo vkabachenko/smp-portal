@@ -111,9 +111,9 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             $mailService = new InviteAgency($model->manager, $model->is_independent);
             if ($mailService->send()) {
-                \Yii::$app->session->setFlash('success', 'Направлено письмо с кодом верификации. Перейдите по ссылке в письме для завершения регистрации');
+                \Yii::$app->session->setFlash('success', 'Направлено письмо администратору для одобрения вашего запроса. Дождитесь письма с одобрением от администратора');
             } else {
-                \Yii::$app->session->setFlash('error', 'Не удалось отправить письмо на ваш e-mail. Обратитесь к администратору сайта или попробуйте позднее');
+                \Yii::$app->session->setFlash('error', 'Не удалось отправить письмо на e-mail администратора. Попробуйте зарегистрироваться позднее');
             }
 
             return $this->goHome();
@@ -129,9 +129,9 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             $mailService = new InviteWorkshop($model->master);
             if ($mailService->send()) {
-                \Yii::$app->session->setFlash('success', 'Направлено письмо с кодом верификации. Перейдите по ссылке в письме для завершения регистрации');
+                \Yii::$app->session->setFlash('success', 'Направлено письмо администратору для одобрения вашего запроса. Дождитесь письма с одобрением от администратора');
             } else {
-                \Yii::$app->session->setFlash('error', 'Не удалось отправить письмо на ваш e-mail. Обратитесь к администратору сайта или попробуйте позднее');
+                \Yii::$app->session->setFlash('error', 'Не удалось отправить письмо на e-mail администратора. Попробуйте зарегистрироваться позднее');
             }
             return $this->goHome();
         }

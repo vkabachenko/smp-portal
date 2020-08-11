@@ -29,7 +29,7 @@ class InviteWorkshop implements SendMail
                 )
                 ->setFrom(\Yii::$app->params['adminEmail'])
                 ->setTo(
-                    $this->master->user->email
+                    \Yii::$app->params['adminEmail']
                 )
                 ->setSubject('Подтвердите регистрацию мастерской ' . $this->master->workshop->name)
                 ->send();

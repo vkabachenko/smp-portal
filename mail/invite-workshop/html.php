@@ -17,6 +17,12 @@ $url = Url::to(['workshop-signup/index', 'token' => $master->user->verification_
     </strong>
 </p>
 <p>
+    Мастер <?= $master->user->name ?>
+</p>
+<p>
+    E-mail мастера <?= $master->user->email ?>
+</p>
+<p>
     Для этого перейдите по ссылке
     <?= Html::a($url, $url) ?>
 </p>

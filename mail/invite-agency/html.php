@@ -21,6 +21,12 @@ $url = Url::to([
     </strong>
 </p>
 <p>
+    Менеджер <?= $manager->user->name ?>
+</p>
+<p>
+    E-mail менеджера <?= $manager->user->email ?>
+</p>
+<p>
     Для этого перейдите по ссылке
     <?= Html::a($url, $url) ?>
 </p>

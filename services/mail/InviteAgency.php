@@ -34,7 +34,7 @@ class InviteAgency implements SendMail
                 )
                 ->setFrom(\Yii::$app->params['adminEmail'])
                 ->setTo(
-                    $this->is_independent ? \Yii::$app->params['adminEmail'] : $this->manager->user->email
+                    \Yii::$app->params['adminEmail']
                 )
                 ->setSubject('Подтвердите регистрацию представительства ' . $this->manager->agency->name)
                 ->send();
