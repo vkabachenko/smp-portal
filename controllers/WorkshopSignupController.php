@@ -15,21 +15,6 @@ use yii\web\Controller;
 
 class WorkshopSignupController extends Controller
 {
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::class,
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                ],
-            ],
-        ];
-    }
-
     public function actionIndex($token)
     {
         /* @var $user \app\models\User */
