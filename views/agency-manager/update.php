@@ -20,6 +20,7 @@ $this->params['back'] = \Yii::$app->user->can('admin')
 
         <?= $form->field($user, 'name')->textInput(['maxlength' => true]) ?>
     <?php if (\Yii::$app->user->can('admin')): ?>
+        <?= $form->field($user, 'email')->textInput(['maxlength' => true]) ?>
         <?= $form->field($manager, 'main')->checkbox() ?>
     <?php endif; ?>
         <?= $form->field($manager, 'phone')->textInput(['maxlength' => true]) ?>
