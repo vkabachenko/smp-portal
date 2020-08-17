@@ -259,7 +259,7 @@ class ReadService extends BaseService
     private function updateBid($attributes)
     {
         /* @var $model Bid */
-        $model = Bid::find()->where(['bid_1C_number' => $this->getAttribute($attributes, 'Номер')])->one();
+        $model = Bid::find()->where(['bid_1C_number' => $this->get1Cattribute($attributes, 'bid_1C_number')])->one();
 
         if (!$this->fillAndValidateBid($model, $attributes)) {
             return null;
