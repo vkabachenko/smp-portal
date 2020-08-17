@@ -59,24 +59,6 @@ class WorkshopController extends Controller
     }
 
 
-    public function actionCreate()
-    {
-        $model = new Workshop();
-        $rules = new WorkshopRulesForm();
-
-        if ($model->load(Yii::$app->request->post()) && $rules->load(Yii::$app->request->post()) ) {
-            $model->rules = $rules->attributes;
-            $model->save();
-            return $this->redirect(['index']);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-            'rules' => $rules
-        ]);
-    }
-
-
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);

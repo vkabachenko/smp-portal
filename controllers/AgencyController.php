@@ -50,21 +50,6 @@ class AgencyController extends Controller
         ]);
     }
 
-
-    public function actionCreate()
-    {
-        $model = new Agency();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
