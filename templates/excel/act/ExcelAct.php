@@ -44,8 +44,13 @@ class ExcelAct extends ExcelActTemplate
             '{diagnostic_warranty}' => $this->bid->isWarranty() ? $this->bid->diagnostic : '',
             '{isWarranty}' => $this->bid->isWarranty() ? 'Да' : '',
             '{isPostPurchase}' => !$this->bid->isWarranty() ? 'Да' : '',
-            '{defect}' => !$this->bid->isWarranty() ? $this->bid->defect : '',
-            '{diagnostic}' => !$this->bid->isWarranty() ? $this->bid->diagnostic : ''
+            '{defect}' => $this->bid->defect_manufacturer ?: $this->bid->defect,
+            '{diagnostic}' => $this->bid->diagnostic_manufacturer ?: $this->bid->diagnostic,
+            '{workshop_name}' => $this->bid->workshop_id ? $this->bid->workshop->name : '',
+            '{workshop_address}' => $this->bid->workshop_id ? $this->bid->workshop->address : '',
+            '{workshop_phone}' => $this->bid->workshop_id ? $this->bid->workshop->phone2 : '',
+            '{workshop_mail}' => $this->bid->workshop_id ? $this->bid->workshop->email3 : '',
+            '{saler_name}' => $this->bid->saler_name,
         ];
     }
 }

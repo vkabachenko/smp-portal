@@ -14,6 +14,7 @@ use yii\helpers\ArrayHelper;
  * @property string $token
  * @property array $rules
  * @property string $description
+ * @property string $address
  * @property array $bid_attributes
  * @property string $phone1
  * @property string $phone2
@@ -53,7 +54,7 @@ class Workshop extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['rules', 'bid_attributes'], 'safe'],
-            [['name', 'token'], 'string', 'max' => 255],
+            [['name', 'token', 'address'], 'string', 'max' => 255],
             [['phone1', 'phone2', 'phone3', 'phone4'], 'string'],
             [['email2', 'email3'], 'string'],
             [['email2', 'email3'], 'email'],
@@ -69,6 +70,7 @@ class Workshop extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Мастерская',
+            'address' => 'Адрес',
             'token' => 'Токен',
             'rules' => 'Правила доступа',
             'description' => 'Описание',

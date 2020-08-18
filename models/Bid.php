@@ -111,7 +111,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'master_id' => 'Мастер',
         'comment' => 'Дополнительные отметки',
         'repair_recommendations' => 'Рекомендации по ремонту',
-        'saler_name' => 'Продавец',
+        '' => 'Продавец',
         'diagnostic_manufacturer' => 'Результат диагностики для представительства',
         'defect_manufacturer' => 'Заявленная неисправность для представительства',
         'date_manufacturer' => 'Дата принятия в ремонт для представительства',
