@@ -27,3 +27,4 @@
     ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['workshop']['email3']]])
     ->textInput(['maxlength' => true]) ?>
 
+
