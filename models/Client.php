@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\helpers\common\DateHelper;
 use Yii;
+use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -89,6 +90,32 @@ class Client extends \yii\db\ActiveRecord
         ];
     }
 
+    public function fields()
+    {
+        return [
+            'id',
+            'name',
+            'full_name',
+            'client_type' => function(Client $client) {
+                return self::CLIENT_TYPES[$client->client_type];
+            },
+            'date_register' => function(Client $client) {
+                return DateHelper::getReadableDate($client->date_register);
+            },
+            'comment',
+            'description',
+            'manager',
+            'inn',
+            'kpp',
+            'email',
+            'address_actual',
+            'address_legal',
+            'bids',
+            'clientPhones'
+        ];
+    }
+
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -170,5 +197,19 @@ class Client extends \yii\db\ActiveRecord
         }
 
         return $query->asArray()->all();
+    }
+
+    public static function getClientByPhone($phone)
+    {
+        $model = self::find()
+            ->select([
+                'client.*',
+                'normalized_phone' => new Expression('substr(regex_replace("[^0-9]", "", client_phone.phone), -10)')
+            ])
+            ->joinWith('clientPhones', false)
+            ->having(['normalized_phone' => $phone])
+            ->one();
+
+        return $model;
     }
 }
