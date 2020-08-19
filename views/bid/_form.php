@@ -78,12 +78,17 @@ QuaggaAsset::register($this);
         <div class="col-md-2 col-sm-3 col-xs-6">
             <?= Html::submitButton('Сохранить', ['name' => 'save', 'class' => 'btn btn-success', 'value' => '1']) ?>
         </div>
+
         <div class="col-md-2 col-sm-3 col-xs-6">
             <?= Html::submitButton('Отправить', ['name' => 'send', 'class' => 'btn btn-primary', 'value' => '1']) ?>
         </div>
-        <div class="col-md-2 col-sm-3 col-xs-6">
-            <?= Html::submitButton('Работы', ['name' => 'job', 'class' => 'btn btn-primary', 'value' => '1']) ?>
-        </div>
+
+        <?php if (\Yii::$app->user->can('manageJobs', ['bidId' => $model->id])): ?>
+            <div class="col-md-2 col-sm-3 col-xs-6">
+                <?= Html::submitButton('Работы', ['name' => 'job', 'class' => 'btn btn-primary', 'value' => '1']) ?>
+            </div>
+        <?php endif; ?>
+
         <div class="col-md-2 col-sm-3 col-xs-6">
             <?= Html::submitButton('Запчасти', ['name' => 'spare', 'class' => 'btn btn-primary', 'value' => '1']) ?>
         </div>
