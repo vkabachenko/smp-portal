@@ -2,6 +2,7 @@
 namespace app\templates\excel\act;
 
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
+use app\models\BidJob;
 use app\templates\excel\ExcelActTemplate;
 use app\helpers\common\DateHelper;
 
@@ -30,6 +31,8 @@ class ExcelAct extends ExcelActTemplate
 
     protected function getParams()
     {
+        $jobs = $this->bid->jobs;
+
         return [
             '{bid_number}' => $this->bid->bid_number,
             '{created_at}' => DateHelper::getReadableDate($this->bid->created_at),
@@ -51,6 +54,10 @@ class ExcelAct extends ExcelActTemplate
             '{workshop_phone}' => $this->bid->workshop_id ? $this->bid->workshop->phone2 : '',
             '{workshop_mail}' => $this->bid->workshop_id ? $this->bid->workshop->email3 : '',
             '{saler_name}' => $this->bid->saler_name,
+            '{job_nom_row}' => array_map(function($el) { return $el + 1; }, array_keys($jobs)),
+            '{job_description}' => array_map(function(BidJob $job) {return $job->description;}, $jobs),
+            '{job_price}' => array_map(function(BidJob $job) {return $job->priceConformed;}, $jobs),
+            '{job_total_price}' => array_sum(array_map(function(BidJob $job) {return $job->priceConformed;}, $jobs))
         ];
     }
 }

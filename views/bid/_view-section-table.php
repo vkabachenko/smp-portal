@@ -10,7 +10,7 @@ use app\models\Bid;
 <table class="table table-striped">
 
     <?php foreach ($section as $attribute): ?>
-        <?php if ($attributes[$attribute] !== false): ?>
+        <?php if (isset($attributes[$attribute]) && $attributes[$attribute] !== false): ?>
         <tr>
             <th>
                 <?= Bid::getAllAttributes()[$attribute] ?>
