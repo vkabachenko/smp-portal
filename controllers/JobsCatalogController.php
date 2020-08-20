@@ -3,10 +3,10 @@
 namespace app\controllers;
 
 use app\models\Agency;
+use app\models\form\UploadExcelTemplateForm;
 use app\models\JobsCatalog;
 use app\services\job\JobsCatalogService;
 use yii\data\ActiveDataProvider;
-use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -120,7 +120,7 @@ class JobsCatalogController  extends Controller
         $model = $this->findModel($id);
         $agencyId = $model->agency_id;
         $this->checkAccess('manageJobsCatalog', ['agencyId' => $agencyId]);
-        if ($this->bidJob) {
+        if ($model->bidJobs) {
             \Yii::$app->session->setFlash('error', 'Удаление невозможно! Существует запись о произведенной работе');
         } else {
             $model->delete();
@@ -128,6 +128,18 @@ class JobsCatalogController  extends Controller
         }
 
         return $this->redirect(['index', 'agencyId' => $agencyId]);
+    }
+
+    public function actionAddExcel($agencyId)
+    {
+        $this->checkAccess('manageJobsCatalog', compact('agencyId'));
+        $uploadForm = new UploadExcelTemplateForm();
+
+        if (\Yii::$app->request->isPost) {
+            JobsCatalog::addFromExcel($agencyId, $uploadForm);
+            return $this->redirect(['index', 'agencyId' => $agencyId]);
+        }
+        return $this->render('upload', compact('agencyId', 'uploadForm'));
     }
 
 

@@ -27,6 +27,16 @@ $this->params['back'] = \Yii::$app->user->can('admin')
         <div class="col-xs-6 col-sm-3">
             <?= Html::a('Разделы работ', ['jobs-section/index', 'agencyId' => $agency->id], ['class' => 'btn btn-primary']) ?>
         </div>
+        <div class="col-xs-6 col-sm-6">
+            <?= Html::a('Добавить из шаблона', ['add-excel', 'agencyId' => $agency->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Образец шаблона',
+                [
+                    'download/default',
+                    'filename' => 'template_jobs_sample.xlsx',
+                    'path' => \Yii::getAlias('@app/templates/excel/job/sample.xlsx')
+                ]);
+            ?>
+        </div>
 
     </div>
     <div class="clearfix form-group"></div>

@@ -29,7 +29,8 @@
         "vova07/yii2-imperavi-widget": "*",
         "vkabachenko/yii2-filepond": "dev-master",
         "npm-asset/sweetalert": "2.1.*",
-        "kartik-v/yii2-sortable": "^1.2"
+        "kartik-v/yii2-sortable": "^1.2",
+        "shuchkin/simplexlsx": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

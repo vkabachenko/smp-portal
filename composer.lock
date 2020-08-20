@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "29cf90f4ad529729ba3c123c8ee27516",
+    "content-hash": "3c59019c0008b3bfaa831193ef4ff2ef",
     "packages": [
         {
             "name": "alhimik1986/php-excel-templator",
@@ -76,7 +76,7 @@
             "version": "3.3.11",
             "source": {
                 "type": "git",
-                "url": "git@github.com:RobinHerbots/Inputmask.git",
+                "url": "https://github.com/RobinHerbots/Inputmask.git",
                 "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b"
             },
             "dist": {
@@ -136,7 +136,7 @@
             "version": "v1.3.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/bestiejs/punycode.js.git",
+                "url": "git@github.com:bestiejs/punycode.js.git",
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3"
             },
             "dist": {
@@ -1762,7 +1762,7 @@
             "version": "4.17.14-patch1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/lodash/lodash.git",
+                "url": "git@github.com:lodash/lodash.git",
                 "reference": "4dd74b933eec09f5f9c053dc7994f4448572f7a0"
             },
             "dist": {
@@ -2330,6 +2330,53 @@
                 "simple-cache"
             ],
             "time": "2017-10-23T01:57:42+00:00"
+        },
+        {
+            "name": "shuchkin/simplexlsx",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shuchkin/simplexlsx.git",
+                "reference": "67252a8d30b6902df16430eb2d19f9c90d024201"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shuchkin/simplexlsx/zipball/67252a8d30b6902df16430eb2d19f9c90d024201",
+                "reference": "67252a8d30b6902df16430eb2d19f9c90d024201",
+                "shasum": ""
+            },
+            "require": {
+                "ext-libxml": "*",
+                "ext-simplexml": "*",
+                "ext-zlib": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/SimpleXLSX.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sergey Shuchkin (SMSPILOT)",
+                    "email": "sergey.shuchkin@gmail.com",
+                    "homepage": "http://www.shuchkin.ru/"
+                }
+            ],
+            "description": "Parse and retrieve data from Excel XLSx files. MS Excel 2007 workbooks PHP reader.",
+            "homepage": "https://github.com/shuchkin/simplexlsx",
+            "keywords": [
+                "backend",
+                "excel",
+                "parser",
+                "php",
+                "xlsx"
+            ],
+            "time": "2020-07-28T17:34:24+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3078,6 +3125,7 @@
                 "functional testing",
                 "unit testing"
             ],
+            "abandoned": true,
             "time": "2018-02-26T23:42:52+00:00"
         },
         {
@@ -5833,12 +5881,14 @@
         "alhimik1986/php-excel-templator": 20,
         "bupy7/xml-constructor": 20,
         "kartik-v/yii2-widget-datepicker": 20,
-        "vkabachenko/yii2-filepond": 20
+        "vkabachenko/yii2-filepond": 20,
+        "shuchkin/simplexlsx": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.4.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

@@ -2,8 +2,9 @@
 
 namespace app\models;
 
-use Yii;
-use yii\helpers\ArrayHelper;
+use app\models\form\UploadExcelTemplateForm;
+use yii\web\UploadedFile;
+use SimpleXLSX;
 
 /**
  * This is the model class for table "jobs_catalog".
@@ -95,6 +96,62 @@ class JobsCatalog extends \yii\db\ActiveRecord
     {
         parent::afterFind();
         $this->jobsSectionName = $this->jobs_section_id ? $this->jobsSection->name : '';
+    }
+
+    public static function addFromExcel($agencyId, UploadExcelTemplateForm $uploadForm)
+    {
+        $path = \Yii::getAlias('@runtime/jobs-catalog-' . $agencyId . 'xlsx');
+        $uploadForm->file = UploadedFile::getInstance($uploadForm, 'file');
+        if (!$uploadForm->file) {
+            throw new \DomainException('xlsx file not uploaded');
+        }
+        $uploadForm->file->saveAs($path);
+        $xlsx = SimpleXLSX::parse($path);
+
+        if (!$xlsx) {
+            throw new \DomainException(SimpleXLSX::parseError());
+        }
+
+        $rows = $xlsx->rows();
+        array_shift($rows);
+
+
+        /*row:
+        0 - Раздел работ
+        1 - Артикул
+        2 -	Наименование
+        3 - Описание
+        4 -	Цена нормочаса
+        5 -	Нормочасов
+        6 -	Стоимость
+        */
+
+        foreach ($rows as $row) {
+
+            $sectionName = $row[0];
+            $jobsSection = JobsSection::find()->where(['name' => $sectionName])->one();
+            if (is_null($jobsSection)) {
+                $jobsSection = new JobsSection(['agency_id' => $agencyId, 'name' => $sectionName]);
+                $jobsSection->save();
+            }
+
+            $model = new self();
+
+            $model->agency_id = $agencyId;
+            $model->date_actual = date('Y-m-d');
+            $model->uuid = \Yii::$app->security->generateRandomString();
+            $model->jobs_section_id = $jobsSection->id;
+            $model->vendor_code = $row[1];
+            $model->name = $row[2];
+            $model->description = $row[3];
+            $model->hour_tariff = doubleval($row[4]);
+            $model->hours_required = doubleval($row[5]);
+            $model->price = doubleval($row[6]);
+
+            if (!$model->save()) {
+                \Yii::error($model->getErrors());
+            }
+        }
     }
 
 }
