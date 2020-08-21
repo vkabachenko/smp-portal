@@ -3,6 +3,7 @@ namespace app\templates\excel\act;
 
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
 use app\models\BidJob;
+use app\models\Spare;
 use app\templates\excel\ExcelActTemplate;
 use app\helpers\common\DateHelper;
 
@@ -32,9 +33,12 @@ class ExcelAct extends ExcelActTemplate
     protected function getParams()
     {
         $jobs = $this->bid->jobs;
+        $spares = $this->bid->spares;
 
         return [
             '{bid_number}' => $this->bid->bid_number,
+            '{bid_1c_number}' => $this->bid->bid_1C_number,
+            '{bid_agency_number}' => $this->bid->bid_manufacturer_number,
             '{created_at}' => DateHelper::getReadableDate($this->bid->created_at),
             '{equipment}' => $this->bid->equipment,
             '{brand_model_name}' => $this->bid->brand_model_name,
@@ -57,7 +61,15 @@ class ExcelAct extends ExcelActTemplate
             '{job_nom_row}' => array_map(function($el) { return $el + 1; }, array_keys($jobs)),
             '{job_description}' => array_map(function(BidJob $job) {return $job->description;}, $jobs),
             '{job_price}' => array_map(function(BidJob $job) {return $job->priceConformed;}, $jobs),
-            '{job_total_price}' => array_sum(array_map(function(BidJob $job) {return $job->priceConformed;}, $jobs))
+            '{job_total_price}' => array_sum(array_map(function(BidJob $job) {return $job->priceConformed;}, $jobs)),
+            '{spare_nom_row}' => array_map(function($el) { return $el + 1; }, array_keys($spares)),
+            '{spare_name}' =>  array_map(function(Spare $spare) {return $spare->name;}, $spares),
+            '{spare_vendor_code}' =>  array_map(function(Spare $spare) {return $spare->vendor_code;}, $spares),
+            '{spare_quantity}' =>  array_map(function(Spare $spare) {return $spare->quantity;}, $spares),
+            '{spare_price}' =>  array_map(function(Spare $spare) {return $spare->price;}, $spares),
+            '{spare_total_price}' =>  array_map(function(Spare $spare) {return $spare->total_price;}, $spares),
+            '{spare_quantity_all}' =>  array_sum(array_map(function(Spare $spare) {return $spare->quantity;}, $spares)),
+            '{spare_total_price_all}' =>  array_sum(array_map(function(Spare $spare) {return $spare->total_price;}, $spares)),
         ];
     }
 }

@@ -95,6 +95,7 @@ class GridHelper
     {
         return [
             'format' => 'raw',
+            'header' => '&nbsp;',
             'value' => function ($model) {
                 return BidCommentsRead::isExistUnread($model->id)
                     ? Html::a('<span class="glyphicon glyphicon-asterisk" aria-hidden="true" title="Имеются непрочитанные комментарии"></span>',
