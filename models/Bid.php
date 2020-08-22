@@ -5,6 +5,7 @@ namespace app\models;
 use app\helpers\common\DateHelper;
 use app\models\form\MultipleUploadForm;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "bid".
@@ -572,6 +573,14 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     public function getTreatmentTypeName()
     {
         return is_null($this->treatment_type) ? '' : self::TREATMENT_TYPES[$this->treatment_type];
+    }
+
+    /**
+     * @return ActiveRecord|AgencyWorkshop
+     */
+    public function getAgencyWorkshop()
+    {
+        return AgencyWorkshop::find()->where(['agency_id' => $this->agency_id, 'workshop_id' => $this->workshop_id])->one();
     }
 
     public function isWarranty()

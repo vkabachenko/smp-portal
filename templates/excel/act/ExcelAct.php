@@ -36,6 +36,8 @@ class ExcelAct extends ExcelActTemplate
         $spares = $this->bid->spares;
 
         return [
+            '{contract_nom}' => $this->bid->getAgencyWorkshop() ? $this->bid->getAgencyWorkshop()->contract_nom : '',
+            '{contract_date}' => $this->bid->getAgencyWorkshop() ? DateHelper::getReadableDate($this->bid->getAgencyWorkshop()->contract_date) : '',
             '{bid_number}' => $this->bid->bid_number,
             '{bid_1c_number}' => $this->bid->bid_1C_number,
             '{bid_agency_number}' => $this->bid->bid_manufacturer_number,

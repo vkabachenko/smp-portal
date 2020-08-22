@@ -138,7 +138,7 @@ class JobsCatalog extends \yii\db\ActiveRecord
             $model = new self();
 
             $model->agency_id = $agencyId;
-            $model->date_actual = date('Y-m-d');
+            $model->date_actual = '1970-01-01';
             $model->uuid = \Yii::$app->security->generateRandomString();
             $model->jobs_section_id = $jobsSection->id;
             $model->vendor_code = $row[1];
