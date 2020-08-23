@@ -199,7 +199,7 @@ class Client extends \yii\db\ActiveRecord
         return $query->asArray()->all();
     }
 
-    public static function getClientByPhone($phone)
+    public static function getClientByPhone($phone, Workshop $workshop)
     {
         $model = self::find()
             ->select([
@@ -207,6 +207,7 @@ class Client extends \yii\db\ActiveRecord
                 'normalized_phone' => new Expression('substr(regex_replace("[^0-9]", "", client_phone.phone), -10)')
             ])
             ->joinWith('clientPhones', false)
+            ->where(['client.workshop_id' => $workshop->id])
             ->having(['normalized_phone' => $phone])
             ->one();
 
