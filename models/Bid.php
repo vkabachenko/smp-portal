@@ -260,6 +260,18 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         ];
     }
 
+    public function fields()
+    {
+        return [
+            'id',
+            'bid_1C_number',
+            'equipment',
+            'created_at' => function(Bid $bid) {
+                return DateHelper::getReadableDate($bid->created_at);
+            },
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
