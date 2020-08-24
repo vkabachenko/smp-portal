@@ -11,6 +11,9 @@ use yii\rest\Controller;
 
 class CrmController extends Controller
 {
+    /* @var Workshop */
+    public $workshop;
+
     protected function verbs()
     {
         return [
@@ -19,31 +22,33 @@ class CrmController extends Controller
         ];
     }
 
-    public function actionGetClient()
+    public function beforeAction($action)
     {
         $token = \Yii::$app->request->get('token');
-        $workshop = $this->getWorkshop($token);
+        $this->workshop = $this->getWorkshop($token);
+
+        return parent::beforeAction($action);
+    }
+
+    public function actionGetClient()
+    {
         $phone = \Yii::$app->request->get('phone');
         $phone = CrmHelper::purifyPhone($phone);
 
-        return Client::getClientByPhone($phone, $workshop);
+        return Client::getClientByPhone($phone, $this->workshop);
     }
 
     public function actionGetClientByBidNumber()
     {
-        $token = \Yii::$app->request->get('token');
-        $workshop = $this->getWorkshop($token);
         $bid1CNumber = \Yii::$app->request->get('bid_1C_number');
 
-        $bid = Bid::find()->where(['workshop_id' => $workshop->id, 'bid_1C_number' => $bid1CNumber])->one();
+        $bid = Bid::find()->where(['workshop_id' => $this->workshop->id, 'bid_1C_number' => $bid1CNumber])->one();
 
         return $bid ? $bid->client : null;
     }
 
     public function actionAddPhoneToClient()
     {
-        $token = \Yii::$app->request->get('token');
-        $workshop = $this->getWorkshop($token);
         $clientId = \Yii::$app->request->get('clientId');
         $phone = \Yii::$app->request->get('phone');
 
