@@ -7,6 +7,7 @@ use app\models\Bid;
 use app\models\Client;
 use app\models\ClientPhone;
 use app\models\Workshop;
+use yii\helpers\Json;
 use yii\rest\Controller;
 
 class CrmController extends Controller
@@ -55,7 +56,7 @@ class CrmController extends Controller
         $clientPhone = new ClientPhone(['client_id' => $clientId, 'phone' => $phone]);
 
         if (!$clientPhone->save()) {
-            throw new \DomainException('fail to save client phone');
+            throw new \DomainException(Json::encode($clientPhone->getErrors()));
         }
 
         return Client::findOne($clientId);

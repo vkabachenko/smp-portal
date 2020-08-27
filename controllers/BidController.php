@@ -72,6 +72,10 @@ class BidController extends Controller
         $gridAttributes = \Yii::$app->user->identity->grid_attributes ?
             Json::decode(\Yii::$app->user->identity->grid_attributes)
             : Bid::GRID_ATTRIBUTES;
+        $gridAttributes = array_filter($gridAttributes, function($attribute) {
+            return \Yii::$app->user->can('adminBidAttribute', ['attribute' => $attribute]);
+        }, ARRAY_FILTER_USE_KEY);
+
         $gridHelper = new GridHelper($gridAttributes, $searchModel);
 
         return $this->render('index', [
@@ -86,6 +90,9 @@ class BidController extends Controller
         $gridAttributes = \Yii::$app->user->identity->grid_attributes ?
             Json::decode(\Yii::$app->user->identity->grid_attributes)
             : Bid::GRID_ATTRIBUTES;
+        $gridAttributes = array_filter($gridAttributes, function($attribute) {
+            return \Yii::$app->user->can('adminBidAttribute', ['attribute' => $attribute]);
+        }, ARRAY_FILTER_USE_KEY);
 
         return $this->render('set-grid-attributes', compact('gridAttributes'));
     }
