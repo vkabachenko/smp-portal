@@ -46,6 +46,7 @@ class BidHistoryController  extends Controller
 
     public function actionView($id)
     {
+        $this->checkAccess('adminBidHistory', ['id' => $id]);
         /* @var $model \app\models\BidHistory */
         $model = BidHistory::find()->where(['id' => $id])->one();
         $this->checkAccess('viewBid', ['bidId' => $model->bid_id]);

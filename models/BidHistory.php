@@ -23,6 +23,8 @@ use yii\db\ActiveRecord;
  */
 class BidHistory extends \yii\db\ActiveRecord
 {
+    const CREATED = 'Создана';
+    const IMPORTED_1C = 'Импортирована из 1С';
     /**
      * {@inheritdoc}
      */

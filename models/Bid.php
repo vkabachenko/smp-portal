@@ -675,7 +675,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 $bidHistory = new BidHistory([
                     'bid_id' => $this->id,
                     'user_id' => $userId,
-                    'action' => 'Создана'
+                    'action' => BidHistory::CREATED
                 ]);
                 $result = $bidHistory->save();
                 if ($result === false) {

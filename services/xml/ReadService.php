@@ -163,7 +163,7 @@ class ReadService extends BaseService
         $bidHistory = new BidHistory([
             'bid_id' => $model->id,
             'user_id' => null,
-            'action' => 'Импортирована из 1С'
+            'action' => BidHistory::IMPORTED_1C
         ]);
         if (!$bidHistory->save()) {
             \Yii::error($bidHistory->getErrors());

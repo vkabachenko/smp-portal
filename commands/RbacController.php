@@ -3,6 +3,7 @@
 
 namespace app\commands;
 
+use app\rbac\rules\BidHistoryRule;
 use app\rbac\rules\JobsCatalogRule;
 use app\rbac\rules\JobsCatalogViewRule;
 use app\rbac\rules\ManageJobsRule;
@@ -238,6 +239,15 @@ class RbacController extends Controller
         $client = $auth->createRole('client');
         $auth->add($client);
 
+        $adminBidHistory = $auth->createPermission('adminBidHistory');
+        $auth->add($adminBidHistory);
+        $bidHistoryRule = new BidHistoryRule();
+        $auth->add($bidHistoryRule);
+        $viewBidHistory = $auth->createPermission('viewBidHistory');
+        $viewBidHistory->ruleName = $bidHistoryRule->name;
+        $auth->add($viewBidHistory);
+        $auth->addChild($viewBidHistory, $adminBidHistory);
+
         $master = $auth->createRole('master');
         $auth->add($master);
         $auth->addChild($master, $listBids);
@@ -262,6 +272,7 @@ class RbacController extends Controller
         $auth->addChild($master, $manageReplacementParts);
         $auth->addChild($master, $manageClientPropositions);
         $auth->addChild($master, $manageBidJob1c);
+        $auth->addChild($master, $adminBidHistory);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
@@ -282,6 +293,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $manageJobs);
         $auth->addChild($manager, $viewSpare);
         $auth->addChild($manager, $viewImageRestricted);
+        $auth->addChild($manager, $viewBidHistory);
 
         $director = $auth->createRole('director');
         $auth->add($director);
@@ -309,6 +321,7 @@ class RbacController extends Controller
         $auth->addChild($admin, $manageReplacementParts);
         $auth->addChild($admin, $manageClientPropositions);
         $auth->addChild($admin, $manageBidJob1c);
+        $auth->addChild($admin, $adminBidHistory);
 
         echo 'done' . "\n";
     }
