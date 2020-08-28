@@ -64,7 +64,7 @@ class BidComment extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'bid_id' => 'Bid ID',
-            'private' => 'Private',
+            'private' => 'Скрыть от представительства',
             'comment' => 'Комментарий',
             'created_at' => 'Создано',
             'updated_at' => 'Updated At',

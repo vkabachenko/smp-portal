@@ -52,7 +52,8 @@ class BidCommentController  extends Controller
 
         $model = new BidComment([
             'bid_id' => $bidId,
-            'user_id' => \Yii::$app->user->id
+            'user_id' => \Yii::$app->user->id,
+            'private' => \Yii::$app->user->identity->role == 'manager' ? false : true
         ]);
 
         if ($model->load(\Yii::$app->request->post()) && $model->save()) {

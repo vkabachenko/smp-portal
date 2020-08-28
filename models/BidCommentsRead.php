@@ -59,10 +59,17 @@ class BidCommentsRead extends \yii\db\ActiveRecord
 
         $lastDateRead = $model ? $model->date_read : '';
 
-        return BidComment::find()
+        $user = User::findOne($userId);
+
+        $query = BidComment::find()
             ->where(['bid_id' => $bidId])
-            ->andWhere(['>', 'updated_at', $lastDateRead])
-            ->exists();
+            ->andWhere(['>', 'updated_at', $lastDateRead]);
+
+        if ($user->role == 'manager') {
+            $query->andWhere(['private' => false]);
+        }
+
+        return $query->exists();
     }
 
     /**
