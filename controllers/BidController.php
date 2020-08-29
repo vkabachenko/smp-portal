@@ -13,6 +13,7 @@ use app\models\BidStatus;
 use app\models\ClientProposition;
 use app\models\form\SendActForm;
 use app\models\ReplacementPart;
+use app\models\search\SpareSearch;
 use app\models\Spare;
 use app\models\User;
 use app\services\access\QueryRestrictionService;
@@ -205,10 +206,7 @@ class BidController extends Controller
             'pagination' => false
         ]);
 
-        $spareProvider = new ActiveDataProvider([
-            'query' => Spare::find()->where(['bid_id' => $id])->orderBy('updated_at'),
-            'pagination' => false
-        ]);
+        $spareProvider = (new SpareSearch())->search($id);
 
         if (!$model->isViewed(\Yii::$app->user->identity)) {
             $statusService = new ReadStatusService($model->id, \Yii::$app->user->identity);

@@ -33,6 +33,8 @@ use yii\helpers\ArrayHelper;
  */
 class Workshop extends \yii\db\ActiveRecord
 {
+    const IS_PAID_BID = 'paidBid';
+
     use BidAttributesTrait;
     /**
      * {@inheritdoc}
@@ -151,6 +153,21 @@ class Workshop extends \yii\db\ActiveRecord
     public function getCommonHiddenAttributeName()
     {
         return 'is_disabled_workshops';
+    }
+
+    public function canManagePaidBid()
+    {
+        $rules = $this->rules;
+
+        if (!isset($rules[self::IS_PAID_BID])) {
+            return true;
+        }
+
+        if ($rules[self::IS_PAID_BID]) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

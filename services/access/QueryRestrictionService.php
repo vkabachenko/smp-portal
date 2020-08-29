@@ -34,6 +34,9 @@ class QueryRestrictionService
 
     public function getMasterRestrictions()
     {
+        /**
+         * @var $workshop Workshop
+         */
         $workshop = Workshop::find()->joinWith('masters', false)->where(['master.user_id' => $this->user->id])->one();
 
         if (is_null($workshop)) {
@@ -42,13 +45,7 @@ class QueryRestrictionService
 
         $restrictionWorkshop = ['bid.workshop_id' => $workshop->id];
 
-        $rules = $workshop->rules;
-
-        if (!isset($rules['paidBid'])) {
-            return $restrictionWorkshop;
-        }
-
-        if ($rules['paidBid']) {
+        if ($workshop->canManagePaidBid()) {
             return $restrictionWorkshop;
         } else {
             return [
@@ -77,7 +74,8 @@ class QueryRestrictionService
                     'and',
                     ['manufacturer_id' => $agency->manufacturer_id],
                     ['bid.workshop_id' => $workshops],
-                    ['or', ['<>', 'status_id', BidStatus::getId(BidStatus::STATUS_FILLED)]]
+                    ['<>', 'status_id', BidStatus::getId(BidStatus::STATUS_FILLED)],
+                    ['or', ['bid.treatment_type' => Bid::TREATMENT_TYPE_WARRANTY], ['bid.treatment_type' => null]]
                 ];
 
     }

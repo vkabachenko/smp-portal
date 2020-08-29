@@ -186,6 +186,8 @@ $this->params['back'] = $returnUrl ?: ['bid/index'];
     <?= GridView::widget([
         'dataProvider' => $spareProvider,
         'summary' => '',
+        'rowOptions'=>function (\app\models\Spare $spare)
+        {if ($spare->is_paid) {return ['class'=>'paid-spare'];} },
         'columns' => [
             'name',
             'quantity',

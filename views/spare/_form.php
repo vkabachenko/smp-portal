@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\jui\DatePicker;
+use app\models\Bid;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Spare */
@@ -16,6 +17,11 @@ use yii\jui\DatePicker;
         'id' => 'spare-form',
         'action' => isset($action) ? $action : ''
     ]); ?>
+
+    <?php if ((is_null($model->bid->treatment_type) || $model->bid->treatment_type == Bid::TREATMENT_TYPE_WARRANTY)
+    && (\Yii::$app->user->identity->role == 'admin' || (\Yii::$app->user->identity->role == 'master' && $model->bid->workshop->canManagePaidBid()))): ?>
+        <?= $form->field($model, 'is_paid')->checkbox() ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'vendor_code')->textInput(['maxlength' => true]) ?>
 

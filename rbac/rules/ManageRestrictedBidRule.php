@@ -15,6 +15,9 @@ class ManageRestrictedBidRule extends Rule
 
     public function execute($user, $item, $params)
     {
+        /**
+         * @var $workshop Workshop
+         */
         $workshop = Workshop::find()->joinWith('masters', false)->where(['master.user_id' => $user])->one();
 
         if (is_null($workshop)) {
@@ -30,13 +33,7 @@ class ManageRestrictedBidRule extends Rule
             return false;
         }
 
-        $rules = $workshop->rules;
-
-        if (!isset($rules['paidBid'])) {
-            return true;
-        }
-
-        if ($rules['paidBid']) {
+        if ($workshop->canManagePaidBid()) {
            return true;
         } else {
             if (!$bid->isPaid()) {

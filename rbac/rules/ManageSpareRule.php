@@ -5,6 +5,7 @@ namespace app\rbac\rules;
 
 use app\models\Bid;
 use app\models\BidStatus;
+use app\models\Spare;
 use app\models\User;
 use yii\rbac\Rule;
 
@@ -31,9 +32,26 @@ class ManageSpareRule extends Rule
 
         /* @var $master \app\models\Master */
         if ($master = $userModel->master) {
-            return $master->workshop_id == $bid->workshop_id
+            if ($master->workshop_id == $bid->workshop_id
                 && ($bid->status_id === BidStatus::getId(BidStatus::STATUS_FILLED)
-                    || $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP));
+                    || $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP))) {
+                if (isset($params['id'])) {
+                    if ($bid->treatment_type == Bid::TREATMENT_TYPE_PRESALE) {
+                        return $master->workshop->canManagePaidBid();
+                    } else {
+                        $spare = Spare::findOne($params['id']);
+                        if ($spare->is_paid) {
+                            return $master->workshop->canManagePaidBid();
+                        } else {
+                            return true;
+                        }
+                    }
+                } else {
+                    return true;
+                }
+            } else {
+                return false;
+            }
         }
         return false;
 

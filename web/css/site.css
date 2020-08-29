@@ -309,7 +309,11 @@ a.btn-feedback {
     font-weight: bold;
 }
 
-.bid-comment-agency {
-    background: rgba(235, 90, 70, 0.2)
+.bid-comment-agency, .paid-spare {
+    background: rgba(235, 90, 70, 0.2);
+}
+
+.paid-spare {
+    background: rgba(235, 90, 70, 0.2) !important;
 }
 

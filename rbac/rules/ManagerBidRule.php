@@ -21,6 +21,10 @@ class ManagerBidRule extends Rule
             return false;
         }
 
+        if ($bid->treatment_type == Bid::TREATMENT_TYPE_PRESALE) {
+            return false;
+        }
+
         if ($bid->status_id === BidStatus::getId(BidStatus::STATUS_FILLED)) {
             return false;
         }

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\BidHistory;
+use app\models\search\SpareSearch;
 use Yii;
 use app\models\Spare;
 use yii\data\ActiveDataProvider;
@@ -43,9 +44,9 @@ class SpareController extends Controller
     public function actionIndex($bidId)
     {
         $this->checkAccess('viewSpare', compact('bidId'));
-        $dataProvider = new ActiveDataProvider([
-            'query' => Spare::find()->where(['bid_id' => $bidId])->orderBy('updated_at'),
-        ]);
+
+        $searchModel = new SpareSearch();
+        $dataProvider = $searchModel->search($bidId);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -57,7 +58,7 @@ class SpareController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $this->checkAccess('viewSpare', ['bidId' => $model->bid_id]);
+        $this->checkAccess('viewSpare', ['bidId' => $model->bid_id, 'id' => $id]);
         return $this->render('view', [
             'model' => $model,
         ]);
@@ -104,7 +105,7 @@ class SpareController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $this->checkAccess('manageSpare', ['bidId' => $model->bid_id]);
+        $this->checkAccess('manageSpare', ['bidId' => $model->bid_id, 'id' => $id]);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             BidHistory::createUpdated($model->bid_id, $model, \Yii::$app->user->id, 'Изменены данные о запчасти');
@@ -121,7 +122,7 @@ class SpareController extends Controller
     {
         $model = $this->findModel($id);
         $bidId = $model->bid_id;
-        $this->checkAccess('manageSpare', ['bidId' => $model->bid_id]);
+        $this->checkAccess('manageSpare', ['bidId' => $model->bid_id, 'id' => $id]);
         BidHistory::createUpdated($model->bid_id, $model, \Yii::$app->user->id, 'Удалены данные запчасти', false);
         $model->delete();
 

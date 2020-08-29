@@ -24,6 +24,8 @@ $this->params['back'] = ['bid/view', 'id' => $bidId];
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'rowOptions'=>function (\app\models\Spare $spare)
+            {if ($spare->is_paid) {return ['class'=>'paid-spare'];} },
         'columns' => [
             'name',
             'quantity',
