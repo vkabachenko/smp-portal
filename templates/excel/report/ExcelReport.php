@@ -58,64 +58,64 @@ class ExcelReport extends ExcelReportTemplate
             ),
             '{spare_bid_number}' => $this->getAttributeParams(
                 'bid_number',
-                'spares',
+                'warrantySpares',
                 true
             ),
             '{spare_bid_equipment}' => $this->getAttributeParams(
                 'equipment',
-                'spares',
+                'warrantySpares',
                 true
             ),
             '{spare_bid_serial_number}' => $this->getAttributeParams(
                 'serial_number',
-                'spares',
+                'warrantySpares',
                 true
             ),
             '{spare_purchase_date}' => $this->getAttributeParams(
                 'purchase_date',
-                'spares',
+                'warrantySpares',
                 true,
                 'app\helpers\common\DateHelper::getReadableDate'
             ),
             '{spare_date_completion}' => $this->getAttributeParams(
                 'date_completion',
-                'spares',
+                'warrantySpares',
                 true,
                 'app\helpers\common\DateHelper::getReadableDate'
             ),
             '{spare_name}' => $this->getAttributeParams(
                 'name',
-                'spares',
+                'warrantySpares',
                 false
             ),
             '{spare_vendor_code}' => $this->getAttributeParams(
                 'vendor_code',
-                'spares',
+                'warrantySpares',
                 false
             ),
             '{spare_quantity}' => $this->getAttributeParams(
                 'quantity',
-                'spares',
+                'warrantySpares',
                 false
             ),
             '{spare_price}' => $this->getAttributeParams(
                 'price',
-                'spares',
+                'warrantySpares',
                 false
             ),
             '{spare_total_price}' => $this->getAttributeParams(
                 'total_price',
-                'spares',
+                'warrantySpares',
                 false
             ),
             '{spare_quantity_all}' => array_sum($this->getAttributeParams(
                 'quantity',
-                'spares',
+                'warrantySpares',
                 false
             )),
             '{spare_total_price_all}' => array_sum($this->getAttributeParams(
                 'total_price',
-                'spares',
+                'warrantySpares',
                 false
             )),
             '{job_nom_row}' => array_map(

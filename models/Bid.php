@@ -520,6 +520,14 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getWarrantySpares()
+    {
+        return $this->hasMany(Spare::className(), ['bid_id' => 'id'])->where(['spare.is_paid' => false]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getReplacementParts()
     {
         return $this->hasMany(ReplacementPart::className(), ['bid_id' => 'id']);
