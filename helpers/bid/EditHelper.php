@@ -573,7 +573,7 @@ class EditHelper
             )->textInput([
                 'maxlength' => true,
                 'disabled' => self::isDisabled($model, 'manager')  || (
-                        \Yii::$app->user->can('master') && !empty($model->master_id)
+                        \Yii::$app->user->can('master') && !empty($model->manager)
                     )
             ]);
         }
@@ -584,7 +584,7 @@ class EditHelper
             )->textInput([
                 'maxlength' => true,
                 'disabled' => self::isDisabled($model, 'manager_contact')  || (
-                        \Yii::$app->user->can('master') && !empty($model->master_id)
+                        \Yii::$app->user->can('master') && !empty($model->manager_contact)
                     )
                 ]);
         }
@@ -595,7 +595,7 @@ class EditHelper
             )->textInput([
                 'maxlength' => true,
                 'disabled' => self::isDisabled($model, 'manager_presale')  || (
-                        \Yii::$app->user->can('master') && !empty($model->master_id)
+                        \Yii::$app->user->can('master') && !empty($model->manager_presale)
                     )
                 ]);
         }
