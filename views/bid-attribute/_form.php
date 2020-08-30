@@ -18,7 +18,7 @@ use yii\helpers\Url;
     <input type="hidden" name="is_html_description_revert" value="0">
 
     <?php if ($model->isNewRecord): ?>
-        <?= $form->field($model, 'attribute')->dropDownList(BidAttribute::getEnabledAttributes()) ?>
+        <?= $form->field($model, 'attribute')->dropDownList(BidAttribute::getEnabledAttributes(true)) ?>
     <?php endif ?>
 
     <?php if ($model->is_html_description): ?>
@@ -43,6 +43,8 @@ use yii\helpers\Url;
     <?= $form->field($model, 'is_disabled_agencies')->checkbox() ?>
 
     <?= $form->field($model, 'is_disabled_workshops')->checkbox() ?>
+
+    <?= $form->field($model, 'is_control')->checkbox() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

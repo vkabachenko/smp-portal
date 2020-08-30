@@ -49,6 +49,15 @@ $this->params['back'] = ['admin/index'];
                 }
             ],
             [
+                'attribute' => 'is_control',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    /* @var $model app\models\BidAttribute */
+                    $html = $model->is_control ? Html::tag('span', '', ['class' => 'glyphicon glyphicon-ok']) : '';
+                    return $html;
+                }
+            ],
+            [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update}{delete}',
             ],

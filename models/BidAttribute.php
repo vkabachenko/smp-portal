@@ -15,6 +15,7 @@ use Yii;
  * @property int $is_disabled_agencies
  * @property int $is_disabled_workshops
  * @property int $is_html_description
+ * @property int $is_control
  */
 class BidAttribute extends \yii\db\ActiveRecord
 {
@@ -38,7 +39,7 @@ class BidAttribute extends \yii\db\ActiveRecord
     {
         return [
             [['description'], 'string'],
-            [['is_disabled_agencies', 'is_disabled_workshops', 'is_html_description'], 'integer'],
+            [['is_disabled_agencies', 'is_disabled_workshops', 'is_html_description', 'is_control'], 'integer'],
             [['attribute', 'short_description'], 'string', 'max' => 255],
         ];
     }
@@ -54,14 +55,15 @@ class BidAttribute extends \yii\db\ActiveRecord
             'short_description' => 'Название для пользователя',
             'is_disabled_agencies' => 'Скрыть для представительств',
             'is_disabled_workshops' => 'Скрыть для мастерских',
-            'is_html_description' => 'Добавить картинку'
+            'is_html_description' => 'Добавить картинку',
+            'is_control' => 'Запретить изменения при включенном контроле',
         ];
     }
 
-    public static function getEnabledAttributes()
+    public static function getEnabledAttributes($is_all_attributes = false)
     {
         $attributes = self::find()->active()->select(['attribute'])->column();
-        return self::getAttributeIds($attributes);
+        return self::getAttributeIds($attributes, $is_all_attributes);
     }
 
     public static function getHiddenAttributes($attribute)
@@ -92,11 +94,15 @@ class BidAttribute extends \yii\db\ActiveRecord
 
     /**
      * @param $attributes[] BidAttribute
+     * @param $is_all_attributes boolean
      * @return array
      */
-    private static function getAttributeIds($attributes)
+    private static function getAttributeIds($attributes, $is_all_attributes = false)
     {
-        return array_filter(Bid::EDITABLE_ATTRIBUTES, function($value, $key) use ($attributes) {
+        $bidAttributes = $is_all_attributes
+            ? array_merge(Bid::EDITABLE_ATTRIBUTES, Bid::ALWAYS_VISIBLE_ATTRIBUTES)
+            : Bid::EDITABLE_ATTRIBUTES;
+        return array_filter($bidAttributes, function($value, $key) use ($attributes) {
             return !in_array($key, $attributes);
         }, ARRAY_FILTER_USE_BOTH);
     }
