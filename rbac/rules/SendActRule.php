@@ -19,7 +19,7 @@ class SendActRule extends Rule
         /* @var $bid Bid */
         $bid = Bid::findOne($params['bidId']);
 
-        if (!$bid || !$bid->manufacturer_id) {
+        if (!$bid->isWarranty()) {
             return false;
         }
 
