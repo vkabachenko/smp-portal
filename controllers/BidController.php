@@ -125,6 +125,7 @@ class BidController extends Controller
             $uploadForm->load(\Yii::$app->request->post());
             if ($model->createBid(\Yii::$app->user->id, $uploadForm)) {
                 $model->bid_number = strval($model->id);
+                $model->bid_manufacturer_number = $model->bid_manufacturer_number ?: strval($model->id);
                 $model->setStatus(BidStatus::STATUS_FILLED);
                 return $this->afterChange($model);
             }

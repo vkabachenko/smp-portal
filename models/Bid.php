@@ -112,7 +112,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'master_id' => 'Мастер',
         'comment' => 'Дополнительные отметки',
         'repair_recommendations' => 'Рекомендации по ремонту',
-        '' => 'Продавец',
+        'saler_name' => 'Продавец',
         'diagnostic_manufacturer' => 'Результат диагностики для представительства',
         'defect_manufacturer' => 'Заявленная неисправность для представительства',
         'date_manufacturer' => 'Дата принятия в ремонт для представительства',
@@ -629,6 +629,14 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         return parent::beforeValidate();
     }
 
+    public function beforeSave($insert)
+    {
+        if ($insert && $this->isWarranty()) {
+            $this->fillFieldsForAgency();
+        }
+        return parent::beforeSave($insert);
+    }
+
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
@@ -786,6 +794,24 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
             || $this->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP)
             || ($user->role === 'manager' &&  $this->status_id === BidStatus::getId(BidStatus::STATUS_SENT_AGENCY))
             || ($user->role === 'master' &&  $this->status_id === BidStatus::getId(BidStatus::STATUS_SENT_WORKSHOP));
+    }
+
+    public function fillFieldsForAgency()
+    {
+        $this->copySimilarFields('diagnostic', 'diagnostic_manufacturer');
+        $this->copySimilarFields('defect', 'defect_manufacturer');
+        $this->date_manufacturer = $this->date_manufacturer ?: date('Y-m-d H:i:s');
+    }
+
+    public function copySimilarFields($sample, ...$items)
+    {
+        if (!empty($this->$sample)) {
+            foreach ($items as $item) {
+                if (empty($this->$item)) {
+                    $this->$item = $this->$sample;
+                }
+            }
+        }
     }
 
 
