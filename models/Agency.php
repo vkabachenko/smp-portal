@@ -27,8 +27,6 @@ use yii\web\UploadedFile;
  * @property array $bid_attributes_section3
  * @property array $bid_attributes_section4
  * @property array $bid_attributes_section5
- * @property string $act_template
- * @property string $report_template
  * @property bool $is_independent
  *
  * @property Manufacturer $manufacturer
@@ -36,11 +34,6 @@ use yii\web\UploadedFile;
  */
 class Agency extends \yii\db\ActiveRecord
 {
-    const TEMPLATES = [
-        'act' => 'act_template',
-        'report' => 'report_template'
-    ];
-
     use BidAttributesTrait;
 
     /**
@@ -141,57 +134,6 @@ class Agency extends \yii\db\ActiveRecord
     public function getCommonHiddenAttributeName()
     {
         return 'is_disabled_agencies';
-    }
-
-    public function getTemplateDirectory($type)
-    {
-        $dir = \Yii::getAlias('@app/templates/excel/' . $type . '/' . $this->id . '/');
-
-        if (!is_dir($dir)) {
-            mkdir($dir);
-        }
-
-        return $dir;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTemplatePath($type)
-    {
-        $attribute = self::TEMPLATES[$type];
-        return $this->getTemplateDirectory($type) . $this->$attribute;
-    }
-
-    /**
-     * @param UploadExcelTemplateForm $uploadForm
-     * @return bool
-     */
-    public function saveWithUpload($type, UploadExcelTemplateForm $uploadForm)
-    {
-        $this->deleteActTemplate($type);
-        $uploadForm->file = UploadedFile::getInstance($uploadForm, 'file');
-        $attribute = self::TEMPLATES[$type];
-        $this->$attribute = $uploadForm->file ? $uploadForm->file->name : null;
-        if ($this->save()) {
-            if ($uploadForm->file) {
-                $uploadForm->file->saveAs($this->getTemplatePath($type));
-            }
-            return true;
-        }
-        return false;
-    }
-
-    private function deleteActTemplate($type)
-    {
-        if (is_file($this->getTemplatePath($type))) {
-            @unlink($this->getTemplatePath($type));
-        }
-    }
-
-    public function isActTemplate()
-    {
-        return !is_null($this->act_template);
     }
 
 }

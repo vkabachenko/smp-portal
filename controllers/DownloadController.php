@@ -7,6 +7,7 @@ namespace app\controllers;
 use app\models\Agency;
 use app\models\BidImage;
 use app\models\Manufacturer;
+use app\models\TemplateModel;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 
@@ -35,12 +36,11 @@ class DownloadController extends Controller
         return \Yii::$app->response->sendFile($path, $filename);
     }
 
-    public function actionAgencyTemplate($agencyId, $type)
+    public function actionAgencyTemplate($templateId)
     {
         /* @todo access restrict */
-        $agency = Agency::findOne($agencyId);
-        $attribute = Agency::TEMPLATES[$type];
-        return \Yii::$app->response->sendFile($agency->getTemplatePath($type), $agency->$attribute);
+        $template = TemplateModel::findOne($templateId);
+        return \Yii::$app->response->sendFile($template->getTemplatePath());
     }
 
     public function actionBidImage($id)

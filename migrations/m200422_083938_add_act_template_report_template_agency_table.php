@@ -21,7 +21,7 @@ class m200422_083938_add_act_template_report_template_agency_table extends Migra
      */
     public function safeDown()
     {
-        $this->dropColumn('agency', 'act_template');
-        $this->dropColumn('agency', 'report_template');
+        $this->addColumn('agency', 'act_template', 'string');
+        $this->addColumn('agency', 'report_template', 'string');
     }
 }
