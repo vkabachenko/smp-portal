@@ -6,6 +6,7 @@ use app\models\BidJob;
 use app\services\job\JobsCatalogService;
 use app\models\JobsCatalog;
 use app\models\Spare;
+use app\models\TemplateModel;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
@@ -43,7 +44,7 @@ $this->params['back'] = $returnUrl ?: ['bid/index'];
 
         <?php if (\Yii::$app->user->can('viewBid', ['bidId' => $model->id])): ?>
             <div class="col-md-2 col-sm-3  col-xs-6">
-                <?= Html::a('Скачать акт и фото', ['download', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Скачать акты и фото', ['download', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             </div>
         <?php endif; ?>
 
@@ -61,7 +62,34 @@ $this->params['back'] = $returnUrl ?: ['bid/index'];
 
         <?php if (\Yii::$app->user->can('sendAct', ['bidId' => $model->id])): ?>
             <div class="col-md-2 col-sm-3  col-xs-6 bid-view-send">
-                <?= Html::a('Отправить', ['send-act/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Отправить
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li>
+                            <?= Html::a('Акт диагностики и фото',
+                                ['send-act/index', 'bidId' => $model->id, 'subType' => TemplateModel::SUB_TYPE_ACT_DIAGNOSTIC],
+                                ['class' => 'btn btn-default'])
+                            ?>
+                        </li>
+                        <?php if (\Yii::$app->user->can('manager')): ?>
+                            <li>
+                                <?= Html::a('Акт списания и фото',
+                                    ['send-act/index', 'bidId' => $model->id, 'subType' => TemplateModel::SUB_TYPE_ACT_WRITE_OFF],
+                                    ['class' => 'btn btn-default'])
+                                ?>
+                            </li>
+                            <li>
+                                <?= Html::a('Акт не гарантии и фото',
+                                    ['send-act/index', 'bidId' => $model->id, 'subType' => TemplateModel::SUB_TYPE_ACT_NO_WARRANTY],
+                                    ['class' => 'btn btn-default'])
+                                ?>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
             </div>
         <?php endif; ?>
 

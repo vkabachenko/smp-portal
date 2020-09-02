@@ -14,6 +14,13 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
 
 <div>
 
+    <?php if (!$model->act->isGenerated()): ?>
+    <div style="color: red; font-weight: bold">
+        Акт не сгенерирован! Проверьте наличие шаблона акта
+    </div>
+
+    <?php endif; ?>
+
     <?php $form = ActiveForm::begin(); ?>
 
         <div class="form-group hidden">

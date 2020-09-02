@@ -31,13 +31,13 @@ class SendActController extends Controller
         ];
     }
 
-    public function actionIndex($bidId, $forced = false)
+    public function actionIndex($bidId, $subType, $forced = false)
     {
         if (!$forced) {
             $this->checkAccess('sendAct', ['bidId' => $bidId]);
         }
 
-        $model = new SendActForm(['bidId' => $bidId, 'user' => \Yii::$app->user]);
+        $model = new SendActForm(['bidId' => $bidId, 'subType' => $subType, 'user' => \Yii::$app->user]);
         $uploadForm = new UploadExcelTemplateForm();
 
         if (!\Yii::$app->request->isPost) {

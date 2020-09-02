@@ -10,6 +10,7 @@ use app\models\BidImage;
 use app\models\Manager;
 use app\models\Master;
 use app\models\TemplateModel;
+use app\templates\email\EmailTemplate;
 use app\templates\excel\act\ExcelAct;
 use himiklab\thumbnail\EasyThumbnailImage;
 use yii\base\Model;
@@ -24,9 +25,16 @@ class SendActForm extends Model
     public $images = [];
     public $sent = [];
     public $email;
+    public $subType;
 
     /* @var ExcelAct */
     public $act;
+
+    /* @var TemplateModel */
+    public $template;
+
+    /* @var EmailTemplate */
+    public $emailTemplate;
 
     /**
      * @inheritdoc
@@ -40,8 +48,15 @@ class SendActForm extends Model
             $this->images[$model->id] = EasyThumbnailImage::thumbnailImg($model->getPath(), 50, 50);
             $this->sent[] = $model->sent;
         }
-        $this->act = new ExcelAct(['id' => $this->bidId]);
+        $this->act = new ExcelAct($this->bidId, $this->subType);
         $this->email = $this->getStoredEmail();
+
+        $bid = Bid::findOne($this->bidId);
+        $this->template = TemplateModel::find()
+            ->where(['agency_id' => $bid->getAgency()->id, 'type' => TemplateModel::TYPE_ACT, 'sub_type' => $this->subType])
+            ->one();
+
+        $this->emailTemplate = new EmailTemplate($this->bidId);
     }
 
     /**
@@ -140,15 +155,10 @@ class SendActForm extends Model
 
     private function getMailContent()
     {
-        $model = TemplateModel::findByName(TemplateModel::EMAIL_ACT);
-        if (is_null($model)) {
-            return '';
-        } else {
-            $fields = $model->fields;
-            $content = isset($fields['content']) ? $fields['content'] : '';
-            $signature = isset($fields['signature']) ? $fields['signature'] : '';
-            return $content . "\n" . "\n" . '-----------------' . "\n" . $signature . "\n";
-        }
+        $body = $this->emailTemplate->getText(strval($this->template->email_body));
+        $signature = $this->emailTemplate->getText(strval($this->template->email_signature));
+
+        return sprintf("%s\n\n-------\n%s", $body, $signature);
     }
 
     private function getEmailsList(...$emails)
@@ -158,13 +168,7 @@ class SendActForm extends Model
 
     private function getSubject()
     {
-        $bid = Bid::findOne($this->bidId);
-        $subject = 'Акт технического состояния. ';
-        $bidNumber = $bid->bid_number ? 'Заявка № ' . $bid->bid_number . '. ' : ' ';
-        $workshopName = 'Мастерская ' . $bid->workshop->name . '. ';
-        $agencyName = 'Представительство ' . $bid->getAgency()->name;
-
-        return $subject . $bidNumber . $workshopName . $agencyName;
+        return $this->emailTemplate->getText(strval($this->template->email_subject));
     }
 
 }

@@ -4,6 +4,7 @@ namespace app\templates\excel\report;
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
 use app\models\Bid;
 use app\models\Report;
+use app\models\TemplateModel;
 use app\templates\excel\ExcelReportTemplate;
 
 
@@ -32,9 +33,12 @@ class ExcelReport extends ExcelReportTemplate
 
     public function generate()
     {
-        $agency = $this->report->agency;
-        if (!is_null($agency->report_template)) {
-            PhpExcelTemplator::saveToFile($agency->getTemplatePath('report'), $this->getPath(), $this->getParams());
+        /* @var $template \app\models\TemplateModel */
+        $template = TemplateModel::find()
+            ->where(['agency_id' => $this->report->agency_id, 'type' => TemplateModel::TYPE_REPORT])
+            ->one();
+        if (!is_null($template) && $template->file_name) {
+            PhpExcelTemplator::saveToFile($template->getTemplatePath(), $this->getPath(), $this->getParams());
         }
     }
 

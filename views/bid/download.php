@@ -3,10 +3,12 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model \app\models\form\SendActForm */
+/* @var $modelActDiagnostic \app\models\form\SendActForm */
+/* @var $modelActWriteoff \app\models\form\SendActForm */
+/* @var $modelActNoWarranty \app\models\form\SendActForm */
 
-$this->title = 'Скачать акт и фото';
-$this->params['back'] = ['view', 'id' => $model->bidId];
+$this->title = 'Скачать акты и фото';
+$this->params['back'] = ['view', 'id' => $modelActDiagnostic->bidId];
 
 ?>
 
@@ -14,14 +16,38 @@ $this->params['back'] = ['view', 'id' => $model->bidId];
     <h2><?= Html::encode($this->title) ?></h2>
 
     <div class="form-group">
-        <?php if ($model->act->isGenerated()): ?>
-            <?= Html::a('Акт технического состояния', [
+        <?php if ($modelActDiagnostic->act->isGenerated()): ?>
+            <?= Html::a('Акт диагностики', [
                 'download/default',
-                'filename' => $model->act->getFilename(),
-                'path' => $model->act->getPath()
+                'filename' => $modelActDiagnostic->act->getFilename(),
+                'path' => $modelActDiagnostic->act->getPath()
             ]) ?>
         <?php else: ?>
-            <h4>Нет шаблона акта технического состояния</h4>
+            <h4>Нет шаблона акта диагностики</h4>
+        <?php endif; ?>
+    </div>
+
+    <div class="form-group">
+        <?php if ($modelActNoWarranty->act->isGenerated()): ?>
+            <?= Html::a('Акт не гарантии', [
+                'download/default',
+                'filename' => $modelActNoWarranty->act->getFilename(),
+                'path' => $modelActNoWarranty->act->getPath()
+            ]) ?>
+        <?php else: ?>
+            <h4>Нет шаблона акта не гарантии</h4>
+        <?php endif; ?>
+    </div>
+
+    <div class="form-group">
+        <?php if ($modelActWriteoff->act->isGenerated()): ?>
+            <?= Html::a('Акт списания', [
+                'download/default',
+                'filename' => $modelActWriteoff->act->getFilename(),
+                'path' => $modelActWriteoff->act->getPath()
+            ]) ?>
+        <?php else: ?>
+            <h4>Нет шаблона акта списания</h4>
         <?php endif; ?>
     </div>
 

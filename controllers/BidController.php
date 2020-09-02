@@ -15,6 +15,7 @@ use app\models\form\SendActForm;
 use app\models\ReplacementPart;
 use app\models\search\SpareSearch;
 use app\models\Spare;
+use app\models\TemplateModel;
 use app\models\User;
 use app\services\access\QueryRestrictionService;
 use app\helpers\bid\TitleHelper;
@@ -242,11 +243,15 @@ class BidController extends Controller
     {
         $this->checkAccess('viewBid', ['bidId' => $id]);
 
-        $model = new SendActForm(['bidId' => $id, 'user' => \Yii::$app->user]);
-        $model->act->generate();
+        $modelActDiagnostic = new SendActForm(['bidId' => $id, 'user' => \Yii::$app->user, 'subType' => TemplateModel::SUB_TYPE_ACT_DIAGNOSTIC]);
+        $modelActDiagnostic->act->generate();
+        $modelActWriteoff = new SendActForm(['bidId' => $id, 'user' => \Yii::$app->user, 'subType' => TemplateModel::SUB_TYPE_ACT_WRITE_OFF]);
+        $modelActWriteoff->act->generate();
+        $modelActNoWarranty = new SendActForm(['bidId' => $id, 'user' => \Yii::$app->user, 'subType' => TemplateModel::SUB_TYPE_ACT_NO_WARRANTY]);
+        $modelActNoWarranty->act->generate();
 
 
-        return $this->render('download', compact('model'));
+        return $this->render('download', compact('modelActDiagnostic', 'modelActWriteoff', 'modelActNoWarranty'));
     }
 
     public function actionBrand()

@@ -9,10 +9,9 @@ use app\helpers\common\DateHelper;
 
 class ExcelAct extends ExcelActTemplate
 {
-
     public function getFilename()
     {
-        return 'act_' . $this->bid->id . '.xlsx';
+        return $this->template ? $this->template->sub_type . '-' . $this->bid->id . '.xlsx' : '';
     }
 
     public function getDirectory()
@@ -22,12 +21,12 @@ class ExcelAct extends ExcelActTemplate
 
     public function generate()
     {
-        if (!($agency = $this->bid->getAgency())) {
+        if (is_null($this->template) || empty($this->template->file_name)) {
             return;
         }
-        if (!is_null($agency->act_template)) {
-            PhpExcelTemplator::saveToFile($agency->getTemplatePath('act'), $this->getPath(), $this->getParams());
-        }
+
+        PhpExcelTemplator::saveToFile($this->template->getTemplatePath(), $this->getPath(), $this->getParams());
+
     }
 
     protected function getParams()
