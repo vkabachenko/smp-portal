@@ -87,11 +87,21 @@ class EditHelper
                 'disabled' => self::isDisabled($model, 'manufacturer_id')
             ]);
 
-        $attributes['equipment'] = $form->field($model, 'equipment')
-            ->textInput([
-                'maxlength' => true,
-                'disabled' => self::isDisabled($model, 'equipment')
-            ]);
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'equipment'])) {
+            $attributes['equipment'] = $form->field($model, 'equipment')
+                ->textInput([
+                    'maxlength' => true,
+                    'disabled' => self::isDisabled($model, 'equipment')
+                ]);
+        }
+
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'equipment_manufacturer'])) {
+            $attributes['equipment_manufacturer'] = $form->field($model, 'equipment_manufacturer')
+                ->textInput([
+                    'maxlength' => true,
+                    'disabled' => self::isDisabled($model, 'equipment_manufacturer')
+                ]);
+        }
 
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'brand_model_name'])) {
             $attributes['brand_model_id'] = $form->field($model, 'brand_model_id')->hiddenInput([

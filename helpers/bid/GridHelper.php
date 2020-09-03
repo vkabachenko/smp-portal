@@ -62,6 +62,7 @@ class GridHelper
     {
         $attributeMethods = [
             'equipment' => 'getEquipmentColumn',
+            'equipment_manufacturer' => 'getEquipmentManufacturerColumn',
             'bid_1C_number'  => 'getBid1CNumberColumn',
             'bid_number'  => 'getBidNumberColumn',
             'client_id'  => 'getClientColumn',
@@ -119,13 +120,31 @@ class GridHelper
             'attribute' => 'equipment',
             'format' => 'raw',
             'value' => function (Bid $model) {
-                $a = Html::a($model->equipment, ['view', 'id' => $model->id]);
+                $name = $model->equipment ?: 'Оборудование не задано';
+                $a = Html::a($name, ['view', 'id' => $model->id]);
                 $html = Html::tag('div', $a);
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-equipment'],
             'headerOptions' => ['class' => 'grid-equipment'],
             'contentOptions' => ['class' => 'grid-equipment']
+        ];
+    }
+
+    private function getEquipmentManufacturerColumn()
+    {
+        return [
+            'attribute' => 'equipment_manufacturer',
+            'format' => 'raw',
+            'value' => function (Bid $model) {
+                $name = $model->equipment_manufacturer ?: 'Оборудование не задано';
+                $a = Html::a($name, ['view', 'id' => $model->id]);
+                $html = Html::tag('div', $a);
+                return $html;
+            },
+            'filterOptions' => ['class' => 'grid-equipment_manufacturer'],
+            'headerOptions' => ['class' => 'grid-equipment_manufacturer'],
+            'contentOptions' => ['class' => 'grid-equipment_manufacturer']
         ];
     }
 

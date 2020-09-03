@@ -23,6 +23,7 @@ class ViewHelper
         $attributes['brand_name'] = $bid->brand_name;
         $attributes['manufacturer_id'] = $bid->manufacturer_id ? $bid->manufacturer->name : '';
         $attributes['equipment'] = $bid->equipment;
+        $attributes['equipment_manufacturer'] = $bid->equipment_manufacturer;
         $attributes['brand_model_name'] = $bid->brand_model_name;
         $attributes['serial_number'] = $bid->serial_number;
         $attributes['vendor_code'] = $bid->vendor_code;

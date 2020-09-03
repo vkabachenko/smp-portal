@@ -73,6 +73,7 @@ use yii\db\ActiveRecord;
  * @property bool $is_report
  * @property bool $is_warranty
  * @property string $warranty_comment
+ * @property string $equipment_manufacturer
  *
  *
  * @property Condition $condition
@@ -136,6 +137,8 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'is_report' => 'Отчет',
         'is_warranty' => 'Гарантийный ремонт',
         'warranty_comment' => 'Комментарий гарантии',
+        'equipment' => 'Оборудование',
+        'equipment_manufacturer' => 'Оборудование для представительства'
     ];
 
     const ALWAYS_VISIBLE_ATTRIBUTES = [
@@ -148,7 +151,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'manufacturer_id' => 'Производитель',
         'brand_name' => 'Бренд',
         'client_id' => 'Клиент',
-        'equipment' => 'Оборудование',
         'decision_workshop_status_id' => 'Решение мастерской',
         'decision_agency_status_id' => 'Решение представительства',
         'status_id' => 'Статус',
@@ -218,6 +220,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
 
     const GRID_ATTRIBUTES = [
         'equipment' => ['desktop' => true, 'tablet' => true, 'phone' => true],
+        'equipment_manufacturer' => ['desktop' => false, 'tablet' => false, 'phone' => false],
         'bid_1C_number'  => ['desktop' => true, 'tablet' => true, 'phone' => true],
         'bid_number'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
         'client_id'  => ['desktop' => true, 'tablet' => true, 'phone' => true],
@@ -339,6 +342,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 'bid_1C_number',
                 'bid_manufacturer_number',
                 'equipment',
+                'equipment_manufacturer',
                 'defect',
                 'diagnostic',
                 'manager',
@@ -618,10 +622,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         if (empty($this->brand_id)) {
             $this->manufacturer_id = null;
         }
-        if (empty($this->equipment)) {
-            $this->equipment = 'Оборудование не задано';
-        }
-
         $this->date_completion = DateHelper::convert($this->date_completion);
         $this->purchase_date = DateHelper::convert($this->purchase_date);
         $this->date_manufacturer = DateHelper::convert($this->date_manufacturer);
@@ -800,6 +800,13 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     {
         $this->copySimilarFields('diagnostic', 'diagnostic_manufacturer');
         $this->copySimilarFields('defect', 'defect_manufacturer');
+
+        if (!empty($this->equipment) && empty($this->equipment_manufacturer)) {
+            $this->copySimilarFields('equipment', 'equipment_manufacturer');
+        } elseif (empty($this->equipment) && !empty($this->equipment_manufacturer)) {
+            $this->copySimilarFields('equipment_manufacturer', 'equipment');
+        }
+
         $this->date_manufacturer = $this->date_manufacturer ?: date('Y-m-d H:i:s');
     }
 
