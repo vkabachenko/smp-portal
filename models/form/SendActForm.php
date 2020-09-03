@@ -10,6 +10,7 @@ use app\models\BidImage;
 use app\models\Manager;
 use app\models\Master;
 use app\models\TemplateModel;
+use app\templates\email\EmailActTemplate;
 use app\templates\email\EmailTemplate;
 use app\templates\excel\act\ExcelAct;
 use himiklab\thumbnail\EasyThumbnailImage;
@@ -30,9 +31,6 @@ class SendActForm extends Model
     /* @var ExcelAct */
     public $act;
 
-    /* @var TemplateModel */
-    public $template;
-
     /* @var EmailTemplate */
     public $emailTemplate;
 
@@ -52,11 +50,11 @@ class SendActForm extends Model
         $this->email = $this->getStoredEmail();
 
         $bid = Bid::findOne($this->bidId);
-        $this->template = TemplateModel::find()
+        $template = TemplateModel::find()
             ->where(['agency_id' => $bid->getAgency()->id, 'type' => TemplateModel::TYPE_ACT, 'sub_type' => $this->subType])
             ->one();
 
-        $this->emailTemplate = new EmailTemplate($this->bidId);
+        $this->emailTemplate = new EmailActTemplate($this->bidId, $template);
     }
 
     /**
@@ -95,9 +93,8 @@ class SendActForm extends Model
 
         $message->setFrom(\Yii::$app->params['adminEmail'])
             ->setTo($to)
-            ->setSubject($this->getSubject())
-            ->setTextBody($this->getMailContent());
-
+            ->setSubject($this->emailTemplate->getSubject())
+            ->setTextBody($this->emailTemplate->getMailContent());
 
         if (file_exists($this->act->getPath())) {
             $message->attach($this->act->getPath());
@@ -153,22 +150,11 @@ class SendActForm extends Model
         }
     }
 
-    private function getMailContent()
-    {
-        $body = $this->emailTemplate->getText(strval($this->template->email_body));
-        $signature = $this->emailTemplate->getText(strval($this->template->email_signature));
-
-        return sprintf("%s\n\n-------\n%s", $body, $signature);
-    }
-
     private function getEmailsList(...$emails)
     {
         return MailHelper::getEmailsList(...$emails);
     }
 
-    private function getSubject()
-    {
-        return $this->emailTemplate->getText(strval($this->template->email_subject));
-    }
+
 
 }

@@ -7,6 +7,9 @@ use app\helpers\common\MailHelper;
 use app\models\Bid;
 use app\models\BidImage;
 use app\models\Report;
+use app\models\TemplateModel;
+use app\templates\email\EmailReportTemplate;
+use app\templates\email\EmailTemplate;
 use app\templates\excel\act\ExcelAct;
 use yii\base\Model;
 use yii\swiftmailer\Message;
@@ -20,10 +23,19 @@ class SendReportForm extends Model
 
     public $isActsSend = false;
 
+    /* @var EmailTemplate */
+    public $emailTemplate;
+
     public function __construct($id, $config = [])
     {
         parent::__construct($config);
         $this->report = Report::findOne($id);
+
+        $template = TemplateModel::find()
+            ->where(['agency_id' => $this->report->agency_id, 'type' => TemplateModel::TYPE_REPORT])
+            ->one();
+
+        $this->emailTemplate = new EmailReportTemplate($this->report, $template);
     }
 
     /**
@@ -57,8 +69,8 @@ class SendReportForm extends Model
 
         $message->setFrom(\Yii::$app->params['adminEmail'])
             ->setTo($to)
-            ->setSubject($this->getSubject())
-            ->setTextBody($this->getMailContent());
+            ->setSubject($this->emailTemplate->getSubject())
+            ->setTextBody($this->emailTemplate->getMailContent());
 
         $message->attach($this->report->report_filename);
 
@@ -80,21 +92,6 @@ class SendReportForm extends Model
         return $result;
     }
 
-    private function getSubject()
-    {
-        return sprintf('Отчет о выполненных работах № %s от %s. Мастерская %s, представительство %s',
-        $this->report->report_nom,
-        DateHelper::getReadableDate($this->report->report_date),
-        $this->report->workshop->name,
-        $this->report->agency->name
-        );
-    }
-
-    private function getMailContent()
-    {
-        return 'Отчет находится в приложенном файле';
-    }
-
     private function attachPhotos(Message $message)
     {
         $images = BidImage::find()
@@ -114,10 +111,28 @@ class SendReportForm extends Model
             ->where(['report_id' => $this->report->id])
             ->all();
         foreach ($bids as $bid) {
-            $act = new ExcelAct(['id' => $bid->id]);
-            if (file_exists($act->getPath())) {
-                $message->attach($act->getPath());
-            }
+            $this->attachAct($bid->id, $message);
+        }
+    }
+
+    private function attachAct($bidId, Message $message)
+    {
+        $act = new ExcelAct($bidId, TemplateModel::SUB_TYPE_ACT_DIAGNOSTIC);
+        if ($act->isGenerated()) {
+            $message->attach($act->getPath());
+            return;
+        }
+
+        $act = new ExcelAct($bidId, TemplateModel::SUB_TYPE_ACT_WRITE_OFF);
+        if ($act->isGenerated()) {
+            $message->attach($act->getPath());
+            return;
+        }
+
+        $act = new ExcelAct($bidId, TemplateModel::SUB_TYPE_ACT_NO_WARRANTY);
+        if ($act->isGenerated()) {
+            $message->attach($act->getPath());
+            return;
         }
     }
 

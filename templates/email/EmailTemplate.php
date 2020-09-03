@@ -5,33 +5,46 @@ namespace app\templates\email;
 
 
 use app\models\Bid;
+use app\models\TemplateModel;
 
 class EmailTemplate
 {
-    /* @var \app\models\Bid */
-    private $bid;
+    /**
+     * @var TemplateModel
+     */
+    private $template;
 
-    public function __construct($bidId)
+    public function __construct(TemplateModel $template)
     {
-        $this->bid = Bid::findOne($bidId);
+        $this->template = $template;
+    }
+
+    public function getSubject()
+    {
+        return  $this->template ? $this->getText(strval($this->template->email_subject)) : '';
+    }
+
+    public function getMailContent()
+    {
+        if (!$this->template) {
+            return '';
+        }
+
+        $body = $this->getText(strval($this->template->email_body));
+        $signature = $this->getText(strval($this->template->email_signature));
+
+        return sprintf("%s\n\n-------\n%s", $body, $signature);
     }
 
 
-    public function getText($text)
+    protected function getText($text)
     {
         return str_replace(array_keys($this->getParams()), array_values($this->getParams()), $text);
     }
 
-
     protected function getParams()
     {
-        return [
-            '{bid_number}' => $this->bid->bid_number,
-            '{bid_1C_number}' => $this->bid->bid_1C_number,
-            '{bid_manufacturer_number}' => $this->bid->bid_manufacturer_number,
-            '{brand_name}' => $this->bid->brand_name,
-            '{workshop_name}' => $this->bid->workshop->name,
-        ];
+        return [];
     }
 
 }
