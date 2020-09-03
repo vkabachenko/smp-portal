@@ -18,6 +18,10 @@ $this->params['back'] = \Yii::$app->user->can('admin')
 
     <?php $form = ActiveForm::begin(); ?>
 
+        <?php if (\Yii::$app->user->can('admin')): ?>
+            <?= $form->field($master, 'uuid')->textInput(['maxlength' => true]) ?>
+        <?php endif; ?>
+
         <?= $form->field($user, 'name')->textInput(['maxlength' => true]) ?>
         <?= $form->field($master, 'phone')->textInput(['maxlength' => true]) ?>
         <?php if (\Yii::$app->user->can('admin')): ?>

@@ -216,7 +216,8 @@ class ReadService extends BaseService
         $model->vendor_code = $this->getAttribute($model, $attributes, 'vendor_code', [$this, 'same']);
         $model->bid_manufacturer_number = $this->getAttribute($model, $attributes, 'bid_manufacturer_number', [$this, 'same']);
         $model->warranty_status_id = $this->getAttribute($model, $attributes, 'warranty_status_id', '\app\models\WarrantyStatus::findIdByName');
-        $model->master_id = $this->getAttribute($model, $attributes, 'master_id', '\app\models\Master::findIdByName');
+        $model->master_id = $this->getAttribute($model, $attributes, 'master_uuid', '\app\models\Master::findIdByUuid');
+        $model->master_id = $model->master_id ?: $this->getAttribute($model, $attributes, 'master_name', '\app\models\Master::findIdByName');
         $model->user_id = $this->getAttribute($model, $attributes, 'user_id', '\app\models\User::findIdByName');
         $model->saler_name = $this->getAttribute($model, $attributes, 'saler_name', [$this, 'same']);
         $model->repair_recommendations = $this->getAttribute($model, $attributes, 'repair_recommendations', [$this, 'same']);
@@ -610,9 +611,9 @@ class ReadService extends BaseService
         $key1C = isset($this->workshop->bid_attributes_1c[$key]) ? $this->workshop->bid_attributes_1c[$key] : null;
 
         if (is_null($key1C)) {
-            return  $bid->$key;
+            return  isset($bid->$key) ? $bid->$key : null;
         } else {
-            return isset($attributes[$key1C]) ? $f($attributes[$key1C]) : $bid->$key;
+            return isset($attributes[$key1C]) ? $f($attributes[$key1C]) : (isset($bid->$key) ? $bid->$key : null);
         }
     }
 

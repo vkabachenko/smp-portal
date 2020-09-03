@@ -14,6 +14,7 @@ use yii\helpers\ArrayHelper;
  * @property bool $main
  * @property string $phone
  * @property string $invite_token
+ * @property string $uuid
  *
  * @property Bid[] $bids
  * @property User $user
@@ -42,7 +43,8 @@ class Master extends \yii\db\ActiveRecord
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['workshop_id'], 'exist', 'skipOnError' => true, 'targetClass' => Workshop::className(), 'targetAttribute' => ['workshop_id' => 'id']],
             ['main', 'boolean'],
-            [['phone', 'invite_token'], 'string']
+            [['phone', 'invite_token', 'uuid'], 'string'],
+            [['uuid'], 'unique']
         ];
     }
 
@@ -57,7 +59,8 @@ class Master extends \yii\db\ActiveRecord
             'workshop_id' => 'Мастерская',
             'main' => 'Основной',
             'phone' => 'Телефон',
-            'invite_token' > 'Invite_token'
+            'invite_token' > 'Invite_token',
+            'uuid' => 'Uuid'
         ];
     }
 
@@ -128,6 +131,13 @@ class Master extends \yii\db\ActiveRecord
         $model = static::findByName($name);
         return $model ? $model->id : null;
     }
+
+    public static function findIdByUuid($uuid)
+    {
+        $model = self::find()->where(['uuid' => $uuid])->one();
+        return $model ? $model->id : null;
+    }
+
 
     public function saveMasterUser(User $user)
     {
