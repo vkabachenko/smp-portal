@@ -34,6 +34,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
@@ -79,6 +80,7 @@ class BidController extends Controller
         }, ARRAY_FILTER_USE_KEY);
 
         $gridHelper = new GridHelper($gridAttributes, $searchModel);
+        Url::remember('','bid/index');
 
         return $this->render('index', [
             'searchModel' => $searchModel,

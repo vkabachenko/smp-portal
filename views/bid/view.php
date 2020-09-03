@@ -7,6 +7,7 @@ use app\services\job\JobsCatalogService;
 use app\models\JobsCatalog;
 use app\models\Spare;
 use app\models\TemplateModel;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
@@ -24,11 +25,10 @@ use app\models\TemplateModel;
 /* @var $returnUrl string|null */
 
 $this->title = 'Просмотр заявки';
-$this->params['back'] = $returnUrl ?: ['bid/index'];
+$this->params['back'] = $returnUrl ?: Url::previous('bid/index');
 
 ?>
 <div>
-
     <h3><?= sprintf('%s (%s %s)', Html::encode($this->title), $model->bid_number, $model->bid_1C_number) ?></h3>
 
     <div class="row" style="margin-bottom: 10px;">

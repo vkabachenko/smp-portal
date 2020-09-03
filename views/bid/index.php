@@ -56,7 +56,6 @@ $columns = $gridHelper->getColumns();
                     ['class' => 'btn btn-primary',]
                 )
                 ?>
-                <?= $this->render('_search-text', ['model' => $searchModel]); ?>
             </div>
         </div>
 
