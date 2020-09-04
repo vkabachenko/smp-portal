@@ -41,7 +41,7 @@ class ExcelAct extends ExcelActTemplate
             '{bid_1c_number}' => $this->bid->bid_1C_number,
             '{bid_agency_number}' => $this->bid->bid_manufacturer_number,
             '{created_at}' => DateHelper::getReadableDate($this->bid->created_at),
-            '{equipment}' => $this->bid->equipment,
+            '{equipment}' => $this->bid->equipment_manufacturer,
             '{brand_model_name}' => $this->bid->brand_model_name,
             '{serial_number}' => $this->bid->serial_number,
             '{purchase_date}' => DateHelper::getReadableDate($this->bid->purchase_date),
