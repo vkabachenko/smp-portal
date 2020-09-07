@@ -94,6 +94,8 @@ class BidController extends Controller
         $gridAttributes = \Yii::$app->user->identity->grid_attributes ?
             Json::decode(\Yii::$app->user->identity->grid_attributes)
             : Bid::GRID_ATTRIBUTES;
+        $additionalAttributes = array_diff_key(Bid::GRID_ATTRIBUTES, $gridAttributes);
+        $gridAttributes += $additionalAttributes;
         $gridAttributes = array_filter($gridAttributes, function($attribute) {
             return \Yii::$app->user->can('adminBidAttribute', ['attribute' => $attribute]);
         }, ARRAY_FILTER_USE_KEY);

@@ -9,7 +9,7 @@ use app\models\TemplateModel;
 use kartik\file\FileInput;
 
 $this->title = $template->getHeader();
-$this->params['back'] = ['agency-template/index'];
+$this->params['back'] = ['agency-template/index', 'agencyId' => $template->agency_id];
 ?>
 
 <h2><?= $this->title ?></h2>
