@@ -2,6 +2,7 @@
 
 namespace app\models\search;
 
+use phpDocumentor\Reflection\Types\Parent_;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Bid;
@@ -93,27 +94,12 @@ class BidSearch extends Bid
      */
     public function attributeLabels()
     {
-        return [
+        return array_merge(parent::attributeLabels(),[
             'client_name' => 'Клиент',
             'client_phone' => 'Телефон клиента',
             'client_email' => 'Email клиента',
             'client_type' => 'Тип клиента',
-            'manufacturer_id' => 'Производитель',
-            'brand_name' => 'Бренд',
-            'equipment' => 'Оборудование',
-            'brand_model_name' => 'Модель',
-            'serial_number' => 'Серийный номер',
-            'vendor_code' => 'Артикул',
-            'master_id' => 'Мастер',
-            'treatment_type' => 'Товар на гарантии',
-            'saler_name' => 'Продавец',
-            'warranty_number' => 'Номер гарантийного талона',
-            'bid_number' => 'Номер заявки',
-            'condition_id' => 'Состояние',
-            'repair_status_id' => 'Статус ремонта',
-            'status_id' => 'Статус',
-            'comment' => 'Комментарий'
-        ];
+        ]);
     }
 
     public function beforeValidate()

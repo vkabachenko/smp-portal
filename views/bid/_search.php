@@ -24,6 +24,7 @@ use kartik\date\DatePicker;
         'method' => 'get',
     ]); ?>
 
+<?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'created_at'])): ?>
     <div class="form-group">
         <label class="control-label">Дата создания заявки</label>
         <?= DatePicker::widget([
@@ -35,12 +36,19 @@ use kartik\date\DatePicker;
             'pluginOptions' => ['autoclose' => true, 'format' => 'yyyy-mm-dd']
         ]) ?>
     </div>
+<?php endif; ?>
 
-    <?= $form->field($model, 'manufacturer_id')->dropDownList(Manufacturer::manufacturersAsMap(),['prompt' => 'Выбор']) ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'manufacturer_id'])): ?>
+        <?= $form->field($model, 'manufacturer_id')->dropDownList(Manufacturer::manufacturersAsMap(),['prompt' => 'Выбор']) ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'brand_name') ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'brand_name'])): ?>
+        <?= $form->field($model, 'brand_name') ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'equipment') ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'equipment'])): ?>
+        <?= $form->field($model, 'equipment') ?>
+    <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'brand_model_name'])): ?>
         <?= $form->field($model, 'brand_model_name') ?>
@@ -62,15 +70,13 @@ use kartik\date\DatePicker;
         <?= $form->field($model, 'master_id')->dropDownList(Master::mastersAsMap(\Yii::$app->user->identity),['prompt' => 'Выбор']) ?>
     <?php endif; ?>
 
-    <?= $form->field($model, 'client_type')->dropDownList(\app\models\Client::CLIENT_TYPES, ['prompt' => 'Выбор']) ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_id'])): ?>
+        <?= $form->field($model, 'client_type')->dropDownList(\app\models\Client::CLIENT_TYPES, ['prompt' => 'Выбор']) ?>
+        <?= $form->field($model, 'client_name') ?>
+        <?= $form->field($model, 'client_phone') ?>
+        <?= $form->field($model, 'client_email') ?>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'client_name') ?>
-
-   <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_phone'])): ?>
-       <?= $form->field($model, 'client_phone') ?>
-   <?php endif; ?>
-
-    <?= $form->field($model, 'client_email') ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'treatment_type'])): ?>
         <?= $form->field($model, 'treatment_type')->dropDownList(Bid::TREATMENT_TYPES ,['prompt' => 'Выбор']) ?>
