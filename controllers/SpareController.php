@@ -58,7 +58,7 @@ class SpareController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $this->checkAccess('viewSpare', ['bidId' => $model->bid_id, 'id' => $id]);
+        $this->checkAccess('viewSpare', ['bidId' => $model->bid_id]);
         return $this->render('view', [
             'model' => $model,
         ]);
@@ -105,7 +105,7 @@ class SpareController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $this->checkAccess('manageSpare', ['bidId' => $model->bid_id, 'id' => $id]);
+        $this->checkAccess('manageSpare', ['bidId' => $model->bid_id]);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             BidHistory::createUpdated($model->bid_id, $model, \Yii::$app->user->id, 'Изменены данные о запчасти');
@@ -122,7 +122,7 @@ class SpareController extends Controller
     {
         $model = $this->findModel($id);
         $bidId = $model->bid_id;
-        $this->checkAccess('manageSpare', ['bidId' => $model->bid_id, 'id' => $id]);
+        $this->checkAccess('manageSpare', ['bidId' => $model->bid_id]);
         BidHistory::createUpdated($model->bid_id, $model, \Yii::$app->user->id, 'Удалены данные запчасти', false);
         $model->delete();
 

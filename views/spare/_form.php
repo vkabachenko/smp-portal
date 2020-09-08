@@ -18,11 +18,6 @@ use app\models\Bid;
         'action' => isset($action) ? $action : ''
     ]); ?>
 
-    <?php if ((is_null($model->bid->treatment_type) || $model->bid->treatment_type == Bid::TREATMENT_TYPE_WARRANTY)
-    && (\Yii::$app->user->identity->role == 'admin' || (\Yii::$app->user->identity->role == 'master' && $model->bid->workshop->canManagePaidBid()))): ?>
-        <?= $form->field($model, 'is_paid')->checkbox() ?>
-    <?php endif; ?>
-
     <?= $form->field($model, 'vendor_code')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>

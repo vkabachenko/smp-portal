@@ -32,7 +32,7 @@ class ExcelAct extends ExcelActTemplate
     protected function getParams()
     {
         $jobs = $this->bid->jobs;
-        $spares = $this->bid->warrantySpares;
+        $spares = $this->bid->spares;
 
         return [
             '{contract_nom}' => $this->bid->getAgencyWorkshop() ? $this->bid->getAgencyWorkshop()->contract_nom : '',

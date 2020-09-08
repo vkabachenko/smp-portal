@@ -35,20 +35,7 @@ class ViewSpareRule extends Rule
             if ($master->workshop_id == $bid->workshop_id
                 && ($bid->status_id === BidStatus::getId(BidStatus::STATUS_FILLED)
                     || $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP))) {
-                if (isset($params['id'])) {
-                    if ($bid->treatment_type == Bid::TREATMENT_TYPE_PRESALE) {
-                        return $master->workshop->canManagePaidBid();
-                    } else {
-                        $spare = Spare::findOne($params['id']);
-                        if ($spare->is_paid) {
-                            return $master->workshop->canManagePaidBid();
-                        } else {
-                            return true;
-                        }
-                    }
-                } else {
-                    return true;
-                }
+                return true;
             } else {
                 return false;
             }
@@ -63,12 +50,7 @@ class ViewSpareRule extends Rule
         if ($manager = $userModel->manager) {
            if ($manager->agency_id == $agency->id
                 && $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_AGENCY)) {
-               if (isset($params['id'])) {
-                   $spare = Spare::findOne($params['id']);
-                   return !$spare->is_paid;
-               } else {
-                   return true;
-               }
+               return true;
            } else {
                return false;
            }

@@ -22,7 +22,6 @@ use yii\behaviors\TimestampBehavior;
  * @property string $created_at
  * @property string $updated_at
  * @property int $num_order
- * @property bool $is_paid
  *
  * @property Bid $bid
  */
@@ -67,7 +66,6 @@ class Spare extends \yii\db\ActiveRecord implements TranslatableInterface
             [['vendor_code', 'name', 'invoice_number'], 'string', 'max' => 255],
             [['bid_id'], 'exist', 'skipOnError' => true, 'targetClass' => Bid::className(), 'targetAttribute' => ['bid_id' => 'id']],
             [['created_at', 'updated_at'], 'safe'],
-            [['is_paid'], 'boolean'],
         ];
     }
 
@@ -89,7 +87,6 @@ class Spare extends \yii\db\ActiveRecord implements TranslatableInterface
             'description' => 'Описание',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'is_paid' => 'Платная запчасть',
         ];
     }
 

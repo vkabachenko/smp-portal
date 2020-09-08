@@ -35,20 +35,7 @@ class ManageSpareRule extends Rule
             if ($master->workshop_id == $bid->workshop_id
                 && ($bid->status_id === BidStatus::getId(BidStatus::STATUS_FILLED)
                     || $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP))) {
-                if (isset($params['id'])) {
-                    if ($bid->treatment_type == Bid::TREATMENT_TYPE_PRESALE) {
-                        return $master->workshop->canManagePaidBid();
-                    } else {
-                        $spare = Spare::findOne($params['id']);
-                        if ($spare->is_paid) {
-                            return $master->workshop->canManagePaidBid();
-                        } else {
-                            return true;
-                        }
-                    }
-                } else {
-                    return true;
-                }
+                return true;
             } else {
                 return false;
             }
