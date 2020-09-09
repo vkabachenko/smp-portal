@@ -7,6 +7,7 @@ use app\rbac\rules\BidHistoryRule;
 use app\rbac\rules\JobsCatalogRule;
 use app\rbac\rules\JobsCatalogViewRule;
 use app\rbac\rules\ManageJobsRule;
+use app\rbac\rules\ManageReplacementPartsRule;
 use app\rbac\rules\ManageRestrictedBidRule;
 use app\rbac\rules\ManagerBidRule;
 use app\rbac\rules\ManagerAgencyRule;
@@ -227,7 +228,10 @@ class RbacController extends Controller
         $auth->add($viewImageRestricted);
         $auth->addChild($viewImageRestricted , $viewImage);
 
+        $manageReplacementPartsRule = new ManageReplacementPartsRule();
+        $auth->add($manageReplacementPartsRule);
         $manageReplacementParts = $auth->createPermission('manageReplacementParts');
+        $manageReplacementParts->ruleName = $manageReplacementPartsRule->name;
         $auth->add($manageReplacementParts);
 
         $manageClientPropositions = $auth->createPermission('manageClientPropositions');

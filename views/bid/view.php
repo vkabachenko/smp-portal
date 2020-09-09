@@ -223,11 +223,23 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
     ]); ?>
 </div>
 
-<?php if (\Yii::$app->user->can('manageReplacementParts') && $replacementPartProvider->totalCount): ?>
+<?php if (\Yii::$app->user->can('manageReplacementParts', ['bidId' => $model->id])): ?>
 
 <div class="form-group clearfix"></div>
-<div>
-    <h3>Артикулы для сервиса (импорт из 1С)</h3>
+    <div>
+        <div class="col-xs-4">
+            <?= Html::a('<h3>Артикулы для сервиса</h3>', ['replacement-part/index', 'bidId' => $model->id]) ?>
+        </div>
+        <div class="col-xs-8">
+            <div style="margin: 20px 0 10px 0;">
+                <?php $replacementPartModel = new \app\models\ReplacementPart(['bid_id' => $model->id]); ?>
+                <?= $this->render('modal/create-replacement-part', [
+                    'model' => $replacementPartModel,
+                ]); ?>
+            </div>
+        </div>
+    </div>
+
     <?= GridView::widget([
         'dataProvider' => $replacementPartProvider,
         'summary' => '',
@@ -241,13 +253,18 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
                 'template' => '{more}',
                 'buttons' => [
                     'more' => function ($url, $model, $key) {
-                        return Html::a('Подробнее...',['replacement-part/view', 'id' => $model->id]);
+                        return Html::a('Подробнее...',
+                            [
+                                'replacement-part/view',
+                                'id' => $model->id,
+                                'returnUrl' => Url::to(['bid/view', 'id' => $model->bid_id])
+                            ]
+                        );
                     }
                 ],
             ],
         ],
     ]); ?>
-</div>
 
 <?php endif; ?>
 

@@ -25,7 +25,7 @@ use Yii;
  *
  * @property Bid $bid
  */
-class ReplacementPart extends \yii\db\ActiveRecord
+class ReplacementPart extends \yii\db\ActiveRecord implements TranslatableInterface
 {
     /**
      * {@inheritdoc}
@@ -33,6 +33,11 @@ class ReplacementPart extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'replacement_part';
+    }
+
+    public static function translateName()
+    {
+        return 'Артикулы для сервиса';
     }
 
     /**
@@ -79,5 +84,14 @@ class ReplacementPart extends \yii\db\ActiveRecord
     public function getBid()
     {
         return $this->hasOne(Bid::className(), ['id' => 'bid_id']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if (empty($this->num_order)) {
+            $numOrder = intval(self::find()->where(['bid_id' => $this->bid_id])->max('num_order'));
+            $this->num_order = $numOrder + 1;
+        }
+        return parent::beforeSave($insert);
     }
 }

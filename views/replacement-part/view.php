@@ -1,9 +1,10 @@
 <?php
 
 /* @var $model \app\models\ReplacementPart */
+/* @var $returnUrl string */
 
 $this->title = 'Артикулы для сервиса ';
-$this->params['back'] = ['bid/view', 'id' => $model->bid_id];
+$this->params['back'] = $returnUrl;
 
 ?>
 
