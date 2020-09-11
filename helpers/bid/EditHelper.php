@@ -5,6 +5,7 @@ namespace app\helpers\bid;
 
 
 use app\models\Bid;
+use app\models\BidStatus;
 use yii\web\User;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
@@ -636,6 +637,16 @@ class EditHelper
                     'prompt' => 'Выбор',
                     'disabled' => self::isDisabled($model, 'decision_agency_status_id')
                     ]);
+        }
+
+        if (\Yii::$app->user->can('admin')) {
+            $attributes['status_id'] = $form->field($model, 'status_id',
+                ['labelOptions' => HintHelper::getLabelOptions('status_id', $hints)]
+            )
+                ->dropDownList(BidStatus::bidStatusAsMap(),[
+                    'prompt' => 'Выбор',
+                    'disabled' => self::isDisabled($model, 'status_id')
+                ]);
         }
 
         $attributes['master_id'] = $form->field($model, 'master_id',
