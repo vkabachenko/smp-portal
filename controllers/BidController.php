@@ -315,7 +315,7 @@ class BidController extends Controller
         $service = new DoneStatusService($bidId, \Yii::$app->user->identity);
         $service->setStatus();
 
-        return $this->redirect(['send-act/index', 'bidId' => $bidId, 'forced' => true]);
+        return $this->redirect(['send-act/index', 'subType' => TemplateModel::SUB_TYPE_ACT_DIAGNOSTIC, 'bidId' => $bidId, 'forced' => true]);
     }
 
     public function actionUpdateDecisionManager($bidId)
@@ -355,7 +355,7 @@ class BidController extends Controller
         if (\Yii::$app->request->post('save')) {
             return $this->redirect(['index']);
         } elseif (\Yii::$app->request->post('send')) {
-            return $this->redirect(['send-act/index', 'bidId' => $model->id]);
+            return $this->redirect(['send-act/index', 'subType' => TemplateModel::SUB_TYPE_ACT_DIAGNOSTIC, 'bidId' => $model->id]);
         } elseif (\Yii::$app->request->post('job')) {
             return $this->redirect(['bid-job/index', 'bidId' => $model->id]);
         } elseif (\Yii::$app->request->post('spare')) {

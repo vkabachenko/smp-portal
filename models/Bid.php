@@ -138,7 +138,13 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'is_warranty' => 'Гарантийный ремонт',
         'warranty_comment' => 'Комментарий гарантии',
         'equipment' => 'Оборудование',
-        'equipment_manufacturer' => 'Оборудование для представительства'
+        'equipment_manufacturer' => 'Оборудование для представительства',
+        'bid_number' => 'Номер заявки',
+        'application_date' => 'Дата обращения',
+        'created_at' => 'Создана',
+        'updated_at' => 'Изменена',
+        'decision_workshop_status_id' => 'Решение мастерской',
+        'decision_agency_status_id' => 'Решение представительства',
     ];
 
     const ALWAYS_VISIBLE_ATTRIBUTES = [
@@ -146,16 +152,10 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'brand_model_id' => 'brand_model_id',
         'compositionCombined' => 'compositionCombined',
         'workshop_id' => 'workshop_id',
-        'created_at' => 'Создана',
-        'updated_at' => 'Изменена',
         'manufacturer_id' => 'Производитель',
         'brand_name' => 'Бренд',
         'client_id' => 'Клиент',
-        'decision_workshop_status_id' => 'Решение мастерской',
-        'decision_agency_status_id' => 'Решение представительства',
         'status_id' => 'Статус',
-        'bid_number' => 'Номер заявки',
-        'application_date' => 'Дата обращения',
     ];
 
 

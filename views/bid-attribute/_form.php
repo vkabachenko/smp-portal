@@ -18,7 +18,7 @@ use yii\helpers\Url;
     <input type="hidden" name="is_html_description_revert" value="0">
 
     <?php if ($model->isNewRecord): ?>
-        <?= $form->field($model, 'attribute')->dropDownList(BidAttribute::getEnabledAttributes(true)) ?>
+        <?= $form->field($model, 'attribute')->dropDownList(BidAttribute::getEnabledAttributes()) ?>
     <?php endif ?>
 
     <?php if ($model->is_html_description): ?>
