@@ -65,7 +65,7 @@ class BidCommentsRead extends \yii\db\ActiveRecord
             ->where(['bid_id' => $bidId])
             ->andWhere(['>', 'updated_at', $lastDateRead]);
 
-        if ($user->role == 'manager') {
+        if (!\Yii::$app->user->can('managePrivateComments', ['bidId' => $bidId])) {
             $query->andWhere(['private' => false]);
         }
 

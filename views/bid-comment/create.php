@@ -20,12 +20,6 @@ $this->params['back'] = ['bid-comment/index', 'bidId' => $model->bid_id];
         <?= $form->field($model, 'comment')->textarea() ?>
     </div>
 
-    <?php if (\Yii::$app->user->identity->role != 'manager'): ?>
-    <div class="form-group">
-        <?= $form->field($model, 'private')->checkbox() ?>
-    </div>
-    <?php endif; ?>
-
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>

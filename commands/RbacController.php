@@ -7,6 +7,7 @@ use app\rbac\rules\BidHistoryRule;
 use app\rbac\rules\JobsCatalogRule;
 use app\rbac\rules\JobsCatalogViewRule;
 use app\rbac\rules\ManageJobsRule;
+use app\rbac\rules\ManagePrivateCommentsRule;
 use app\rbac\rules\ManageReplacementPartsRule;
 use app\rbac\rules\ManageRestrictedBidRule;
 use app\rbac\rules\ManagerBidRule;
@@ -234,6 +235,12 @@ class RbacController extends Controller
         $manageReplacementParts->ruleName = $manageReplacementPartsRule->name;
         $auth->add($manageReplacementParts);
 
+        $managePrivateCommentsRule = new ManagePrivateCommentsRule();
+        $auth->add($managePrivateCommentsRule);
+        $managePrivateComments = $auth->createPermission('managePrivateComments');
+        $managePrivateComments->ruleName = $managePrivateCommentsRule->name;
+        $auth->add($managePrivateComments);
+
         $manageClientPropositions = $auth->createPermission('manageClientPropositions');
         $auth->add($manageClientPropositions);
 
@@ -277,6 +284,7 @@ class RbacController extends Controller
         $auth->addChild($master, $manageClientPropositions);
         $auth->addChild($master, $manageBidJob1c);
         $auth->addChild($master, $adminBidHistory);
+        $auth->addChild($master, $managePrivateComments);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
@@ -326,6 +334,7 @@ class RbacController extends Controller
         $auth->addChild($admin, $manageClientPropositions);
         $auth->addChild($admin, $manageBidJob1c);
         $auth->addChild($admin, $adminBidHistory);
+        $auth->addChild($admin, $managePrivateComments);
 
         echo 'done' . "\n";
     }

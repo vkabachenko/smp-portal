@@ -4,7 +4,7 @@
 
 ?>
 
-<div class=<?= $model->private ?  "" : "bid-comment-agency" ?>>
+<div>
     <div class="col-sm-4 col-xs-12">
         <div class="col-sm-12 col-xs-6">
             <?= \Yii::$app->formatter->asDatetime($model->created_at, 'php:d.m.Y H:i:s') ?>

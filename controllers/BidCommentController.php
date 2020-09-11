@@ -32,38 +32,40 @@ class BidCommentController  extends Controller
         ];
     }
 
-    public function actionIndex($bidId)
+    public function actionIndex($bidId, $private)
     {
         $this->checkAccess('viewComments');
 
         $searchModel = new BidCommentSearch();
-        $dataProvider = $searchModel->search($bidId);
+        $dataProvider = $searchModel->search($bidId, $private);
         BidCommentsRead::createOrUpdate($bidId);
 
         return $this->render('index', [
             'bidId' => $bidId,
             'dataProvider' => $dataProvider,
+            'private' => $private
         ]);
     }
 
-    public function actionCreate($bidId)
+    public function actionCreate($bidId, $private)
     {
         $this->checkAccess('createComment');
 
         $model = new BidComment([
             'bid_id' => $bidId,
             'user_id' => \Yii::$app->user->id,
-            'private' => \Yii::$app->user->identity->role == 'manager' ? false : true
+            'private' => $private
         ]);
 
         if ($model->load(\Yii::$app->request->post()) && $model->save()) {
             Bid::setFlagExport($bidId, false);
             BidCommentsRead::createOrUpdate($bidId);
-            return $this->redirect(['index', 'bidId' => $bidId]);
+            return $this->redirect(['index', 'bidId' => $bidId, 'private' => $private]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'private' => $private
         ]);
     }
 

@@ -9,13 +9,10 @@ use yii\data\ActiveDataProvider;
 
 class BidCommentSearch
 {
-    public function search($bidId)
+    public function search($bidId, $private)
     {
         $query = BidComment::find()->where(['bid_id' => $bidId]);
-
-        if (\Yii::$app->user->identity->role == 'manager') {
-            $query->andWhere(['private' => false]);
-        }
+        $query->andWhere(['private' => $private]);
 
         $query->orderBy('created_at');
 

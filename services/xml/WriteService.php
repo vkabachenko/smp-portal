@@ -171,7 +171,7 @@ class WriteService extends BaseService
             $changedAttributes[$bidAttribute1C] = $attributes[$bidAttribute];
         }
 
-        $comments = $this->getCommentsAsArray($model->bidComments);
+        $comments = $this->getCommentsAsArray($model->bidPrivateComments);
         $spares = $this->getSparesAsArray($model->spares);
         $jobs = $this->getJobsAsArray($model->jobs1c);
         $replacementParts = $this->getReplacementPartsAsArray($model->replacementParts);
