@@ -6,6 +6,7 @@ namespace app\rbac\rules;
 
 use app\models\Bid;
 use app\models\BidStatus;
+use app\models\User;
 use app\models\Workshop;
 use yii\rbac\Rule;
 
@@ -20,41 +21,32 @@ class UpdateBidRule extends Rule
             return false;
         }
 
-        if ($bid->status_id !== BidStatus::getId(BidStatus::STATUS_FILLED)) {
-            $agency = $bid->getAgency();
-            if ($agency && !$agency->is_independent) {
-                return false;
-            }
-        }
+        $userModel = User::findOne($user);
 
-        if ($bid->status_id === BidStatus::getId(BidStatus::STATUS_DONE)) {
-            return false;
-        }
-
-        $workshop = Workshop::find()->joinWith('masters', false)->where(['master.user_id' => $user])->one();
-
-        if (is_null($workshop)) {
-            return false;
-        }
-
-        if ($bid->workshop_id != $workshop->id) {
-            return false;
-        }
-
-        $rules = $workshop->rules;
-
-        if (!isset($rules['paidBid'])) {
-            return true;
-        }
-
-        if ($rules['paidBid']) {
-           return true;
-        } else {
-            if (!$bid->isPaid()) {
-                return true;
+        if ($master = $userModel->master) {
+            /* @var $master \app\models\Master */
+            if ($master->workshop->canManagePaidBid()) {
+                return $master->workshop_id == $bid->workshop_id;
             } else {
-                return false;
+                if ($master->workshop_id != $bid->workshop_id) {
+                    return false;
+                }
+                if ($bid->status_id !== BidStatus::getId(BidStatus::STATUS_FILLED)) {
+                    $agency = $bid->getAgency();
+                    if ($agency && !$agency->is_independent) {
+                        return false;
+                    }
+                }
+
+                if ($bid->status_id === BidStatus::getId(BidStatus::STATUS_DONE)) {
+                    return false;
+                }
+
+                return $bid->isWarranty();
             }
+
+        } else {
+            return false;
         }
 
     }

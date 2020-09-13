@@ -31,10 +31,11 @@ class EditHelper
         ])
             ->label(false);
 
-        $attributes['brand_name'] = $form->field($model, 'brand_name')
-            ->widget(AutoComplete::class, [
-                'clientOptions' => [
-                    'source' => new JsExpression('
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'brand_name'])) {
+            $attributes['brand_name'] = $form->field($model, 'brand_name')
+                ->widget(AutoComplete::class, [
+                    'clientOptions' => [
+                        'source' => new JsExpression('
                 function (request, response) {
                     $.ajax({
                         beforeSend: function() {
@@ -64,7 +65,7 @@ class EditHelper
                     });
                 }
             '),
-                    'select' => new JsExpression('
+                        'select' => new JsExpression('
                 function (event, ui) {
                     event.preventDefault();
                     this.value = ui.item.label;
@@ -73,20 +74,23 @@ class EditHelper
                     $("#bid-manufacturer-id").val(ui.item.manufacturer_id);
                 }
             '),
-                ],
-                'options' => [
-                    'class' => 'form-control',
-                    'id' => 'bid-brand-name',
-                    'disabled' => self::isDisabled($model, 'brand_name')
-                ]
-            ]);
+                    ],
+                    'options' => [
+                        'class' => 'form-control',
+                        'id' => 'bid-brand-name',
+                        'disabled' => self::isDisabled($model, 'brand_name')
+                    ]
+                ]);
+        }
 
-        $attributes['manufacturer_id'] = $form->field($model, 'manufacturer_id')
-            ->dropDownList(Manufacturer::manufacturersAsMap(),[
-                'prompt' => 'Выбор',
-                'id' => 'bid-manufacturer-id',
-                'disabled' => self::isDisabled($model, 'manufacturer_id')
-            ]);
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'manufacturer_id'])) {
+            $attributes['manufacturer_id'] = $form->field($model, 'manufacturer_id')
+                ->dropDownList(Manufacturer::manufacturersAsMap(), [
+                    'prompt' => 'Выбор',
+                    'id' => 'bid-manufacturer-id',
+                    'disabled' => self::isDisabled($model, 'manufacturer_id')
+                ]);
+        }
 
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'equipment'])) {
             $attributes['equipment'] = $form->field($model, 'equipment')
@@ -621,15 +625,17 @@ class EditHelper
                     ]);
         }
 
-        $attributes['decision_workshop_status_id'] = $form->field($model, 'decision_workshop_status_id',
-            ['labelOptions' => HintHelper::getLabelOptions('decision_workshop_status_id', $hints)]
-        )
-            ->dropDownList(\app\models\DecisionWorkshopStatus::decisionWorkshopStatusAsMap(),[
-                'prompt' => 'Выбор',
-                'disabled' => self::isDisabled($model, 'decision_workshop_status_id')
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'decision_workshop_status_id'])) {
+            $attributes['decision_workshop_status_id'] = $form->field($model, 'decision_workshop_status_id',
+                ['labelOptions' => HintHelper::getLabelOptions('decision_workshop_status_id', $hints)]
+            )
+                ->dropDownList(\app\models\DecisionWorkshopStatus::decisionWorkshopStatusAsMap(), [
+                    'prompt' => 'Выбор',
+                    'disabled' => self::isDisabled($model, 'decision_workshop_status_id')
                 ]);
+        }
 
-        if (\Yii::$app->user->can('admin')) {
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'decision_agency_status_id'])) {
             $attributes['decision_agency_status_id'] = $form->field($model, 'decision_agency_status_id',
                 ['labelOptions' => HintHelper::getLabelOptions('decision_agency_status_id', $hints)]
             )
