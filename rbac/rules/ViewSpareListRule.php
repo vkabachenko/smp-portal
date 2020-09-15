@@ -9,9 +9,9 @@ use app\models\Spare;
 use app\models\User;
 use yii\rbac\Rule;
 
-class ViewSpareRule extends Rule
+class ViewSpareListRule extends Rule
 {
-    public $name = 'isViewSpare';
+    public $name = 'isViewSpareList';
 
     public function execute($user, $item, $params)
     {
@@ -34,8 +34,7 @@ class ViewSpareRule extends Rule
         if ($master = $userModel->master) {
             if ($master->getBidRole() === Bid::TREATMENT_TYPE_WARRANTY
                 && $master->workshop_id == $bid->workshop_id
-                && ($bid->status_id === BidStatus::getId(BidStatus::STATUS_FILLED)
-                    || $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP))) {
+                ) {
                 return true;
             } else {
                 return false;
@@ -50,7 +49,7 @@ class ViewSpareRule extends Rule
         /* @var $manager \app\models\Manager */
         if ($manager = $userModel->manager) {
            if ($manager->agency_id == $agency->id
-                && $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_AGENCY)) {
+                ) {
                return true;
            } else {
                return false;

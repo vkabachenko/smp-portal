@@ -25,6 +25,7 @@ use app\rbac\rules\ViewImageRule;
 use app\rbac\rules\ViewJobsRule;
 use app\rbac\rules\ViewNewsRule;
 use app\rbac\rules\ManageSpareRule;
+use app\rbac\rules\ViewSpareListRule;
 use app\rbac\rules\ViewSpareRule;
 use app\rbac\rules\SetBidDoneRule;
 use yii\console\Controller;
@@ -221,6 +222,12 @@ class RbacController extends Controller
         $viewSpare->ruleName = $viewSpareRule->name;
         $auth->add($viewSpare);
 
+        $viewSpareListRule = new ViewSpareListRule();
+        $auth->add($viewSpareListRule);
+        $viewSpareList = $auth->createPermission('viewSpareList');
+        $viewSpareList->ruleName = $viewSpareListRule->name;
+        $auth->add($viewSpareList);
+
         $setBidDoneRule = new SetBidDoneRule();
         $auth->add($setBidDoneRule);
         $setBidDone = $auth->createPermission('setBidDone');
@@ -285,6 +292,7 @@ class RbacController extends Controller
         $auth->addChild($master, $viewJobs);
         $auth->addChild($master, $manageSpare);
         $auth->addChild($master, $viewSpare);
+        $auth->addChild($master, $viewSpareList);
         $auth->addChild($master, $setBidDone);
         $auth->addChild($master, $viewImageRestricted);
         $auth->addChild($master, $restrictUpdateClient);
@@ -312,6 +320,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $viewJobsCatalog);
         $auth->addChild($manager, $manageJobs);
         $auth->addChild($manager, $viewSpare);
+        $auth->addChild($manager, $viewSpareList);
         $auth->addChild($manager, $viewImageRestricted);
         $auth->addChild($manager, $viewBidHistory);
         $auth->addChild($manager, $viewJobs);
@@ -338,6 +347,7 @@ class RbacController extends Controller
         $auth->addChild($admin, $viewJobs);
         $auth->addChild($admin, $manageSpare);
         $auth->addChild($admin, $viewSpare);
+        $auth->addChild($admin, $viewSpareList);
         $auth->addChild($admin, $viewImage);
         $auth->addChild($admin, $updateClient);
         $auth->addChild($admin, $manageReplacementParts);

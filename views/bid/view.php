@@ -193,6 +193,7 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
 
 <?php endif; ?>
 
+<?php if (\Yii::$app->user->can('viewSpareList', ['bidId' => $model->id])): ?>
 <div class="form-group clearfix"></div>
 <div>
     <div>
@@ -227,6 +228,7 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
         ],
     ]); ?>
 </div>
+<?php endif; ?>
 
 <?php if (\Yii::$app->user->can('manageReplacementParts', ['bidId' => $model->id])): ?>
 

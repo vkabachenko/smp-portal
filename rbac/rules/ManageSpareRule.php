@@ -32,7 +32,8 @@ class ManageSpareRule extends Rule
 
         /* @var $master \app\models\Master */
         if ($master = $userModel->master) {
-            if ($master->workshop_id == $bid->workshop_id
+            if ($master->getBidRole() === Bid::TREATMENT_TYPE_WARRANTY
+                && $master->workshop_id == $bid->workshop_id
                 && ($bid->status_id === BidStatus::getId(BidStatus::STATUS_FILLED)
                     || $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP))) {
                 return true;
