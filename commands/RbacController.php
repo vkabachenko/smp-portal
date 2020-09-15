@@ -22,6 +22,7 @@ use app\rbac\rules\UpdateClientRule;
 use app\rbac\rules\UpdateDecisionManagerRule;
 use app\rbac\rules\UpdateDecisionMasterRule;
 use app\rbac\rules\ViewImageRule;
+use app\rbac\rules\ViewJobsRule;
 use app\rbac\rules\ViewNewsRule;
 use app\rbac\rules\ManageSpareRule;
 use app\rbac\rules\ViewSpareRule;
@@ -202,6 +203,12 @@ class RbacController extends Controller
         $manageJobs->ruleName = $manageJobsRule->name;
         $auth->add($manageJobs);
 
+        $viewJobsRule = new ViewJobsRule();
+        $auth->add($viewJobsRule);
+        $viewJobs = $auth->createPermission('viewJobs');
+        $viewJobs->ruleName = $viewJobsRule->name;
+        $auth->add($viewJobs);
+
         $manageSpareRule = new ManageSpareRule();
         $auth->add($manageSpareRule);
         $manageSpare = $auth->createPermission('manageSpare');
@@ -275,6 +282,7 @@ class RbacController extends Controller
         $auth->addChild($master, $viewNews);
         $auth->addChild($master, $viewJobsCatalog);
         $auth->addChild($master, $manageJobs);
+        $auth->addChild($master, $viewJobs);
         $auth->addChild($master, $manageSpare);
         $auth->addChild($master, $viewSpare);
         $auth->addChild($master, $setBidDone);
@@ -306,6 +314,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $viewSpare);
         $auth->addChild($manager, $viewImageRestricted);
         $auth->addChild($manager, $viewBidHistory);
+        $auth->addChild($manager, $viewJobs);
 
         $director = $auth->createRole('director');
         $auth->add($director);
@@ -326,6 +335,7 @@ class RbacController extends Controller
         $auth->addChild($admin, $manageJobsCatalog);
         $auth->addChild($admin, $listJobsCatalog);
         $auth->addChild($admin, $manageJobs);
+        $auth->addChild($admin, $viewJobs);
         $auth->addChild($admin, $manageSpare);
         $auth->addChild($admin, $viewSpare);
         $auth->addChild($admin, $viewImage);

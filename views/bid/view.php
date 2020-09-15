@@ -126,6 +126,7 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
     <?= Html::a('Добавить фото', ['bid-image/create', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
 </div>
 
+<?php if (\Yii::$app->user->can('viewJobs', ['bidId' => $model->id])): ?>
 <div class="form-group clearfix"></div>
 <div>
     <div>
@@ -171,6 +172,7 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
         ],
     ]); ?>
 </div>
+<?php endif; ?>
 
 <?php if (\Yii::$app->user->can('manageBidJob1c') && $bidJob1cProvider->totalCount): ?>
 

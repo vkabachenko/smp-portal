@@ -310,7 +310,7 @@ a.btn-feedback {
 }
 
 .wrap-select-master-role {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: calc(50% - 50px);
     z-index: 1100;

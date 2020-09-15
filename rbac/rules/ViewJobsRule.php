@@ -9,9 +9,9 @@ use app\models\JobsCatalog;
 use app\models\User;
 use yii\rbac\Rule;
 
-class ManageJobsRule extends Rule
+class ViewJobsRule extends Rule
 {
-    public $name = 'isManageJobs';
+    public $name = 'isViewJobs';
 
     public function execute($user, $item, $params)
     {
@@ -41,16 +41,12 @@ class ManageJobsRule extends Rule
         }
 
         if ($manager = $userModel->manager) {
-            return $manager->agency_id == $agency->id && $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_AGENCY);
+            return $manager->agency_id == $agency->id;
         }
 
         if ($master = $userModel->master) {
                 return $master->getBidRole() === Bid::TREATMENT_TYPE_WARRANTY
-                    && $master->workshop_id == $bid->workshop_id
-                    && ($bid->status_id === BidStatus::getId(BidStatus::STATUS_FILLED)
-                        || $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP)
-                    );
-
+                    && $master->workshop_id == $bid->workshop_id;
         }
 
         return false;
