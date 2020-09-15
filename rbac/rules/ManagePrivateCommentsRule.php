@@ -32,7 +32,7 @@ class ManagePrivateCommentsRule extends Rule
         /* @var $master \app\models\Master */
         if ($master = $userModel->master) {
             if ($master->workshop_id == $bid->workshop_id
-                && $master->workshop->canManagePaidBid()) {
+                && $master->getBidRole() === Bid::TREATMENT_TYPE_PRESALE) {
                 return true;
             } else {
                 return false;

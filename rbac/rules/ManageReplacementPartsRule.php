@@ -31,11 +31,8 @@ class ManageReplacementPartsRule extends Rule
         }
 
         if ($master = $userModel->master) {
-            return $master->workshop_id == $bid->workshop_id;
-        }
-
-        if ($master = $userModel->master) {
-            return $master->workshop_id == $bid->workshop_id && $bid->workshop->canManagePaidBid();
+            return $master->getBidRole() === Bid::TREATMENT_TYPE_PRESALE
+                && $master->workshop_id == $bid->workshop_id;
         }
 
         return false;
