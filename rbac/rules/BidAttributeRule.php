@@ -3,6 +3,7 @@
 
 namespace app\rbac\rules;
 
+use app\models\Bid;
 use app\models\BidAttribute;
 use app\models\Manager;
 use app\models\Master;
@@ -26,13 +27,10 @@ class BidAttributeRule extends Rule
                 if (isset($params['is_control'])) {
                     $allAttributes = BidAttribute::getHiddenAttributes('is_control');
                 } else {
-                    if ($master->workshop->canManagePaidBid()) {
-                        $commonAttributes = BidAttribute::getHiddenAttributes('is_disabled_workshops');
-                        $ownAttributes = $master->workshop->getBidAttributes('bid_attributes');
-                    } else {
-                            $commonAttributes = BidAttribute::getHiddenAttributes('is_disabled_agencies');
-                            $ownAttributes = $master->workshop->getBidAttributes('bid_attributes');
-                    }
+                    $commonAttributes = $master->getBidRole() === Bid::TREATMENT_TYPE_WARRANTY
+                        ? BidAttribute::getHiddenAttributes('is_disabled_agencies')
+                        : BidAttribute::getHiddenAttributes('is_disabled_workshops');
+                    $ownAttributes = $master->workshop->getBidAttributes('bid_attributes');
                     $allAttributes = array_merge($commonAttributes, $ownAttributes);
                 }
             } else {

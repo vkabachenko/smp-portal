@@ -3,12 +3,12 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-use yii\helpers\Html;
+use yii\bootstrap\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use app\assets\AppAsset;
 use yii\bootstrap\Modal;
-
+use app\models\Bid;
 
 AppAsset::register($this);
 
@@ -45,6 +45,20 @@ if (Yii::$app->user->isGuest) {
 <?php $this->beginBody() ?>
 
 <div class="wrap">
+    <?php if (\Yii::$app->user->can('master')
+        && \Yii::$app->user->identity->master->workshop->canManagePaidBid()): ?>
+
+        <div class="wrap-select-master-role">
+            <?= Html::dropDownList(
+                    'select-master-role',
+                isset($_COOKIE['master_role']) ? $_COOKIE['master_role'] : Bid::TREATMENT_TYPE_PRESALE,
+                    Bid::TREATMENT_TYPES, [
+                       'onchange' => 'document.cookie = "master_role=" + this.value + ";path=/"; location.reload()'
+                ]
+                    )
+            ?>
+        </div>
+    <?php endif; ?>
     <?php
     NavBar::begin([
         'brandLabel' => Yii::$app->name,

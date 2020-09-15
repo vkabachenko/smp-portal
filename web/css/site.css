@@ -309,5 +309,14 @@ a.btn-feedback {
     font-weight: bold;
 }
 
+.wrap-select-master-role {
+    position: absolute;
+    top: 0;
+    left: calc(50% - 50px);
+    z-index: 1100;
+    padding-top: 10px;
+    width: 100px;
+}
+
 
 

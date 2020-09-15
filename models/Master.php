@@ -166,4 +166,13 @@ class Master extends \yii\db\ActiveRecord
             return false;
         }
     }
+
+    public function getBidRole()
+    {
+        $workshop = $this->workshop;
+        if (!$workshop->canManagePaidBid()) {
+            return Bid::TREATMENT_TYPE_WARRANTY;
+        }
+        return isset($_COOKIE['master_role']) ? $_COOKIE['master_role'] : Bid::TREATMENT_TYPE_PRESALE;
+    }
 }

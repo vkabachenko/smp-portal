@@ -25,7 +25,7 @@ class UpdateBidRule extends Rule
 
         if ($master = $userModel->master) {
             /* @var $master \app\models\Master */
-            if ($master->workshop->canManagePaidBid()) {
+            if ($master->getBidRole() === Bid::TREATMENT_TYPE_PRESALE) {
                 return $master->workshop_id == $bid->workshop_id;
             } else {
                 if ($master->workshop_id != $bid->workshop_id) {
