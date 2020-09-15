@@ -246,6 +246,15 @@ class EditHelper
             ]);
         }
 
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'composition_name_manufacturer'])) {
+            $attributes['composition_name_manufacturer'] = $form->field($model, 'composition_name_manufacturer',
+                ['labelOptions' => HintHelper::getLabelOptions('composition_name_manufacturer', $hints)]
+            )->textInput([
+                'maxlength' => true,
+                'disabled' => self::isDisabled($model, 'composition_name_manufacturer')
+            ]);
+        }
+
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'author'])) {
             $attributes['author'] = $form->field($model, 'author',
                 ['labelOptions' => HintHelper::getLabelOptions('author', $hints)]
@@ -388,46 +397,58 @@ class EditHelper
             )
                 ->dropDownList(Condition::conditionsAsMap(),[
                     'prompt' => 'Выбор',
-                    'class' => 'form-control bid-condition',
+                    'class' => 'form-control',
                     'disabled' => self::isDisabled($model, 'condition_id')
                     ]);
         }
 
-        $attributes['client_id'] = $form
-            ->field($model,
-                'client_id',
-                [
-                    'options' => ['class' => ''],
-                    'inputOptions' => [
-                        'id' => 'client_id',
-                        'data-url' => Url::to(['client/auto-complete']),
-                        'data-select' => Url::to(['client/update-modal'])
-                    ]
-                ]
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_manufacturer_id'])) {
+            $attributes['condition_manufacturer_id'] = $form->field($model, 'condition_manufacturer_id',
+                ['labelOptions' => HintHelper::getLabelOptions('condition_manufacturer_id', $hints)]
             )
-            ->hiddenInput();
-
-        $clientValue = $model->client_id ? $model->client->name : '';
-        if (\Yii::$app->user->can('updateClient')) {
-            $btnSaveClient = Html::a('Редактировать', '#', [
-                    'class' => 'btn btn-success client-modal-btn',
-                    'disabled' => self::isDisabled($model, 'client_id')
-                    ]) .
-                             ' ' .
-                             Html::a('Новый клиент', '#', [
-                                 'class' => 'btn btn-success new-client-modal-btn',
-                                 'disabled' => self::isDisabled($model, 'client_id')
-                                 ]);
-        } else {
-            $btnSaveClient = '';
+                ->dropDownList(Condition::conditionsAsMap(),[
+                    'prompt' => 'Выбор',
+                    'class' => 'form-control',
+                    'disabled' => self::isDisabled($model, 'condition_manufacturer_id')
+                ]);
         }
 
-        $autocompleteClient = AutoComplete::widget([
-            'value' => $clientValue,
-            'options' => ['id' => 'client_name'],
-            'clientOptions' => [
-                'minLength'=>'3',
-                'source' => new JsExpression('
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_id'])) {
+            $attributes['client_id'] = $form
+                ->field($model,
+                    'client_id',
+                    [
+                        'options' => ['class' => ''],
+                        'inputOptions' => [
+                            'id' => 'client_id',
+                            'data-url' => Url::to(['client/auto-complete']),
+                            'data-select' => Url::to(['client/update-modal'])
+                        ]
+                    ]
+                )
+                ->hiddenInput();
+
+            $clientValue = $model->client_id ? $model->client->name : '';
+            if (\Yii::$app->user->can('updateClient')) {
+                $btnSaveClient = Html::a('Редактировать', '#', [
+                        'class' => 'btn btn-success client-modal-btn',
+                        'disabled' => self::isDisabled($model, 'client_id')
+                    ]) .
+                    ' ' .
+                    Html::a('Новый клиент', '#', [
+                        'class' => 'btn btn-success new-client-modal-btn',
+                        'disabled' => self::isDisabled($model, 'client_id')
+                    ]);
+            } else {
+                $btnSaveClient = '';
+            }
+
+            $autocompleteClient = AutoComplete::widget([
+                'value' => $clientValue,
+                'options' => ['id' => 'client_name'],
+                'clientOptions' => [
+                    'minLength' => '3',
+                    'source' => new JsExpression('
                         function (request, response) {
                             $.ajax({
                                 url: $("#client_id").data("url"),
@@ -452,7 +473,7 @@ class EditHelper
                             });
                         }
                     '),
-                'select' => new JsExpression('
+                    'select' => new JsExpression('
                         function (event, ui) {
                             event.preventDefault();
                             this.value = ui.item.label;       
@@ -474,10 +495,100 @@ class EditHelper
                             });
                         }
                     '),
-            ]
-        ]);
+                ]
+            ]);
 
-        $attributes['client_id'] .= sprintf('<div class="form-group">%s%s</div>', $autocompleteClient, $btnSaveClient);
+            $attributes['client_id'] .= sprintf('<div class="form-group">%s%s</div>', $autocompleteClient, $btnSaveClient);
+        }
+
+
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_manufacturer_id'])) {
+            $attributes['client_manufacturer_id'] = $form
+                ->field($model,
+                    'client_manufacturer_id',
+                    [
+                        'options' => ['class' => ''],
+                        'inputOptions' => [
+                            'id' => 'client_manufacturer_id',
+                            'data-url' => Url::to(['client/auto-complete']),
+                            'data-select' => Url::to(['client/update-modal'])
+                        ]
+                    ]
+                )
+                ->hiddenInput();
+
+            $clientValue = $model->client_manufacturer_id ? $model->clientManufacturer->name : '';
+            if (\Yii::$app->user->can('updateClient')) {
+                $btnSaveClient = Html::a('Редактировать', '#', [
+                        'class' => 'btn btn-success client-modal-btn',
+                        'disabled' => self::isDisabled($model, 'client_manufacturer_id')
+                    ]) .
+                    ' ' .
+                    Html::a('Новый клиент', '#', [
+                        'class' => 'btn btn-success new-client-modal-btn',
+                        'disabled' => self::isDisabled($model, 'client_manufacturer_id')
+                    ]);
+            } else {
+                $btnSaveClient = '';
+            }
+
+            $autocompleteClient = AutoComplete::widget([
+                'value' => $clientValue,
+                'options' => ['id' => 'client_manufacturer_name'],
+                'clientOptions' => [
+                    'minLength' => '3',
+                    'source' => new JsExpression('
+                        function (request, response) {
+                            $.ajax({
+                                url: $("#client_manufacturer_id").data("url"),
+                                method: "POST",
+                                data: {
+                                    workshopId: $("#workshop_id").val(),
+                                    term: request.term
+                                },
+                                dataType: "json",
+                                success: function(data) {
+                                    response($.map(data.clients, function (rt) {
+                                        return {
+                                            label: rt.name,
+                                            value: rt.id,
+                                        };
+                                    }));
+                                },
+                                error: function (jqXHR, status) {
+                                    console.log(status);
+                                    response([]);
+                                }
+                            });
+                        }
+                    '),
+                    'select' => new JsExpression('
+                        function (event, ui) {
+                            event.preventDefault();
+                            this.value = ui.item.label;       
+                            $("#client_manufacturer_id").val(ui.item.value);
+                            
+                            $.ajax({
+                                url: $("#client_manufacturer_id").data("select"),
+                                method: "GET",
+                                data: {
+                                    id: ui.item.value
+                                },
+                                success: function(html) {
+                                    $("#client-modal .modal-body").html(html);
+                                },
+                                error: function (jqXHR, status) {
+                                    console.log(status);
+                                    response([]);
+                                }
+                            });
+                        }
+                    '),
+                ]
+            ]);
+
+            $attributes['client_manufacturer_id'] .= sprintf('<div class="form-group">%s%s</div>', $autocompleteClient, $btnSaveClient);
+        }
 
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'treatment_type'])) {
             $attributes['treatment_type'] = $form->field($model, 'treatment_type',
@@ -533,6 +644,19 @@ class EditHelper
                     'class' => 'form-control',
                     'disabled' => self::isDisabled($model, 'date_completion')
                     ]
+            ]);
+        }
+
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'date_completion_manufacturer'])) {
+            $attributes['date_completion_manufacturer'] = $form->field($model, 'date_completion_manufacturer',
+                ['labelOptions' => HintHelper::getLabelOptions('date_completion_manufacturer', $hints)]
+            )->widget(DatePicker::class, [
+                'language' => 'ru',
+                'dateFormat' => 'dd.MM.yyyy',
+                'options' => [
+                    'class' => 'form-control',
+                    'disabled' => self::isDisabled($model, 'date_completion_manufacturer')
+                ]
             ]);
         }
 

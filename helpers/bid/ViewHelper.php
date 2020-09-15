@@ -28,7 +28,9 @@ class ViewHelper
         $attributes['serial_number'] = $bid->serial_number;
         $attributes['vendor_code'] = $bid->vendor_code;
         $attributes['composition_name'] = $bid->composition_name;
+        $attributes['composition_name_manufacturer'] = $bid->composition_name_manufacturer;
         $attributes['condition_id'] = $bid->condition_id ? $bid->condition->name : null;
+        $attributes['condition_manufacturer_id'] = $bid->condition_manufacturer_id ? $bid->conditionManufacturer->name : null;
         $attributes['defect'] = $bid->defect;
         $attributes['defect_manufacturer'] = $bid->defect_manufacturer;
         $attributes['diagnostic'] = $bid->diagnostic;
@@ -36,6 +38,9 @@ class ViewHelper
         $attributes['repair_recommendations'] = $bid->repair_recommendations;
         $attributes['client_id'] = $bid->client_id
             ? \Yii::$app->view->render('//client/view', ['model' => $bid->client])
+            : '';
+        $attributes['client_manufacturer_id'] = $bid->client_manufacturer_id
+            ? \Yii::$app->view->render('//client/view', ['model' => $bid->clientManufacturer])
             : '';
         $attributes['is_warranty_defect'] = $bid->is_warranty_defect ? 'Истина' : 'Ложь';
         $attributes['is_repair_possible'] = $bid->is_repair_possible ? 'Истина' : 'Ложь';
@@ -46,6 +51,7 @@ class ViewHelper
         $attributes['application_date'] = \Yii::$app->formatter->asDate($bid->application_date);
         $attributes['date_manufacturer'] = \Yii::$app->formatter->asDate($bid->date_manufacturer);
         $attributes['date_completion'] = \Yii::$app->formatter->asDate($bid->date_completion);
+        $attributes['date_completion_manufacturer'] = \Yii::$app->formatter->asDate($bid->date_completion_manufacturer);
         $attributes['bid_number'] = $bid->bid_number;
         $attributes['warranty_number'] = $bid->warranty_number;
         $attributes['bid_manufacturer_number'] = $bid->bid_manufacturer_number;

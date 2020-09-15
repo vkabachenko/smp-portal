@@ -66,11 +66,14 @@ class GridHelper
             'bid_1C_number'  => 'getBid1CNumberColumn',
             'bid_number'  => 'getBidNumberColumn',
             'client_id'  => 'getClientColumn',
+            'client_manufacturer_id'  => 'getClientManufacturerColumn',
             'master_id'  => 'getMasterColumn',
             'condition_id'  => 'getConditionColumn',
+            'condition_manufacturer_id'  => 'getConditionManufacturerColumn',
             'brand_name'  => 'getBrandColumn',
             'brand_model_name'  => 'getBrandModelColumn',
             'composition_name'  => 'getCompositionColumn',
+            'composition_name_manufacturer'  => 'getCompositionManufacturerColumn',
             'created_at'  => 'getCreatedAtColumn',
             'status_id'  => 'getStatusColumn',
             'repair_status_id'  => 'getRepairStatusColumn',
@@ -198,6 +201,26 @@ class GridHelper
         ];
     }
 
+    private function getClientManufacturerColumn()
+    {
+        return [
+            'attribute' => 'client_manufacturer_id',
+            'format' => 'raw',
+            'value' => function (Bid $model) {
+                $html = $model->client_manufacturer_id
+                    ? Html::tag('div', $model->clientManufacturer->name)
+                    : null;
+                return $html;
+            },
+            'filterOptions' => ['class' => 'grid-client_manufacturer_id'],
+            'headerOptions' => ['class' => 'grid-client_manufacturer_id'],
+            'contentOptions' => ['class' => 'grid-client_manufacturer_id'],
+            'filter' => Client::clientsAsMap(\Yii::$app->user->identity->master
+                ? \Yii::$app->user->identity->master->workshop_id
+                : null)
+        ];
+    }
+
     private function getMasterColumn()
     {
         return [
@@ -230,6 +253,24 @@ class GridHelper
             'filterOptions' => ['class' => 'grid-condition_id'],
             'headerOptions' => ['class' => 'grid-condition_id'],
             'contentOptions' => ['class' => 'grid-condition_id'],
+            'filter' => Condition::conditionsAsMap()
+        ];
+    }
+
+    private function getConditionManufacturerColumn()
+    {
+        return [
+            'attribute' => 'condition_manufacturer_id',
+            'format' => 'raw',
+            'value' => function (Bid $model) {
+                $html = $model->condition_manufacturer_id
+                    ? Html::tag('div', $model->conditionManufacturer->name)
+                    : null;
+                return $html;
+            },
+            'filterOptions' => ['class' => 'grid-condition_manufacturer_id'],
+            'headerOptions' => ['class' => 'grid-condition_manufacturer_id'],
+            'contentOptions' => ['class' => 'grid-condition_manufacturer_id'],
             'filter' => Condition::conditionsAsMap()
         ];
     }
@@ -276,6 +317,21 @@ class GridHelper
             'filterOptions' => ['class' => 'grid-composition_name'],
             'headerOptions' => ['class' => 'grid-composition_name'],
             'contentOptions' => ['class' => 'grid-composition_name'],
+        ];
+    }
+
+    private function getCompositionManufacturerColumn()
+    {
+        return [
+            'attribute' => 'composition_name_manufacturer',
+            'format' => 'raw',
+            'value' => function (Bid $model) {
+                $html = Html::tag('div', $model->composition_name_manufacturer);
+                return $html;
+            },
+            'filterOptions' => ['class' => 'grid-composition_name_manufacturer'],
+            'headerOptions' => ['class' => 'grid-composition_name_manufacturer'],
+            'contentOptions' => ['class' => 'grid-composition_name_manufacturer'],
         ];
     }
 
