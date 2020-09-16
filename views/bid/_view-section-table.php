@@ -11,6 +11,7 @@ use app\models\Bid;
 
     <?php foreach ($section as $attribute): ?>
         <?php if (isset($attributes[$attribute]) && $attributes[$attribute] !== false): ?>
+        <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => $attribute])): ?>
         <tr>
             <th>
                 <?= Bid::getAllAttributes()[$attribute] ?>
@@ -19,6 +20,7 @@ use app\models\Bid;
                 <?= $attributes[$attribute] ?>
             </td>
         </tr>
+        <?php endif; ?>
         <?php endif; ?>
     <?php endforeach; ?>
 

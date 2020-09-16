@@ -109,11 +109,18 @@ class ViewHelper
 
     public static function getViewSection(Bid $bid, User $user, $sectionName, $isFilledByDefault = true)
     {
+        $agency = $bid->getAgency();
         if ($user->can('manager')) {
-            $agency = $bid->getAgency();
             return $agency ? $agency->getSectionsAttributes()->$sectionName : [];
         } elseif ($user->can('master')) {
-            return $bid->workshop->getSectionsAttributes()->$sectionName;
+            if ($user->identity->master->getBidRole() === Bid::TREATMENT_TYPE_PRESALE) {
+                return $bid->workshop->getSectionsAttributes()->$sectionName;
+            } else {
+                return $agency
+                    ? $agency->getSectionsAttributes()->$sectionName
+                    : $bid->workshop->getSectionsAttributes()->$sectionName;
+            }
+
         } else {
             return $isFilledByDefault ? array_keys($bid->attributeLabels()) : [];
         }
