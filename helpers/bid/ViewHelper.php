@@ -120,7 +120,6 @@ class ViewHelper
                     ? $agency->getSectionsAttributes()->$sectionName
                     : $bid->workshop->getSectionsAttributes()->$sectionName;
             }
-
         } else {
             return $isFilledByDefault ? array_keys($bid->attributeLabels()) : [];
         }

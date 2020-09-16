@@ -113,8 +113,9 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
 <div class="form-group">
     <?php if (\Yii::$app->user->can('managePrivateComments', ['bidId' => $model->id])): ?>
         <?= Html::a('Служебные комментарии', ['bid-comment/index', 'bidId' => $model->id, 'private' => true], ['class' => 'btn btn-danger']) ?>
+    <?php else: ?>
+        <?= Html::a('Комментарии', ['bid-comment/index', 'bidId' => $model->id, 'private' => false], ['class' => 'btn btn-success']) ?>
     <?php endif; ?>
-    <?= Html::a('Комментарии', ['bid-comment/index', 'bidId' => $model->id, 'private' => false], ['class' => 'btn btn-success']) ?>
 </div>
 
 <?php if (!empty($model->bidImages)): ?>
