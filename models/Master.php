@@ -19,6 +19,7 @@ use yii\helpers\ArrayHelper;
  * @property Bid[] $bids
  * @property User $user
  * @property Workshop $workshop
+ * @property string $grid_attributes_warranty
  */
 class Master extends \yii\db\ActiveRecord
 {

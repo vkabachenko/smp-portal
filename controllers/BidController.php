@@ -72,12 +72,7 @@ class BidController extends Controller
         $searchModel = new BidSearch(['restrictions' => $restrictions]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $gridAttributes = \Yii::$app->user->identity->grid_attributes ?
-            Json::decode(\Yii::$app->user->identity->grid_attributes)
-            : Bid::GRID_ATTRIBUTES;
-        $gridAttributes = array_filter($gridAttributes, function($attribute) {
-            return \Yii::$app->user->can('adminBidAttribute', ['attribute' => $attribute]);
-        }, ARRAY_FILTER_USE_KEY);
+        $gridAttributes = $this->getGridAttributes();
 
         $gridHelper = new GridHelper($gridAttributes, $searchModel);
         Url::remember('','bid/index');
@@ -91,23 +86,23 @@ class BidController extends Controller
 
     public function actionSetGridAttributes()
     {
-        $gridAttributes = \Yii::$app->user->identity->grid_attributes ?
-            Json::decode(\Yii::$app->user->identity->grid_attributes)
-            : Bid::GRID_ATTRIBUTES;
-        $additionalAttributes = array_diff_key(Bid::GRID_ATTRIBUTES, $gridAttributes);
-        $gridAttributes += $additionalAttributes;
-        $gridAttributes = array_filter($gridAttributes, function($attribute) {
-            return \Yii::$app->user->can('adminBidAttribute', ['attribute' => $attribute]);
-        }, ARRAY_FILTER_USE_KEY);
+        $gridAttributes = $this->getGridAttributes();
 
         return $this->render('set-grid-attributes', compact('gridAttributes'));
     }
 
     public function actionSaveGridAttributes()
     {
-        $user = User::findOne(\Yii::$app->user->id);
-        $gridAttributes = \Yii::$app->request->post('grid_attributes');
-        $user->grid_attributes = Json::encode($gridAttributes);
+        $gridAttributes = Json::encode(\Yii::$app->request->post('grid_attributes'));
+        $user = \Yii::$app->user->identity;
+        if ($master = $user->master) {
+            if ($master->getBidRole() === Bid::TREATMENT_TYPE_WARRANTY) {
+                $master->grid_attributes_warranty = $gridAttributes;
+                $master->save();
+                return $this->redirect(['index']);
+            }
+        }
+        $user->grid_attributes = $gridAttributes;
         $user->save();
 
         return $this->redirect(['index']);
@@ -363,6 +358,29 @@ class BidController extends Controller
         } else {
             throw new \DomainException('Unknown action after bid change');
         }
+    }
+
+    private function getGridAttributes()
+    {
+        $master = \Yii::$app->user->identity->master;
+        if ($master) {
+            $gridAttributes = $master->getBidRole() === Bid::TREATMENT_TYPE_WARRANTY
+                ? $master->grid_attributes_warranty
+                : \Yii::$app->user->identity->grid_attributes;
+        } else {
+            $gridAttributes = \Yii::$app->user->identity->grid_attributes;
+        }
+
+        $gridAttributes = $gridAttributes ?
+            Json::decode($gridAttributes)
+            : Bid::GRID_ATTRIBUTES;
+        $additionalAttributes = array_diff_key(Bid::GRID_ATTRIBUTES, $gridAttributes);
+        $gridAttributes += $additionalAttributes;
+        $gridAttributes = array_filter($gridAttributes, function($attribute) {
+            return \Yii::$app->user->can('adminBidAttribute', ['attribute' => $attribute]);
+        }, ARRAY_FILTER_USE_KEY);
+
+        return $gridAttributes;
     }
 
 }
