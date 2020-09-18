@@ -26,6 +26,12 @@ class TemplateModel extends \yii\db\ActiveRecord
     const SUB_TYPE_ACT_WRITE_OFF = 'act_write_off';
     const SUB_TYPE_ACT_NO_WARRANTY = 'act_no_warranty';
 
+    const SUB_TYPE_ACTS = [
+        self::SUB_TYPE_ACT_DIAGNOSTIC  => 'Акт диагностики',
+        self::SUB_TYPE_ACT_WRITE_OFF  => 'Акт списания',
+        self::SUB_TYPE_ACT_NO_WARRANTY  => 'Акт не гарантии',
+    ];
+
 
     /**
      * {@inheritdoc}
@@ -88,16 +94,8 @@ class TemplateModel extends \yii\db\ActiveRecord
 
     public function getActHeader()
     {
-        switch ($this->sub_type) {
-            case self::SUB_TYPE_ACT_DIAGNOSTIC:
-                return 'Акт диагностики';
-            case self::SUB_TYPE_ACT_WRITE_OFF:
-                return 'Акт списания';
-            case self::SUB_TYPE_ACT_NO_WARRANTY:
-                return 'Акт не гарантии';
-            default:
-                return 'Акт';
-        }
+        $acts = self::SUB_TYPE_ACTS;
+        return isset($acts[$this->sub_type]) ? $acts[$this->sub_type] : '';
     }
 
     public function getReportHeader()

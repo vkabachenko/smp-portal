@@ -10,6 +10,10 @@ use yii\helpers\ArrayHelper;
  *
  * @property int $id
  * @property string $name
+ * @property string $sub_type_act
+ * @property string $email_subject
+ * @property string $email_body
+ * @property string $email_signature
  */
 class DecisionWorkshopStatus extends \yii\db\ActiveRecord
 {
@@ -28,7 +32,8 @@ class DecisionWorkshopStatus extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['name'], 'string', 'max' => 255],
+            [['name', 'sub_type_act', 'email_subject', 'email_signature'], 'string', 'max' => 255],
+            [['email_body'], 'string'],
         ];
     }
 
@@ -40,6 +45,11 @@ class DecisionWorkshopStatus extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Наименование',
+            'sub_type_act' => 'Вид акта',
+            'email_subject' => 'Шаблон письма - тема',
+            'email_body' => 'Шаблон письма - текст',
+            'email_signature' => 'Шаблон письма - подпись',
+
         ];
     }
 
