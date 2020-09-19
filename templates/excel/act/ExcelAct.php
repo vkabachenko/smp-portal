@@ -4,6 +4,7 @@ namespace app\templates\excel\act;
 use alhimik1986\PhpExcelTemplator\PhpExcelTemplator;
 use app\models\BidJob;
 use app\models\Spare;
+use app\models\TemplateModel;
 use app\templates\excel\ExcelActTemplate;
 use app\helpers\common\DateHelper;
 
@@ -11,7 +12,9 @@ class ExcelAct extends ExcelActTemplate
 {
     public function getFilename()
     {
-        return $this->template ? $this->template->sub_type . '-' . $this->bid->id . '.xlsx' : '';
+        return $this->decision && $this->decision->sub_type_act
+            ? $this->decision->sub_type_act . '-' . $this->bid->id . '.xlsx'
+            : '';
     }
 
     public function getDirectory()
@@ -21,12 +24,11 @@ class ExcelAct extends ExcelActTemplate
 
     public function generate()
     {
-        if (is_null($this->template) || empty($this->template->file_name)) {
+        if (empty($this->template)) {
             return;
         }
 
         PhpExcelTemplator::saveToFile($this->template->getTemplatePath(), $this->getPath(), $this->getParams());
-
     }
 
     protected function getParams()

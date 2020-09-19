@@ -7,6 +7,7 @@ namespace app\models\form;
 use app\helpers\common\MailHelper;
 use app\models\Bid;
 use app\models\BidImage;
+use app\models\DecisionStatusInterface;
 use app\models\Manager;
 use app\models\Master;
 use app\models\TemplateModel;
@@ -26,7 +27,9 @@ class SendActForm extends Model
     public $images = [];
     public $sent = [];
     public $email;
-    public $subType;
+
+    /* @var Bid */
+    public $bid;
 
     /* @var ExcelAct */
     public $act;
@@ -34,11 +37,19 @@ class SendActForm extends Model
     /* @var EmailTemplate */
     public $emailTemplate;
 
+    /* @var DecisionStatusInterface */
+    public $decision;
+
     /**
      * @inheritdoc
      */
     public function init()
     {
+        $this->bid = Bid::findOne($this->bidId);
+        $this->decision = $this->getDecision();
+        $this->act = $this->decision ? new ExcelAct($this->bid, $this->decision) : null;
+        $this->email = $this->getStoredEmail();
+
         $models = BidImage::getAllowedImages($this->bidId, $this->user);
         $this->sent = [];
         foreach ($models as $model) {
@@ -46,15 +57,16 @@ class SendActForm extends Model
             $this->images[$model->id] = EasyThumbnailImage::thumbnailImg($model->getPath(), 50, 50);
             $this->sent[] = $model->sent;
         }
-        $this->act = new ExcelAct($this->bidId, $this->subType);
-        $this->email = $this->getStoredEmail();
 
-        $bid = Bid::findOne($this->bidId);
         $template = TemplateModel::find()
-            ->where(['agency_id' => $bid->getAgency()->id, 'type' => TemplateModel::TYPE_ACT, 'sub_type' => $this->subType])
+            ->where([
+                'agency_id' => $this->bid->getAgency()->id,
+                'type' => TemplateModel::TYPE_ACT,
+                'sub_type' => $this->decision ? $this->decision->sub_type_act : null
+            ])
             ->one();
 
-        $this->emailTemplate = new EmailActTemplate($this->bidId, $template);
+        $this->emailTemplate = $this->decision ? new EmailActTemplate($this->bid, $template, $this->decision) : null;
     }
 
     /**
@@ -63,8 +75,11 @@ class SendActForm extends Model
     public function rules()
     {
         return [
-            [['bidId', 'email'], 'required'],
-            [['images'], 'safe'],
+            ['email', 'required', 'message' => 'Не заданы адреса для отправки'],
+            ['bid', 'required', 'message' => 'Не задана заявка'],
+            ['decision', 'required', 'message' => 'Не задано решение мастерской или представительства'],
+            ['decision', 'isActExists'],
+            [['images', 'act', 'emailTemplate'], 'safe'],
             [['email'], 'string'],
             [['email'], 'filter', 'filter' => 'trim'],
         ];
@@ -80,6 +95,13 @@ class SendActForm extends Model
             'images' => 'Выберите фотографии',
             'email' => 'Email'
         ];
+    }
+
+    public function isActExists($attribute, $params, $validator)
+    {
+        if (!empty($this->decision->sub_type_act) && empty($this->act->template)) {
+                $this->addError('act', 'Не задан шаблон акта');
+        }
     }
 
     public function send(UploadExcelTemplateForm $uploadForm)
@@ -153,6 +175,21 @@ class SendActForm extends Model
     private function getEmailsList(...$emails)
     {
         return MailHelper::getEmailsList(...$emails);
+    }
+
+    private function getDecision()
+    {
+        if (!$this->bid) {
+            return null;
+        }
+        $userModel = $this->user->identity;
+        if ($userModel->master) {
+            return $this->bid->decisionWorkshopStatus;
+        } elseif ($userModel->manager) {
+            return $this->bid->decisionAgencyStatus;
+        } else {
+            return null;
+        }
     }
 
 

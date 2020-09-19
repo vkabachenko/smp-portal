@@ -14,14 +14,9 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
 
 <div>
 
-    <?php if (!$model->act->isGenerated()): ?>
-    <div style="color: red; font-weight: bold">
-        Акт не сгенерирован! Проверьте наличие шаблона акта
-    </div>
-
-    <?php endif; ?>
-
     <?php $form = ActiveForm::begin(); ?>
+
+    <?= $form->errorSummary($model); ?>
 
         <div class="form-group hidden">
             <?= Html::a('', '#', ['class' => 'btn btn-primary toggle-extended hidden-extended']) ?>
@@ -44,7 +39,7 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
             <?= $form->field($model, 'email') ?>
         </div>
 
-    <?php if ($model->act->isGenerated()): ?>
+    <?php if ($model->act && $model->act->isGenerated()): ?>
         <div class="form-group extended-form">
             <?= Html::a('Акт технического состояния', [
                     'download/act-excel',
@@ -58,7 +53,7 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
         <?= $form->field($uploadForm, 'file')->widget(FileInput::class, [
             'pluginOptions'=>['allowedFileExtensions'=>['xlsx'],'showUpload' => false,]
         ])
-            ->label($model->act->isGenerated() ?
+            ->label($model->act && $model->act->isGenerated() ?
             'Заменить сгенерированный акт'  :
             'Акт технического состояния'
             )

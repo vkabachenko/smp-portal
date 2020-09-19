@@ -15,7 +15,7 @@ use yii\helpers\ArrayHelper;
  * @property string $email_body
  * @property string $email_signature
  */
-class DecisionAgencyStatus extends \yii\db\ActiveRecord
+class DecisionAgencyStatus extends \yii\db\ActiveRecord implements DecisionStatusInterface
 {
     /**
      * {@inheritdoc}

@@ -5,6 +5,7 @@ namespace app\templates\email;
 
 
 use app\models\Bid;
+use app\models\DecisionStatusInterface;
 use app\models\TemplateModel;
 
 class EmailActTemplate extends EmailTemplate
@@ -12,10 +13,10 @@ class EmailActTemplate extends EmailTemplate
     /* @var \app\models\Bid */
     private $bid;
 
-    public function __construct($bidId, TemplateModel $template)
+    public function __construct(Bid $bid, $template, DecisionStatusInterface $decision)
     {
-        $this->bid = Bid::findOne($bidId);
-        parent::__construct($template);
+        parent::__construct($template, $decision);
+        $this->bid = $bid;
     }
 
     protected function getParams()
