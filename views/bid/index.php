@@ -22,7 +22,7 @@ $columns = $gridHelper->getColumns();
 ?>
 
 <div>
-    <h2> <?= $this->title ?></h2>
+    <h2> <?= $this->title ?> <?= Html::a('Сброс', ['bid/index'], ['class' => 'btn btn-default']) ?></h2>
 
     <div class="bids-grid">
         <div class="row row-no-padding">
