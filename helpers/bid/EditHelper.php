@@ -674,7 +674,7 @@ class EditHelper
                 ['labelOptions' => HintHelper::getLabelOptions('bid_1C_number', $hints)]
             )->textInput([
                 'maxlength' => true,
-                'disabled' => self::isDisabled($model, 'bid_1C_number')
+                'disabled' => self::isDisabled($model, 'bid_1C_number') || self::isDisabledFilled($model, 'bid_1C_number')
                 ]);
         }
 
@@ -711,9 +711,7 @@ class EditHelper
                 ['labelOptions' => HintHelper::getLabelOptions('manager', $hints)]
             )->textInput([
                 'maxlength' => true,
-                'disabled' => self::isDisabled($model, 'manager')  || (
-                        \Yii::$app->user->can('master') && !empty($model->manager)
-                    )
+                'disabled' => self::isDisabled($model, 'manager')  || self::isDisabledFilled($model, 'manager')
             ]);
         }
 
@@ -722,9 +720,7 @@ class EditHelper
                 ['labelOptions' => HintHelper::getLabelOptions('manager_contact', $hints)]
             )->textInput([
                 'maxlength' => true,
-                'disabled' => self::isDisabled($model, 'manager_contact')  || (
-                        \Yii::$app->user->can('master') && !empty($model->manager_contact)
-                    )
+                'disabled' => self::isDisabled($model, 'manager_contact')  || self::isDisabledFilled($model, 'manager_contact')
                 ]);
         }
 
@@ -733,9 +729,7 @@ class EditHelper
                 ['labelOptions' => HintHelper::getLabelOptions('manager_presale', $hints)]
             )->textInput([
                 'maxlength' => true,
-                'disabled' => self::isDisabled($model, 'manager_presale')  || (
-                        \Yii::$app->user->can('master') && !empty($model->manager_presale)
-                    )
+                'disabled' => self::isDisabled($model, 'manager_presale')  || self::isDisabledFilled($model, 'manager_presale')
                 ]);
         }
 
@@ -784,10 +778,8 @@ class EditHelper
         )
             ->dropDownList(Master::mastersAsMap(\Yii::$app->user->identity),[
                 'prompt' => 'Выбор',
-                'disabled' => self::isDisabled($model, 'master_id') || (
-                    \Yii::$app->user->can('master') && !empty($model->master_id)
-                    )
-                ]);
+                'disabled' => self::isDisabled($model, 'master_id') || self::isDisabledFilled($model, 'master_id')
+            ]);
 
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])) {
             $attributes['comment'] = $form->field($model, 'comment',
@@ -832,5 +824,10 @@ class EditHelper
     {
         return $bid->is_control
             && !\Yii::$app->user->can('adminBidAttribute', ['attribute' => $attribute, 'is_control' => true]);
+    }
+
+    public static function isDisabledFilled(Bid $bid, $attribute)
+    {
+        return \Yii::$app->user->can('master') && !empty($bid->$attribute);
     }
 }
