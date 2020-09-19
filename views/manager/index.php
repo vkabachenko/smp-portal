@@ -17,7 +17,6 @@ $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);
 
     <div class="list-group center-menu">
         <?= Html::a('Заявки', ['bid/index'], ['class' => 'list-group-item center-menu-item']) ?>
-        <?= Html::a('Профиль', ['manager/profile'], ['class' => 'list-group-item center-menu-item']) ?>
 
         <?php if (\Yii::$app->user->can('updateAgency')): ?>
 
@@ -35,6 +34,7 @@ $this->title = TitleHelper::getTitle(\Yii::$app->user->identity);
             ?>
             <?= Html::a('Мастерcкие', ['agency-workshop/workshops'], ['class' => 'list-group-item center-menu-item']) ?>
             <?= Html::a('Менеджеры', ['agency-manager/managers'], ['class' => 'list-group-item center-menu-item']) ?>
+            <?= Html::a('Профиль', ['manager/profile'], ['class' => 'list-group-item center-menu-item']) ?>
 
         <?php endif; ?>
         <?= Html::a('Написать разработчику', '#', ['class' => 'list-group-item center-menu-item btn-feedback']) ?>
