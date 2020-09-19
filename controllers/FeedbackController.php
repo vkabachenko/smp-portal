@@ -36,7 +36,7 @@ class FeedbackController extends Controller
             \Yii::$app->request->post('subject', ''),
             \Yii::$app->request->post('message', ''),
             \Yii::$app->request->post('files', []),
-            \Yii::$app->user->identity->email
+            \Yii::$app->user->identity
         );
 
         return $mailService->send();

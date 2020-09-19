@@ -4,29 +4,41 @@
 namespace app\services\mail;
 
 
+use app\models\User;
+
 class Feedback implements SendMail
 {
     private $subject;
     private $message;
-    private $userEmail;
+
+    /* @var User */
+    private $user;
 
     /* @var array */
     private $dirs;
 
-    public function __construct($subject, $message, $dirs, $userEmail)
+    public function __construct($subject, $message, $dirs, User $user)
     {
         $this->subject = $subject;
-        $this->userEmail = $userEmail;
+        $this->user = $user;
         $this->dirs = $dirs;
         $this->message = $this->createTextMessage($message);
     }
 
     private function createTextMessage($message)
     {
-        $details = 'Темв: ' . $this->subject . "\n"
-            . 'Email пользователя: ' . $this->userEmail;
+        $details = 'Тема: ' . $this->subject . "\n"
+            . 'Email пользователя: ' . $this->user->email;
 
-        return $message . "\n\n" . $details;
+        if ($this->user->master) {
+            $office = "\n\n" .'Мастерская ' . $this->user->master->workshop->name;
+        } elseif ($this->user->manager) {
+            $office = "\n\n" .'Представительство ' . $this->user->manager->agency->name;
+        } else {
+            $office = '';
+        }
+
+        return $message . "\n\n" . $details . $office;
     }
 
     public function send()
