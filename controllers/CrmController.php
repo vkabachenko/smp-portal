@@ -7,6 +7,7 @@ use app\models\Bid;
 use app\models\Client;
 use app\models\ClientPhone;
 use app\models\Workshop;
+use yii\db\Expression;
 use yii\helpers\Json;
 use yii\rest\Controller;
 
@@ -26,6 +27,7 @@ class CrmController extends Controller
     public function beforeAction($action)
     {
         $token = \Yii::$app->request->get('token');
+        $token = $token ?: \Yii::$app->request->post('token');
         $this->workshop = $this->getWorkshop($token);
 
         return parent::beforeAction($action);
@@ -37,6 +39,25 @@ class CrmController extends Controller
         $phone = CrmHelper::purifyPhone($phone);
 
         return Client::getClientByPhone($phone, $this->workshop);
+    }
+
+    public function actionGetActiveClients()
+    {
+        $phones = \Yii::$app->request->post('phones');
+        $normalizedPhones = array_map(function($phone) {return CrmHelper::purifyPhone($phone);},
+            $phones);
+
+        $foundPhones = ClientPhone::find()
+            ->select(['normalized_phone' => new Expression('substr(regex_replace("[^0-9]", "", client_phone.phone), -10)')])
+            ->joinWith('client.workshop', false)
+            ->where(['workshop.id' => $this->workshop->id])
+            ->having(['normalized_phone' => $normalizedPhones])
+            ->column();
+
+        $flagPhones = array_map(function($item) use ($foundPhones) {return array_search($item, $foundPhones) === false ? false : true;}
+        , $normalizedPhones);
+
+        return array_combine($phones, $flagPhones);
     }
 
     public function actionGetClientByBidNumber()
