@@ -26,6 +26,7 @@ class SendActForm extends Model
     public $bidId;
     public $images = [];
     public $sent = [];
+    public $label = [];
     public $email;
 
     /* @var Bid */
@@ -52,10 +53,12 @@ class SendActForm extends Model
 
         $models = BidImage::getAllowedImages($this->bidId, $this->user);
         $this->sent = [];
+        $this->label = [];
         foreach ($models as $model) {
             /* @var $model BidImage */
             $this->images[$model->id] = EasyThumbnailImage::thumbnailImg($model->getPath(), 50, 50);
             $this->sent[] = $model->sent;
+            $this->label[] = $model->file_name;
         }
 
         $template = TemplateModel::find()
@@ -127,8 +130,7 @@ class SendActForm extends Model
         if ($this->images) {
             foreach ($this->images as $index=>$imageId) {
                 $model = BidImage::findOne($imageId);
-                $imageName = sprintf('photo_%s_%s', $model->bid_id, $index + 1);
-                $message->attach($model->getPath(), ['fileName' => $imageName]);
+                $message->attach($model->getPath(), ['fileName' => $model->file_name]);
             }
         }
 

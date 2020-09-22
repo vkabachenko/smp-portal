@@ -36,6 +36,7 @@ class SendActRule extends Rule
         $master = $user->master;
         if ($master) {
             if ($master->workshop_id == $bid->workshop_id
+                && $master->getBidRole() == Bid::TREATMENT_TYPE_WARRANTY
                 && ($bid->status_id === BidStatus::getId(BidStatus::STATUS_FILLED)
                 || $bid->status_id === BidStatus::getId(BidStatus::STATUS_READ_WORKSHOP))) {
                 return true;

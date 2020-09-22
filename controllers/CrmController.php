@@ -21,6 +21,7 @@ class CrmController extends Controller
         return [
             'get-client' => ['GET'],
             'get-client-by-bid-number' => ['GET'],
+            'get-active-clients' => ['POST'],
         ];
     }
 
