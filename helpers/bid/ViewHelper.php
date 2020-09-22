@@ -29,8 +29,8 @@ class ViewHelper
         $attributes['vendor_code'] = $bid->vendor_code;
         $attributes['composition_name'] = $bid->composition_name;
         $attributes['composition_name_manufacturer'] = $bid->composition_name_manufacturer;
-        $attributes['condition_id'] = $bid->condition_id ? $bid->condition->name : null;
-        $attributes['condition_manufacturer_id'] = $bid->condition_manufacturer_id ? $bid->conditionManufacturer->name : null;
+        $attributes['condition_name'] = $bid->condition_name;
+        $attributes['condition_manufacturer_name'] = $bid->condition_manufacturer_name;
         $attributes['defect'] = $bid->defect;
         $attributes['defect_manufacturer'] = $bid->defect_manufacturer;
         $attributes['diagnostic'] = $bid->diagnostic;

@@ -1,14 +1,7 @@
 <?php
 
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use app\models\Manufacturer;
 use app\models\Bid;
-use app\models\Condition;
-use app\models\RepairStatus;
-use app\models\WarrantyStatus;
-use app\models\BidStatus;
-use kartik\date\DatePicker;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\search\BidSearch */
@@ -225,12 +218,12 @@ use kartik\date\DatePicker;
         </span>
     <?php endif; ?>
 
-    <?php if($model->condition_id): ?>
+    <?php if($model->condition_name): ?>
         <span class="bid-search-head">
             Состояние
         </span>
         <span class="bid-search-content">
-            <?= $model->condition->name ?>
+            <?= $model->condition_name ?>
         </span>
     <?php endif; ?>
 

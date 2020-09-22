@@ -162,8 +162,8 @@ use kartik\date\DatePicker;
         ) ?>
     <?php endif; ?>
 
-    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_id'])): ?>
-        <?= $form->field($model, 'condition_id')->dropDownList(Condition::conditionsAsMap(),['prompt' => 'Выбор']) ?>
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_name'])): ?>
+        <?= $form->field($model, 'condition_name')->label('Состояние') ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'defect'])): ?>

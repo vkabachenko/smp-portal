@@ -49,7 +49,7 @@ class ExcelAct extends ExcelActTemplate
             '{purchase_date}' => DateHelper::getReadableDate($this->bid->purchase_date),
             '{client_name}' => $this->bid->client_id ? $this->bid->client->name : '',
             '{client_phone}' => $this->bid->client_id ? $this->bid->client->clientPhone : '',
-            '{condition}' => $this->bid->condition_id ? $this->bid->condition->name : '',
+            '{condition}' => $this->bid->condition_manufacturer_name,
             '{defect_warranty}' => $this->bid->defect_manufacturer ?: $this->bid->defect,
             '{diagnostic_warranty}' => $this->bid->diagnostic_manufacturer ?: $this->bid->diagnostic,
             '{isWarranty}' => $this->bid->isWarranty() ? 'Да' : '',

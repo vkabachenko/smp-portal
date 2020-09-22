@@ -203,7 +203,7 @@ class ReadService extends BaseService
         $model->manufacturer_id = $brandService->getManufacturerId();
         $model->brand_model_name = $this->getAttribute($model, $attributes, 'brand_model_name', [$this, 'same']);
         $model->serial_number = $this->getAttribute($model, $attributes, 'serial_number', [$this, 'same']);
-        $model->condition_id = $this->getAttribute($model, $attributes, 'condition_id', '\app\models\Condition::findIdByName');
+        $model->condition_name = $this->getAttribute($model, $attributes, 'condition_name', [$this, 'same']);
         $model->composition_name = $this->getAttribute($model, $attributes, 'composition_name', [$this, 'same']);
         $model->defect = $this->getAttribute($model, $attributes, 'defect', [$this, 'same']);
         $model->defect_manufacturer = $this->getAttribute($model, $attributes, 'defect_manufacturer', [$this, 'same']);

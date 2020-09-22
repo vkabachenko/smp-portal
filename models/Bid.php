@@ -38,8 +38,8 @@ use yii\db\ActiveRecord;
  * @property string $bid_number
  * @property string $bid_1C_number
  * @property string $bid_manufacturer_number
- * @property int $condition_id
- * @property int $condition_manufacturer_id
+ * @property string $condition_name
+ * @property string $condition_manufacturer_name
  * @property int $repair_status_id
  * @property int $warranty_status_id
  * @property int $status_id
@@ -80,7 +80,6 @@ use yii\db\ActiveRecord;
  * @property string $equipment_manufacturer
  *
  *
- * @property Condition $condition
  * @property Brand $brand
  * @property BrandCorrespondence $brandCorrespondence
  * @property Client $client
@@ -109,8 +108,8 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'warranty_number' => 'Номер гарантийного талона',
         'bid_1C_number' => 'Номер заявки в 1С',
         'bid_manufacturer_number' => 'Номер заявки у представительства',
-        'condition_id' => 'Состояние',
-        'condition_manufacturer_id'  => 'Состояние для представительства',
+        'condition_name' => 'Состояние',
+        'condition_manufacturer_name'  => 'Состояние для представительства',
         'defect' => 'Заявленная неисправность',
         'diagnostic' => 'Результат диагностики',
         'repair_status_id' => 'Статус ремонта',
@@ -182,8 +181,8 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'brand_name' => 'Бренд',
         'brand_model_name' => 'Модель',
         'serial_number'  => 'Серийный номер',
-        'condition_id' => 'Состояние',
-        'condition_manufacturer_id'  => 'Состояние для представительства',
+        'condition_name' => 'Состояние',
+        'condition_manufacturer_name'  => 'Состояние для представительства',
         'composition_name' => 'Комплектность',
         'composition_name_manufacturer' => 'Комплектность для представительства',
         'defect' => 'Заявленная неисправность',
@@ -239,8 +238,8 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'client_id'  => ['desktop' => true, 'tablet' => true, 'phone' => true],
         'client_manufacturer_id'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
         'master_id'  => ['desktop' => true, 'tablet' => false, 'phone' => false],
-        'condition_id'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
-        'condition_manufacturer_id'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
+        'condition_name'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
+        'condition_manufacturer_name'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
         'brand_name'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
         'brand_model_name'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
         'composition_name'  => ['desktop' => false, 'tablet' => false, 'phone' => false],
@@ -306,8 +305,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 'composition_id',
                 'client_id',
                 'client_manufacturer_id',
-                'condition_id',
-                'condition_manufacturer_id',
                 'repair_status_id',
                 'warranty_status_id',
                 'status_id',
@@ -363,6 +360,8 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 'bid_manufacturer_number',
                 'equipment',
                 'equipment_manufacturer',
+                'condition_name',
+                'condition_manufacturer_name',
                 'defect',
                 'diagnostic',
                 'manager',
@@ -374,8 +373,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 'warranty_comment',
             ], 'string', 'max' => 255],
             ['purchase_date', 'BeforeApplicationDateValidate'],
-            [['condition_id'], 'exist', 'skipOnError' => true, 'targetClass' => Condition::className(), 'targetAttribute' => ['condition_id' => 'id']],
-            [['condition_manufacturer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Condition::className(), 'targetAttribute' => ['condition_manufacturer_id' => 'id']],
             [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => Brand::className(), 'targetAttribute' => ['brand_id' => 'id']],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::className(), 'targetAttribute' => ['client_id' => 'id']],
             [['client_manufacturer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Client::className(), 'targetAttribute' => ['client_manufacturer_id' => 'id']],
@@ -413,22 +410,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     public function attributeLabels()
     {
         return $this->getAllAttributes();
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCondition()
-    {
-        return $this->hasOne(Condition::className(), ['id' => 'condition_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getConditionManufacturer()
-    {
-        return $this->hasOne(Condition::className(), ['id' => 'condition_manufacturer_id']);
     }
 
     /**
@@ -850,7 +831,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         $this->copySimilarFields('equipment', 'equipment_manufacturer');
         $this->copySimilarFields('date_completion', 'date_completion_manufacturer');
         $this->copySimilarFields('composition_name', 'composition_name_manufacturer');
-        $this->copySimilarFields('condition_id', 'condition_manufacturer_id');
+        $this->copySimilarFields('condition_name', 'condition_manufacturer_name');
         $this->copySimilarFields('client_id', 'client_manufacturer_id');
 
         $this->date_manufacturer = $this->date_manufacturer ?: date('Y-m-d H:i:s');

@@ -68,8 +68,8 @@ class GridHelper
             'client_id'  => 'getClientColumn',
             'client_manufacturer_id'  => 'getClientManufacturerColumn',
             'master_id'  => 'getMasterColumn',
-            'condition_id'  => 'getConditionColumn',
-            'condition_manufacturer_id'  => 'getConditionManufacturerColumn',
+            'condition_name'  => 'getConditionColumn',
+            'condition_manufacturer_name'  => 'getConditionManufacturerColumn',
             'brand_name'  => 'getBrandColumn',
             'brand_model_name'  => 'getBrandModelColumn',
             'composition_name'  => 'getCompositionColumn',
@@ -242,36 +242,34 @@ class GridHelper
     private function getConditionColumn()
     {
         return [
-            'attribute' => 'condition_id',
+            'attribute' => 'condition_name',
             'format' => 'raw',
             'value' => function (Bid $model) {
-                $html = $model->condition_id
-                    ? Html::tag('div', $model->condition->name)
+                $html = $model->condition_name
+                    ? Html::tag('div', $model->condition_name)
                     : null;
                 return $html;
             },
-            'filterOptions' => ['class' => 'grid-condition_id'],
-            'headerOptions' => ['class' => 'grid-condition_id'],
-            'contentOptions' => ['class' => 'grid-condition_id'],
-            'filter' => Condition::conditionsAsMap()
+            'filterOptions' => ['class' => 'grid-condition_name'],
+            'headerOptions' => ['class' => 'grid-condition_name'],
+            'contentOptions' => ['class' => 'grid-condition_name'],
         ];
     }
 
     private function getConditionManufacturerColumn()
     {
         return [
-            'attribute' => 'condition_manufacturer_id',
+            'attribute' => 'condition_manufacturer_name',
             'format' => 'raw',
             'value' => function (Bid $model) {
-                $html = $model->condition_manufacturer_id
-                    ? Html::tag('div', $model->conditionManufacturer->name)
+                $html = $model->condition_manufacturer_name
+                    ? Html::tag('div', $model->condition_manufacturer_name)
                     : null;
                 return $html;
             },
-            'filterOptions' => ['class' => 'grid-condition_manufacturer_id'],
-            'headerOptions' => ['class' => 'grid-condition_manufacturer_id'],
-            'contentOptions' => ['class' => 'grid-condition_manufacturer_id'],
-            'filter' => Condition::conditionsAsMap()
+            'filterOptions' => ['class' => 'grid-condition_manufacturer_name'],
+            'headerOptions' => ['class' => 'grid-condition_manufacturer_name'],
+            'contentOptions' => ['class' => 'grid-condition_manufacturer_name'],
         ];
     }
 

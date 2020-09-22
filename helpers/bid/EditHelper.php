@@ -65,7 +65,7 @@ class EditHelper
                     });
                 }
             '),
-                        'select' => new JsExpression('
+             'select' => new JsExpression('
                 function (event, ui) {
                     event.preventDefault();
                     this.value = ui.item.label;
@@ -391,26 +391,64 @@ class EditHelper
                 ]);
         }
 
-        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_id'])) {
-            $attributes['condition_id'] = $form->field($model, 'condition_id',
-                ['labelOptions' => HintHelper::getLabelOptions('condition_id', $hints)]
-            )
-                ->dropDownList(Condition::conditionsAsMap(),[
-                    'prompt' => 'Выбор',
-                    'class' => 'form-control',
-                    'disabled' => self::isDisabled($model, 'condition_id')
-                    ]);
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_name'])) {
+            $attributes['condition_name'] = Html::beginTag('div', ['class' => 'row'])
+
+                    . Html::beginTag('div', ['class' => 'col-sm-6']) .
+                    $form->field($model, 'condition_name',
+                    [ 'labelOptions' => HintHelper::getLabelOptions('condition_name', $hints),]
+                )->textInput([
+                    'id' => 'condition-name',
+                    'disabled' => self::isDisabled($model, 'condition_name')
+                    ])
+                    .
+                    Html::endTag('div')
+
+                    . Html::beginTag('div', ['class' => 'col-sm-6', 'style' => 'margin-top: 30px;'])
+                    .
+                    Html::dropDownList('', '', Condition::conditionsAsMap(),
+                    [
+                        'prompt' => '',
+                        'onchange' => '$("#condition-name").val($(this).val());',
+                        'style' => 'opacity: 0.5'
+                    ])
+
+                    .
+                    Html::endTag('div')
+                    . Html::tag('div', '', ['class' => 'clearfix'])
+
+                .
+                Html::endTag('div');
         }
 
-        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_manufacturer_id'])) {
-            $attributes['condition_manufacturer_id'] = $form->field($model, 'condition_manufacturer_id',
-                ['labelOptions' => HintHelper::getLabelOptions('condition_manufacturer_id', $hints)]
-            )
-                ->dropDownList(Condition::conditionsAsMap(),[
-                    'prompt' => 'Выбор',
-                    'class' => 'form-control',
-                    'disabled' => self::isDisabled($model, 'condition_manufacturer_id')
-                ]);
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_manufacturer_name'])) {
+            $attributes['condition_manufacturer_name'] = Html::beginTag('div', ['class' => 'row'])
+
+                . Html::beginTag('div', ['class' => 'col-sm-6']) .
+                $form->field($model, 'condition_manufacturer_name',
+                    [ 'labelOptions' => HintHelper::getLabelOptions('condition_manufacturer_name', $hints),]
+                )->textInput([
+                    'id' => 'condition-manufacturer-name',
+                    'disabled' => self::isDisabled($model, 'condition_name')
+                ])
+                .
+                Html::endTag('div')
+
+                . Html::beginTag('div', ['class' => 'col-sm-6', 'style' => 'margin-top: 30px;'])
+                .
+                Html::dropDownList('', '', Condition::conditionsAsMap(),
+                    [
+                        'prompt' => '',
+                        'onchange' => '$("#condition-manufacturer-name").val($(this).val());',
+                        'style' => 'opacity: 0.5'
+                    ])
+
+                .
+                Html::endTag('div')
+                . Html::tag('div', '', ['class' => 'clearfix'])
+
+                .
+                Html::endTag('div');
         }
 
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_id'])) {

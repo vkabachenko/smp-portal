@@ -46,44 +46,14 @@ class Condition extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBids()
-    {
-        return $this->hasMany(Bid::className(), ['condition_id' => 'id']);
-    }
-
-    /**
      * return array
      */
     public static function conditionsAsMap()
     {
         $models = self::find()->orderBy('name')->all();
-        $list = ArrayHelper::map($models, 'id', 'name');
+        $list = ArrayHelper::map($models, 'name', 'name');
 
         return $list;
     }
 
-
-    public static function findByName($name)
-    {
-        if (empty($name)) {
-            return null;
-        }
-
-        $model = self::find()->where(['name' => $name])->one();
-        if (!$model) {
-            $model = new self(['name' => $name]);
-            $model->save();
-        }
-
-        return $model;
-    }
-
-    public static function findIdByName($name)
-    {
-        $model = self::findByName($name);
-
-        return $model ? $model->id : null;
-    }
 }

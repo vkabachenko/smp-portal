@@ -37,7 +37,6 @@ class BidSearch extends Bid
         return [
             [[
                 'manufacturer_id',
-                'condition_id',
                 'status_id',
                 'warranty_status_id',
                 'repair_status_id',
@@ -125,7 +124,7 @@ class BidSearch extends Bid
             ->distinct()
             ->joinWith(['client', 'client.clientPhones'], false)
             ->with([
-                'condition', 'brand', 'brandCorrespondence', 'brandModel', 'manufacturer', 'repairStatus',
+                'brand', 'brandCorrespondence', 'brandModel', 'manufacturer', 'repairStatus',
                 'status', 'master', 'workshop', 'warrantyStatus'
                 ])
             ->where($this->restrictions)
@@ -153,7 +152,6 @@ class BidSearch extends Bid
 
         $query->andFilterWhere([
             'manufacturer_id' => $this->manufacturer_id,
-            'condition_id' => $this->condition_id,
             'repair_status_id' => $this->repair_status_id,
             'warranty_status_id' => $this->warranty_status_id,
             'status_id' => $this->status_id,
@@ -171,6 +169,7 @@ class BidSearch extends Bid
 
         $query
             ->andFilterWhere(['like', 'brand_name', $this->brand_name])
+            ->andFilterWhere(['like', 'condition_name', $this->condition_name])
             ->andFilterWhere(['like', 'equipment', $this->equipment])
             ->andFilterWhere(['like', 'brand_model_name', $this->brand_model_name])
             ->andFilterWhere(['like', 'composition_name', $this->composition_name])

@@ -120,7 +120,7 @@ class WriteService extends BaseService
             'brand_name' => $model->brand_correspondence_id ? $model->brandCorrespondence->name : $model->brand_name,
             'brand_model_name' => $model->brand_model_name,
             'serial_number'  => $model->serial_number,
-            'condition_id' => $model->condition_id ? $model->condition->name : '',
+            'condition_name' => $model->condition_name,
             'composition_name' => $model->composition_name,
             'defect' => $model->defect,
             'comment' => $model->comment,
