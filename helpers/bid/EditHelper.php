@@ -811,13 +811,15 @@ class EditHelper
                 ]);
         }
 
-        $attributes['master_id'] = $form->field($model, 'master_id',
-            ['labelOptions' => HintHelper::getLabelOptions('master_id', $hints)]
-        )
-            ->dropDownList(Master::mastersAsMap(\Yii::$app->user->identity),[
-                'prompt' => 'Выбор',
-                'disabled' => self::isDisabled($model, 'master_id') || self::isDisabledFilled($model, 'master_id')
-            ]);
+        if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'master_id'])) {
+            $attributes['master_id'] = $form->field($model, 'master_id',
+                ['labelOptions' => HintHelper::getLabelOptions('master_id', $hints)]
+            )
+                ->dropDownList(Master::mastersAsMap(\Yii::$app->user->identity), [
+                    'prompt' => 'Выбор',
+                    'disabled' => self::isDisabled($model, 'master_id') || self::isDisabledFilled($model, 'master_id')
+                ]);
+        }
 
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])) {
             $attributes['comment'] = $form->field($model, 'comment',
