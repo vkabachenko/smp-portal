@@ -46,13 +46,13 @@ class SendActController extends Controller
 
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             if ($model->send($uploadForm)) {
-                \Yii::$app->session->setFlash('success', 'Заявка успешно отправлена');
+                \Yii::$app->session->setFlash('success', 'Акт успешно отправлен');
                 if (!$forced) {
                     $statusService = new SentStatusService($bidId, \Yii::$app->user->identity);
                     $statusService->setStatus();
                 }
             } else {
-                \Yii::$app->session->setFlash('error', 'Ошибка при отправке заявки. Проверьте наличие шаблона акта');
+                \Yii::$app->session->setFlash('error', 'Ошибка при отправке акта. Проверьте наличие шаблона акта');
             }
             return $this->redirect(['bid/view', 'id' => $bidId]);
         }

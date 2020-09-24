@@ -24,11 +24,12 @@ class ExcelAct extends ExcelActTemplate
 
     public function generate()
     {
-        if (empty($this->template)) {
-            return;
+        if (!$this->template || !$this->template->file_name) {
+            return false;
         }
 
         PhpExcelTemplator::saveToFile($this->template->getTemplatePath(), $this->getPath(), $this->getParams());
+        return true;
     }
 
     protected function getParams()

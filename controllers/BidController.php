@@ -38,6 +38,7 @@ use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
+use function foo\func;
 
 class BidController extends Controller
 {
@@ -242,15 +243,13 @@ class BidController extends Controller
     {
         $this->checkAccess('viewBid', ['bidId' => $id]);
 
-        $modelActDiagnostic = new SendActForm(['bidId' => $id, 'user' => \Yii::$app->user, 'subType' => TemplateModel::SUB_TYPE_ACT_DIAGNOSTIC]);
-        $modelActDiagnostic->act->generate();
-        $modelActWriteoff = new SendActForm(['bidId' => $id, 'user' => \Yii::$app->user, 'subType' => TemplateModel::SUB_TYPE_ACT_WRITE_OFF]);
-        $modelActWriteoff->act->generate();
-        $modelActNoWarranty = new SendActForm(['bidId' => $id, 'user' => \Yii::$app->user, 'subType' => TemplateModel::SUB_TYPE_ACT_NO_WARRANTY]);
-        $modelActNoWarranty->act->generate();
+        $modelAct = new SendActForm(['bidId' => $id, 'user' => \Yii::$app->user]);
 
-
-        return $this->render('download', compact('modelActDiagnostic', 'modelActWriteoff', 'modelActNoWarranty'));
+        if (!$modelAct->validate() || !$modelAct->act->generate()) {
+            \Yii::$app->session->setFlash('error', 'Не удалось скачать акт. Проверьте наличие шаблона акта или решение мастерской/представительства');
+            return $this->redirect(['bid/view', 'id' => $id]);
+        }
+        return $this->render('download', compact('modelAct'));
     }
 
     public function actionBrand()
@@ -379,6 +378,11 @@ class BidController extends Controller
         $gridAttributes = array_filter($gridAttributes, function($attribute) {
             return \Yii::$app->user->can('adminBidAttribute', ['attribute' => $attribute]);
         }, ARRAY_FILTER_USE_KEY);
+
+        $gridAttributes = array_filter($gridAttributes,
+            function ($attribute) {return in_array($attribute, array_keys(Bid::GRID_ATTRIBUTES));},
+            ARRAY_FILTER_USE_KEY
+        );
 
         return $gridAttributes;
     }
