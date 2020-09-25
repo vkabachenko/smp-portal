@@ -32,9 +32,14 @@ class GridHelper
 
     public function getCss()
     {
-        $template = '@media(%s) {
+        $templateHide = '@media(%s) {
                     .bids-grid .%s {
                         display: none;
+                    }
+                }';
+        $templateShow = '@media(%s) {
+                    .bids-grid .%s {
+                        display: table-cell;
                     }
                 }';
         $desktop = 'min-width:768px';
@@ -46,13 +51,19 @@ class GridHelper
         {
             $class = 'grid-' . $attribute;
             if (!$params['desktop']) {
-                $css .= sprintf($template, $desktop, $class);
+                $css .= sprintf($templateHide, $desktop, $class);
+            } else {
+                $css .= sprintf($templateShow, $desktop, $class);
             }
             if (!$params['tablet']) {
-                $css .= sprintf($template, $tablet, $class);
+                $css .= sprintf($templateHide, $tablet, $class);
+            } else {
+                $css .= sprintf($templateShow, $tablet, $class);
             }
             if (!$params['phone']) {
-                $css .= sprintf($template, $phone, $class);
+                $css .= sprintf($templateHide, $phone, $class);
+            } else {
+                $css .= sprintf($templateShow, $phone, $class);
             }
         }
         return $css;
