@@ -659,9 +659,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
 
     public function beforeSave($insert)
     {
-        if ($insert) {
-            $this->fillFieldsForAgency();
-        }
+        $this->fillFieldsForAgency();
         return parent::beforeSave($insert);
     }
 
