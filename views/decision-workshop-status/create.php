@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
+/* @var $autoFilledAttributes array */
+/* @var $model \app\models\DecisionWorkshopStatus */
 
 $this->title = 'Новый статус решения мастерской';
 $this->params['back'] = ['index'];

@@ -3,9 +3,11 @@
 namespace app\models;
 
 use app\helpers\common\DateHelper;
+use app\helpers\constants\Constants;
 use app\models\form\MultipleUploadForm;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\web\Application;
 
 /**
  * This is the model class for table "bid".
@@ -251,6 +253,19 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'warranty_status_id'  => ['desktop' => true, 'tablet' => false, 'phone' => false],
         'manufacturer_id'  => ['desktop' => true, 'tablet' => true, 'phone' => false]
     ];
+
+    /**
+     * @return array[]
+     */
+    public static function autoFilledAttributes()
+    {
+        return [
+            'is_warranty_defect' => ['options' => Constants::BOOLEAN],
+            'is_repair_possible' => ['options' => Constants::BOOLEAN],
+            'is_for_warranty' => ['options' => Constants::BOOLEAN],
+            'warranty_status_id' => ['options' => WarrantyStatus::warrantyStatusAsMap()]
+        ];
+    }
 
     /**
      * {@inheritdoc}
@@ -660,6 +675,11 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     public function beforeSave($insert)
     {
         $this->fillFieldsForAgency();
+
+        if (\Yii::$app instanceof  \yii\web\Application) {
+            $this->fillFieldsDecision();
+        }
+
         return parent::beforeSave($insert);
     }
 
@@ -844,5 +864,23 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         }
     }
 
+    public function fillFieldsDecision()
+    {
+        $this->fillFildsBy($this->decisionAgencyStatus);
+        $this->fillFildsBy($this->decisionWorkshopstatus);
+    }
 
+    private function fillFildsBy(AutoFillInterface $model)
+    {
+        if (!is_array($model->auto_fill)) {
+            return;
+        }
+
+        foreach ($model->auto_fill as $attribute => $value) {
+            if (!\Yii::$app->user->can('adminBidAttribute', ['attribute' => $attribute])
+                && !empty($value)) {
+                $this->$attribute = $value;
+            }
+        }
+    }
 }

@@ -14,8 +14,9 @@ use yii\helpers\ArrayHelper;
  * @property string $email_subject
  * @property string $email_body
  * @property string $email_signature
+ * @property array $auto_fill
  */
-class DecisionWorkshopStatus extends \yii\db\ActiveRecord implements DecisionStatusInterface
+class DecisionWorkshopStatus extends \yii\db\ActiveRecord implements DecisionStatusInterface, AutoFillInterface
 {
     /**
      * {@inheritdoc}
@@ -34,6 +35,7 @@ class DecisionWorkshopStatus extends \yii\db\ActiveRecord implements DecisionSta
             [['name'], 'required'],
             [['name', 'sub_type_act', 'email_subject', 'email_signature'], 'string', 'max' => 255],
             [['email_body'], 'string'],
+            [['auto_fill'], 'safe'],
         ];
     }
 
@@ -49,7 +51,7 @@ class DecisionWorkshopStatus extends \yii\db\ActiveRecord implements DecisionSta
             'email_subject' => 'Шаблон письма - тема',
             'email_body' => 'Шаблон письма - текст',
             'email_signature' => 'Шаблон письма - подпись',
-
+            'auto_fill' => 'Поля заявки для автоматического заполнения'
         ];
     }
 
