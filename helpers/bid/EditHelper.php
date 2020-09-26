@@ -260,7 +260,7 @@ class EditHelper
                 ['labelOptions' => HintHelper::getLabelOptions('author', $hints)]
             )->textInput([
                 'maxlength' => true,
-                'disabled' => self::isDisabled($model, 'author')
+                'disabled' => self::isDisabled($model, 'author')  || self::isDisabledFilled($model, 'author')
                 ]);
         }
 
