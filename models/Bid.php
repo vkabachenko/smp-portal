@@ -866,11 +866,11 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
 
     public function fillFieldsDecision()
     {
-        $this->fillFildsBy($this->decisionAgencyStatus);
-        $this->fillFildsBy($this->decisionWorkshopstatus);
+        $this->fillFieldsBy($this->decisionAgencyStatus);
+        $this->fillFieldsBy($this->decisionWorkshopstatus);
     }
 
-    private function fillFildsBy(AutoFillInterface $model)
+    private function fillFieldsBy(AutoFillInterface $model)
     {
         if (!is_array($model->auto_fill)) {
             return;

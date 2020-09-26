@@ -358,7 +358,7 @@ class WriteService extends BaseService
     private function getRecentBids()
     {
         $models = Bid::find()
-            ->with(['bidComments', 'warrantyStatus', 'status', 'repairStatus', 'brand', 'condition', 'bidImages'])
+            ->with(['bidComments', 'warrantyStatus', 'status', 'repairStatus', 'brand', 'bidImages'])
             ->where(['flag_export' => false])
             ->andWhere(['workshop_id' => $this->workshop->id])
             ->all();
