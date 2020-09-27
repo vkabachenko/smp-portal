@@ -4,7 +4,7 @@
 namespace app\helpers\bid;
 
 use app\models\Client;
-use app\models\Condition;
+use yii\helpers\Json;
 use app\models\Manufacturer;
 use app\models\RepairStatus;
 use app\models\search\BidSearch;
@@ -14,6 +14,9 @@ use app\models\BidCommentsRead;
 use app\models\Bid;
 use app\models\Master;
 use kartik\date\DatePicker;
+use yii\helpers\Url;
+use yii\jui\AutoComplete;
+use yii\web\JsExpression;
 
 
 class GridHelper
@@ -194,6 +197,10 @@ class GridHelper
 
     private function getClientColumn()
     {
+        $workshopId = \Yii::$app->user->identity->master
+            ? \Yii::$app->user->identity->master->workshop_id
+            : null;
+        $url = Url::to(['client/auto-complete']);
         return [
             'attribute' => 'client_id',
             'format' => 'raw',
@@ -206,14 +213,54 @@ class GridHelper
             'filterOptions' => ['class' => 'grid-client_id'],
             'headerOptions' => ['class' => 'grid-client_id'],
             'contentOptions' => ['class' => 'grid-client_id'],
-            'filter' => Client::clientsAsMap(\Yii::$app->user->identity->master
-                ? \Yii::$app->user->identity->master->workshop_id
-                : null)
-        ];
+            'filter' => AutoComplete::widget([
+                'name' => 'BidSearch[client_name]',
+                'value' => $this->searchModel->client_name,
+                'clientOptions' => [
+                    'minLength' => '3',
+                    'source' => new JsExpression('
+                        function (request, response) {
+                            console.log("request");
+                            $.ajax({
+                                url: ' . Json::htmlEncode($url) . ',
+                                method: "POST",                              
+                                data: {
+                                    workshopId: ' . Json::htmlEncode($workshopId) . ',
+                                    term: request.term
+                                },
+                                dataType: "json",
+                                success: function(data) {
+                                    response($.map(data.clients, function (rt) {
+                                        return {
+                                            label: rt.name,
+                                        };
+                                    }));
+                                },
+                                error: function (jqXHR, status) {
+                                    console.log(status);
+                                    response([]);
+                                }
+                            });
+                        }
+                    '),
+                    'select' => new JsExpression('
+                        function (event, ui) {
+                            event.preventDefault();
+                            this.value = ui.item.label;       
+                        }
+                    ')
+                ]
+        ])
+    ];
     }
 
     private function getClientManufacturerColumn()
     {
+        $workshopId = \Yii::$app->user->identity->master
+            ? \Yii::$app->user->identity->master->workshop_id
+            : null;
+        $url = Url::to(['client/auto-complete']);
+
         return [
             'attribute' => 'client_manufacturer_id',
             'format' => 'raw',
@@ -226,9 +273,44 @@ class GridHelper
             'filterOptions' => ['class' => 'grid-client_manufacturer_id'],
             'headerOptions' => ['class' => 'grid-client_manufacturer_id'],
             'contentOptions' => ['class' => 'grid-client_manufacturer_id'],
-            'filter' => Client::clientsAsMap(\Yii::$app->user->identity->master
-                ? \Yii::$app->user->identity->master->workshop_id
-                : null)
+            'filter' => AutoComplete::widget([
+                'name' => 'BidSearch[client_manufacturer_name]',
+                'value' => $this->searchModel->client_manufacturer_name,
+                'clientOptions' => [
+                    'minLength' => '3',
+                    'source' => new JsExpression('
+                        function (request, response) {
+                            console.log("request");
+                            $.ajax({
+                                url: ' . Json::htmlEncode($url) . ',
+                                method: "POST",                              
+                                data: {
+                                    workshopId: ' . Json::htmlEncode($workshopId) . ',
+                                    term: request.term
+                                },
+                                dataType: "json",
+                                success: function(data) {
+                                    response($.map(data.clients, function (rt) {
+                                        return {
+                                            label: rt.name,
+                                        };
+                                    }));
+                                },
+                                error: function (jqXHR, status) {
+                                    console.log(status);
+                                    response([]);
+                                }
+                            });
+                        }
+                    '),
+                    'select' => new JsExpression('
+                        function (event, ui) {
+                            event.preventDefault();
+                            this.value = ui.item.label;       
+                        }
+                    ')
+                ]
+            ])
         ];
     }
 

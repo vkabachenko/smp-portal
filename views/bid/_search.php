@@ -77,6 +77,13 @@ use kartik\date\DatePicker;
         <?= $form->field($model, 'client_email') ?>
     <?php endif; ?>
 
+    <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_manufacturer_id'])): ?>
+        <?= $form->field($model, 'client_manufacturer_type')->dropDownList(\app\models\Client::CLIENT_TYPES, ['prompt' => 'Выбор']) ?>
+        <?= $form->field($model, 'client_manufacturer_name') ?>
+        <?= $form->field($model, 'client_manufacturer_phone') ?>
+        <?= $form->field($model, 'client_manufacturer_email') ?>
+    <?php endif; ?>
+
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'treatment_type'])): ?>
         <?= $form->field($model, 'treatment_type')->dropDownList(Bid::TREATMENT_TYPES ,['prompt' => 'Выбор']) ?>

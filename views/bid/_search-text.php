@@ -92,6 +92,33 @@ use app\models\Bid;
         </span>
     <?php endif; ?>
 
+    <?php if($model->client_manufacturer_name): ?>
+        <span class="bid-search-head">
+            Клиент для представительства
+        </span>
+        <span class="bid-search-content">
+            <?= $model->client_manufacturer_name ?>
+        </span>
+    <?php endif; ?>
+
+    <?php if($model->client_manufacturer_phone): ?>
+        <span class="bid-search-head">
+            Телефон клиента для представительства
+        </span>
+        <span class="bid-search-content">
+            <?= $model->client_manufacturer_phone ?>
+        </span>
+    <?php endif; ?>
+
+    <?php if($model->client_manufacturer_email): ?>
+        <span class="bid-search-head">
+            Email клиента для представительства
+        </span>
+        <span class="bid-search-content">
+            <?= $model->client_manufacturer_email ?>
+        </span>
+    <?php endif; ?>
+
     <?php if($model->client_name): ?>
         <span class="bid-search-head">
             Клиент
@@ -125,6 +152,15 @@ use app\models\Bid;
         </span>
         <span class="bid-search-content">
             <?= Bid::TREATMENT_TYPES[$model->treatment_type] ?>
+        </span>
+    <?php endif; ?>
+
+    <?php if($model->client_manufacturer_type): ?>
+        <span class="bid-search-head">
+            Тип клиента для представительства
+        </span>
+        <span class="bid-search-content">
+            <?= \app\models\Client::CLIENT_TYPES[$model->client_type] ?>
         </span>
     <?php endif; ?>
 
