@@ -866,19 +866,24 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
 
     public function fillFieldsDecision()
     {
-        $this->fillFieldsBy($this->decisionAgencyStatus);
-        $this->fillFieldsBy($this->decisionWorkshopstatus);
+        if (\Yii::$app->user->can('master') && $this->decision_workshop_status_id) {
+            $this->decision_agency_status_id = null;
+            $this->fillFieldsBy($this->decisionWorkshopStatus);
+        } elseif (\Yii::$app->user->can('manager') && $this->decision_agency_status_id) {
+            $this->decision_workshop_status_id = null;
+            $this->fillFieldsBy($this->decisionAgencyStatus);
+        }
     }
 
     private function fillFieldsBy(AutoFillInterface $model)
     {
-        if (!is_array($model->auto_fill)) {
+        if (!$model || !is_array($model->auto_fill)) {
             return;
         }
 
         foreach ($model->auto_fill as $attribute => $value) {
             if (!\Yii::$app->user->can('adminBidAttribute', ['attribute' => $attribute])
-                && !empty($value)) {
+                && $value !== null && $value !== '') {
                 $this->$attribute = $value;
             }
         }
