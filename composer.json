@@ -30,7 +30,8 @@
         "vkabachenko/yii2-filepond": "dev-master",
         "npm-asset/sweetalert": "2.1.*",
         "kartik-v/yii2-sortable": "^1.2",
-        "shuchkin/simplexlsx": "dev-master"
+        "shuchkin/simplexlsx": "dev-master",
+        "kartik-v/yii2-widget-select2": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
@@ -73,10 +74,10 @@
             ]
         }
     },
-    "repositories": [
-        {
+    "repositories": {
+        "packagist": {
             "type": "composer",
-            "url": "https://asset-packagist.org"
+            "url": "https://packagist.org"
         }
-    ]
+    }
 }

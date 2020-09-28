@@ -48,10 +48,14 @@ class Condition extends \yii\db\ActiveRecord
     /**
      * return array
      */
-    public static function conditionsAsMap()
+    public static function conditionsAsMap($additionalValue = null)
     {
         $models = self::find()->orderBy('name')->all();
         $list = ArrayHelper::map($models, 'name', 'name');
+
+        if ($additionalValue) {
+            $list[$additionalValue] = $additionalValue;
+        }
 
         return $list;
     }

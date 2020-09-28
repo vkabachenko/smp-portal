@@ -6,6 +6,7 @@ namespace app\helpers\bid;
 
 use app\models\Bid;
 use app\models\BidStatus;
+use kartik\select2\Select2;
 use yii\web\User;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
@@ -392,63 +393,27 @@ class EditHelper
         }
 
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_name'])) {
-            $attributes['condition_name'] = Html::beginTag('div', ['class' => 'row'])
-
-                    . Html::beginTag('div', ['class' => 'col-sm-6']) .
-                    $form->field($model, 'condition_name',
-                    [ 'labelOptions' => HintHelper::getLabelOptions('condition_name', $hints),]
-                )->textInput([
-                    'id' => 'condition-name',
-                    'disabled' => self::isDisabled($model, 'condition_name')
-                    ])
-                    .
-                    Html::endTag('div')
-
-                    . Html::beginTag('div', ['class' => 'col-sm-6', 'style' => 'margin-top: 30px;'])
-                    .
-                    Html::dropDownList('', '', Condition::conditionsAsMap(),
-                    [
-                        'prompt' => '',
-                        'onchange' => '$("#condition-name").val($(this).val());',
-                        'style' => 'opacity: 0.5'
-                    ])
-
-                    .
-                    Html::endTag('div')
-                    . Html::tag('div', '', ['class' => 'clearfix'])
-
-                .
-                Html::endTag('div');
+            $attributes['condition_name'] = $form->field($model, 'condition_name',
+                ['labelOptions' => HintHelper::getLabelOptions('condition_name', $hints)]
+            )->widget(Select2::class, [
+                'options' => ['placeholder' => 'Введите или выберите'],
+                'data' => Condition::conditionsAsMap($model->condition_name),
+                'pluginOptions' => [
+                    'tags' => true,
+                ],
+            ]);
         }
 
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_manufacturer_name'])) {
-            $attributes['condition_manufacturer_name'] = Html::beginTag('div', ['class' => 'row'])
-
-                . Html::beginTag('div', ['class' => 'col-sm-6']) .
-                $form->field($model, 'condition_manufacturer_name',
-                    [ 'labelOptions' => HintHelper::getLabelOptions('condition_manufacturer_name', $hints),]
-                )->textInput([
-                    'id' => 'condition-manufacturer-name',
-                    'disabled' => self::isDisabled($model, 'condition_name')
-                ])
-                .
-                Html::endTag('div')
-
-                . Html::beginTag('div', ['class' => 'col-sm-6', 'style' => 'margin-top: 30px;'])
-                .
-                Html::dropDownList('', '', Condition::conditionsAsMap(),
-                    [
-                        'prompt' => '',
-                        'onchange' => '$("#condition-manufacturer-name").val($(this).val());',
-                        'style' => 'opacity: 0.5'
-                    ])
-
-                .
-                Html::endTag('div')
-                . Html::tag('div', '', ['class' => 'clearfix'])
-
-                .
-                Html::endTag('div');
+            $attributes['condition_manufacturer_name'] = $form->field($model, 'condition_manufacturer_name',
+                ['labelOptions' => HintHelper::getLabelOptions('condition_name', $hints)]
+            )->widget(Select2::class, [
+                'options' => ['placeholder' => 'Введите или выберите'],
+                'data' => Condition::conditionsAsMap($model->condition_manufacturer_name),
+                'pluginOptions' => [
+                    'tags' => true,
+                ],
+            ]);
         }
 
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_id'])) {
@@ -798,6 +763,7 @@ class EditHelper
                 ->dropDownList(\app\models\DecisionAgencyStatus::decisionAgencyStatusAsMap(),[
                     'prompt' => 'Выбор',
                     'disabled' => self::isDisabled($model, 'decision_agency_status_id')
+                        || self::isDisabledRole('master')
                     ]);
         }
 
@@ -869,5 +835,10 @@ class EditHelper
     public static function isDisabledFilled(Bid $bid, $attribute)
     {
         return \Yii::$app->user->can('master') && !empty($bid->$attribute);
+    }
+
+    public static function isDisabledRole($role)
+    {
+        return \Yii::$app->user->can($role);
     }
 }
