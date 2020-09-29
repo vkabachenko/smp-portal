@@ -406,7 +406,7 @@ class EditHelper
 
         if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'condition_manufacturer_name'])) {
             $attributes['condition_manufacturer_name'] = $form->field($model, 'condition_manufacturer_name',
-                ['labelOptions' => HintHelper::getLabelOptions('condition_name', $hints)]
+                ['labelOptions' => HintHelper::getLabelOptions('condition_manufacturer_name', $hints)]
             )->widget(Select2::class, [
                 'options' => ['placeholder' => 'Введите или выберите'],
                 'data' => Condition::conditionsAsMap($model->condition_manufacturer_name),
