@@ -723,7 +723,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
 
             $toSave = false;
             foreach ($autoFillAttributesModel->auto_fill as $attribute => $value) {
-                if ($this->$attribute != $value) {
+                if ($value !== null && $value !== '' && $this->$attribute != $value) {
                     $toSave = true;
                     $this->$attribute = $value;
                 }
