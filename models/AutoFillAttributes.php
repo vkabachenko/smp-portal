@@ -50,7 +50,7 @@ class AutoFillAttributes extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'decision_workshop_status_id' => 'Решение мастерской',
-            'decision_agency_status_id' => 'Решение агентства',
+            'decision_agency_status_id' => 'Решение представительства',
             'status_id' => 'Статус заявки',
             'auto_fill' => 'Auto Fill',
         ];
