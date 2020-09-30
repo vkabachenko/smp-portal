@@ -3,14 +3,14 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model \app\models\DecisionWorkshopStatus */
+/* @var $model app\models\AutoFillAttributes */
 
-$this->title = 'Новый статус решения мастерской';
+$this->title = 'Новое правило автозаполнения';
 $this->params['back'] = ['index'];
 ?>
 <div>
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h2><?= Html::encode($this->title) ?></h2>
 
     <?= $this->render('_form', [
         'model' => $model,

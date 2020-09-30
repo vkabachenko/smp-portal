@@ -3,16 +3,18 @@
 namespace app\controllers;
 
 use app\models\Bid;
-use app\models\DecisionWorkshopStatus;
 use Yii;
+use app\models\AutoFillAttributes;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-
-class DecisionWorkshopStatusController extends Controller
+/**
+ * AutoFillAttributesController implements the CRUD actions for AutoFillAttributes model.
+ */
+class AutoFillAttributesController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -41,7 +43,7 @@ class DecisionWorkshopStatusController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => DecisionWorkshopStatus::find()->orderBy('name'),
+            'query' => AutoFillAttributes::find(),
         ]);
 
         return $this->render('index', [
@@ -51,7 +53,10 @@ class DecisionWorkshopStatusController extends Controller
 
     public function actionCreate()
     {
-        $model = new DecisionWorkshopStatus();
+        $model = new AutoFillAttributes();
+
+        $autoFilledAttributes = Bid::autoFilledAttributes();
+        $model->auto_fill = array_fill_keys(array_keys($autoFilledAttributes), null);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
@@ -66,6 +71,17 @@ class DecisionWorkshopStatusController extends Controller
     {
         $model = $this->findModel($id);
 
+        $autoFilledAttributes = Bid::autoFilledAttributes();
+
+        $autoFillInModel = $model->auto_fill ?: [];
+        $autoFillEmpty = array_fill_keys(array_keys($autoFilledAttributes), null);
+
+        $model->auto_fill = array_merge($autoFillEmpty,
+            array_filter($autoFillInModel, function($attribute) use ($autoFillEmpty) {
+                return in_array($attribute, array_keys($autoFillEmpty));
+            },  ARRAY_FILTER_USE_KEY)
+        );
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
@@ -77,7 +93,7 @@ class DecisionWorkshopStatusController extends Controller
 
     protected function findModel($id)
     {
-        if (($model = DecisionWorkshopStatus::findOne($id)) !== null) {
+        if (($model = AutoFillAttributes::findOne($id)) !== null) {
             return $model;
         }
 

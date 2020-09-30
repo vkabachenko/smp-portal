@@ -263,7 +263,8 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
             'is_warranty_defect' => ['options' => Constants::BOOLEAN],
             'is_repair_possible' => ['options' => Constants::BOOLEAN],
             'is_for_warranty' => ['options' => Constants::BOOLEAN],
-            'warranty_status_id' => ['options' => WarrantyStatus::warrantyStatusAsMap()]
+            'warranty_status_id' => ['options' => WarrantyStatus::warrantyStatusAsMap()],
+            'repair_status_id'  => ['options' => RepairStatus::repairStatusAsMap()],
         ];
     }
 
@@ -676,10 +677,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     {
         $this->fillFieldsForAgency();
 
-        if (\Yii::$app instanceof  \yii\web\Application) {
-            $this->fillFieldsDecision();
-        }
-
         return parent::beforeSave($insert);
     }
 
@@ -695,6 +692,44 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
                 $this->repair_status_author_id != $repairStatusAuthorId || $this->repair_status_date != $repairStatusDate)) {
                 $this->repair_status_author_id = $repairStatusAuthorId;
                 $this->repair_status_date = $repairStatusDate;
+                $this->save(false);
+            }
+        }
+
+        $this->performAutoFill($changedAttributes);
+    }
+
+    private function performAutoFill($changedAttributes)
+    {
+        $oldDecisionWorkshop = isset($changedAttributes['decision_workshop_status_id']) ? $changedAttributes['decision_workshop_status_id'] : null;
+        $oldDecisionAgency = isset($changedAttributes['decision_agency_status_id']) ? $changedAttributes['decision_agency_status_id'] : null;
+        $oldStatus = isset($changedAttributes['status_id']) ? $changedAttributes['status_id'] : null;
+
+        if ($oldDecisionWorkshop != $this->decision_workshop_status_id
+            || $oldDecisionAgency != $this->decision_agency_status_id
+            || $oldStatus != $this->status_id
+        ) {
+            /* @var $autoFillAttributesModel AutoFillAttributes */
+            $autoFillAttributesModel = AutoFillAttributes::find()
+                ->where([
+                    'decision_workshop_status_id' => $this->decision_workshop_status_id,
+                    'decision_agency_status_id' => $this->decision_agency_status_id,
+                    'status_id' => $this->status_id,
+                    ])
+                ->one();
+            if (!$autoFillAttributesModel) {
+                return;
+            }
+
+            $toSave = false;
+            foreach ($autoFillAttributesModel->auto_fill as $attribute => $value) {
+                if ($this->$attribute != $value) {
+                    $toSave = true;
+                    $this->$attribute = $value;
+                }
+            }
+
+            if ($toSave) {
                 $this->save(false);
             }
         }
@@ -861,31 +896,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
             $this->$item = $this->$sample;
         } elseif (!empty($this->$item) && empty($this->$sample)) {
             $this->$sample = $this->$item;
-        }
-    }
-
-    public function fillFieldsDecision()
-    {
-        if (\Yii::$app->user->can('master') && $this->decision_workshop_status_id) {
-            $this->decision_agency_status_id = null;
-            $this->fillFieldsBy($this->decisionWorkshopStatus);
-        } elseif (\Yii::$app->user->can('manager') && $this->decision_agency_status_id) {
-            $this->decision_workshop_status_id = null;
-            $this->fillFieldsBy($this->decisionAgencyStatus);
-        }
-    }
-
-    private function fillFieldsBy(AutoFillInterface $model)
-    {
-        if (!$model || !is_array($model->auto_fill)) {
-            return;
-        }
-
-        foreach ($model->auto_fill as $attribute => $value) {
-            if (!\Yii::$app->user->can('adminBidAttribute', ['attribute' => $attribute])
-                && $value !== null && $value !== '') {
-                $this->$attribute = $value;
-            }
         }
     }
 }

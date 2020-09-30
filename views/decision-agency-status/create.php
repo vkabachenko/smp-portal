@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $autoFilledAttributes array */
 /* @var $model \app\models\DecisionAgencyStatus */
 
 $this->title = 'Новый статус решения представительства';
@@ -15,7 +14,6 @@ $this->params['back'] = ['index'];
 
     <?= $this->render('_form', [
         'model' => $model,
-        'autoFilledAttributes' => $autoFilledAttributes
     ]) ?>
 
 </div>
