@@ -168,6 +168,7 @@ class BidSearch extends Bid
             'warranty_status_id' => $this->warranty_status_id,
             'status_id' => $this->status_id,
             'master_id' => $this->master_id,
+            'bid.client_id' => $this->client_id,
             'client.client_type' => $this->client_type,
             'client_manufacturer.client_type' => $this->client_manufacturer_type
         ]);
