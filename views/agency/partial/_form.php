@@ -1,8 +1,11 @@
 <?php
 
+use app\models\Bid;
+
 /* @var $model app\models\Agency */
 /* @var $form yii\widgets\ActiveForm */
-/* @var $manufacturer bool */
+
+$manufacturer = $model->isNewRecord ? false : Bid::find()->where(['agency_id' => $model->id])->exists();
 
 use app\models\Manufacturer;
 
@@ -12,7 +15,7 @@ use app\models\Manufacturer;
 <?= $form->field($model, 'manufacturer_id')
     ->dropDownList(Manufacturer::manufacturersAsMap(),[
         'prompt' => 'Выбор',
-        'disabled' => !$manufacturer
+        'disabled' => $manufacturer
     ]); ?>
 <?= $form->field($model, 'phone1',
     ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['phone1']]])
@@ -20,13 +23,13 @@ use app\models\Manufacturer;
 <?= $form->field($model, 'phone2',
     ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['phone2']]])
     ->textInput(['maxlength' => true]) ?>
-<?= $form->field($model, 'is_independent')->checkbox() ?>
 <?= $form->field($model, 'phone3',
     ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['phone3']]])
     ->textInput(['maxlength' => true]) ?>
 <?= $form->field($model, 'phone4',
     ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['phone4']]])
     ->textInput(['maxlength' => true]) ?>
+<?= $form->field($model, 'is_independent')->checkbox() ?>
 <?= $form->field($model, 'email2',
     ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['agency']['email2']]])
     ->textInput(['maxlength' => true]) ?>
