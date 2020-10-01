@@ -169,6 +169,12 @@ class BidSearch extends Bid
             ]);
         }
 
+        if (!empty($this->warranty_status_id)) {
+            $query->andWhere([
+                'warranty_status_id' => $this->warranty_status_id != Constants::EMPTY_VALUE_ID ? $this->warranty_status_id : null,
+            ]);
+        }
+
         if (!empty($this->manufacturer_id)) {
             $query->andWhere([
                 'manufacturer_id' => $this->manufacturer_id != Constants::EMPTY_VALUE_ID ? $this->manufacturer_id : null,
@@ -194,7 +200,6 @@ class BidSearch extends Bid
         }
 
         $query->andFilterWhere([
-            'warranty_status_id' => $this->warranty_status_id,
             'bid.client_id' => $this->client_id,
             'client.client_type' => $this->client_type,
             'client_manufacturer.client_type' => $this->client_manufacturer_type

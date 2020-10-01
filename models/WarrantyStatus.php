@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\constants\Constants;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -56,12 +57,12 @@ class WarrantyStatus extends \yii\db\ActiveRecord
     /**
      * return array
      */
-    public static function warrantyStatusAsMap()
+    public static function warrantyStatusAsMap($withEmpty = false)
     {
         $models = self::find()->orderBy('name')->all();
         $list = ArrayHelper::map($models, 'id', 'name');
 
-        return $list;
+        return $withEmpty ? Constants::EMPTY_ELEMENT + $list : $list;
     }
 
 

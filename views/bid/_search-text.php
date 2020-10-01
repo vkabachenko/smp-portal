@@ -350,7 +350,7 @@ use app\helpers\constants\Constants;
             Статус гарантии
         </span>
         <span class="bid-search-content">
-            <?= $model->warrantyStatus->name ?>
+            <?= $model->warranty_status_id != Constants::EMPTY_VALUE_ID ? $model->warrantyStatus->name : Constants::EMPTY_VALUE ?>
         </span>
     <?php endif; ?>
 

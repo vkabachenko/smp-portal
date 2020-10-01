@@ -519,7 +519,7 @@ class GridHelper
             'filterOptions' => ['class' => 'grid-warranty_status_id'],
             'headerOptions' => ['class' => 'grid-warranty_status_id'],
             'contentOptions' => ['class' => 'grid-warranty_status_id'],
-            'filter' => WarrantyStatus::warrantyStatusAsMap()
+            'filter' => WarrantyStatus::warrantyStatusAsMap(true)
         ];
     }
 
