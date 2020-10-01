@@ -2,6 +2,7 @@
 
 namespace app\models\search;
 
+use app\helpers\constants\Constants;
 use phpDocumentor\Reflection\Types\Parent_;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -162,12 +163,38 @@ class BidSearch extends Bid
             'is_for_warranty' => $this->is_for_warranty,
         ]);
 
+        if (!empty($this->repair_status_id)) {
+            $query->andWhere([
+                'repair_status_id' => $this->repair_status_id != Constants::EMPTY_VALUE_ID ? $this->repair_status_id : null,
+            ]);
+        }
+
+        if (!empty($this->manufacturer_id)) {
+            $query->andWhere([
+                'manufacturer_id' => $this->manufacturer_id != Constants::EMPTY_VALUE_ID ? $this->manufacturer_id : null,
+            ]);
+        }
+
+        if (!empty($this->master_id)) {
+            $query->andWhere([
+                'master_id' => $this->master_id != Constants::EMPTY_VALUE_ID ? $this->master_id : null,
+            ]);
+        }
+
+        if (!empty($this->status_id)) {
+            $query->andWhere([
+                'status_id' => $this->status_id != Constants::EMPTY_VALUE_ID ? $this->status_id : null,
+            ]);
+        }
+
+        if (!empty($this->treatment_type)) {
+            $query->andWhere([
+                'treatment_type' => $this->treatment_type != Constants::EMPTY_VALUE_ID ? $this->treatment_type : null,
+            ]);
+        }
+
         $query->andFilterWhere([
-            'manufacturer_id' => $this->manufacturer_id,
-            'repair_status_id' => $this->repair_status_id,
             'warranty_status_id' => $this->warranty_status_id,
-            'status_id' => $this->status_id,
-            'master_id' => $this->master_id,
             'bid.client_id' => $this->client_id,
             'client.client_type' => $this->client_type,
             'client_manufacturer.client_type' => $this->client_manufacturer_type
@@ -188,7 +215,6 @@ class BidSearch extends Bid
             ->andFilterWhere(['like', 'composition_name', $this->composition_name])
             ->andFilterWhere(['like', 'serial_number', $this->serial_number])
             ->andFilterWhere(['like', 'vendor_code', $this->vendor_code])
-            ->andFilterWhere(['like', 'treatment_type', $this->treatment_type])
             ->andFilterWhere(['like', 'warranty_number', $this->warranty_number])
             ->andFilterWhere(['like', 'bid_number', $this->bid_number])
             ->andFilterWhere(['like', 'bid_1C_number', $this->bid_1C_number])

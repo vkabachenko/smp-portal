@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Bid;
+use app\helpers\constants\Constants;
 
 
 /* @var $this yii\web\View */
@@ -25,7 +26,7 @@ use app\models\Bid;
             Производитель
         </span>
         <span class="bid-search-content">
-            <?= $model->manufacturer->name ?>
+            <?= $model->manufacturer_id != Constants::EMPTY_VALUE_ID ? $model->manufacturer->name : Constants::EMPTY_VALUE ?>
         </span>
     <?php endif; ?>
 
@@ -88,7 +89,7 @@ use app\models\Bid;
             Мастер
         </span>
         <span class="bid-search-content">
-            <?= $model->master->user->name ?>
+            <?= $model->master_id != Constants::EMPTY_VALUE_ID ? $model->master->user->name : 'Пусто' ?>
         </span>
     <?php endif; ?>
 
@@ -151,7 +152,7 @@ use app\models\Bid;
             Тип обращения
         </span>
         <span class="bid-search-content">
-            <?= Bid::TREATMENT_TYPES[$model->treatment_type] ?>
+            <?= $model->treatment_type == Constants::EMPTY_VALUE_ID ? Constants::EMPTY_VALUE : Bid::TREATMENT_TYPES[$model->treatment_type] ?>
         </span>
     <?php endif; ?>
 
@@ -331,7 +332,7 @@ use app\models\Bid;
             Статус ремонта
         </span>
         <span class="bid-search-content">
-            <?= $model->repairStatus->name ?>
+            <?= $model->repair_status_id != Constants::EMPTY_VALUE_ID ? $model->repairStatus->name : Constants::EMPTY_VALUE ?>
         </span>
     <?php endif; ?>
 
@@ -358,7 +359,7 @@ use app\models\Bid;
             Статус заявки
         </span>
         <span class="bid-search-content">
-            <?= $model->status->name ?>
+            <?= $model->status_id != Constants::EMPTY_VALUE_ID ? $model->status->name : Constants::EMPTY_VALUE ?>
         </span>
     <?php endif; ?>
 

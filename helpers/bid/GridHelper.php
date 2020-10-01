@@ -3,6 +3,7 @@
 
 namespace app\helpers\bid;
 
+use app\helpers\constants\Constants;
 use app\models\Client;
 use yii\helpers\Json;
 use app\models\Manufacturer;
@@ -328,7 +329,7 @@ class GridHelper
             'filterOptions' => ['class' => 'grid-master_id'],
             'headerOptions' => ['class' => 'grid-master_id'],
             'contentOptions' => ['class' => 'grid-master_id'],
-            'filter' => Master::mastersAsMap(\Yii::$app->user->identity)
+            'filter' => Master::mastersAsMap(\Yii::$app->user->identity, true)
         ];
     }
 
@@ -464,7 +465,7 @@ class GridHelper
             'filterOptions' => ['class' => 'grid-status_id'],
             'headerOptions' => ['class' => 'grid-status_id'],
             'contentOptions' => ['class' => 'grid-status_id'],
-            'filter' => \app\models\BidStatus::bidStatusAsMap()
+            'filter' => \app\models\BidStatus::bidStatusAsMap(true)
         ];
     }
 
@@ -482,7 +483,7 @@ class GridHelper
             'filterOptions' => ['class' => 'grid-repair_status_id'],
             'headerOptions' => ['class' => 'grid-repair_status_id'],
             'contentOptions' => ['class' => 'grid-repair_status_id'],
-            'filter' => RepairStatus::repairStatusAsMap()
+            'filter' => RepairStatus::repairStatusAsMap(true)
         ];
     }
 
@@ -500,7 +501,7 @@ class GridHelper
             'filterOptions' => ['class' => 'grid-treatment_type'],
             'contentOptions' => ['class' => 'grid-treatment_type'],
             'headerOptions' => ['class' => 'grid-treatment_type'],
-            'filter' => Bid::TREATMENT_TYPES
+            'filter' => Constants::EMPTY_ELEMENT + Bid::TREATMENT_TYPES
         ];
     }
 
@@ -536,7 +537,7 @@ class GridHelper
             'filterOptions' => ['class' => 'grid-manufacturer_id'],
             'headerOptions' => ['class' => 'grid-manufacturer_id'],
             'contentOptions' => ['class' => 'grid-manufacturer_id'],
-            'filter' => Manufacturer::manufacturersAsMap()
+            'filter' => Manufacturer::manufacturersAsMap(true)
         ];
     }
 

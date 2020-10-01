@@ -1,5 +1,6 @@
 <?php
 
+use app\helpers\constants\Constants;
 use app\models\Master;
 use app\models\User;
 use yii\helpers\Html;
@@ -39,7 +40,7 @@ use kartik\date\DatePicker;
 <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'manufacturer_id'])): ?>
-        <?= $form->field($model, 'manufacturer_id')->dropDownList(Manufacturer::manufacturersAsMap(),['prompt' => 'Выбор']) ?>
+        <?= $form->field($model, 'manufacturer_id')->dropDownList(Manufacturer::manufacturersAsMap(true),['prompt' => 'Выбор']) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'brand_name'])): ?>
@@ -67,7 +68,7 @@ use kartik\date\DatePicker;
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'vendor_code'])): ?>
-        <?= $form->field($model, 'master_id')->dropDownList(Master::mastersAsMap(\Yii::$app->user->identity),['prompt' => 'Выбор']) ?>
+        <?= $form->field($model, 'master_id')->dropDownList(Master::mastersAsMap(\Yii::$app->user->identity, true),['prompt' => 'Выбор']) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'client_id'])): ?>
@@ -86,7 +87,7 @@ use kartik\date\DatePicker;
 
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'treatment_type'])): ?>
-        <?= $form->field($model, 'treatment_type')->dropDownList(Bid::TREATMENT_TYPES ,['prompt' => 'Выбор']) ?>
+        <?= $form->field($model, 'treatment_type')->dropDownList(Constants::EMPTY_ELEMENT + Bid::TREATMENT_TYPES ,['prompt' => 'Выбор']) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'saler_name'])): ?>
@@ -206,7 +207,7 @@ use kartik\date\DatePicker;
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'repair_status_id'])): ?>
-        <?= $form->field($model, 'repair_status_id')->dropDownList(RepairStatus::repairStatusAsMap(),['prompt' => 'Выбор']) ?>
+        <?= $form->field($model, 'repair_status_id')->dropDownList(RepairStatus::repairStatusAsMap(true),['prompt' => 'Выбор']) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'repair_recommendations'])): ?>
@@ -218,7 +219,7 @@ use kartik\date\DatePicker;
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'status_id'])): ?>
-        <?= $form->field($model, 'status_id')->dropDownList(BidStatus::bidStatusAsMap(),['prompt' => 'Выбор']) ?>
+        <?= $form->field($model, 'status_id')->dropDownList(BidStatus::bidStatusAsMap(true),['prompt' => 'Выбор']) ?>
     <?php endif; ?>
 
     <?php if (\Yii::$app->user->can('adminBidAttribute', ['attribute' => 'comment'])): ?>

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\constants\Constants;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -92,7 +93,7 @@ class Master extends \yii\db\ActiveRecord
     /**
      * return array
      */
-    public static function mastersAsMap(User $user)
+    public static function mastersAsMap(User $user, $withEmpty = false)
     {
         $query = self::find()
             ->select(['master.id', 'user.name'])
@@ -114,7 +115,7 @@ class Master extends \yii\db\ActiveRecord
 
         $list = ArrayHelper::map($models, 'id', 'name');
 
-        return $list;
+        return $withEmpty ? Constants::EMPTY_ELEMENT + $list : $list;
     }
 
     public static function findByUserId($userId)

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\constants\Constants;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -57,12 +58,12 @@ class BidStatus extends \yii\db\ActiveRecord
     /**
      * return array
      */
-    public static function bidStatusAsMap()
+    public static function bidStatusAsMap($withEmpty = false)
     {
         $models = self::find()->orderBy('name')->all();
         $list = ArrayHelper::map($models, 'id', 'name');
 
-        return $list;
+        return $withEmpty ? Constants::EMPTY_ELEMENT + $list : $list;
     }
 
     public static function getId($adminName)

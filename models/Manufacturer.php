@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\constants\Constants;
 use app\models\form\UploadExcelTemplateForm;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -68,12 +69,12 @@ class Manufacturer extends \yii\db\ActiveRecord
     /**
      * return array
      */
-    public static function manufacturersAsMap()
+    public static function manufacturersAsMap($withEmpty = false)
     {
         $models = self::find()->orderBy('name')->all();
         $list = ArrayHelper::map($models, 'id', 'name');
 
-        return $list;
+        return $withEmpty ? Constants::EMPTY_ELEMENT + $list : $list;
     }
 
 }
