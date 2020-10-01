@@ -6,6 +6,7 @@ namespace app\rbac\rules;
 
 use app\models\Bid;
 use app\models\BidStatus;
+use app\models\User;
 use app\models\Workshop;
 use yii\rbac\Rule;
 
@@ -17,6 +18,11 @@ class SetBidDoneRule extends Rule
     {
         $bid = Bid::findOne($params['bidId']);
         if (is_null($bid)) {
+            return false;
+        }
+
+        $userModel = User::findOne($user);
+        if ($userModel->role === 'master' && $userModel->master->getBidRole() === Bid::TREATMENT_TYPE_PRESALE) {
             return false;
         }
 

@@ -21,6 +21,7 @@ use app\rbac\rules\UpdateBidRule;
 use app\rbac\rules\UpdateClientRule;
 use app\rbac\rules\UpdateDecisionManagerRule;
 use app\rbac\rules\UpdateDecisionMasterRule;
+use app\rbac\rules\ViewActRule;
 use app\rbac\rules\ViewImageRule;
 use app\rbac\rules\ViewJobsRule;
 use app\rbac\rules\ViewNewsRule;
@@ -273,6 +274,12 @@ class RbacController extends Controller
         $auth->add($viewBidHistory);
         $auth->addChild($viewBidHistory, $adminBidHistory);
 
+        $viewActRule = new ViewActRule();
+        $auth->add($viewActRule);
+        $viewAct = $auth->createPermission('viewAct');
+        $viewAct->ruleName = $viewActRule->name;
+        $auth->add($viewAct);
+
         $master = $auth->createRole('master');
         $auth->add($master);
         $auth->addChild($master, $listBids);
@@ -301,6 +308,7 @@ class RbacController extends Controller
         $auth->addChild($master, $manageBidJob1c);
         $auth->addChild($master, $adminBidHistory);
         $auth->addChild($master, $managePrivateComments);
+        $auth->addChild($master, $viewAct);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
@@ -324,6 +332,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $viewImageRestricted);
         $auth->addChild($manager, $viewBidHistory);
         $auth->addChild($manager, $viewJobs);
+        $auth->addChild($manager, $viewAct);
 
         $director = $auth->createRole('director');
         $auth->add($director);

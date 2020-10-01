@@ -42,7 +42,7 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
             </div>
         <?php endif; ?>
 
-        <?php if (\Yii::$app->user->can('viewBid', ['bidId' => $model->id])): ?>
+        <?php if (\Yii::$app->user->can('viewAct', ['bidId' => $model->id])): ?>
             <div class="col-md-2 col-sm-3  col-xs-6">
                 <?= Html::a('Скачать акты и фото', ['download', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             </div>
