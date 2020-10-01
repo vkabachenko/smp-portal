@@ -66,7 +66,7 @@ $columns = $gridHelper->getColumns();
             'filterModel' => $searchModel,
             'columns' => $columns,
             'rowOptions' => function(Bid $bid) {
-                return ['class' => RowOptionsHelper::getClass($bid, \Yii::$app->user->identity->role)];
+                return ['class' => RowOptionsHelper::getClass($bid, \Yii::$app->user->identity)];
             }
         ]); ?>
     </div>
