@@ -4,7 +4,6 @@
 namespace app\helpers\bid;
 
 use app\helpers\constants\Constants;
-use app\models\Client;
 use yii\helpers\Json;
 use app\models\Manufacturer;
 use app\models\RepairStatus;
@@ -144,8 +143,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-equipment'],
-            'headerOptions' => ['class' => 'grid-equipment'],
-            'contentOptions' => ['class' => 'grid-equipment']
+            'headerOptions' => ['class' => 'grid-equipment  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-equipment  grid-bid-content']
         ];
     }
 
@@ -161,8 +160,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-equipment_manufacturer'],
-            'headerOptions' => ['class' => 'grid-equipment_manufacturer'],
-            'contentOptions' => ['class' => 'grid-equipment_manufacturer']
+            'headerOptions' => ['class' => 'grid-equipment_manufacturer  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-equipment_manufacturer grid-bid-content']
         ];
     }
 
@@ -176,8 +175,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-bid_1C_number'],
-            'headerOptions' => ['class' => 'grid-bid_1C_number'],
-            'contentOptions' => ['class' => 'grid-bid_1C_number']
+            'headerOptions' => ['class' => 'grid-bid_1C_number  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-bid_1C_number grid-bid-content']
         ];
     }
 
@@ -191,8 +190,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-bid_number'],
-            'headerOptions' => ['class' => 'grid-bid_number'],
-            'contentOptions' => ['class' => 'grid-bid_number']
+            'headerOptions' => ['class' => 'grid-bid_number  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-bid_number grid-bid-content']
         ];
     }
 
@@ -212,8 +211,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-client_id'],
-            'headerOptions' => ['class' => 'grid-client_id'],
-            'contentOptions' => ['class' => 'grid-client_id'],
+            'headerOptions' => ['class' => 'grid-client_id  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-client_id grid-bid-content'],
             'filter' => AutoComplete::widget([
                 'name' => 'BidSearch[client_name]',
                 'value' => $this->searchModel->client_name,
@@ -272,8 +271,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-client_manufacturer_id'],
-            'headerOptions' => ['class' => 'grid-client_manufacturer_id'],
-            'contentOptions' => ['class' => 'grid-client_manufacturer_id'],
+            'headerOptions' => ['class' => 'grid-client_manufacturer_id  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-client_manufacturer_id grid-bid-content'],
             'filter' => AutoComplete::widget([
                 'name' => 'BidSearch[client_manufacturer_name]',
                 'value' => $this->searchModel->client_manufacturer_name,
@@ -327,8 +326,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-master_id'],
-            'headerOptions' => ['class' => 'grid-master_id'],
-            'contentOptions' => ['class' => 'grid-master_id'],
+            'headerOptions' => ['class' => 'grid-master_id  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-master_id grid-bid-content'],
             'filter' => Master::mastersAsMap(\Yii::$app->user->identity, true)
         ];
     }
@@ -345,8 +344,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-condition_name'],
-            'headerOptions' => ['class' => 'grid-condition_name'],
-            'contentOptions' => ['class' => 'grid-condition_name'],
+            'headerOptions' => ['class' => 'grid-condition_name  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-condition_name grid-bid-content'],
         ];
     }
 
@@ -362,8 +361,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-condition_manufacturer_name'],
-            'headerOptions' => ['class' => 'grid-condition_manufacturer_name'],
-            'contentOptions' => ['class' => 'grid-condition_manufacturer_name'],
+            'headerOptions' => ['class' => 'grid-condition_manufacturer_name  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-condition_manufacturer_name grid-bid-content'],
         ];
     }
 
@@ -377,8 +376,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-brand_name'],
-            'headerOptions' => ['class' => 'grid-brand_name'],
-            'contentOptions' => ['class' => 'grid-brand_name'],
+            'headerOptions' => ['class' => 'grid-brand_name  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-brand_name grid-bid-content'],
         ];
     }
 
@@ -392,8 +391,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-brand_model_name'],
-            'headerOptions' => ['class' => 'grid-brand_model_name'],
-            'contentOptions' => ['class' => 'grid-brand_model_name'],
+            'headerOptions' => ['class' => 'grid-brand_model_name  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-brand_model_name grid-bid-content'],
         ];
     }
 
@@ -407,8 +406,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-composition_name'],
-            'headerOptions' => ['class' => 'grid-composition_name'],
-            'contentOptions' => ['class' => 'grid-composition_name'],
+            'headerOptions' => ['class' => 'grid-composition_name  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-composition_name grid-bid-content'],
         ];
     }
 
@@ -422,8 +421,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-composition_name_manufacturer'],
-            'headerOptions' => ['class' => 'grid-composition_name_manufacturer'],
-            'contentOptions' => ['class' => 'grid-composition_name_manufacturer'],
+            'headerOptions' => ['class' => 'grid-composition_name_manufacturer  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-composition_name_manufacturer grid-bid-content'],
         ];
     }
 
@@ -438,8 +437,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-created_at'],
-            'headerOptions' => ['class' => 'grid-created_at'],
-            'contentOptions' => ['class' => 'grid-created_at'],
+            'headerOptions' => ['class' => 'grid-created_at  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-created_at grid-bid-content'],
             'filter' => DatePicker::widget([
                 'model' => $this->searchModel,
                 'attribute' => 'created_at_from',
@@ -463,8 +462,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-status_id'],
-            'headerOptions' => ['class' => 'grid-status_id'],
-            'contentOptions' => ['class' => 'grid-status_id'],
+            'headerOptions' => ['class' => 'grid-status_id  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-status_id grid-bid-content'],
             'filter' => \app\models\BidStatus::bidStatusAsMap(true)
         ];
     }
@@ -481,8 +480,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-repair_status_id'],
-            'headerOptions' => ['class' => 'grid-repair_status_id'],
-            'contentOptions' => ['class' => 'grid-repair_status_id'],
+            'headerOptions' => ['class' => 'grid-repair_status_id  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-repair_status_id grid-bid-content'],
             'filter' => RepairStatus::repairStatusAsMap(true)
         ];
     }
@@ -499,8 +498,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-treatment_type'],
-            'contentOptions' => ['class' => 'grid-treatment_type'],
-            'headerOptions' => ['class' => 'grid-treatment_type'],
+            'contentOptions' => ['class' => 'grid-treatment_type grid-bid-content'],
+            'headerOptions' => ['class' => 'grid-treatment_type  grid-bid-header'],
             'filter' => Constants::EMPTY_ELEMENT + Bid::TREATMENT_TYPES
         ];
     }
@@ -517,8 +516,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-warranty_status_id'],
-            'headerOptions' => ['class' => 'grid-warranty_status_id'],
-            'contentOptions' => ['class' => 'grid-warranty_status_id'],
+            'headerOptions' => ['class' => 'grid-warranty_status_id  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-warranty_status_id grid-bid-content'],
             'filter' => WarrantyStatus::warrantyStatusAsMap(true)
         ];
     }
@@ -535,8 +534,8 @@ class GridHelper
                 return $html;
             },
             'filterOptions' => ['class' => 'grid-manufacturer_id'],
-            'headerOptions' => ['class' => 'grid-manufacturer_id'],
-            'contentOptions' => ['class' => 'grid-manufacturer_id'],
+            'headerOptions' => ['class' => 'grid-manufacturer_id  grid-bid-header'],
+            'contentOptions' => ['class' => 'grid-manufacturer_id grid-bid-content'],
             'filter' => Manufacturer::manufacturersAsMap(true)
         ];
     }

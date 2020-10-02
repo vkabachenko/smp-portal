@@ -25,16 +25,16 @@ $columns = $gridHelper->getColumns();
     <h2> <?= $this->title ?> <?= Html::a('Сброс', ['bid/index'], ['class' => 'btn btn-default']) ?></h2>
 
     <div class="bids-grid">
-        <div class="row row-no-padding">
+        <div class="row">
             <?php if (\Yii::$app->user->can('createBid')): ?>
-                <div class="col-xs-3">
-                    <?= Html::a('Новая заявка', ['create'], ['class' => 'btn btn-success']) ?>
+                <div class="col-xs-4 col-sm-3">
+                    <?= Html::a('Новая заявка', ['create'], ['class' => 'btn btn-success btn-one-line']) ?>
                 </div>
             <?php endif; ?>
 
-            <div class="bid-search-btn-wrap col-xs-3">
+            <div class="bid-search-btn-wrap col-xs-4 col-sm-3">
                 <?= Html::button('Расширенный поиск', [
-                    'class' => 'btn btn-primary',
+                    'class' => 'btn btn-primary btn-one-line',
                     'onclick' => '$(".bid-search").show();$(".bid-search-text").hide();'
                 ])
                 ?>
@@ -42,18 +42,18 @@ $columns = $gridHelper->getColumns();
             </div>
 
             <?php if (\Yii::$app->user->can('manager')): ?>
-                <div class="col-xs-3">
+                <div class="col-xs-4 col-sm-3">
                     <?= Html::a('Отчет',
                         ['agency-report/index', 'agencyId' => \Yii::$app->user->identity->manager->agency_id],
-                        ['class' => 'btn btn-success'])
+                        ['class' => 'btn btn-success btn-one-line'])
                     ?>
                 </div>
             <?php endif; ?>
 
-            <div class="col-xs-3">
+            <div class="col-xs-4 col-sm-3">
                 <?= Html::a('Настроить поля',
                     ['bid/set-grid-attributes'],
-                    ['class' => 'btn btn-primary',]
+                    ['class' => 'btn btn-primary btn-one-line',]
                 )
                 ?>
             </div>
