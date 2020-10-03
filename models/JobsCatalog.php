@@ -100,7 +100,7 @@ class JobsCatalog extends \yii\db\ActiveRecord
 
     public static function addFromExcel($agencyId, UploadExcelTemplateForm $uploadForm)
     {
-        $path = \Yii::getAlias('@runtime/jobs-catalog-' . $agencyId . 'xlsx');
+        $path = \Yii::getAlias('@runtime/jobs-catalog-' . $agencyId . '.xlsx');
         $uploadForm->file = UploadedFile::getInstance($uploadForm, 'file');
         if (!$uploadForm->file) {
             throw new \DomainException('xlsx file not uploaded');
@@ -128,7 +128,7 @@ class JobsCatalog extends \yii\db\ActiveRecord
 
         foreach ($rows as $row) {
 
-            $sectionName = $row[0];
+            $sectionName = strval($row[0]);
             $jobsSection = JobsSection::find()->where(['name' => $sectionName])->one();
             if (is_null($jobsSection)) {
                 $jobsSection = new JobsSection(['agency_id' => $agencyId, 'name' => $sectionName]);
@@ -141,15 +141,16 @@ class JobsCatalog extends \yii\db\ActiveRecord
             $model->date_actual = '1970-01-01';
             $model->uuid = \Yii::$app->security->generateRandomString();
             $model->jobs_section_id = $jobsSection->id;
-            $model->vendor_code = $row[1];
-            $model->name = $row[2];
-            $model->description = $row[3];
+            $model->vendor_code = strval($row[1]);
+            $model->name = strval($row[2]);
+            $model->description = strval($row[3]);
             $model->hour_tariff = doubleval($row[4]);
             $model->hours_required = doubleval($row[5]);
             $model->price = doubleval($row[6]);
 
             if (!$model->save()) {
                 \Yii::error($model->getErrors());
+                \Yii::error($row);
             }
         }
     }
