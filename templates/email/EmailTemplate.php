@@ -40,8 +40,8 @@ class EmailTemplate
             $body = $this->getText(strval($this->decision->email_body));
             $signature = $this->getText(strval($this->decision->email_signature));
         } else {
-            $body = $this->getText(strval($this->template->email_body));
-            $signature = $this->getText(strval($this->template->email_signature));
+            $body = $this->getText(strval($this->template ? $this->template->email_body: ''));
+            $signature = $this->getText(strval($this->template ? $this->template->email_signature : ''));
         }
         return sprintf("%s\n\n-------\n%s", $body, $signature);
     }

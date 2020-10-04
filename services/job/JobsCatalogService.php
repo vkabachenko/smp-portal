@@ -19,9 +19,9 @@ class JobsCatalogService
     /**
      * return array
      */
-    public function jobsCatalogAsMap()
+    public function jobsCatalogAsMap($sectionId)
     {
-        $models = $this->dateActualQuery()->all();
+        $models = $this->dateActualQuery($sectionId)->all();
         $list = ArrayHelper::map($models, 'id', 'name');
 
         return $list;
@@ -31,8 +31,9 @@ class JobsCatalogService
      *
      * @return Query
      */
-    public function dateActualQuery()
+    public function dateActualQuery($sectionId)
     {
+        $sectionId = empty($sectionId) ? null : $sectionId;
         $subQuery = new Query();
         $subQuery
             ->select(['date_max' => 'MAX(date_actual)', 'uuid'])
@@ -43,9 +44,10 @@ class JobsCatalogService
 
         $query = new Query();
         $query
-            ->select(['jobs_catalog.*', 'jobs_section_name' => 'jobs_section.name'])
+            ->select(['jobs_catalog.*'])
             ->from('jobs_catalog')
             ->where(['jobs_catalog.agency_id' => $this->agencyId])
+            ->andWhere(['jobs_catalog.jobs_section_id' => $sectionId])
             ->leftJoin('jobs_section', 'jobs_catalog.jobs_section_id = jobs_section.id')
             ->innerJoin(['u' => $subQuery], 'u.uuid = jobs_catalog.uuid AND u.date_max = jobs_catalog.date_actual');
 

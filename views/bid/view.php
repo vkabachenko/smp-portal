@@ -117,7 +117,8 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
                     <?php $jobModel = new BidJob(['bid_id' => $model->id]); ?>
                     <?php $agency = $model->getAgency(); ?>
                     <?php $jobsCatalogService = new JobsCatalogService($agency ? $agency->id : null, $model->created_at); ?>
-                    <?php $jobsCatalog = JobsCatalog::findOne(array_key_first($jobsCatalogService->jobsCatalogAsMap())); ?>
+                    <?php $jobsSection = \app\models\JobsSection::find()->where(['agency_id' => ($agency ? $agency->id : null)])->orderBy('name')->one() ?>
+                    <?php $jobsCatalog = JobsCatalog::findOne(array_key_first($jobsCatalogService->jobsCatalogAsMap($jobsSection ? $jobsSection->id : null))); ?>
                     <?= $this->render('modal/create-job', [
                         'model' => $jobModel,
                         'bid' => $model,

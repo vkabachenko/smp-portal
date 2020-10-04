@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\models\form\UploadExcelTemplateForm;
+use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use SimpleXLSX;
 
@@ -26,7 +27,6 @@ use SimpleXLSX;
  */
 class JobsCatalog extends \yii\db\ActiveRecord
 {
-    public $jobsSectionName;
     /**
      * {@inheritdoc}
      */
@@ -67,7 +67,6 @@ class JobsCatalog extends \yii\db\ActiveRecord
             'hour_tariff' => 'Цена нормочаса',
             'hours_required' => 'Нормочасов',
             'price' => 'Стоимость',
-            'jobsSectionName' => 'Раздел работ',
         ];
     }
 
@@ -90,12 +89,6 @@ class JobsCatalog extends \yii\db\ActiveRecord
     public function getBidJobs()
     {
         return $this->hasMany(BidJob::class, ['jobs_catalog_id' => 'id']);
-    }
-
-    public function afterFind()
-    {
-        parent::afterFind();
-        $this->jobsSectionName = $this->jobs_section_id ? $this->jobsSection->name : '';
     }
 
     public static function addFromExcel($agencyId, UploadExcelTemplateForm $uploadForm)
@@ -153,6 +146,17 @@ class JobsCatalog extends \yii\db\ActiveRecord
                 \Yii::error($row);
             }
         }
+    }
+
+    /**
+     * return array
+     */
+    public static function jobsSectionAsMap($sectionId, $agencyId)
+    {
+        $models = self::find()->where(['jobs_section_id' => $sectionId, 'agency_id' => $agencyId])->orderBy('name')->all();
+        $list = ArrayHelper::map($models, 'id', 'name');
+
+        return $list;
     }
 
 }

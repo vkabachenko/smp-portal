@@ -20,8 +20,15 @@ use yii\helpers\Url;
             'action' => isset($action) ? $action : ''
     ]); ?>
 
+    <?= $form->field($jobsCatalog, 'jobs_section_id')
+        ->dropDownList(\app\models\JobsSection::jobsSectionAsMap($bid->agency_id), [
+            'id' => 'jobs-section-select',
+            'data-url' => Url::to(['bid-job/change-jobs-section'])
+        ])
+    ?>
+
     <?= $form->field($model, 'jobs_catalog_id')
-        ->dropDownList($jobsCatalogService->jobsCatalogAsMap(), [
+        ->dropDownList($jobsCatalogService->jobsCatalogAsMap($jobsCatalog->jobs_section_id), [
             'id' => 'jobs-catalog-select',
             'data-url' => Url::to(['bid-job/change-jobs-catalog'])
         ])
@@ -32,11 +39,7 @@ use yii\helpers\Url;
             'id' => 'jobs-catalog-vendor-code'
     ])
     ?>
-    <?= $form->field($jobsCatalog, 'jobsSectionName')->textInput([
-            'disabled' => true,
-            'id' => 'jobs-catalog-vendor-section-name'
-    ])
-    ?>
+
     <?= $form->field($jobsCatalog, 'hour_tariff')->textInput([
             'disabled' => true,
             'id' => 'jobs-catalog-hour-tariff'
@@ -74,10 +77,27 @@ $(function() {
             data: {id: self.val()}
         }).then(function(result) {
             $('#jobs-catalog-vendor-code').val(result.vendor_code);
-            $('#jobs-catalog-vendor-section-name').val(result.section_name);
             $('#jobs-catalog-hour-tariff').val(result.hour_tariff);
             $('#jobs-catalog-hours-required').val(result.hours_required);
             $('#jobs-catalog-price').val(result.price);
+        }).catch(function(error) {
+            swal('Ошибка', error.message, 'error');
+        });
+    });
+    
+    $('#jobs-section-select').change(function() {
+        var agencyId = {$bid->agency_id};
+        var self = $(this);
+        $.ajax({
+            url: self.data('url'),
+            method: 'POST',
+            data: {id: self.val(), agencyId: agencyId}
+        }).then(function(result) {
+            var catalog = $('#jobs-catalog-select')[0];
+            catalog.options.length = 0;
+            for (var id in result) {
+                catalog.options[catalog.options.length] = new Option(result[id], id, false, false);
+            }
         }).catch(function(error) {
             swal('Ошибка', error.message, 'error');
         });
