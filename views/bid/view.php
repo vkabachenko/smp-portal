@@ -32,43 +32,43 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
     <h3><?= sprintf('%s (%s %s)', Html::encode($this->title), $model->bid_number, $model->bid_1C_number) ?></h3>
 
     <div class="row" style="margin-bottom: 10px;">
-        <div class="col-md-2 col-sm-3 col-xs-6">
-            <?= Html::a('История', ['bid-history/index', 'bidId' => $model->id], ['class' => 'btn btn-success']) ?>
+        <div class="col-md-2 col-sm-3 col-xs-6 tablet-mt-10">
+            <?= Html::a('История', ['bid-history/index', 'bidId' => $model->id], ['class' => 'btn btn-success btn-one-line']) ?>
         </div>
 
         <?php if (\Yii::$app->user->can('updateBid', ['bidId' => $model->id])): ?>
-            <div class="col-md-2 col-sm-3  col-xs-6">
-                <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <div class="col-md-2 col-sm-3  col-xs-6 tablet-mt-10">
+                <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-one-line']) ?>
             </div>
         <?php endif; ?>
 
         <?php if (\Yii::$app->user->can('viewAct', ['bidId' => $model->id])): ?>
-            <div class="col-md-2 col-sm-3  col-xs-6">
-                <?= Html::a('Скачать акты и фото', ['download', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <div class="col-md-2 col-sm-3  col-xs-6 tablet-mt-10">
+                <?= Html::a('Скачать акты и фото', ['download', 'id' => $model->id], ['class' => 'btn btn-primary btn-one-line']) ?>
             </div>
         <?php endif; ?>
 
         <?php if (\Yii::$app->user->can('manageJobs', ['bidId' => $model->id])): ?>
-            <div class="col-md-2 col-sm-3  col-xs-6">
-                <?= Html::a('Работы', ['bid-job/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <div class="col-md-2 col-sm-3  col-xs-6 tablet-mt-10">
+                <?= Html::a('Работы', ['bid-job/index', 'bidId' => $model->id], ['class' => 'btn btn-primary btn-one-line']) ?>
             </div>
         <?php endif; ?>
 
         <?php if (\Yii::$app->user->can('viewSpare', ['bidId' => $model->id])): ?>
-            <div class="col-md-2 col-sm-3  col-xs-6">
-                <?= Html::a('Запчасти', ['spare/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <div class="col-md-2 col-sm-3  col-xs-6 tablet-mt-10">
+                <?= Html::a('Запчасти', ['spare/index', 'bidId' => $model->id], ['class' => 'btn btn-primary btn-one-line']) ?>
             </div>
         <?php endif; ?>
 
         <?php if (\Yii::$app->user->can('sendAct', ['bidId' => $model->id])): ?>
-            <div class="col-md-2 col-sm-3  col-xs-6 bid-view-send">
-                <?= Html::a('Отправить', ['send-act/index', 'bidId' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <div class="col-md-2 col-sm-3  col-xs-6 tablet-mt-10">
+                <?= Html::a('Отправить', ['send-act/index', 'bidId' => $model->id], ['class' => 'btn btn-primary btn-one-line']) ?>
             </div>
         <?php endif; ?>
 
         <?php if (\Yii::$app->user->can('setBidDone', ['bidId' => $model->id])): ?>
-            <div class="col-md-2 col-sm-3  col-xs-6 bid-view-send">
-                <?= Html::a('Выполнено', ['bid/set-status-done', 'bidId' => $model->id], ['class' => 'btn btn-danger']) ?>
+            <div class="col-md-2 col-sm-3  col-xs-6 tablet-mt-10">
+                <?= Html::a('Выполнено', ['bid/set-status-done', 'bidId' => $model->id], ['class' => 'btn btn-danger btn-one-line']) ?>
             </div>
         <?php endif; ?>
 

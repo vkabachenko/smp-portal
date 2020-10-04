@@ -176,7 +176,7 @@ a.desc:after {
 }
 
 @media(max-width:767px) {
-    .bid-view-send {
+    .tablet-mt-10 {
         margin-top: 10px;
     }
 }
