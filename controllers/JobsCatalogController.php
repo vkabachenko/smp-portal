@@ -47,7 +47,7 @@ class JobsCatalogController  extends Controller
         $agency = Agency::findOne($agencyId);
 
         $service = new JobsCatalogService($agencyId, date('Y-m-d'));
-        $query = $service->dateActualQuery();
+        $query = $service->dateActualQuery(false);
 
         $dataProvider = new ActiveDataProvider(['query' => $query]);
 

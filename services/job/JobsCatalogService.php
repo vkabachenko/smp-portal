@@ -33,7 +33,10 @@ class JobsCatalogService
      */
     public function dateActualQuery($sectionId)
     {
-        $sectionId = empty($sectionId) ? null : $sectionId;
+        if ($sectionId !== false) {
+            $sectionId = empty($sectionId) ? null : $sectionId;
+        }
+
         $subQuery = new Query();
         $subQuery
             ->select(['date_max' => 'MAX(date_actual)', 'uuid'])
@@ -47,9 +50,13 @@ class JobsCatalogService
             ->select(['jobs_catalog.*'])
             ->from('jobs_catalog')
             ->where(['jobs_catalog.agency_id' => $this->agencyId])
-            ->andWhere(['jobs_catalog.jobs_section_id' => $sectionId])
             ->leftJoin('jobs_section', 'jobs_catalog.jobs_section_id = jobs_section.id')
-            ->innerJoin(['u' => $subQuery], 'u.uuid = jobs_catalog.uuid AND u.date_max = jobs_catalog.date_actual');
+            ->innerJoin(['u' => $subQuery], 'u.uuid = jobs_catalog.uuid AND u.date_max = jobs_catalog.date_actual')
+            ->orderBy('jobs_catalog.jobs_section_id, jobs_catalog.name');
+
+        if ($sectionId !== false) {
+            $query->andWhere(['jobs_catalog.jobs_section_id' => $sectionId]);
+        }
 
         return $query;
     }

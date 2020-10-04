@@ -47,8 +47,11 @@ $this->params['back'] = \Yii::$app->user->can('admin')
             'dataProvider' => $dataProvider,
             'columns' => [
                 [
-                    'attribute' => 'jobs_section_name',
-                    'header' => 'Раздел работ'
+                    'attribute' => 'jobs_section_id',
+                    'header' => 'Раздел работ',
+                    'value' => function ($model) {
+                        return $model['jobs_section_id'] ? \app\models\JobsSection::findOne($model['jobs_section_id'])->name : null;
+                    },
                 ],
                 [
                     'attribute' => 'vendor_code',
