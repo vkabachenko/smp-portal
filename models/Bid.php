@@ -709,28 +709,38 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
             || $oldDecisionAgency != $this->decision_agency_status_id
             || $oldStatus != $this->status_id
         ) {
-            /* @var $autoFillAttributesModel AutoFillAttributes */
-            $autoFillAttributesModel = AutoFillAttributes::find()
-                ->where([
-                    'decision_workshop_status_id' => $this->decision_workshop_status_id,
-                    'decision_agency_status_id' => $this->decision_agency_status_id,
-                    'status_id' => $this->status_id,
-                    ])
-                ->one();
-            if (!$autoFillAttributesModel) {
-                return;
-            }
+            $autoFillAttributesModels = AutoFillAttributes::find()->all();
 
-            $toSave = false;
-            foreach ($autoFillAttributesModel->auto_fill as $attribute => $value) {
-                if ($value !== null && $value !== '' && $this->$attribute != $value) {
-                    $toSave = true;
-                    $this->$attribute = $value;
+            $initialAttributes = [];
+
+            foreach ($autoFillAttributesModels as $autoFillAttributesModel) {
+                /* @var $autoFillAttributesModel AutoFillAttributes */
+                if (
+                    (is_null($autoFillAttributesModel->decision_agency_status_id)
+                    || $autoFillAttributesModel->decision_agency_status_id == $this->decision_workshop_status_id)
+                    &&
+                    (is_null($autoFillAttributesModel->decision_workshop_status_id)
+                        || $autoFillAttributesModel->decision_workshop_status_id == $this->decision_workshop_status_id)
+                    &&
+                    (is_null($autoFillAttributesModel->status_id)
+                        || $autoFillAttributesModel->status_id == $this->status_id)
+                    ) {
+                    foreach ($autoFillAttributesModel->auto_fill as $attribute => $value) {
+                        if ($value !== null && $value !== '' && $this->$attribute != $value) {
+                            if (!isset($initialAttributes[$attribute])) {
+                                $initialAttributes[$attribute] = $this->$attribute;
+                            }
+                            $this->$attribute = $value;
+                        }
+                    }
                 }
             }
 
-            if ($toSave) {
-                $this->save(false);
+            foreach ($initialAttributes as $attribute => $value) {
+                if ($this->$attribute != $value) {
+                    $this->save(false);
+                    break;
+                }
             }
         }
     }
