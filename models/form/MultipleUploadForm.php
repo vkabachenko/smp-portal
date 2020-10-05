@@ -4,6 +4,7 @@
 namespace app\models\form;
 
 use app\models\BidImage;
+use app\services\image\ImageService;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
@@ -32,6 +33,8 @@ class MultipleUploadForm extends Model
                 $files = array_diff(scandir($path), ['..', '.']);
                 $origFileName = reset($files);
                 if (!empty($origFileName)) {
+                    $imageService = new ImageService($path, $origFileName);
+                    $imageService->resize();
                     $extension = pathinfo($origFileName, PATHINFO_EXTENSION);
                     $image = new BidImage($attributes);
                     $fileName = $this->getNewFilename($attributes['bid_id']);
