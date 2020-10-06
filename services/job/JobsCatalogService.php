@@ -27,6 +27,13 @@ class JobsCatalogService
         return $list;
     }
 
+    public function jobsCatalogActual($sectionId)
+    {
+        $models = $this->dateActualQuery($sectionId)->all();
+
+        return $models;
+    }
+
     /**
      *
      * @return Query
@@ -52,7 +59,7 @@ class JobsCatalogService
             ->where(['jobs_catalog.agency_id' => $this->agencyId])
             ->leftJoin('jobs_section', 'jobs_catalog.jobs_section_id = jobs_section.id')
             ->innerJoin(['u' => $subQuery], 'u.uuid = jobs_catalog.uuid AND u.date_max = jobs_catalog.date_actual')
-            ->orderBy('jobs_catalog.jobs_section_id, jobs_catalog.name');
+            ->orderBy('jobs_catalog.name');
 
         if ($sectionId !== false) {
             $query->andWhere(['jobs_catalog.jobs_section_id' => $sectionId]);

@@ -12,7 +12,7 @@ class ImageService
     {
         $this->path = $dir . '/' . $filename;
         if (!file_exists($this->path)) {
-            throw new \DomainException(sprintf('File %s does not exists', $this->path));
+            throw new \DomainException(sprintf('File %s does not exist', $this->path));
         }
     }
 

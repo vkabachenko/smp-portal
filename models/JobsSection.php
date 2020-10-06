@@ -69,11 +69,11 @@ class JobsSection extends \yii\db\ActiveRecord
     /**
      * return array
      */
-    public static function jobsSectionAsMap($agencyId)
+    public static function jobsSectionAsMap($agencyId, $withEmpty = false)
     {
         $models = self::find()->where(['agency_id' => $agencyId])->orderBy('name')->all();
         $list = ArrayHelper::map($models, 'id', 'name');
 
-        return $list;
+        return $withEmpty ? ['0' => 'Все'] + $list : $list;
     }
 }

@@ -66,10 +66,8 @@ class BidJobController extends Controller
         $this->checkAccess('manageJobs', compact('bidId'));
         $bid = Bid::findOne($bidId);
         $model = new BidJob(['bid_id' => $bidId]);
-        $jobsSection = JobsSection::find()->where(['agency_id' => $bid->agency_id])->orderBy('name')->one();
         $jobsCatalogService = new JobsCatalogService($bid->agency_id, $bid->created_at);
-        $jobsCatalog = JobsCatalog::findOne(array_key_first($jobsCatalogService
-            ->jobsCatalogAsMap($jobsSection ? $jobsSection->id : null)));
+        $jobsCatalog = $jobsCatalogService->jobsCatalogActual(false);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             BidHistory::createUpdated($bidId, $model, \Yii::$app->user->id, 'Создана запись о работе');
@@ -100,10 +98,10 @@ class BidJobController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $jobsCatalog = $model->jobsCatalog;
         $this->checkAccess('manageJobs', ['bidId' => $model->bid_id]);
         $bid = Bid::findOne($model->bid_id);
         $jobsCatalogService = new JobsCatalogService($bid->agency_id, $bid->created_at);
+        $jobsCatalog = $jobsCatalogService->jobsCatalogActual(false);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             BidHistory::createUpdated($model->bid_id, $model, \Yii::$app->user->id, 'Изменена запись о работе');
@@ -139,51 +137,4 @@ class BidJobController extends Controller
         return $this->redirect(['index', 'bidId' => $bidId]);
     }
 
-    public function actionChangeJobsCatalog()
-    {
-        if (!\Yii::$app->request->isPost) {
-            throw new MethodNotAllowedHttpException();
-        }
-
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-
-        $model = JobsCatalog::findOne(\Yii::$app->request->post('id'));
-        if (is_null($model)) {
-            throw new NotFoundHttpException();
-        }
-
-        $this->checkAccess('listJobsCatalog', ['agencyId' => $model->agency_id]);
-
-        return [
-            'vendor_code' => $model->vendor_code,
-            'hour_tariff' => $model->hour_tariff,
-            'hours_required' => $model->hours_required,
-            'price' => $model->price
-        ];
-    }
-
-    public function actionChangeJobsSection()
-    {
-        if (!\Yii::$app->request->isPost) {
-            throw new MethodNotAllowedHttpException();
-        }
-
-        $agencyId = \Yii::$app->request->post('agencyId');
-
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-
-        $this->checkAccess('listJobsCatalog', ['agencyId' => $agencyId]);
-
-        $id = \Yii::$app->request->post('id');
-
-        if (!empty($id)) {
-            $model = JobsSection::findOne(\Yii::$app->request->post('id'));
-            if (is_null($model)) {
-                throw new NotFoundHttpException();
-            }
-            return JobsCatalog::jobsSectionAsMap($model->id, $agencyId);
-        } else {
-            return JobsCatalog::jobsSectionAsMap(null, $agencyId);
-        }
-    }
 }

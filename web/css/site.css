@@ -343,5 +343,14 @@ a.btn-feedback {
     }
 }
 
+.table-jobs-catalog {
+    cursor: pointer;
+}
+
+.tr-jobs-catalog.active td{
+    color: #fff;
+    background-color: #337ab7  !important;
+}
+
 
 
