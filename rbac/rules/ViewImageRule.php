@@ -24,21 +24,14 @@ class ViewImageRule extends Rule
             return true;
         }
 
-        $userImageModel = $bidImage->user;
-
-        if (is_null($userImageModel)) {
-            return true;
-        }
-
         /* @var $userModel \app\models\User */
         $userModel = User::findOne($user);
 
-        if ($userModel->master && $userImageModel->master) {
-            return ($userModel->master->workshop_id == $userImageModel->master->workshop_id);
-        } elseif ($userModel->manager && $userImageModel->manager) {
-            return ($userModel->manager->agency_id == $userImageModel->manager->agency_id);
-        } else {
+        if ($userModel->manager && !$bidImage->sent) {
             return false;
+        } else {
+            return true;
         }
+
     }
 }
