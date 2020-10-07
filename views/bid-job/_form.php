@@ -101,6 +101,9 @@ $(function() {
     $('#jobs-section-select').change(function() {
         $('.tr-jobs-catalog').show().removeClass('active');
         
+        $('#jobs-catalog-id').val('');
+        $('.btn-jobs-submit').attr('disabled', true);
+        
         var section = $(this).val();
         if (section === '0') {
             return;
