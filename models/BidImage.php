@@ -19,6 +19,7 @@ use yii\helpers\Url;
  * @property bool $sent
  *
  * @property Bid $bid
+ * @property User $user
  */
 class BidImage extends \yii\db\ActiveRecord
 {

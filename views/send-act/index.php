@@ -22,6 +22,7 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
             <?= Html::a('', '#', ['class' => 'btn btn-primary toggle-extended hidden-extended']) ?>
         </div>
 
+        <?php if (\Yii::$app->user->can('master')): ?>
         <?php if (count($model->images) > 0): ?>
             <?= $form->field($model, 'images')
                 ->checkboxList($model->images,[
@@ -34,6 +35,7 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
                     }
                 ])
             ?>
+        <?php endif; ?>
         <?php endif; ?>
 
         <div class="extended-form email-field">

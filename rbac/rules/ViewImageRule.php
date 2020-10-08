@@ -27,8 +27,8 @@ class ViewImageRule extends Rule
         /* @var $userModel \app\models\User */
         $userModel = User::findOne($user);
 
-        if ($userModel->manager && !$bidImage->sent) {
-            return false;
+        if ($userModel->manager && !$bidImage->user->manager) {
+            return $bidImage->sent;
         } else {
             return true;
         }
