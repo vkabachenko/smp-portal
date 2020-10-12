@@ -121,10 +121,12 @@ class SendActForm extends Model
             ->setSubject($this->emailTemplate->getSubject())
             ->setTextBody($this->emailTemplate->getMailContent());
 
-        if (file_exists($this->act->getPath())) {
-            $message->attach($this->act->getPath());
-        } else {
-            return false;
+        if ($this->act->template) {
+            if ($this->act->isGenerated()) {
+                $message->attach($this->act->getPath());
+            } else {
+                return false;
+            }
         }
 
         if ($this->images) {
