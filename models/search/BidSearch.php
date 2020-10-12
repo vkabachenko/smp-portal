@@ -140,13 +140,17 @@ class BidSearch extends Bid
                 'brand', 'brandCorrespondence', 'brandModel', 'manufacturer', 'repairStatus',
                 'status', 'master', 'workshop', 'warrantyStatus'
                 ])
-            ->where($this->restrictions)
-            ->orderBy('created_at DESC');
+            ->where($this->restrictions);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'created_at' => SORT_ASC
+                ]
+            ]
         ]);
 
         $this->load($params);
