@@ -49,14 +49,18 @@ if (Yii::$app->user->isGuest) {
         && \Yii::$app->user->identity->master->workshop->canManagePaidBid()): ?>
 
         <div class="wrap-select-master-role">
-            <?= Html::dropDownList(
-                    'select-master-role',
-                isset($_COOKIE['master_role']) ? $_COOKIE['master_role'] : Bid::TREATMENT_TYPE_PRESALE,
-                    Bid::TREATMENT_TYPES, [
-                       'onchange' => 'document.cookie = "master_role=" + this.value + ";path=/"; location.reload()'
-                ]
-                    )
-            ?>
+            <?= Html::button(
+                isset($_COOKIE['master_role'])
+                    ? Bid::TREATMENT_TYPES[$_COOKIE['master_role']]
+                    : Bid::TREATMENT_TYPES[Bid::TREATMENT_TYPE_PRESALE],
+                    [
+                        'value' => isset($_COOKIE['master_role'])
+                            ? Bid::nextTreatmentType($_COOKIE['master_role'])
+                            : Bid::TREATMENT_TYPE_WARRANTY,
+                        'class' => 'btn btn-primary',
+                        'onclick' => 'document.cookie = "master_role=" + this.value + ";path=/"; location.reload()'
+                    ]
+            ) ?>
         </div>
     <?php endif; ?>
     <?php

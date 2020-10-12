@@ -908,4 +908,11 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
             $this->$sample = $this->$item;
         }
     }
+
+    public static function nextTreatmentType($type)
+    {
+        return $type === self::TREATMENT_TYPE_WARRANTY
+            ? self::TREATMENT_TYPE_PRESALE
+            : self::TREATMENT_TYPE_WARRANTY;
+    }
 }
