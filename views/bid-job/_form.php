@@ -98,6 +98,11 @@ $(function() {
        $('.btn-jobs-submit').attr('disabled', false);
     });
     
+    $('.tr-jobs-catalog').dblclick(function() {
+       $(this).trigger('click');
+       $('#bid-job-form').trigger('submit');
+    });
+    
     $('#jobs-section-select').change(function() {
         $('.tr-jobs-catalog').show().removeClass('active');
         
