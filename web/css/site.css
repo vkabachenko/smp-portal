@@ -352,5 +352,10 @@ a.btn-feedback {
     background-color: #337ab7  !important;
 }
 
+.carousel-control {
+    font-weight: bold;
+    font-size: 60px;
+}
+
 
 

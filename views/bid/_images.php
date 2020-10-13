@@ -1,6 +1,16 @@
 <?php
 
 use yii\bootstrap\Modal;
+use yii\bootstrap\Html;
+use app\models\BidImage;
+
+/* @var $model \app\models\Bid */
+
+
+$items = array_map(function(BidImage  $image) {
+    return Html::img($image->getAbsoluteUrl(), ['style' => 'width: 100%;']);
+}, $model->bidImages);
+
 ?>
 
     <div>
@@ -34,7 +44,12 @@ Modal::begin([
 ]);
 ?>
 
-    <img src="" alt="" style="width: 100%;"/>
+    <?= \yii\bootstrap\Carousel::widget([
+            'items' => $items,
+            'clientOptions' => [
+                'interval' => false
+            ]
+    ]); ?>
 
 
 <?php Modal::end(); ?>
@@ -46,10 +61,10 @@ $script = <<<JS
         $('.view-img-wrap').click(function(evt) {
             evt.preventDefault();
             
-            var modal = $('#img-expand');
-            var url = $(this).data('url');
+            var number = $('.view-img-wrap').index(this);
             
-            modal.find('img').attr('src', url);           
+            var modal = $('#img-expand');
+            $('.carousel').carousel(number);
             modal.modal('show');
         });
     });
