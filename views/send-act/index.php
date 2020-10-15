@@ -30,8 +30,15 @@ $this->params['back'] = ['bid/view', 'id' => $model->bidId];
                     'separator'=>'<br/>',
                     'item' => function ($index, $label, $name, $checked, $value) use ($model) {
                         $checked = $model->sent[$index] ? '' : 'checked';
+                        $sent = $model->sent[$index] ? 'Уже отправлено' : '';
                         $fileName = $model->label[$index];
-                        return "<label><input type='checkbox' {$checked} name='{$name}' value='{$value}'>&nbsp;{$label}&nbsp;{$fileName}</label>";
+                        return "<label>
+                            <input 
+                                type='checkbox' 
+                                {$checked} 
+                                name='{$name}' 
+                                value='{$value}'>&nbsp;{$label}&nbsp;{$fileName}&nbsp;{$sent}
+                                </label>";
                     }
                 ])
             ?>

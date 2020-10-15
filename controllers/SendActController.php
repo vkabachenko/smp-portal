@@ -44,7 +44,7 @@ class SendActController extends Controller
             $model->act->generate();
         }
 
-        if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
+        if (\Yii::$app->user->can('manager') || ($model->load(\Yii::$app->request->post()) && $model->validate())) {
             if ($model->send($uploadForm)) {
                 \Yii::$app->session->setFlash('success', 'Акт успешно отправлен');
                 if (!$forced) {
