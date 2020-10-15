@@ -820,7 +820,14 @@ class EditHelper
     public static function getEditSection(Bid $bid, User $user, $sectionName, $isFilledByDefault = true)
     {
         if ($user->can('master')) {
-            return $bid->workshop->getSectionsAttributes()->$sectionName;
+            if ($user->identity->master->getBidRole() === Bid::TREATMENT_TYPE_PRESALE) {
+                return $bid->workshop->getSectionsAttributes()->$sectionName;
+            } else {
+                $agency = $bid->getAgency();
+                return $agency
+                    ? $agency->getSectionsAttributes()->$sectionName
+                    : $bid->workshop->getSectionsAttributes()->$sectionName;
+            }
         } else {
             return $isFilledByDefault ? array_keys($bid->attributeLabels()) : [];
         }
