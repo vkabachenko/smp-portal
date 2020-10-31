@@ -28,6 +28,10 @@ use yii\helpers\ArrayHelper;
  * @property array $bid_attributes_section4
  * @property array $bid_attributes_section5
  * @property array $bid_attributes_1c
+ * @property string $mailbox_host
+ * @property string $mailbox_pass
+ * @property string $mailbox_port
+ * @property string $mailbox_encryption
  *
  * @property Master[] $masters
  */
@@ -56,7 +60,7 @@ class Workshop extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['rules', 'bid_attributes'], 'safe'],
-            [['name', 'token', 'address'], 'string', 'max' => 255],
+            [['name', 'token', 'address', 'mailbox_host', 'mailbox_pass', 'mailbox_port', 'mailbox_encrryption'], 'string', 'max' => 255],
             [['phone1', 'phone2', 'phone3', 'phone4'], 'string'],
             [['email2', 'email3'], 'string'],
             [['email2', 'email3'], 'email'],
@@ -82,6 +86,10 @@ class Workshop extends \yii\db\ActiveRecord
             'phone4' => 'Телефон 4',
             'email2' => 'Email 2',
             'email3' => 'Email 3',
+            'mailbox_host' => 'Хост почты',
+            'mailbox_pass' => 'Пароль почты',
+            'mailbox_port' => 'Порт почты',
+            'mailbox_encrryption' => 'Шифрование почты'
         ];
     }
 

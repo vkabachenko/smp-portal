@@ -27,4 +27,13 @@
     ['labelOptions' => ['class' => 'column-hint', 'data-title' => \Yii::$app->params['fieldTitle']['workshop']['email3']]])
     ->textInput(['maxlength' => true]) ?>
 
+<?php if (\Yii::$app->user->can('admin')): ?>
+
+    <?= $form->field($model, 'mailbox_host')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'mailbox_pass')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'mailbox_port')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'mailbox_encryption')->textInput(['maxlength' => true]) ?>
+
+
+<?php endif; ?>
 

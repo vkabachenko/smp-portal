@@ -111,12 +111,13 @@ class SendActForm extends Model
     {
         $this->setUploadedAct($uploadForm);
         $to = preg_split("/,[\s]*/", $this->email);
+        $from = MailHelper::getFromEmail($this->user);
 
         /* @var $mailer \yii\swiftmailer\Mailer */
         $mailer = \Yii::$app->mailer;
         $message = $mailer->compose();
 
-        $message->setFrom(\Yii::$app->params['adminEmail'])
+        $message->setFrom($from)
             ->setTo($to)
             ->setSubject($this->emailTemplate->getSubject())
             ->setTextBody($this->emailTemplate->getMailContent());
