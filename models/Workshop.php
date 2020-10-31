@@ -60,7 +60,7 @@ class Workshop extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['rules', 'bid_attributes'], 'safe'],
-            [['name', 'token', 'address', 'mailbox_host', 'mailbox_pass', 'mailbox_port', 'mailbox_encrryption'], 'string', 'max' => 255],
+            [['name', 'token', 'address', 'mailbox_host', 'mailbox_pass', 'mailbox_port', 'mailbox_encryption'], 'string', 'max' => 255],
             [['phone1', 'phone2', 'phone3', 'phone4'], 'string'],
             [['email2', 'email3'], 'string'],
             [['email2', 'email3'], 'email'],
@@ -89,7 +89,7 @@ class Workshop extends \yii\db\ActiveRecord
             'mailbox_host' => 'Хост почты',
             'mailbox_pass' => 'Пароль почты',
             'mailbox_port' => 'Порт почты',
-            'mailbox_encrryption' => 'Шифрование почты'
+            'mailbox_encryption' => 'Шифрование почты'
         ];
     }
 

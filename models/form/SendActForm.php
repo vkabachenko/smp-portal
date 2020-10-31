@@ -111,7 +111,7 @@ class SendActForm extends Model
     {
         $this->setUploadedAct($uploadForm);
         $to = preg_split("/,[\s]*/", $this->email);
-        $from = MailHelper::getFromEmail($this->user);
+        $from = MailHelper::getFromEmail($this->user->identity);
 
         /* @var $mailer \yii\swiftmailer\Mailer */
         $mailer = \Yii::$app->mailer;
