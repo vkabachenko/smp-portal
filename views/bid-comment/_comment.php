@@ -1,7 +1,7 @@
 <?php
 /* @var $model \app\models\BidComment */
 
-
+use yii\bootstrap\Html;
 ?>
 
 <div>
@@ -19,6 +19,13 @@
         </div>
     </div>
     <div class="clearfix"></div>
+    <?php if (\Yii::$app->user->can('updateComment', ['commentId' => $model->id])): ?>
+
+    <div>
+        <?= Html::a('Редактировать', ['bid-comment/update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    </div>
+
+    <?php endif; ?>
 <div>
     <hr style="color: #bbb;">
 </div>

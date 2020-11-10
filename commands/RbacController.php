@@ -19,6 +19,7 @@ use app\rbac\rules\BidAttributeRule;
 use app\rbac\rules\SendActRule;
 use app\rbac\rules\UpdateBidRule;
 use app\rbac\rules\UpdateClientRule;
+use app\rbac\rules\UpdateCommentRule;
 use app\rbac\rules\UpdateDecisionManagerRule;
 use app\rbac\rules\UpdateDecisionMasterRule;
 use app\rbac\rules\ViewActRule;
@@ -280,6 +281,12 @@ class RbacController extends Controller
         $viewAct->ruleName = $viewActRule->name;
         $auth->add($viewAct);
 
+        $updateCommentRule = new UpdateCommentRule();
+        $auth->add($updateCommentRule);
+        $updateComment = $auth->createPermission('updateComment');
+        $updateComment->ruleName = $updateCommentRule->name;
+        $auth->add($updateComment);
+
         $master = $auth->createRole('master');
         $auth->add($master);
         $auth->addChild($master, $listBids);
@@ -309,6 +316,7 @@ class RbacController extends Controller
         $auth->addChild($master, $adminBidHistory);
         $auth->addChild($master, $managePrivateComments);
         $auth->addChild($master, $viewAct);
+        $auth->addChild($master, $updateComment);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);
@@ -333,6 +341,7 @@ class RbacController extends Controller
         $auth->addChild($manager, $viewBidHistory);
         $auth->addChild($manager, $viewJobs);
         $auth->addChild($manager, $viewAct);
+        $auth->addChild($manager, $updateComment);
 
         $director = $auth->createRole('director');
         $auth->add($director);
@@ -364,6 +373,7 @@ class RbacController extends Controller
         $auth->addChild($admin, $manageBidJob1c);
         $auth->addChild($admin, $adminBidHistory);
         $auth->addChild($admin, $managePrivateComments);
+        $auth->addChild($admin, $updateComment);
 
         echo 'done' . "\n";
     }

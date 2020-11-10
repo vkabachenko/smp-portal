@@ -65,8 +65,26 @@ class BidCommentController  extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'private' => $private
         ]);
+    }
+
+    public function actionUpdate($id)
+    {
+        $this->checkAccess('updateComment', ['commentId' => $id]);
+
+        $model = BidComment::findOne($id);
+        $bidId = $model->bid->id;
+
+        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
+            Bid::setFlagExport($bidId, false);
+            BidCommentsRead::createOrUpdate($bidId);
+            return $this->redirect(['index', 'bidId' => $bidId, 'private' => $model->private]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+
     }
 
 }

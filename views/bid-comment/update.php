@@ -2,7 +2,7 @@
 
 /* @var $model \app\models\BidComment */
 
-$this->title = 'Новый комментарий';
+$this->title = 'Редактировать комментарий';
 $this->params['back'] = ['bid-comment/index', 'bidId' => $model->bid_id];
 ?>
 
@@ -13,5 +13,7 @@ $this->params['back'] = ['bid-comment/index', 'bidId' => $model->bid_id];
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
+
 </div>
+
 
