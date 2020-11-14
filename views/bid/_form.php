@@ -74,7 +74,6 @@ QuaggaAsset::register($this);
         ]
     ) ?>
 
-    <?php if ($model->isNewRecord): ?>
         <div class="form-group">
             <?= Html::label('Загрузить фотографии', null, ['class' => 'control-label']) ?>
             <?= FilepondWidget::widget([
@@ -89,8 +88,6 @@ QuaggaAsset::register($this);
             ]);
             ?>
         </div>
-    <?php endif; ?>
-
 
     <div class="form-group">
         <div class="col-md-2 col-sm-3 col-xs-6">

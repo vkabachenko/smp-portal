@@ -145,18 +145,22 @@ class BidController extends Controller
 
         $model = Bid::findOne($id);
         $hints = BidAttribute::getHints();
+        $uploadForm = new MultipleUploadForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $uploadForm->load(\Yii::$app->request->post());
             $model->checkBrandCorrespondence();
             BidHistory::createUpdated($model->id, $model, \Yii::$app->user->id);
             $model->flag_export = false;
             $model->save(false);
+            $uploadForm->upload(['bid_id' => $model->id, 'user_id' => $model->user_id,]);
             return $this->afterChange($model);
         }
 
         return $this->render('update', [
             'model' => $model,
-            'hints' => $hints
+            'hints' => $hints,
+            'uploadForm' => $uploadForm
         ]);
     }
 
