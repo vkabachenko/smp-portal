@@ -16,6 +16,7 @@ use app\rbac\rules\ManagerManagerRule;
 use app\rbac\rules\MasterMasterRule;
 use app\rbac\rules\MasterWorkshopRule;
 use app\rbac\rules\BidAttributeRule;
+use app\rbac\rules\SendActRepeatRule;
 use app\rbac\rules\SendActRule;
 use app\rbac\rules\UpdateBidRule;
 use app\rbac\rules\UpdateClientRule;
@@ -287,6 +288,12 @@ class RbacController extends Controller
         $updateComment->ruleName = $updateCommentRule->name;
         $auth->add($updateComment);
 
+        $sendActRepeatRule = new SendActRepeatRule();
+        $auth->add($sendActRepeatRule);
+        $sendActRepeat = $auth->createPermission('sendActRepeat');
+        $sendActRepeat->ruleName = $sendActRepeatRule->name;
+        $auth->add($sendActRepeat);
+
         $master = $auth->createRole('master');
         $auth->add($master);
         $auth->addChild($master, $listBids);
@@ -317,6 +324,7 @@ class RbacController extends Controller
         $auth->addChild($master, $managePrivateComments);
         $auth->addChild($master, $viewAct);
         $auth->addChild($master, $updateComment);
+        $auth->addChild($master, $sendActRepeat);
 
         $manager = $auth->createRole('manager');
         $auth->add($manager);

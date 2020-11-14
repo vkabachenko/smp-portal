@@ -66,6 +66,12 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
             </div>
         <?php endif; ?>
 
+        <?php if (\Yii::$app->user->can('sendActRepeat', ['bidId' => $model->id])): ?>
+            <div class="col-md-2 col-sm-3  col-xs-6 tablet-mt-10">
+                <?= Html::a('Отправить акт', ['send-act/index', 'bidId' => $model->id, 'forced' => true], ['class' => 'btn btn-primary btn-one-line']) ?>
+            </div>
+        <?php endif; ?>
+
         <?php if (\Yii::$app->user->can('setBidDone', ['bidId' => $model->id])): ?>
             <div class="col-md-2 col-sm-3  col-xs-6 tablet-mt-10">
                 <?= Html::a('Выполнено', ['bid/set-status-done', 'bidId' => $model->id], ['class' => 'btn btn-danger btn-one-line']) ?>
