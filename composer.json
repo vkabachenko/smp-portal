@@ -31,7 +31,8 @@
         "npm-asset/sweetalert": "2.1.*",
         "kartik-v/yii2-sortable": "^1.2",
         "shuchkin/simplexlsx": "dev-master",
-        "kartik-v/yii2-widget-select2": "@dev"
+        "kartik-v/yii2-widget-select2": "@dev",
+        "php-imap/php-imap": "^3.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

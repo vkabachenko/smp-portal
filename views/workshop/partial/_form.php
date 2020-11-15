@@ -33,6 +33,7 @@
     <?= $form->field($model, 'mailbox_pass')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'mailbox_port')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'mailbox_encryption')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'imap-server')->textInput(['maxlength' => true]) ?>
 
 
 <?php endif; ?>
