@@ -12,7 +12,7 @@ class m201115_082039_add_imap_server_field_workshop_table extends Migration
      */
     public function safeUp()
     {
-        $this->addColumn('workshop', 'imap-server', 'string');
+        $this->addColumn('workshop', 'imap_server', 'string');
     }
 
     /**
@@ -20,7 +20,7 @@ class m201115_082039_add_imap_server_field_workshop_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropColumn('workshop', 'imap-server');
+        $this->dropColumn('workshop', 'imap_server');
     }
 
 }
