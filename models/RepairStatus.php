@@ -16,6 +16,8 @@ use yii\helpers\ArrayHelper;
  */
 class RepairStatus extends \yii\db\ActiveRecord
 {
+    const DIAGNOSTIC_NAME = '1.Диагностика';
+
     /**
      * {@inheritdoc}
      */

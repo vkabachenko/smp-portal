@@ -607,6 +607,14 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getBidAgencyComments()
+    {
+        return $this->hasMany(BidComment::className(), ['bid_id' => 'id'])->where(['bid_comment.private' => false]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getBidPublicComments()
     {
         return $this->hasMany(BidComment::className(), ['bid_id' => 'id'])->where(['bid_comment.private' => false]);

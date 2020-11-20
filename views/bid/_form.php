@@ -94,9 +94,11 @@ QuaggaAsset::register($this);
             <?= Html::submitButton('Сохранить', ['name' => 'save', 'class' => 'btn btn-success', 'value' => '1']) ?>
         </div>
 
-        <div class="col-md-2 col-sm-3 col-xs-6">
-            <?= Html::submitButton('Отправить', ['name' => 'send', 'class' => 'btn btn-primary', 'value' => '1']) ?>
-        </div>
+        <?php if (\Yii::$app->user->can('sendAct', ['bidId' => $model->id])): ?>
+            <div class="col-md-2 col-sm-3 col-xs-6">
+                <?= Html::submitButton('Отправить', ['name' => 'send', 'class' => 'btn btn-primary', 'value' => '1']) ?>
+            </div>
+        <?php endif; ?>
 
         <?php if (\Yii::$app->user->can('manageJobs', ['bidId' => $model->id])): ?>
             <div class="col-md-2 col-sm-3 col-xs-6">

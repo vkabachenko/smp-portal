@@ -5,6 +5,8 @@ namespace app\models;
 use app\models\form\CommentForm;
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\Html;
+use function GuzzleHttp\Psr7\str;
 
 /**
  * This is the model class for table "bid_comment".
@@ -18,6 +20,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $user_id
  *
  * @property Bid $bid
+ * @property User $user
  */
 class BidComment extends \yii\db\ActiveRecord
 {
@@ -86,6 +89,15 @@ class BidComment extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public function getPlainComment()
+    {
+        $date = date('d-m-Y H:i', strtotime($this->created_at));
+        $user = $this->user_id ? $this->user->name : '';
+        $comment = Html::encode($this->comment);
+
+        return sprintf("%s  %s\n\n%s\n------\n", $date, $user, $comment);
     }
 
     public static function createFromForm(CommentForm $commentForm, $bidId, $userId) {

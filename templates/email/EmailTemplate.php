@@ -3,8 +3,7 @@
 
 namespace app\templates\email;
 
-
-use app\models\Bid;
+use app\helpers\common\CryptHelper;
 use app\models\DecisionStatusInterface;
 use app\models\TemplateModel;
 
@@ -25,16 +24,22 @@ class EmailTemplate
         $this->decision = $decision;
     }
 
-    public function getSubject()
+    public function getSubject($bidId = null)
     {
         if ($this->decision->email_subject) {
-            return $this->getText(strval($this->decision->email_subject));
+            $subj = $this->getText(strval($this->decision->email_subject));
         } else {
-            return  $this->template ? $this->getText(strval($this->template->email_subject)) : '';
+            $subj =  $this->template ? $this->getText(strval($this->template->email_subject)) : '';
         }
+
+        if ($bidId) {
+            $subj .= ' id=' . CryptHelper::numhash($bidId);
+        }
+
+        return $subj;
     }
 
-    public function getMailContent()
+    public function getMailContent($content = '')
     {
         if ($this->decision->email_body) {
             $body = $this->getText(strval($this->decision->email_body));
@@ -43,7 +48,7 @@ class EmailTemplate
             $body = $this->getText(strval($this->template ? $this->template->email_body: ''));
             $signature = $this->getText(strval($this->template ? $this->template->email_signature : ''));
         }
-        return sprintf("%s\n\n-------\n%s", $body, $signature);
+        return sprintf("%s\n%s\n-------\n%s", $body, $content, $signature);
     }
 
 

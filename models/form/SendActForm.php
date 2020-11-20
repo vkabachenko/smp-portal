@@ -6,6 +6,7 @@ namespace app\models\form;
 
 use app\helpers\common\MailHelper;
 use app\models\Bid;
+use app\models\BidComment;
 use app\models\BidImage;
 use app\models\DecisionStatusInterface;
 use app\models\Manager;
@@ -117,10 +118,16 @@ class SendActForm extends Model
         $mailer = \Yii::$app->mailer;
         $message = $mailer->compose();
 
+        $comments = $this->user->identity->master
+            ? implode("\n", array_map(function (BidComment $comment) {
+            return $comment->getPlainComment();
+        }, $this->bid->bidAgencyComments))
+            : '';
+
         $message->setFrom($from)
             ->setTo($to)
-            ->setSubject($this->emailTemplate->getSubject())
-            ->setTextBody($this->emailTemplate->getMailContent());
+            ->setSubject($this->emailTemplate->getSubject($this->bidId))
+            ->setTextBody($this->emailTemplate->getMailContent($comments));
 
         if ($this->act->template) {
             if ($this->act->isGenerated()) {
