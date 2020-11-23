@@ -13,7 +13,7 @@ class ExcelAct extends ExcelActTemplate
     public function getFilename()
     {
         return $this->decision && $this->decision->sub_type_act
-            ? $this->decision->sub_type_act . '-' . $this->bid->id . '.xlsx'
+            ? $this->decision->sub_type_act . '-' . $this->bid->bid_1C_number . '_(' .$this->bid->id . ').xlsx'
             : '';
     }
 
