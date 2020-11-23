@@ -6,6 +6,7 @@ namespace app\commands;
 use app\rbac\rules\BidHistoryRule;
 use app\rbac\rules\JobsCatalogRule;
 use app\rbac\rules\JobsCatalogViewRule;
+use app\rbac\rules\ManageJobs1CRule;
 use app\rbac\rules\ManageJobsRule;
 use app\rbac\rules\ManagePrivateCommentsRule;
 use app\rbac\rules\ManageReplacementPartsRule;
@@ -261,7 +262,10 @@ class RbacController extends Controller
         $manageClientPropositions = $auth->createPermission('manageClientPropositions');
         $auth->add($manageClientPropositions);
 
+        $manageBidJob1cRule = new ManageJobs1CRule();
+        $auth->add($manageBidJob1cRule);
         $manageBidJob1c = $auth->createPermission('manageBidJob1c');
+        $manageBidJob1c->ruleName = $manageBidJob1cRule->name;
         $auth->add($manageBidJob1c);
 
         $client = $auth->createRole('client');
