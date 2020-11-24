@@ -17,6 +17,7 @@ use app\models\ClientProposition;
 use app\models\JobsCatalog;
 use app\models\ReplacementPart;
 use app\models\Spare;
+use app\models\StatusHistory1c;
 use app\models\User;
 use app\services\brand\BrandService;
 use Codeception\Module\Cli;
@@ -106,6 +107,7 @@ class ReadService extends BaseService
         $bidJobs = isset($bidArray['УслугиДляПредставительстваСтрока']) ? $bidArray['УслугиДляПредставительстваСтрока'] : [];
         $bidReplacementParts = isset($bidArray['АртикулыДляСервисаСтрока']) ? $bidArray['АртикулыДляСервисаСтрока'] : [];
         $bidClientPropositions = isset($bidArray['ПредложениеДляКлиентаСтрока']) ? $bidArray['ПредложениеДляКлиентаСтрока'] : [];
+        $bidStatuseHistories = isset($bidArray['ИсторияСтатусовСтрока']) ? $bidArray['ИсторияСтатусовСтрока'] : [];
 
         if ($this->isDuplicate($attributes)) {
             $bid = $this->updateBid($attributes);
@@ -118,6 +120,7 @@ class ReadService extends BaseService
         $this->createJobs($bid, $bidJobs);
         $this->createReplacementParts($bid, $bidReplacementParts);
         $this->createClientPropositions($bid, $bidClientPropositions);
+        $this->createStatuseHistories($bid, $bidStatuseHistories);
 
 
         if (is_null($bid)) {
@@ -524,6 +527,42 @@ class ReadService extends BaseService
         $model->quantity = $this->getCommentAttribute($attributes, 'Количество');
         $model->total_price = $this->getCommentAttribute($attributes, 'Сумма');
         $model->num_order = intval($this->getCommentAttribute($attributes, 'НомерСтроки'));
+
+        if (!$model->save()) {
+            \Yii::error($attributes);
+            \Yii::error($model->getErrors());
+        }
+    }
+
+    private function createStatuseHistories($bid, $bidStatuseHistories)
+    {
+        if (!$bid) {
+            return;
+        }
+
+        if (isset($bidStatuseHistories['@attributes'])) {
+            $this->createComment($bid, $bidStatuseHistories['@attributes']);
+        } else {
+            foreach ($bidStatuseHistories as $bidStatuseHistory) {
+                $this->createStatuseHistory($bid, $bidStatuseHistory['@attributes']);
+            }
+        }
+    }
+
+    private function createStatuseHistory($bid, $attributes)
+    {
+        $createdAt = $this->setDate($this->getCommentAttribute($attributes, 'Дата'));
+        $exists = StatusHistory1c::find()->where(['bid_id' => $bid->id, 'date' => $createdAt])->exists();
+
+        if ($exists) {
+            return;
+        }
+
+        $model = new StatusHistory1c();
+        $model->bid_id = $bid->id;
+        $model->status = $this->getCommentAttribute($attributes, 'Статус');
+        $model->sum_doc = floatval($this->getCommentAttribute($attributes, 'СуммаДокумента'));
+        $model->author = $this->getCommentAttribute($attributes, 'Автор');
 
         if (!$model->save()) {
             \Yii::error($attributes);
