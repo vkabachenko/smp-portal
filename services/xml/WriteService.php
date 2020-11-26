@@ -174,6 +174,8 @@ class WriteService extends BaseService
         $comments = $this->getCommentsAsArray($model->bidPrivateComments);
         $spares = $this->getSparesAsArray($model->spares);
         $jobs = $this->getJobsAsArray($model->jobs1c);
+        $portalJobs = $this->getPortalJobsAsArray($model->jobs);
+        $jobs = $this->mergeJobs($jobs, $portalJobs);
         $replacementParts = $this->getReplacementPartsAsArray($model->replacementParts);
         $clientPropositions = $this->getClientPropositionsAsArray($model->clientPropositions);
         $images = $this->getImagesAsArray($model->bidImages);
@@ -262,6 +264,41 @@ class WriteService extends BaseService
             'attributes' => $attributes
         ];
         return $element;
+    }
+
+    private function getPortalJobsAsArray($jobs)
+    {
+        $elements = [];
+        foreach ($jobs as $job) {
+            $elements[] = $this->getPortalJobAsArray($job);
+        }
+        return $elements;
+    }
+
+    private function getPortalJobAsArray(BidJob $job)
+    {
+        $attributes = [
+            'Наименование' => $job->jobsCatalog->name,
+            'Количество' => 1,
+            'Цена' => $job->priceConformed,
+            'Сумма' => $job->priceConformed,
+            'НомерСтроки' => 0,
+        ];
+        $element = [
+            'tag' => 'УслугиДляПредставительстваСтрока',
+            'attributes' => $attributes
+        ];
+        return $element;
+    }
+
+    private function mergeJobs($jobs, $portalJobs)
+    {
+        $maxNumOrder = max(array_map(function($element) { return $element['attributes']['НомерСтроки'];},
+        $jobs));
+        array_walk($portalJobs,
+            function(&$element, $key) use ($maxNumOrder) {$element['attributes']['НомерСтроки'] = $maxNumOrder + $key + 1;});
+
+        return array_merge($jobs, $portalJobs);
     }
 
     private function getReplacementPartsAsArray($replacementParts)

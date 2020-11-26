@@ -25,7 +25,7 @@ class ManageJobs1CRule extends Rule
         }
 
         if ($userModel->role === 'master') {
-            return $userModel->master->getBidRole() === Bid::TREATMENT_TYPE_PRESALE;
+            return $userModel->master->getBidRole() === Bid::TREATMENT_TYPE_WARRANTY;
         }
 
         return false;

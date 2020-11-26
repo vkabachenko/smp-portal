@@ -112,9 +112,9 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
     <div>
         <div class="col-xs-4">
             <?php if (\Yii::$app->user->can('manageJobs', ['bidId' => $model->id])): ?>
-                <?= Html::a('<h3>Работы</h3>', ['bid-job/index', 'bidId' => $model->id]) ?>
+                <?= Html::a('<h3>Работы гарантийные</h3>', ['bid-job/index', 'bidId' => $model->id]) ?>
             <?php else: ?>
-                <h3>Работы</h3>
+                <h3>Работы гарантийные</h3>
             <?php endif; ?>
         </div>
         <div class="col-xs-8">
@@ -158,7 +158,7 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
 
 <div class="form-group clearfix"></div>
 <div>
-    <h3>Работы (импорт из 1С)</h3>
+    <h3>Работы гарантийные (импорт из 1С)</h3>
     <?= GridView::widget([
         'dataProvider' => $bidJob1cProvider,
         'summary' => '',

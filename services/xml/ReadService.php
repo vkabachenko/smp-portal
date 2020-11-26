@@ -444,8 +444,10 @@ class ReadService extends BaseService
         }
     }
 
-    private function createJob($bid, $attributes)
+    private function createJob(Bid $bid, $attributes)
     {
+        $portalJobs = $bid->jobs;
+
         $model = new BidJob1c();
         $model->bid_id = $bid->id;
         $model->name = $this->getCommentAttribute($attributes, 'Наименование');
@@ -454,10 +456,32 @@ class ReadService extends BaseService
         $model->total_price = $this->getCommentAttribute($attributes, 'Сумма');
         $model->num_order = intval($this->getCommentAttribute($attributes, 'НомерСтроки'));
 
+        if ($this->isExistPortalJob($model, $portalJobs)) {
+            return;
+        }
+
         if (!$model->save()) {
             \Yii::error($attributes);
             \Yii::error($model->getErrors());
         }
+    }
+
+    /**
+     * @param BidJob1c $model
+     * @param $portalJobs BidJob[]
+     * @return bool
+     */
+    private function isExistPortalJob(BidJob1c $model, $portalJobs)
+    {
+        foreach ($portalJobs as $job) {
+            if ($model->name == $job->jobsCatalog->name
+                && $model->price == $job->priceConformed
+                && $model->total_price == $model->price
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private function createReplacementParts($bid, $bidReplacementParts)
@@ -560,6 +584,7 @@ class ReadService extends BaseService
 
         $model = new StatusHistory1c();
         $model->bid_id = $bid->id;
+        $model->date = $createdAt;
         $model->status = $this->getCommentAttribute($attributes, 'Статус');
         $model->sum_doc = floatval($this->getCommentAttribute($attributes, 'СуммаДокумента'));
         $model->author = $this->getCommentAttribute($attributes, 'Автор');

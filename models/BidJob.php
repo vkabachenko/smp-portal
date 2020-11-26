@@ -18,6 +18,7 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property Bid $bid
  * @property JobsCatalog $jobsCatalog
+ * @property float $priceConformed
  */
 class BidJob extends \yii\db\ActiveRecord implements TranslatableInterface
 {
@@ -102,6 +103,6 @@ class BidJob extends \yii\db\ActiveRecord implements TranslatableInterface
         } else {
             $priceConformed = $this->jobs_catalog_id ? $this->jobsCatalog->price : null;
         }
-        return $priceConformed;
+        return floatval($priceConformed);
     }
 }
