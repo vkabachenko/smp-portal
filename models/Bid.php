@@ -94,6 +94,8 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     const TREATMENT_TYPE_WARRANTY = 'warranty';
     const TREATMENT_TYPE_PRESALE = 'pre-sale';
 
+    const UNDEFINED_EQUIPMENT = 'Оборудование не задано';
+
     const TREATMENT_TYPES = [
         self::TREATMENT_TYPE_WARRANTY => 'Гарантия',
         self::TREATMENT_TYPE_PRESALE => 'Предпродажа',
@@ -899,7 +901,7 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     {
         $this->copySimilarFields('diagnostic', 'diagnostic_manufacturer');
         $this->copySimilarFields('defect', 'defect_manufacturer');
-        $this->copySimilarFields('equipment', 'equipment_manufacturer');
+        $this->copySimilarFields('equipment', 'equipment_manufacturer', Bid::UNDEFINED_EQUIPMENT);
         $this->copySimilarFields('date_completion', 'date_completion_manufacturer');
         $this->copySimilarFields('composition_name', 'composition_name_manufacturer');
         $this->copySimilarFields('condition_name', 'condition_manufacturer_name');
@@ -908,11 +910,11 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         $this->date_manufacturer = $this->date_manufacturer ?: date('Y-m-d H:i:s');
     }
 
-    public function copySimilarFields($sample, $item)
+    public function copySimilarFields($sample, $item, $emptyField = null)
     {
-        if (!empty($this->$sample) && empty($this->$item)) {
+        if (!empty($this->$sample) && (empty($this->$item) || $this->$item === $emptyField)) {
             $this->$item = $this->$sample;
-        } elseif (!empty($this->$item) && empty($this->$sample)) {
+        } elseif (!empty($this->$item) && (empty($this->$item) || $this->$item === $emptyField)) {
             $this->$sample = $this->$item;
         }
     }

@@ -137,7 +137,7 @@ class GridHelper
             'attribute' => 'equipment',
             'format' => 'raw',
             'value' => function (Bid $model) {
-                $name = $model->equipment ?: 'Оборудование не задано';
+                $name = $model->equipment ?: Bid::UNDEFINED_EQUIPMENT;
                 $a = Html::a($name, ['view', 'id' => $model->id]);
                 $html = Html::tag('div', $a);
                 return $html;
@@ -154,7 +154,7 @@ class GridHelper
             'attribute' => 'equipment_manufacturer',
             'format' => 'raw',
             'value' => function (Bid $model) {
-                $name = $model->equipment_manufacturer ?: 'Оборудование не задано';
+                $name = $model->equipment_manufacturer ?: Bid::UNDEFINED_EQUIPMENT;
                 $a = Html::a($name, ['view', 'id' => $model->id]);
                 $html = Html::tag('div', $a);
                 return $html;

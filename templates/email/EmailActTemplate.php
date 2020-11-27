@@ -23,7 +23,7 @@ class EmailActTemplate extends EmailTemplate
     {
         return [
             '{bid_number}' => $this->bid->bid_number,
-            '{bid_1C_number}' => $this->bid->bid_1C_number,
+            '{bid_1c_number}' => $this->bid->bid_1C_number,
             '{bid_manufacturer_number}' => $this->bid->bid_manufacturer_number,
             '{brand_name}' => $this->bid->brand_name,
             '{workshop_name}' => $this->bid->workshop->name,

@@ -190,7 +190,7 @@ class ReadService extends BaseService
         $brandService = new BrandService(trim($this->getAttribute($model, $attributes, 'brand_name', [$this, 'same'])));
 
         $equipment = trim($this->getAttribute($model, $attributes, 'equipment', [$this, 'same']));
-        $equipment = $equipment ?: 'Оборудование не задано';
+        $equipment = $equipment ?: Bid::UNDEFINED_EQUIPMENT;
 
         $model->guid = $this->getAttribute($model, $attributes, 'guid', [$this, 'same']);
         $model->bid_1C_number = $this->getAttribute($model, $attributes, 'bid_1C_number', [$this, 'same']);
