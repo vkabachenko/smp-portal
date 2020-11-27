@@ -6,6 +6,7 @@ use app\helpers\CrmHelper;
 use app\models\Bid;
 use app\models\Client;
 use app\models\ClientPhone;
+use app\models\StatusHistory1c;
 use app\models\Workshop;
 use yii\db\Expression;
 use yii\helpers\Json;
@@ -22,6 +23,7 @@ class CrmController extends Controller
             'get-client' => ['GET'],
             'get-client-by-bid-number' => ['GET'],
             'get-active-clients' => ['POST'],
+            'get-imported-authors' => ['GET']
         ];
     }
 
@@ -82,6 +84,18 @@ class CrmController extends Controller
         }
 
         return Client::findOne($clientId);
+    }
+
+    public function actionGetImportedAuthors()
+    {
+        $authors = StatusHistory1c::find()
+            ->joinWith('bid', false)
+            ->select('status_history_1c.author')
+            ->distinct()
+            ->where(['bid.workshop_id' => $this->workshop->id])
+            ->orderBy('author')
+            ->column();
+        return $authors;
     }
 
     /**
