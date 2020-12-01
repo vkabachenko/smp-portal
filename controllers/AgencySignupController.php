@@ -56,6 +56,7 @@ class AgencySignupController extends Controller
                 \Yii::error($exc->getMessage());
                 \Yii::$app->session->setFlash('error', 'Ошибка при отправке письма менеджеру');
             }
+            $this->goHome();
         }
         return $this->render('index', [
             'agency' => $agency

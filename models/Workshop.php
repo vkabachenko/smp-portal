@@ -170,7 +170,7 @@ class Workshop extends \yii\db\ActiveRecord
         $rules = $this->rules;
 
         if (!isset($rules[self::IS_PAID_BID])) {
-            return true;
+            return false;
         }
 
         if ($rules[self::IS_PAID_BID]) {

@@ -25,7 +25,7 @@ class ImapService
 
     public function __construct($email)
     {
-        $this->workshop = Workshop::find()->where(['email3' => $email]);
+        $this->workshop = Workshop::find()->where(['email3' => $email])->one();
         if ($this->workshop && $this->workshop->imap_server && $this->workshop->mailbox_pass) {
             $this->mailEngine = new Mailbox($this->workshop->imap_server, $email, $this->workshop->mailbox_pass);
         } else {
