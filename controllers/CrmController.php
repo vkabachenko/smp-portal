@@ -23,7 +23,8 @@ class CrmController extends Controller
             'get-client' => ['GET'],
             'get-client-by-bid-number' => ['GET'],
             'get-active-clients' => ['POST'],
-            'get-imported-authors' => ['GET']
+            'get-imported-authors' => ['GET'],
+            'get-stats-change-statuses' => ['GET']
         ];
     }
 
@@ -96,6 +97,21 @@ class CrmController extends Controller
             ->orderBy('author')
             ->column();
         return $authors;
+    }
+
+    public function actionGetStatsChangeStatuses()
+    {
+        $dateBegin = date('Y-m-d H:i:s', \Yii::$app->request->get('DateBegin'));
+        $dateEnd = date('Y-m-d H:i:s', \Yii::$app->request->get('DateEnd'));
+
+        $statuses = (new \yii\db\Query())
+            ->from('status_history_1c')
+            ->select(['cnt' => 'COUNT(id)', 'day' => 'DATE(date)', 'author'])
+            ->where(['between', 'date', $dateBegin, $dateEnd])
+            ->groupBy(['day', 'author'])
+            ->all();
+
+        return $statuses;
     }
 
     /**
