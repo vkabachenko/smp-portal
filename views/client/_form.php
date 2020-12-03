@@ -30,7 +30,7 @@ use yii\bootstrap\Html;
     <?= $form->field($client, 'workshop_id')
         ->dropDownList(\app\models\Workshop::workshopsAsMap(), [
             'prompt' => 'Выбор',
-            'readonly' => !\Yii::$app->user->can('admin')
+            'disabled' => !\Yii::$app->user->can('admin')
             ])
     ?>
     <?= $form->field($client, 'name', ['inputOptions' => ['id' => 'form_client_name']]) ?>
