@@ -186,14 +186,14 @@ class Client extends \yii\db\ActiveRecord
             ->select(['name', 'client.id'])
             ->orderBy('name');
 
-        if ($workshopId) {
-            $query->where(['workshop_id' => $workshopId]);
-        }
-
         if (preg_match("/^\d+$/", $term)) {
             $query->where(['like', 'client_phone.phone', $term]);
         } else {
             $query->where(['like', 'name', $term]);
+        }
+
+        if ($workshopId) {
+            $query->andWhere(['workshop_id' => $workshopId]);
         }
 
         return $query->asArray()->all();
