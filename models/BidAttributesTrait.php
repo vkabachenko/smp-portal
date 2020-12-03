@@ -20,6 +20,10 @@ trait BidAttributesTrait
             BidAttribute::getAvailableAttributes($this->getModel()->getCommonHiddenAttributeName(), $withAlwaysVisible),
             $ownAttributes);
 
+        $availableAttributes = array_filter($availableAttributes,
+            function ($name) {return Bid::getAllAttributes()[$name] !== false;}
+        );
+
         return $availableAttributes;
     }
 

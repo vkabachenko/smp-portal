@@ -160,10 +160,10 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
     ];
 
     const ALWAYS_VISIBLE_ATTRIBUTES = [
-        'brand_id' => 'brand_id',
-        'brand_model_id' => 'brand_model_id',
-        'compositionCombined' => 'compositionCombined',
-        'workshop_id' => 'workshop_id',
+        'brand_id' => false,
+        'brand_model_id' => false,
+        'compositionCombined' => false,
+        'workshop_id' => false,
         'manufacturer_id' => 'Производитель',
         'brand_name' => 'Бренд',
         'status_id' => 'Статус',
