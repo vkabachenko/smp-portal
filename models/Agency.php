@@ -36,6 +36,8 @@ class Agency extends \yii\db\ActiveRecord
 {
     use BidAttributesTrait;
 
+    const IS_DISABLED_AGENCIES = 'is_disabled_agencies';
+
     /**
      * {@inheritdoc}
      */
@@ -133,7 +135,7 @@ class Agency extends \yii\db\ActiveRecord
 
     public function getCommonHiddenAttributeName()
     {
-        return 'is_disabled_agencies';
+        return self::IS_DISABLED_AGENCIES;
     }
 
 }

@@ -68,7 +68,19 @@ class BidAttribute extends \yii\db\ActiveRecord
 
     public static function getHiddenAttributes($attribute)
     {
-        return self::find()->active()->select(['attribute'])->where([$attribute => true])->column();
+        switch ($attribute) {
+            case Agency::IS_DISABLED_AGENCIES:
+                $alwaysHidden = Bid::PRESALE_ATTRIBUTES;
+                break;
+            case Workshop::IS_DISABLED_WORKSHOPS:
+                $alwaysHidden = Bid::WARRANTY_ATTRIBUTES;
+                break;
+            default:
+                $alwaysHidden = [];
+        }
+        $customHidden = self::find()->active()->select(['attribute'])->where([$attribute => true])->column();
+
+        return array_unique(array_merge($alwaysHidden, $customHidden));
     }
 
     public static function getAvailableAttributes($attribute, $withAlwaysVisible = false)

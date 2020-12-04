@@ -256,6 +256,26 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'manufacturer_id'  => ['desktop' => true, 'tablet' => true, 'phone' => false]
     ];
 
+    const WARRANTY_ATTRIBUTES = [
+        'equipment_manufacturer',
+        'client_manufacturer_id',
+        'condition_manufacturer_name',
+        'composition_name_manufacturer',
+        'bid_manufacturer_number',
+        'date_completion_manufacturer',
+        'sum_manufacturer'
+    ];
+
+    const PRESALE_ATTRIBUTES = [
+        'equipment',
+        'client_id',
+        'condition_name',
+        'composition_name',
+        'date_completion',
+        'bid_number',
+        'manager_presale'
+    ];
+
     /**
      * @return array[]
      */
