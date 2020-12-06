@@ -13,16 +13,18 @@ trait BidAttributesTrait
         return is_null($this->getModel()->$attributeName) ? [] : $this->getModel()->$attributeName;
     }
 
-    public function getAvailableAttributes($withAlwaysVisible = false)
+    public function getAvailableAttributes($withAlwaysVisible = false, $withAlwaysHidden = false)
     {
         $ownAttributes = $this->getBidAttributes('bid_attributes');
         $availableAttributes = array_diff(
             BidAttribute::getAvailableAttributes($this->getModel()->getCommonHiddenAttributeName(), $withAlwaysVisible),
             $ownAttributes);
 
-        $availableAttributes = array_filter($availableAttributes,
-            function ($name) {return Bid::getAllAttributes()[$name] !== false;}
-        );
+        if (!$withAlwaysHidden) {
+            $availableAttributes = array_filter($availableAttributes,
+                function ($name) {return Bid::getAllAttributes()[$name] !== false;}
+            );
+        }
 
         return $availableAttributes;
     }
@@ -30,7 +32,7 @@ trait BidAttributesTrait
     public function getSectionsAttributes()
     {
         $bidSection = new BidSection();
-        $availableAttributes = $this->getAvailableAttributes(true);
+        $availableAttributes = $this->getAvailableAttributes(true, true);
         $bidSection->section1 = $this->getBidAttributes(BidSection::ATTRIBUTE_SECTION_1);
         $bidSection->section2 = $this->getBidAttributes(BidSection::ATTRIBUTE_SECTION_2);
         $bidSection->section3 = $this->getBidAttributes(BidSection::ATTRIBUTE_SECTION_3);

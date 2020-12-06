@@ -351,7 +351,7 @@ class BidController extends Controller
     private function afterChange(Bid $model)
     {
         if (\Yii::$app->request->post('save')) {
-            return $this->redirect(['index']);
+            return $this->redirect(Url::previous('bid/index'));
         } elseif (\Yii::$app->request->post('send')) {
             return $this->redirect(['send-act/index', 'subType' => TemplateModel::SUB_TYPE_ACT_DIAGNOSTIC, 'bidId' => $model->id]);
         } elseif (\Yii::$app->request->post('job')) {

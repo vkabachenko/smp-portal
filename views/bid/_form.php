@@ -19,7 +19,9 @@ QuaggaAsset::register($this);
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->errorSummary($model) ?>
+    <?php if ($model->hasErrors()): ?>
+        <?= $form->errorSummary($model) ?>
+    <?php endif; ?>
 
     <?php
     $attributes = EditHelper::getAttributesEdit($model, \Yii::$app->user, $form, $hints);
