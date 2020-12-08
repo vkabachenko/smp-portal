@@ -94,7 +94,7 @@ class ImapService
 
         $bidComment = new BidComment([
             'bid_id' => $bid->id,
-            'private' => true,
+            'private' => 1,
             'comment' => 'Ответ представительства на почте'
         ]);
         if (!$bidComment->save()) {
