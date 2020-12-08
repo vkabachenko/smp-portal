@@ -87,6 +87,7 @@ class ImapService
 
         if ($repairDiagnosticStatusId) {
             $bid->repair_status_id = $repairDiagnosticStatusId;
+            $bid->updated_at = date('Y-m-d H:i:s');
             if (!$bid->save(false)) {
                 \Yii::error($bid->getErrors());
             }
