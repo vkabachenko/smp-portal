@@ -92,6 +92,8 @@ class ImapService
             }
         }
 
+        Bid::setFlagExport($bid->id, false);
+
         $bidComment = new BidComment([
             'bid_id' => $bid->id,
             'private' => 1,
