@@ -23,8 +23,9 @@ $script = <<<JS
 
     $('.new-client-modal-btn').click(function(evt) {
         evt.preventDefault();
+        var url = $("#client_id").length ? $("#client_id").data("select") : $("#client_manufacturer_id").data("select");
         $.ajax({
-            url: $("#client_id").data("select"),
+            url: url,
             method: "GET",
             data: {
                 id: null
@@ -43,14 +44,16 @@ $script = <<<JS
     $('body').on('click', '.btn-submit', function(evt) {
       evt.preventDefault();
       var form = $('#client-form');
+      var clientId = $("#client_id").length ? '#client_id' : '#client_manufacturer_id';
+      var clientName = $("#client_name").length ? '#client_name' : '#client_manufacturer_name';
       $.ajax({
         type: 'POST',
         data: form.serialize(),
         url: form.attr('action')
       }).then(function(result) {
           $('#client-modal').modal('hide');
-          $('#client_name').val(result.name);
-          $('#client_id').val(result.id);
+          $(clientName).val(result.name);
+          $(clientId).val(result.id);
       });
     });
 JS;

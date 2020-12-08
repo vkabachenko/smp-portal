@@ -272,7 +272,6 @@ class Bid extends \yii\db\ActiveRecord implements TranslatableInterface
         'condition_name',
         'composition_name',
         'date_completion',
-        'bid_number',
         'manager_presale'
     ];
 

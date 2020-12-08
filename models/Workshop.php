@@ -163,7 +163,7 @@ class Workshop extends \yii\db\ActiveRecord
 
     public function getCommonHiddenAttributeName()
     {
-        return self::IS_DISABLED_WORKSHOPS;
+        return $this->canManagePaidBid() ? self::IS_DISABLED_WORKSHOPS : Agency::IS_DISABLED_AGENCIES;
     }
 
     public function canManagePaidBid()
