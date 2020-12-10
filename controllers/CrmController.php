@@ -24,7 +24,8 @@ class CrmController extends Controller
             'get-client-by-bid-number' => ['GET'],
             'get-active-clients' => ['POST'],
             'get-imported-authors' => ['GET'],
-            'get-stats-change-statuses' => ['GET']
+            'get-stats-change-statuses' => ['GET'],
+            'get-bids-created' => ['GET']
         ];
     }
 
@@ -112,6 +113,29 @@ class CrmController extends Controller
             ->all();
 
         return $statuses;
+    }
+
+    public function actionGetBidsCreated()
+    {
+        $dateBegin = date('Y-m-d H:i:s', \Yii::$app->request->get('DateBegin'));
+        $dateEnd = date('Y-m-d H:i:s', \Yii::$app->request->get('DateEnd'));
+
+        $expresssion = new Expression('MIN(date)');
+
+        $subQuery = (new \yii\db\Query())
+            ->select(['date' => $expresssion, 'bid_id'])
+            ->from('status_history_1c')
+            ->groupBy('bid_id');
+
+        $bids = (new \yii\db\Query())
+            ->select(['cnt' => 'COUNT(status_history_1c.id)', 'day' => 'DATE(u.date)', 'status_history_1c.author'])
+            ->from('status_history_1c')
+            ->innerJoin(['u' => $subQuery], 'u.bid_id = status_history_1c.bid_id AND u.date = status_history_1c.date' )
+            ->where(['between', 'u.date', $dateBegin, $dateEnd])
+            ->groupBy(['day', 'status_history_1c.author'])
+            ->all();
+
+        return $bids;
     }
 
     /**
