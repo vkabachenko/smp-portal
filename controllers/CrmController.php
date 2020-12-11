@@ -123,15 +123,15 @@ class CrmController extends Controller
         $expresssion = new Expression('MIN(date)');
 
         $subQuery = (new \yii\db\Query())
-            ->select(['date' => $expresssion, 'bid_id'])
+            ->select(['datemin' => $expresssion, 'bid_id'])
             ->from('status_history_1c')
+            ->having(['between', 'datemin', $dateBegin, $dateEnd])
             ->groupBy('bid_id');
 
         $bids = (new \yii\db\Query())
-            ->select(['cnt' => 'COUNT(status_history_1c.id)', 'day' => 'DATE(u.date)', 'status_history_1c.author'])
+            ->select(['cnt' => 'COUNT(status_history_1c.bid_id)', 'day' => 'DATE(u.datemin)', 'status_history_1c.author'])
             ->from('status_history_1c')
-            ->innerJoin(['u' => $subQuery], 'u.bid_id = status_history_1c.bid_id AND u.date = status_history_1c.date' )
-            ->where(['between', 'u.date', $dateBegin, $dateEnd])
+            ->innerJoin(['u' => $subQuery], 'u.bid_id = status_history_1c.bid_id AND u.datemin = status_history_1c.date' )
             ->groupBy(['day', 'status_history_1c.author'])
             ->all();
 
