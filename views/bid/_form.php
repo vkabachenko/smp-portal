@@ -112,9 +112,11 @@ QuaggaAsset::register($this);
                 </div>
             <?php endif; ?>
 
+            <?php if (\Yii::$app->user->can('manageSpare', ['bidId' => $model->id])): ?>
             <div class="col-md-2 col-sm-3 col-xs-6">
                 <?= Html::submitButton('Запчасти', ['name' => 'spare', 'class' => 'btn btn-primary', 'value' => '1']) ?>
             </div>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 
