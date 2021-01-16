@@ -153,7 +153,7 @@ class BidController extends Controller
             BidHistory::createUpdated($model->id, $model, \Yii::$app->user->id);
             $model->flag_export = false;
             $model->save(false);
-            $uploadForm->upload(['bid_id' => $model->id, 'user_id' => $model->user_id,]);
+            $uploadForm->upload(['bid_id' => $model->id, 'user_id' => \Yii::$app->user->id]);
             return $this->afterChange($model);
         }
 
