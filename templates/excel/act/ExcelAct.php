@@ -62,6 +62,8 @@ class ExcelAct extends ExcelActTemplate
             '{workshop_phone}' => $this->bid->workshop_id ? $this->bid->workshop->phone2 : '',
             '{workshop_mail}' => $this->bid->workshop_id ? $this->bid->workshop->email3 : '',
             '{saler_name}' => $this->bid->saler_name,
+            '{vendor_code}' => $this->bid->vendor_code,
+            '{warranty_number}' => $this->bid->vendor_code,
             '{job_nom_row}' => array_map(function($el) { return $el + 1; }, array_keys($jobs)),
             '{job_description}' => array_map(function(BidJob $job) {return $job->description;}, $jobs),
             '{job_price}' => array_map(function(BidJob $job) {return $job->priceConformed;}, $jobs),
