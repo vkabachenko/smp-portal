@@ -4,6 +4,7 @@
 namespace app\templates\email;
 
 
+use app\helpers\common\DateHelper;
 use app\models\Bid;
 use app\models\DecisionStatusInterface;
 use app\models\TemplateModel;
@@ -27,6 +28,8 @@ class EmailActTemplate extends EmailTemplate
             '{bid_manufacturer_number}' => $this->bid->bid_manufacturer_number,
             '{brand_name}' => $this->bid->brand_name,
             '{workshop_name}' => $this->bid->workshop->name,
+            '{contract_nom}' => $this->bid->getAgencyWorkshop() ? $this->bid->getAgencyWorkshop()->contract_nom : '',
+            '{contract_date}' => $this->bid->getAgencyWorkshop() ? DateHelper::getReadableDate($this->bid->getAgencyWorkshop()->contract_date) : '',
         ];
     }
 
