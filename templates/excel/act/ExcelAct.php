@@ -10,6 +10,8 @@ use app\helpers\common\DateHelper;
 
 class ExcelAct extends ExcelActTemplate
 {
+    const ACT_PATH = '@app/templates/excel/act/generated/';
+
     public function getFilename()
     {
         return $this->decision && $this->decision->sub_type_act
@@ -19,7 +21,7 @@ class ExcelAct extends ExcelActTemplate
 
     public function getDirectory()
     {
-        return \Yii::getAlias('@app/templates/excel/act/generated/');
+        return \Yii::getAlias(self::ACT_PATH);
     }
 
     public function generate()

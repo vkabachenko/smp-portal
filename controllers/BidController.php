@@ -30,6 +30,7 @@ use app\models\search\BidSearch;
 use app\services\status\DoneStatusService;
 use app\services\status\ReadStatusService;
 use app\templates\excel\act\ExcelAct;
+use app\templates\excel\act\ExcelActs;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -226,6 +227,8 @@ class BidController extends Controller
         $section4 = ViewHelper::getViewSection($model, \Yii::$app->user, 'section4', false);
         $section5 = ViewHelper::getViewSection($model, \Yii::$app->user, 'section5', false);
 
+        $existingActs = ExcelActs::findFilesByBidId($id);
+
         return $this->render('view', [
             'returnUrl' => $returnUrl,
             'model' => $model,
@@ -239,7 +242,8 @@ class BidController extends Controller
             'section2' => $section2,
             'section3' => $section3,
             'section4' => $section4,
-            'section5' => $section5
+            'section5' => $section5,
+            'existingActs' => $existingActs
         ]);
     }
 

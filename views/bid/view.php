@@ -4,10 +4,9 @@ use yii\bootstrap\Html;
 use yii\grid\GridView;
 use app\models\BidJob;
 use app\services\job\JobsCatalogService;
-use app\models\JobsCatalog;
 use app\models\Spare;
-use app\models\TemplateModel;
 use yii\helpers\Url;
+use app\templates\excel\act\ExcelAct;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Bid */
@@ -22,6 +21,7 @@ use yii\helpers\Url;
 /* @var $section3 array */
 /* @var $section4 array */
 /* @var $section5 array */
+/* @var $existingActs array */
 /* @var $returnUrl string|null */
 
 $this->title = 'Просмотр заявки';
@@ -44,7 +44,31 @@ $this->params['back'] = $returnUrl ?: Url::previous('bid/index');
 
         <?php if (\Yii::$app->user->can('viewAct', ['bidId' => $model->id])): ?>
             <div class="col-md-2 col-sm-3  col-xs-6 tablet-mt-10">
-                <?= Html::a('Скачать акты и фото', ['download', 'id' => $model->id], ['class' => 'btn btn-primary btn-one-line']) ?>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Скачать акты и фото
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li>
+                            <?= Html::a('Текущий акт',
+                                ['download', 'id' => $model->id],
+                                ['class' => 'btn btn-default'])
+                            ?>
+                        </li>
+                        <?php foreach ($existingActs as $existingAct): ?>
+                        <li>
+                            <?= Html::a($existingAct,
+                                ['download/default',
+                                 'filename' => $existingAct,
+                                 'path' => \Yii::getAlias(ExcelAct::ACT_PATH) . $existingAct
+                                 ],
+                                ['class' => 'btn btn-default'])
+                            ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
             </div>
         <?php endif; ?>
 
